@@ -1,0 +1,27 @@
+.alignMenuItems > ul {
+    margin-top: 10px;
+}
+
+.fa-small {
+    font-size: 75%;
+    padding: 2px;
+}
+
+.connected span {
+    color: green;
+    font-weight: bold;
+}
+
+.disconnected span {
+    color: red;
+    font-weight: bold;
+}
+
+.options {
+    width:32px;
+    text-align: center;
+}
+
+.ui-datatable {
+    margin-top: 25px;
+}

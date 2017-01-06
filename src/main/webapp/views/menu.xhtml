@@ -1,0 +1,49 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+>
+    <h:form id="menuForm">
+        <p:growl id="messages"/>
+
+        <p:menubar id="menu" autoDisplay="#{false}" styleClass="alignMenuItems">
+            <p:submenu label="#{msg['menu.file']}" icon="fa fa-fw fa-small fa-file-o">
+                <p:submenu label="#{msg['menu.file.new']}" icon="fa fa-fw fa-plus">
+                    <p:menuitem value="#{msg['menu.file.new.lesson']}" icon="fa fa-fw fa-book"/>
+                </p:submenu>
+                <p:separator/>
+                <p:menuitem value="#{msg['menu.file.quit']}" icon="fa fa-fw fa-close"
+                            actionListener="#{menuBean.quit}" update="messages"/>
+            </p:submenu>
+
+            <p:submenu label="#{msg['menu.connection']}" icon="fa fa-fw fa-exchange">
+                <p:menuitem value="#{msg['menu.connection.connect']}" icon="fa fa-fw fa-toggle-on"
+                            actionListener="#{menuBean.connect}" update="@all"
+                            disabled="#{menuBean.connected}"/>
+                <p:menuitem value="#{msg['menu.connection.disconnect']}" icon="fa fa-fw fa-toggle-off"
+                            actionListener="#{menuBean.disconnect}" update="@all"
+                            disabled="#{!menuBean.connected}"/>
+
+                <p:separator/>
+                <p:menuitem disabled="#{true}"
+                            value="#{menuBean.connected ? msg['menu.connection.connected']
+                                                    : msg['menu.connection.disconnected']}"
+                            styleClass="#{menuBean.connected ? 'connected' : 'disconnected'}"/>
+            </p:submenu>
+
+            <p:menuitem value="#{msg['menu.addStudent']}" icon="fa fa-fw fa-user-plus"
+                        actionListener="#{menuBean.addStudent}"/>
+
+            <f:facet name="options">
+                <h:panelGrid columns="2" style="margin-right: 10px">
+                    <p:outputLabel for="language" value="#{msg['menu.language']}"/>
+                    <p:selectOneMenu id="language" value="#{localeBean.language}" onchange="submit();">
+                        <f:selectItems value="#{localeBean.availableLocales}"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+            </f:facet>
+
+        </p:menubar>
+    </h:form>
+</ui:composition>
