@@ -54,6 +54,16 @@
 			<version>RELEASE</version>
 		</dependency>
 
+		<!-- Throws just an info message, but is confusing -->
+		<!-- "com.sun.faces.application.view.ViewScopeManager.<init> CDI @ViewScoped bean functionality unavailable" -->
+		<!-- https://kubosj.wordpress.com/2015/08/26/viewscoped-bean-functionality-unavailable/ -->
+		<!-- https://java.net/jira/browse/JAVASERVERFACES-3613 -->
+		<dependency>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
+			<version>RELEASE</version>
+		</dependency>
+
 		<!-- JSF 2 <probably not used> -->
 		<dependency>
 			<groupId>javax.servlet.jsp.jstl</groupId>
@@ -77,11 +87,13 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- Tools -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>RELEASE</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>

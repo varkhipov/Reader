@@ -7,13 +7,13 @@ import com.grsu.reader.models.Student;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
 @ManagedBean(name = "lectureBean")
-@SessionScoped
+@ViewScoped
 public class LectureBean implements Serializable {
 
 	private Lecture selectedLecture;
@@ -21,8 +21,15 @@ public class LectureBean implements Serializable {
 	@ManagedProperty(value = "#{databaseBean}")
 	private DatabaseBean databaseBean;
 
+	@ManagedProperty(value = "#{sessionBean}")
+	private SessionBean sessionBean;
+
 	public void setDatabaseBean(DatabaseBean databaseBean) {
 		this.databaseBean = databaseBean;
+	}
+
+	public void setSessionBean(SessionBean sessionBean) {
+		this.sessionBean = sessionBean;
 	}
 
 	public Lecture getSelectedLecture() {
@@ -38,9 +45,9 @@ public class LectureBean implements Serializable {
 	}
 
 	public List<Student> getLectureStudents() {
-		if (selectedLecture == null) {
+		if (sessionBean.getCurrentLecture() == null) {
 			return Collections.emptyList();
 		}
-		return StudentDAO.getStudentsByLectureId(databaseBean.getConnection(), selectedLecture.getId());
+		return StudentDAO.getStudentsByLectureId(databaseBean.getConnection(), sessionBean.getCurrentLecture().getId());
 	}
 }

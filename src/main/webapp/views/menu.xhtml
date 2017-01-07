@@ -4,13 +4,17 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
 >
-    <h:form id="menuForm">
+    <h:form id="menuForm" styleClass="menu">
         <p:growl id="messages"/>
 
         <p:menubar id="menu" autoDisplay="#{false}" styleClass="alignMenuItems">
             <p:submenu label="#{msg['menu.file']}" icon="fa fa-fw fa-small fa-file-o">
                 <p:submenu label="#{msg['menu.file.new']}" icon="fa fa-fw fa-plus">
-                    <p:menuitem value="#{msg['menu.file.new.lesson']}" icon="fa fa-fw fa-book"/>
+                    <p:menuitem value="#{msg['menu.file.new.lecture']}" icon="fa fa-fw fa-book"
+                                update="@([id$=views])"/>
+                    <p:menuitem value="#{msg['menu.file.new.student']}" icon="fa fa-fw fa-user"/>
+                    <p:menuitem value="#{msg['menu.file.new.group']}" icon="fa fa-fw fa-users"/>
+                    <p:menuitem value="#{msg['menu.file.new.lecturer']}" icon="fa fa-fw fa-mortar-board"/>
                 </p:submenu>
                 <p:separator/>
                 <p:menuitem value="#{msg['menu.file.quit']}" icon="fa fa-fw fa-close"
@@ -19,17 +23,28 @@
 
             <p:submenu label="#{msg['menu.connection']}" icon="fa fa-fw fa-exchange">
                 <p:menuitem value="#{msg['menu.connection.connect']}" icon="fa fa-fw fa-toggle-on"
-                            actionListener="#{menuBean.connect}" update="@all"
-                            disabled="#{menuBean.connected}"/>
+                            actionListener="#{menuBean.connect}" update="@([id$=wrapper])"
+                            disabled="#{sessionBean.connected}"/>
                 <p:menuitem value="#{msg['menu.connection.disconnect']}" icon="fa fa-fw fa-toggle-off"
-                            actionListener="#{menuBean.disconnect}" update="@all"
-                            disabled="#{!menuBean.connected}"/>
+                            actionListener="#{menuBean.disconnect}" update="@([id$=wrapper])"
+                            disabled="#{!sessionBean.connected}"/>
 
                 <p:separator/>
                 <p:menuitem disabled="#{true}"
-                            value="#{menuBean.connected ? msg['menu.connection.connected']
+                            value="#{sessionBean.connected ? msg['menu.connection.connected']
                                                     : msg['menu.connection.disconnected']}"
-                            styleClass="#{menuBean.connected ? 'connected' : 'disconnected'}"/>
+                            styleClass="#{sessionBean.connected ? 'connected' : 'disconnected'}"/>
+            </p:submenu>
+
+            <p:submenu label="Show" icon="fa fa-fw fa-bars">
+                <p:menuitem value="Lectures" icon="fa fa-fw fa-book"
+                            actionListener="#{menuBean.changeView('lectures')}" update="@([id$=views])"/>
+                <p:menuitem value="Students" icon="fa fa-fw fa-user"
+                            actionListener="#{menuBean.changeView('students')}" update="@([id$=views])"/>
+                <p:menuitem value="Groups" icon="fa fa-fw fa-users"
+                            actionListener="#{menuBean.changeView('groups')}" update="@([id$=views])"/>
+                <p:menuitem value="Lecturers" icon="fa fa-fw fa-mortar-board"
+                            actionListener="#{menuBean.changeView('lecturers')}" update="@([id$=views])"/>
             </p:submenu>
 
             <p:menuitem value="#{msg['menu.addStudent']}" icon="fa fa-fw fa-user-plus"

@@ -1,36 +1,33 @@
 package com.grsu.reader.beans;
 
-import com.grsu.reader.utils.DBUtils;
+import com.grsu.reader.utils.FacesUtils;
 
-import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.event.ValueChangeListener;
+import javax.faces.view.ViewScoped;
 
 import java.io.Serializable;
 import java.sql.SQLException;
 
-import static com.grsu.reader.utils.FacesUtils.addMessage;
-
 @ManagedBean(name = "menuBean")
-@SessionScoped
+@ViewScoped
 public class MenuBean implements Serializable {
 
-	private boolean connected;
+	@ManagedProperty(value = "#{sessionBean}")
+	private SessionBean sessionBean;
 
 	@ManagedProperty(value = "#{databaseBean}")
 	private DatabaseBean databaseBean;
+
+	public void setSessionBean(SessionBean sessionBean) {
+		this.sessionBean = sessionBean;
+	}
 
 	public void setDatabaseBean(DatabaseBean databaseBean) {
 		this.databaseBean = databaseBean;
 	}
 
-	public boolean isConnected() {
-		return connected;
-	}
-
+/*
 	public void save() {
 		addMessage("Success", "Data saved");
 	}
@@ -42,10 +39,9 @@ public class MenuBean implements Serializable {
 	public void delete() {
 		addMessage("Success", "Data deleted");
 	}
-
+*/
 	public void quit() {
-		addMessage("Quit", "Some quit action");
-//		System.out.println("quit action runned");
+		FacesUtils.addMessage("Quit", "Some quit action");
 	}
 
 	public void connect() {
@@ -54,7 +50,7 @@ public class MenuBean implements Serializable {
 			if (!databaseBean.isConnected()) {
 				System.out.println("No connection to db.");
 			} else {
-				connected = true;
+				sessionBean.setConnected(true);
 			}
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -66,8 +62,12 @@ public class MenuBean implements Serializable {
 		if (databaseBean.isConnected()) {
 			System.out.println("Still not disconnected.");
 		} else {
-			connected = false;
+			sessionBean.setConnected(false);
 		}
+	}
+
+	public void changeView(String viewName) {
+		sessionBean.setActiveView(viewName);
 	}
 
 	public void addStudent() {

@@ -4,7 +4,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
 >
-    <h:form id="lecturesTableForm">
+    <h:form id="lecturesForm">
         <p:growl id="msgs" showDetail="true"/>
 
         <p:dataTable var="lecture" value="#{lectureBean.lectures}">
@@ -30,9 +30,9 @@
                 <h:outputText value="#{lecture.lecturer.name}"/>
             </p:column>
             <p:column styleClass="options">
-                <p:commandButton update=":lectureTableForm" oncomplete=""
+                <p:commandButton actionListener="#{menuBean.changeView('lecture')}" update="@([id$=views])"
                                  icon="ui-icon-search" title="View">
-                    <f:setPropertyActionListener value="#{lecture}" target="#{lectureBean.selectedLecture}"/>
+                    <f:setPropertyActionListener value="#{lecture}" target="#{sessionBean.currentLecture}"/>
                 </p:commandButton>
             </p:column>
         </p:dataTable>

@@ -5,12 +5,12 @@ import com.grsu.reader.models.Student;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.util.List;
 
 @ManagedBean(name = "studentBean")
-@SessionScoped
+@ViewScoped
 public class StudentBean implements Serializable {
 
 	private Student selectedStudent;

@@ -12,23 +12,23 @@
 <f:view locale="#{localeBean.locale}">
 
     <h:head>
-        <title>index</title>
+        <title>RFID Reader</title>
         <h:outputStylesheet name="css/style.css"/>
     </h:head>
 
     <h:body>
-        <ui:include src="views/menu.xhtml"/>
-        <h2>
-            <h:outputText value="#{msg['welcome.jsf']}"/>
-        </h2>
-        <h:panelGroup id="views" rendered="#{menuBean.connected}">
-            <ui:include src="views/lecturesTable.xhtml"/>
-            <ui:include src="views/lectureTable.xhtml"/>
-            <ui:include src="views/studentInfo.xhtml"/>
+        <h:panelGroup id="wrapper">
+            <ui:include src="views/menu.xhtml"/>
+
+            <h:panelGroup id="views" rendered="#{sessionBean.connected}">
+                <ui:include src="views/studentInfo.xhtml"/>
+                <ui:include src="views/#{sessionBean.activeView}.xhtml"/>
+            </h:panelGroup>
         </h:panelGroup>
 
         <p:ajaxStatus onstart="PF('blocker').show()" onsuccess="PF('blocker').hide()"/>
-        <p:dialog widgetVar="blocker" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+        <p:dialog widgetVar="blocker" modal="true" draggable="false"
+                  closable="false" resizable="false" showHeader="false">
             <p:graphicImage name="images/loader.gif"/>
         </p:dialog>
     </h:body>

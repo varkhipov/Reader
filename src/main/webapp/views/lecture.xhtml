@@ -4,10 +4,12 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
 >
-    <h:form id="studentTableForm">
+    <h:form id="lectureForm">
         <p:growl id="msgs" showDetail="true"/>
+        <p:commandButton value="Back to lectures" icon="fa fa-fw fa-arrow-left"
+                         actionListener="#{sessionBean.setActiveView('lectures')}" update="@([id$=views])"/>
 
-        <p:dataTable var="student" value="#{studentBean.students}">
+        <p:dataTable var="student" value="#{lectureBean.lectureStudents}">
             <f:facet name="header">
                 Students
             </f:facet>
@@ -16,6 +18,12 @@
             </p:column>
             <p:column headerText="Name">
                 <h:outputText value="#{student.name}"/>
+            </p:column>
+            <p:column headerText="Surname">
+                <h:outputText value="#{student.surname}"/>
+            </p:column>
+            <p:column headerText="Patronymic">
+                <h:outputText value="#{student.patronymic}"/>
             </p:column>
             <p:column headerText="Group">
                 <h:outputText value="#{student.group.name}"/>

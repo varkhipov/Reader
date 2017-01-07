@@ -4,10 +4,10 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
 >
-    <h:form id="lectureTableForm">
+    <h:form id="studentsForm">
         <p:growl id="msgs" showDetail="true"/>
 
-        <p:dataTable var="student" value="#{lectureBean.lectureStudents}">
+        <p:dataTable var="student" value="#{studentBean.students}">
             <f:facet name="header">
                 Students
             </f:facet>
@@ -16,12 +16,6 @@
             </p:column>
             <p:column headerText="Name">
                 <h:outputText value="#{student.name}"/>
-            </p:column>
-            <p:column headerText="Surname">
-                <h:outputText value="#{student.surname}"/>
-            </p:column>
-            <p:column headerText="Patronymic">
-                <h:outputText value="#{student.patronymic}"/>
             </p:column>
             <p:column headerText="Group">
                 <h:outputText value="#{student.group.name}"/>
