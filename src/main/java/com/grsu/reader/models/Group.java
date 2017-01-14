@@ -27,4 +27,15 @@ public class Group {
 				", name='" + name + '\'' +
 				'}';
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) return false;
+		if (this == obj) return true;
+
+		if (obj.getClass() != null && obj instanceof Group) {
+			return name.equals(((Group) obj).getName());
+		}
+		return false;
+	}
 }

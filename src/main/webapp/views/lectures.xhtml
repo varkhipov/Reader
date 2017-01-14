@@ -31,7 +31,7 @@
             </p:column>
             <p:column styleClass="options">
                 <p:commandButton actionListener="#{menuBean.changeView('lecture')}" update="@([id$=views])"
-                                 icon="ui-icon-search" title="View">
+                                 icon="fa fa-fw fa-search" title="View">
                     <f:setPropertyActionListener value="#{lecture}" target="#{sessionBean.currentLecture}"/>
                 </p:commandButton>
             </p:column>

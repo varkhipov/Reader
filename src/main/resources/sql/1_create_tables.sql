@@ -1,24 +1,24 @@
 BEGIN;
 
 -- SCHEDULE
-CREATE TABLE Schedule(
+CREATE TABLE Schedule (
   id            INTEGER PRIMARY KEY,
   begin         TEXT NOT NULL,
   end           TEXT NOT NULL
 );
 
 -- DISCIPLINE
-CREATE TABLE Discipline(
+CREATE TABLE Discipline (
   id            INTEGER PRIMARY KEY,
   name          TEXT NOT NULL
 );
 
 -- LECTURER
-CREATE TABLE Lecturer(
+CREATE TABLE Lecturer (
   id            INTEGER PRIMARY KEY,
   uid           TEXT UNIQUE,
   name          TEXT NOT NULL,
-  surame        TEXT NOT NULL,
+  surname       TEXT NOT NULL,
   patronymic    TEXT,
   phone         TEXT,
   email         TEXT,
@@ -27,17 +27,17 @@ CREATE TABLE Lecturer(
 );
 
 -- GROUP (used brackets because GROUP is reserved keyword)
-CREATE TABLE [Group](
+CREATE TABLE [Group] (
   id            INTEGER PRIMARY KEY,
   name          TEXT NOT NULL
 );
 
 -- STUDENT
-CREATE TABLE Student(
+CREATE TABLE Student (
   id            INTEGER PRIMARY KEY,
   uid           TEXT NOT NULL UNIQUE,
   name          TEXT NOT NULL,
-  surame        TEXT NOT NULL,
+  surname       TEXT NOT NULL,
   patronymic    TEXT,
   phone         TEXT,
   email         TEXT,
@@ -48,7 +48,7 @@ CREATE TABLE Student(
 );
 
 -- LECTURE
-CREATE TABLE Lecture(
+CREATE TABLE Lecture (
   id            INTEGER PRIMARY KEY,
   name          TEXT NOT NULL,
   timeBefore    INTEGER,
@@ -65,7 +65,7 @@ CREATE TABLE Lecture(
 );
 
 -- LECTURE-STUDENT
-CREATE TABLE Lecture_Student(
+CREATE TABLE Lecture_Student (
   lectureId     INTEGER NOT NULL,
   studentId     INTEGER NOT NULL,
   FOREIGN KEY (lectureId)     REFERENCES Lecture(id),

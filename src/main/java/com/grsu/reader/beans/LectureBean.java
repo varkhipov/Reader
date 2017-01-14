@@ -1,6 +1,7 @@
 package com.grsu.reader.beans;
 
 import com.grsu.reader.dao.LectureDAO;
+import com.grsu.reader.dao.LecturerStudentDAO;
 import com.grsu.reader.dao.StudentDAO;
 import com.grsu.reader.models.Lecture;
 import com.grsu.reader.models.Student;
@@ -48,6 +49,6 @@ public class LectureBean implements Serializable {
 		if (sessionBean.getCurrentLecture() == null) {
 			return Collections.emptyList();
 		}
-		return StudentDAO.getStudentsByLectureId(databaseBean.getConnection(), sessionBean.getCurrentLecture().getId());
+		return LecturerStudentDAO.getStudentsByLectureId(databaseBean.getConnection(), sessionBean.getCurrentLecture().getId());
 	}
 }

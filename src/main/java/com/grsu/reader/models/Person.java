@@ -1,5 +1,7 @@
 package com.grsu.reader.models;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 public class Person {
 	private int id;
 	private String uid;
@@ -24,7 +26,7 @@ public class Person {
 	}
 
 	public void setUid(String uid) {
-		this.uid = uid;
+		this.uid = isEmpty(uid) ? null : uid;
 	}
 
 	public String getName() {
@@ -32,7 +34,7 @@ public class Person {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = isEmpty(name) ? null : name;
 	}
 
 	public String getSurname() {
@@ -40,7 +42,7 @@ public class Person {
 	}
 
 	public void setSurname(String surname) {
-		this.surname = surname;
+		this.surname = isEmpty(surname) ? null : surname;
 	}
 
 	public String getPatronymic() {
@@ -48,7 +50,7 @@ public class Person {
 	}
 
 	public void setPatronymic(String patronymic) {
-		this.patronymic = patronymic;
+		this.patronymic = isEmpty(patronymic) ? null : patronymic;
 	}
 
 	public String getPhone() {
@@ -56,7 +58,7 @@ public class Person {
 	}
 
 	public void setPhone(String phone) {
-		this.phone = phone;
+		this.phone = isEmpty(phone) ? null : phone;
 	}
 
 	public String getEmail() {
@@ -64,7 +66,7 @@ public class Person {
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
+		this.email = isEmpty(email) ? null : email;
 	}
 
 	public String getNotes() {
@@ -72,7 +74,7 @@ public class Person {
 	}
 
 	public void setNotes(String notes) {
-		this.notes = notes;
+		this.notes = isEmpty(notes) ? null : notes;
 	}
 
 	public Object getPicture() {

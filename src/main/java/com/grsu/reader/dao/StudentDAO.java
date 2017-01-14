@@ -19,6 +19,12 @@ public class StudentDAO {
 		student.setId(resultSet.getInt("id"));
 		student.setUid(resultSet.getString("uid"));
 		student.setName(resultSet.getString("name"));
+		student.setSurname(resultSet.getString("surname"));
+		student.setPatronymic(resultSet.getString("patronymic"));
+		student.setPhone(resultSet.getString("phone"));
+		student.setEmail(resultSet.getString("email"));
+		student.setNotes(resultSet.getString("notes"));
+		// TODO: add photo
 
 		String groupId = resultSet.getString("groupId");
 		if (groupId != null) {
@@ -32,7 +38,7 @@ public class StudentDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT * FROM Student"
+					"SELECT * FROM Student;"
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -75,7 +81,7 @@ public class StudentDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT * FROM Student WHERE uid = '?';",
+					"SELECT * FROM Student WHERE uid = ?;",
 					uid
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -92,31 +98,79 @@ public class StudentDAO {
 		return student;
 	}
 
-	public static List<Student> getStudentsByLectureId(Connection connection, int id) {
-		List<Student> students = new ArrayList<>();
+	public static void updateStudent(Connection connection, Student student) {
 		try {
-			Lecture lecture = LectureDAO.getLectureById(connection, id);
-			if (lecture == null) {
-				return students;
-			}
-
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT studentId FROM Lecture_Student WHERE lectureId = ?",
-					lecture.getId()
+					"UPDATE Student " +
+							"SET " +
+								"uid = ?, name = ?, surname = ?, " +
+								"patronymic = ?, phone = ?, email = ?, " +
+								"notes = ?, groupId = ? " +
+							"WHERE id = ?;",
+					student.getUid(),
+					student.getName(),
+					student.getSurname(),
+					student.getPatronymic(),
+					student.getPhone(),
+					student.getEmail(),
+					student.getNotes(),
+					student.getGroup() != null && student.getGroup().getId() != 0
+							? student.getGroup().getId()
+							: null,
+
+					student.getId()
 			);
-			ResultSet resultSet = preparedStatement.executeQuery();
 
-			while (resultSet.next()) {
-				students.add(getStudentById(connection, resultSet.getInt(1)));
-			}
-
-			resultSet.close();
+			preparedStatement.executeUpdate();
 			preparedStatement.close();
-		} catch (Exception e) {
-			System.out.println("Error In getStudentsByLectureId() -->" + e.getMessage());
-			return null;
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		return students;
+	}
+
+	public static void addStudent(Connection connection, Student student) {
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"INSERT INTO Student (" +
+								"uid, name, surname, " +
+								"patronymic, phone, email, " +
+								"notes, groupId" +
+							") VALUES (" +
+								"?, ?, ?, ?, ?, ?, ?, ?" +
+							");",
+					student.getUid(),
+					student.getName(),
+					student.getSurname(),
+					student.getPatronymic(),
+					student.getPhone(),
+					student.getEmail(),
+					student.getNotes(),
+					student.getGroup() != null && student.getGroup().getId() != 0
+							? student.getGroup().getId()
+							: null
+			);
+
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void deleteStudent(Connection connection, Student student) {
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"DELETE FROM Student WHERE id = ?;",
+					student.getId()
+			);
+
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

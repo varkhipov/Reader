@@ -21,9 +21,10 @@
                 <h:outputText value="#{student.group.name}"/>
             </p:column>
             <p:column styleClass="options">
-                <p:commandButton update=":studentInfoForm:studentDetail" oncomplete="PF('studentDialog').show()"
-                                 icon="ui-icon-search" title="View">
+                <p:commandButton update=":studentInfoForm" oncomplete="PF('studentDialog').show()"
+                                 icon="fa fa-fw fa-search" title="View">
                     <f:setPropertyActionListener value="#{student}" target="#{studentBean.selectedStudent}"/>
+                    <p:resetInput target=":studentInfoForm:studentDetail"/>
                 </p:commandButton>
             </p:column>
         </p:dataTable>

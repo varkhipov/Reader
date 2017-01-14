@@ -10,9 +10,12 @@
         <p:menubar id="menu" autoDisplay="#{false}" styleClass="alignMenuItems">
             <p:submenu label="#{msg['menu.file']}" icon="fa fa-fw fa-small fa-file-o">
                 <p:submenu label="#{msg['menu.file.new']}" icon="fa fa-fw fa-plus">
-                    <p:menuitem value="#{msg['menu.file.new.lecture']}" icon="fa fa-fw fa-book"
-                                update="@([id$=views])"/>
-                    <p:menuitem value="#{msg['menu.file.new.student']}" icon="fa fa-fw fa-user"/>
+                    <p:menuitem value="#{msg['menu.file.new.lecture']}" icon="fa fa-fw fa-book"/>
+                    <p:menuitem value="#{msg['menu.file.new.student']}" icon="fa fa-fw fa-user"
+                                update=":studentInfoForm" oncomplete="PF('studentDialog').show()">
+                        <f:setPropertyActionListener value="#{newInstanceOfStudent}" target="#{studentBean.selectedStudent}"/>
+                        <p:resetInput target=":studentInfoForm:studentDetail"/>
+                    </p:menuitem>
                     <p:menuitem value="#{msg['menu.file.new.group']}" icon="fa fa-fw fa-users"/>
                     <p:menuitem value="#{msg['menu.file.new.lecturer']}" icon="fa fa-fw fa-mortar-board"/>
                 </p:submenu>
