@@ -4,7 +4,7 @@ import com.grsu.reader.utils.FacesUtils;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.view.ViewScoped;
+import javax.faces.bean.ViewScoped;
 
 import java.io.Serializable;
 import java.sql.SQLException;

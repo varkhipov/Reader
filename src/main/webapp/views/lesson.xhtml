@@ -4,12 +4,12 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
 >
-    <h:form id="lectureForm">
+    <h:form id="lessonForm">
         <p:growl id="msgs" showDetail="true"/>
-        <p:commandButton value="Back to lectures" icon="fa fa-fw fa-arrow-left"
-                         actionListener="#{sessionBean.setActiveView('lectures')}" update="@([id$=views])"/>
+        <p:commandButton value="Back to lessons" icon="fa fa-fw fa-arrow-left"
+                         actionListener="#{sessionBean.setActiveView('lessons')}" update="@([id$=views])"/>
 
-        <p:dataTable var="student" value="#{lectureBean.lectureStudents}">
+        <p:dataTable var="student" value="#{lessonBean.lessonStudents}">
             <f:facet name="header">
                 Students
             </f:facet>

@@ -1,12 +1,12 @@
 package com.grsu.reader.models;
 
-public class Discipline {
+public class Stream {
 	private int id;
 	private String name;
 
-	public Discipline() {}
+	public Stream() {}
 
-	public Discipline(int id, String name) {
+	public Stream(int id, String name) {
 		this.id = id;
 		this.name = name;
 	}
@@ -29,7 +29,7 @@ public class Discipline {
 
 	@Override
 	public String toString() {
-		return "Discipline{" +
+		return "Stream{" +
 				"id=" + id +
 				", name='" + name + '\'' +
 				'}';

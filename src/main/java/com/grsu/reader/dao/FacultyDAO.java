@@ -1,6 +1,6 @@
 package com.grsu.reader.dao;
 
-import com.grsu.reader.models.Discipline;
+import com.grsu.reader.models.Faculty;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,38 +9,35 @@ import java.sql.SQLException;
 
 import static com.grsu.reader.utils.DBUtils.buildPreparedStatement;
 
-public class DisciplineDAO {
-	public static Discipline getDisciplineById(Connection connection, int id) {
-		Discipline discipline = null;
+public class FacultyDAO {
+	public static Faculty getFacultyById(Connection connection, int id) {
+		Faculty faculty = null;
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT * FROM Discipline WHERE id = ?;",
+					"SELECT * FROM Faculty WHERE id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
-				discipline = new Discipline(
-						resultSet.getInt("id"),
-						resultSet.getString("name")
-				);
+				faculty = new Faculty(resultSet.getInt("id"), resultSet.getString("name"));
 			}
 			resultSet.close();
 			preparedStatement.close();
 		} catch (Exception e) {
-			System.out.println("Error In getDisciplineById() -->" + e.getMessage());
-			return discipline;
+			System.out.println("Error In getFacultyById() -->" + e.getMessage());
+			return faculty;
 		}
-		return discipline;
+		return faculty;
 	}
 
-	public static void create(Connection connection, Discipline discipline) {
+	public static void create(Connection connection, Faculty faculty) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"INSERT INTO Discipline (name) VALUES (?);",
-					discipline.getName()
+					"INSERT INTO Faculty (name) VALUES (?);",
+					faculty.getName()
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
@@ -49,13 +46,13 @@ public class DisciplineDAO {
 		}
 	}
 
-	public static void update(Connection connection, Discipline discipline) {
+	public static void update(Connection connection, Faculty faculty) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE Discipline SET name = ? WHERE id = ?;",
-					discipline.getName(),
-					discipline.getId()
+					"UPDATE Faculty SET name = ? WHERE id = ?;",
+					faculty.getName(),
+					faculty.getId()
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
@@ -64,12 +61,12 @@ public class DisciplineDAO {
 		}
 	}
 
-	public static void delete(Connection connection, Discipline discipline) {
+	public static void delete(Connection connection, Faculty faculty) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM Discipline WHERE id = ?;",
-					discipline.getId()
+					"DELETE FROM Faculty WHERE id = ?;",
+					faculty.getId()
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();

@@ -1,6 +1,6 @@
 package com.grsu.reader.dao;
 
-import com.grsu.reader.models.Discipline;
+import com.grsu.reader.models.Stream;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,19 +9,19 @@ import java.sql.SQLException;
 
 import static com.grsu.reader.utils.DBUtils.buildPreparedStatement;
 
-public class DisciplineDAO {
-	public static Discipline getDisciplineById(Connection connection, int id) {
-		Discipline discipline = null;
+public class StreamDAO {
+	public static Stream getStreamById(Connection connection, int id) {
+		Stream stream = null;
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT * FROM Discipline WHERE id = ?;",
+					"SELECT * FROM Stream WHERE id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
-				discipline = new Discipline(
+				stream = new Stream(
 						resultSet.getInt("id"),
 						resultSet.getString("name")
 				);
@@ -29,18 +29,18 @@ public class DisciplineDAO {
 			resultSet.close();
 			preparedStatement.close();
 		} catch (Exception e) {
-			System.out.println("Error In getDisciplineById() -->" + e.getMessage());
-			return discipline;
+			System.out.println("Error In getStreamById() -->" + e.getMessage());
+			return stream;
 		}
-		return discipline;
+		return stream;
 	}
 
-	public static void create(Connection connection, Discipline discipline) {
+	public static void create(Connection connection, Stream stream) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"INSERT INTO Discipline (name) VALUES (?);",
-					discipline.getName()
+					"INSERT INTO Stream (name) VALUES (?);",
+					stream.getName()
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
@@ -49,13 +49,13 @@ public class DisciplineDAO {
 		}
 	}
 
-	public static void update(Connection connection, Discipline discipline) {
+	public static void update(Connection connection, Stream stream) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE Discipline SET name = ? WHERE id = ?;",
-					discipline.getName(),
-					discipline.getId()
+					"UPDATE Stream SET name = ? WHERE id = ?;",
+					stream.getName(),
+					stream.getId()
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
@@ -64,12 +64,12 @@ public class DisciplineDAO {
 		}
 	}
 
-	public static void delete(Connection connection, Discipline discipline) {
+	public static void delete(Connection connection, Stream stream) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM Discipline WHERE id = ?;",
-					discipline.getId()
+					"DELETE FROM Stream WHERE id = ?;",
+					stream.getId()
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();

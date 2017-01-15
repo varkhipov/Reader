@@ -1,6 +1,6 @@
 package com.grsu.reader.beans;
 
-import com.grsu.reader.models.Lecture;
+import com.grsu.reader.models.Lesson;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -12,8 +12,8 @@ import java.io.Serializable;
 public class SessionBean implements Serializable {
 
 	private boolean connected;
-	private String activeView = "lectures";
-	private Lecture currentLecture;
+	private String activeView = "lessons";
+	private Lesson currentLesson;
 
 	@ManagedProperty(value = "#{databaseBean}")
 	private DatabaseBean databaseBean;
@@ -38,11 +38,11 @@ public class SessionBean implements Serializable {
 		this.activeView = activeView;
 	}
 
-	public Lecture getCurrentLecture() {
-		return currentLecture;
+	public Lesson getCurrentLesson() {
+		return currentLesson;
 	}
 
-	public void setCurrentLecture(Lecture currentLecture) {
-		this.currentLecture = currentLecture;
+	public void setCurrentLesson(Lesson currentLesson) {
+		this.currentLesson = currentLesson;
 	}
 }

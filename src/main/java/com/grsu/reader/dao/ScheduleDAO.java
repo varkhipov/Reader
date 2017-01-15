@@ -1,17 +1,19 @@
 package com.grsu.reader.dao;
 
 import com.grsu.reader.models.Schedule;
+import com.grsu.reader.models.Schedule;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalTime;
 
 import static com.grsu.reader.utils.DBUtils.buildPreparedStatement;
 
 public class ScheduleDAO {
 	public static Schedule getScheduleById(Connection connection, int id) {
-		Schedule lecture = null;
+		Schedule schedule = null;
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
@@ -21,17 +23,71 @@ public class ScheduleDAO {
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
-				lecture = new Schedule();
-				lecture.setId(resultSet.getInt("id"));
-				lecture.setBegin(LocalTime.parse(resultSet.getString("begin")));
-				lecture.setEnd(LocalTime.parse(resultSet.getString("end")));
+				schedule = new Schedule(
+						resultSet.getInt("id"),
+						LocalTime.parse(resultSet.getString("begin")),
+						LocalTime.parse(resultSet.getString("end")),
+						resultSet.getString("number")
+				);
 			}
 			resultSet.close();
 			preparedStatement.close();
 		} catch (Exception e) {
 			System.out.println("Error In getScheduleById() -->" + e.getMessage());
-			return null;
+			return schedule;
 		}
-		return lecture;
+		return schedule;
+	}
+
+	public static void create(Connection connection, Schedule schedule) {
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"INSERT INTO Schedule (begin, end, number) VALUES (?, ?, ?);",
+					schedule.getBegin(),
+					schedule.getEnd(),
+					schedule.getNumber()
+			);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void update(Connection connection, Schedule schedule) {
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"UPDATE Schedule " +
+							"SET " +
+								"begin = ?, " +
+								"end = ?, " +
+								"number = ? " +
+							"WHERE id = ?;",
+					schedule.getBegin(),
+					schedule.getEnd(),
+					schedule.getNumber(),
+					schedule.getId()
+			);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void delete(Connection connection, Schedule schedule) {
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"DELETE FROM Schedule WHERE id = ?;",
+					schedule.getId()
+			);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -58,9 +58,9 @@ public class StudentBean implements Serializable {
 
 	public void save() {
 		if (selectedStudent.getId() == 0) {
-			StudentDAO.addStudent(databaseBean.getConnection(), selectedStudent);
+			StudentDAO.create(databaseBean.getConnection(), selectedStudent);
 		} else {
-			StudentDAO.updateStudent(databaseBean.getConnection(), selectedStudent);
+			StudentDAO.update(databaseBean.getConnection(), selectedStudent);
 		}
 		update("views");
 	}
@@ -71,7 +71,7 @@ public class StudentBean implements Serializable {
 	}
 
 	public void delete() {
-		StudentDAO.deleteStudent(databaseBean.getConnection(), selectedStudent);
+		StudentDAO.delete(databaseBean.getConnection(), selectedStudent);
 		update("views");
 		closeDialog();
 	}

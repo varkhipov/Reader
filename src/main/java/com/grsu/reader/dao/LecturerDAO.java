@@ -5,12 +5,27 @@ import com.grsu.reader.models.Lecturer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import static com.grsu.reader.utils.DBUtils.buildPreparedStatement;
 
 public class LecturerDAO {
+	private static Lecturer mapFromResultSet(ResultSet resultSet) throws SQLException {
+		Lecturer lecturer = new Lecturer();
+		lecturer.setId(resultSet.getInt("id"));
+		lecturer.setUid(resultSet.getString("uid"));
+		lecturer.setName(resultSet.getString("name"));
+		lecturer.setSurname(resultSet.getString("surname"));
+		lecturer.setPatronymic(resultSet.getString("patronymic"));
+		lecturer.setPhone(resultSet.getString("phone"));
+		lecturer.setEmail(resultSet.getString("email"));
+		lecturer.setNotes(resultSet.getString("notes"));
+		// TODO: add photo
+		return lecturer;
+	}
+	
 	public static Lecturer getLecturerById(Connection connection, int id) {
-		Lecturer lecture = null;
+		Lecturer lecturer = null;
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
@@ -20,16 +35,17 @@ public class LecturerDAO {
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
-				lecture = new Lecturer();
-				lecture.setId(resultSet.getInt("id"));
-				lecture.setName(resultSet.getString("name"));
+				lecturer = mapFromResultSet(resultSet);
 			}
 			resultSet.close();
 			preparedStatement.close();
 		} catch (Exception e) {
 			System.out.println("Error In getLecturerById() -->" + e.getMessage());
-			return null;
+			return lecturer;
 		}
-		return lecture;
+		return lecturer;
 	}
+
+
+	// TODO:Implement full CRUD
 }

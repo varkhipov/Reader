@@ -1,6 +1,5 @@
 package com.grsu.reader.dao;
 
-import com.grsu.reader.models.Lecture;
 import com.grsu.reader.models.Student;
 
 import java.sql.Connection;
@@ -49,7 +48,7 @@ public class StudentDAO {
 			preparedStatement.close();
 		} catch (Exception e) {
 			System.out.println("Error In getStudents() -->" + e.getMessage());
-			return null;
+			return students;
 		}
 		return students;
 	}
@@ -71,7 +70,7 @@ public class StudentDAO {
 			preparedStatement.close();
 		} catch (Exception e) {
 			System.out.println("Error In getStudentById() -->" + e.getMessage());
-			return null;
+			return student;
 		}
 		return student;
 	}
@@ -93,12 +92,43 @@ public class StudentDAO {
 			preparedStatement.close();
 		} catch (Exception e) {
 			System.out.println("Error In getStudentByUID() -->" + e.getMessage());
-			return null;
+			return student;
 		}
 		return student;
 	}
 
-	public static void updateStudent(Connection connection, Student student) {
+	public static void create(Connection connection, Student student) {
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"INSERT INTO Student (" +
+								"uid, name, surname, " +
+								"patronymic, phone, email, " +
+								"notes, groupId" +
+							") VALUES (" +
+								"?, ?, ?, " +
+								"?, ?, ?, " +
+								"?, ?" +
+							");",
+					student.getUid(),
+					student.getName(),
+					student.getSurname(),
+					student.getPatronymic(),
+					student.getPhone(),
+					student.getEmail(),
+					student.getNotes(),
+					student.getGroup() != null && student.getGroup().getId() != 0
+							? student.getGroup().getId()
+							: null
+			);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void update(Connection connection, Student student) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
@@ -121,7 +151,6 @@ public class StudentDAO {
 
 					student.getId()
 			);
-
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 		} catch (SQLException e) {
@@ -129,44 +158,13 @@ public class StudentDAO {
 		}
 	}
 
-	public static void addStudent(Connection connection, Student student) {
-		try {
-			PreparedStatement preparedStatement = buildPreparedStatement(
-					connection,
-					"INSERT INTO Student (" +
-								"uid, name, surname, " +
-								"patronymic, phone, email, " +
-								"notes, groupId" +
-							") VALUES (" +
-								"?, ?, ?, ?, ?, ?, ?, ?" +
-							");",
-					student.getUid(),
-					student.getName(),
-					student.getSurname(),
-					student.getPatronymic(),
-					student.getPhone(),
-					student.getEmail(),
-					student.getNotes(),
-					student.getGroup() != null && student.getGroup().getId() != 0
-							? student.getGroup().getId()
-							: null
-			);
-
-			preparedStatement.executeUpdate();
-			preparedStatement.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void deleteStudent(Connection connection, Student student) {
+	public static void delete(Connection connection, Student student) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
 					"DELETE FROM Student WHERE id = ?;",
 					student.getId()
 			);
-
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 		} catch (SQLException e) {

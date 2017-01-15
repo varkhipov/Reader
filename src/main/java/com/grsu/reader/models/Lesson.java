@@ -2,26 +2,24 @@ package com.grsu.reader.models;
 
 import com.grsu.reader.utils.DateUtils;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class Lecture {
+public class Lesson {
 	private int id;
 	private String name;
 	private int timeBefore;
 	private int timeAfter;
-	private LocalDateTime dateTime;
-	private Schedule schedule;
+	private LocalDateTime createDate;
 	private Discipline discipline;
 	private Lecturer lecturer;
-	private Group group;
+	private Stream stream;
 
 	public String getDate() {
-		return DateUtils.formatDate(dateTime);
+		return DateUtils.formatDate(createDate);
 	}
 
 	public String getTime() {
-		return DateUtils.formatTime(dateTime);
+		return DateUtils.formatTime(createDate);
 	}
 
 	public int getId() {
@@ -56,20 +54,12 @@ public class Lecture {
 		this.timeAfter = timeAfter;
 	}
 
-	public LocalDateTime getDateTime() {
-		return dateTime;
+	public LocalDateTime getCreateDate() {
+		return createDate;
 	}
 
-	public void setDateTime(LocalDateTime dateTime) {
-		this.dateTime = dateTime;
-	}
-
-	public Schedule getSchedule() {
-		return schedule;
-	}
-
-	public void setSchedule(Schedule schedule) {
-		this.schedule = schedule;
+	public void setCreateDate(LocalDateTime createDate) {
+		this.createDate = createDate;
 	}
 
 	public Discipline getDiscipline() {
@@ -88,26 +78,25 @@ public class Lecture {
 		this.lecturer = lecturer;
 	}
 
-	public Group getGroup() {
-		return group;
+	public Stream getStream() {
+		return stream;
 	}
 
-	public void setGroup(Group group) {
-		this.group = group;
+	public void setStream(Stream stream) {
+		this.stream = stream;
 	}
 
 	@Override
 	public String toString() {
-		return "Lecture{" +
+		return "Lesson{" +
 				"id=" + id +
 				", name='" + name + '\'' +
 				", timeBefore=" + timeBefore +
 				", timeAfter=" + timeAfter +
-				", dateTime=" + dateTime +
-				", schedule=" + schedule +
+				", createDate=" + createDate +
 				", discipline=" + discipline +
 				", lecturer=" + lecturer +
-				", group=" + group +
+				", stream=" + stream +
 				'}';
 	}
 }
