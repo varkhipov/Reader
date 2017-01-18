@@ -9,7 +9,7 @@
 
         <p:dataTable var="student" value="#{studentBean.students}">
             <f:facet name="header">
-                Students
+                #{msg['students']}
             </f:facet>
             <p:column headerText="#{msg['student.uid']}">
                 <h:outputText value="#{student.uid}"/>

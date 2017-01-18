@@ -6,31 +6,31 @@
 >
     <h:form id="lessonForm">
         <p:growl id="msgs" showDetail="true"/>
-        <p:commandButton value="Back to lessons" icon="fa fa-fw fa-arrow-left"
+        <p:commandButton value="#{msg['btn.backToLessons']}" icon="fa fa-fw fa-arrow-left"
                          actionListener="#{sessionBean.setActiveView('lessons')}" update="@([id$=views])"/>
 
         <p:dataTable var="student" value="#{lessonBean.lessonStudents}">
             <f:facet name="header">
-                Students
+                #{msg['students']}
             </f:facet>
-            <p:column headerText="UID">
+            <p:column headerText="#{msg['lesson.uid']}">
                 <h:outputText value="#{student.uid}"/>
             </p:column>
-            <p:column headerText="Name">
+            <p:column headerText="#{msg['lesson.name']}">
                 <h:outputText value="#{student.name}"/>
             </p:column>
-            <p:column headerText="Surname">
+            <p:column headerText="#{msg['lesson.surname']}">
                 <h:outputText value="#{student.surname}"/>
             </p:column>
-            <p:column headerText="Patronymic">
+            <p:column headerText="#{msg['lesson.patronymic']}">
                 <h:outputText value="#{student.patronymic}"/>
             </p:column>
-            <p:column headerText="Group">
+            <p:column headerText="#{msg['lesson.group']}">
                 <h:outputText value="#{student.group.name}"/>
             </p:column>
             <p:column styleClass="options">
                 <p:commandButton update=":studentInfoForm" oncomplete="PF('studentDialog').show()"
-                                 icon="fa fa-fw fa-search" title="View">
+                                 icon="fa fa-fw fa-search" title="#{msg['option.view']}">
                     <f:setPropertyActionListener value="#{student}" target="#{studentBean.selectedStudent}"/>
                     <p:resetInput target=":studentInfoForm:studentDetail"/>
                 </p:commandButton>
