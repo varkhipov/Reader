@@ -5,14 +5,14 @@
                 xmlns:p="http://primefaces.org/ui"
 >
     <h:form id="studentInfoForm">
-        <p:dialog header="Student Info" widgetVar="studentDialog" position="center"
+        <p:dialog header="#{msg['student.info']}" widgetVar="studentDialog" position="center"
                   modal="true" showEffect="fade" hideEffect="fade" resizable="true" fitViewport="true"
                   onHide="PF('studentDialog').content.empty()">
 
             <p:ajax event="close" listener="#{studentBean.exit}"/>
 
             <p:outputPanel id="studentDetail">
-                <p:commandButton value="Delete" icon="fa fa-fw fa-remove"
+                <p:commandButton value="#{msg['btn.delete']}" icon="fa fa-fw fa-remove"
                                  rendered="#{studentBean.selectedStudent != null
                                              and studentBean.selectedStudent.id != 0}"
                                  actionListener="#{studentBean.delete}"/>
@@ -23,47 +23,47 @@
                         <p:graphicImage name="images/noavatar.png" width="150" height="150"/>
                     </f:facet>
 
-                    <p:outputLabel for="uid" value="UID:"/>
+                    <p:outputLabel for="uid" value="#{msg['student.info.uid']}"/>
                     <p:inputText id="uid" value="#{studentBean.selectedStudent.uid}" required="true">
                         <p:ajax update=":studentInfoForm:studentDetail"/>
                     </p:inputText>
 
-                    <p:outputLabel for="name" value="Name:"/>
+                    <p:outputLabel for="name" value="#{msg['student.info.name']}"/>
                     <p:inputText id="name" value="#{studentBean.selectedStudent.name}" required="true">
                         <p:ajax update=":studentInfoForm:studentDetail"/>
                     </p:inputText>
 
-                    <p:outputLabel for="surname" value="Surname:"/>
+                    <p:outputLabel for="surname" value="#{msg['student.info.surname']}"/>
                     <p:inputText id="surname" value="#{studentBean.selectedStudent.surname}" required="true">
                         <p:ajax update=":studentInfoForm:studentDetail"/>
                     </p:inputText>
 
-                    <h:outputText value="Patronymic:"/>
+                    <h:outputText value="#{msg['student.info.patronymic']}"/>
                     <h:inputText value="#{studentBean.selectedStudent.patronymic}">
                         <p:ajax update=":studentInfoForm:studentDetail"/>
                     </h:inputText>
 
-                    <h:outputText value="Group:"/>
+                    <h:outputText value="#{msg['student.info.group']}"/>
                     <h:outputText value="#{studentBean.selectedStudent.group.name}"/>
 
-                    <h:outputText value="Phone:"/>
+                    <h:outputText value="#{msg['student.info.phone']}"/>
                     <h:inputText value="#{studentBean.selectedStudent.phone}">
                         <p:ajax update=":studentInfoForm:studentDetail"/>
                     </h:inputText>
 
-                    <h:outputText value="Email:"/>
+                    <h:outputText value="#{msg['student.info.email']}"/>
                     <h:inputText value="#{studentBean.selectedStudent.email}">
                         <p:ajax update=":studentInfoForm:studentDetail"/>
                     </h:inputText>
 
-                    <h:outputText value="Notes:"/>
+                    <h:outputText value="#{msg['student.info.notes']}"/>
                     <h:inputTextarea value="#{studentBean.selectedStudent.notes}">
                         <p:ajax update=":studentInfoForm:studentDetail"/>
                     </h:inputTextarea>
                 </p:panelGrid>
 
                 <p:outputPanel rendered="#{studentBean.infoChanged}">
-                    <p:commandButton value="Save and Exit" icon="fa fa-fw fa-save"
+                    <p:commandButton value="#{msg['btn.save.exit']}" icon="fa fa-fw fa-save"
                                      actionListener="#{studentBean.saveAndExit}"
                                      update=":studentInfoForm:studentDetail"/>
                 </p:outputPanel>

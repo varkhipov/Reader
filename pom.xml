@@ -13,7 +13,7 @@
 
 	<properties>
 		<war.name>ROOT</war.name>
-		<tomcat.webapps.path>/Users/vitaly.arkhipov/env/apache-tomcat-8.5.5/webapps</tomcat.webapps.path>
+		<tomcat.webapps.path>/Users/anny/work/apache-tomcat-8.5.5/webapps</tomcat.webapps.path>
 	</properties>
 
 	<dependencies>

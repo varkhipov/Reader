@@ -11,18 +11,18 @@
             <f:facet name="header">
                 Students
             </f:facet>
-            <p:column headerText="UID">
+            <p:column headerText="#{msg['student.uid']}">
                 <h:outputText value="#{student.uid}"/>
             </p:column>
-            <p:column headerText="Name">
+            <p:column headerText="#{msg['student.name']}">
                 <h:outputText value="#{student.name}"/>
             </p:column>
-            <p:column headerText="Group">
+            <p:column headerText="#{msg['student.group']}">
                 <h:outputText value="#{student.group.name}"/>
             </p:column>
             <p:column styleClass="options">
                 <p:commandButton update=":studentInfoForm" oncomplete="PF('studentDialog').show()"
-                                 icon="fa fa-fw fa-search" title="View">
+                                 icon="fa fa-fw fa-search" title="#{msg['option.view']}">
                     <f:setPropertyActionListener value="#{student}" target="#{studentBean.selectedStudent}"/>
                     <p:resetInput target=":studentInfoForm:studentDetail"/>
                 </p:commandButton>

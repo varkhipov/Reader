@@ -28,7 +28,7 @@
             </p:column>
             <p:column styleClass="options">
                 <p:commandButton actionListener="#{menuBean.changeView('lesson')}" update="@([id$=views])"
-                                 icon="fa fa-fw fa-search" title="View">
+                                 icon="fa fa-fw fa-search" title="#{msg['option.view']}">
                     <f:setPropertyActionListener value="#{lesson}" target="#{sessionBean.currentLesson}"/>
                 </p:commandButton>
             </p:column>

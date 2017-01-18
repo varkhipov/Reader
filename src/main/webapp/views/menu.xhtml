@@ -39,14 +39,14 @@
                             styleClass="#{sessionBean.connected ? 'connected' : 'disconnected'}"/>
             </p:submenu>
 
-            <p:submenu label="Show" icon="fa fa-fw fa-bars">
-                <p:menuitem value="Lessons" icon="fa fa-fw fa-book"
+            <p:submenu label="#{msg['menu.show']}" icon="fa fa-fw fa-bars">
+                <p:menuitem value="#{msg['menu.show.lessons']}" icon="fa fa-fw fa-book"
                             actionListener="#{menuBean.changeView('lessons')}" update="@([id$=views])"/>
-                <p:menuitem value="Students" icon="fa fa-fw fa-user"
+                <p:menuitem value="#{msg['menu.show.students']}" icon="fa fa-fw fa-user"
                             actionListener="#{menuBean.changeView('students')}" update="@([id$=views])"/>
-                <p:menuitem value="Groups" icon="fa fa-fw fa-users"
+                <p:menuitem value="#{msg['menu.show.groups']}" icon="fa fa-fw fa-users"
                             actionListener="#{menuBean.changeView('groups')}" update="@([id$=views])"/>
-                <p:menuitem value="Lecturers" icon="fa fa-fw fa-mortar-board"
+                <p:menuitem value="#{msg['menu.show.lecturers']}" icon="fa fa-fw fa-mortar-board"
                             actionListener="#{menuBean.changeView('lecturers')}" update="@([id$=views])"/>
             </p:submenu>
 
