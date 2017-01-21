@@ -6,10 +6,37 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.grsu.reader.utils.DBUtils.*;
 
 public class GroupDAO {
+	public static List<Group> getGroups(Connection connection) {
+		List<Group> groups = new ArrayList<>();
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"SELECT * FROM [Group];"
+			);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				groups.add(new Group(
+						resultSet.getInt("id"),
+						resultSet.getString("name"),
+						FacultyDAO.getFacultyById(connection, resultSet.getInt("facultyId"))
+				));
+			}
+			resultSet.close();
+			preparedStatement.close();
+		} catch (Exception e) {
+			System.out.println("Error In getGroups() -->" + e.getMessage());
+			return groups;
+		}
+		return groups;
+	}
+	
 	public static Group getGroupById(Connection connection, int id) {
 		Group group = null;
 			try {
@@ -24,6 +51,7 @@ public class GroupDAO {
 					group = new Group();
 					group.setId(resultSet.getInt("id"));
 					group.setName(resultSet.getString("name"));
+					group.setFaculty(FacultyDAO.getFacultyById(connection, resultSet.getInt("facultyId")));
 				}
 				resultSet.close();
 				preparedStatement.close();

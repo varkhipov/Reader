@@ -1,8 +1,11 @@
 package com.grsu.reader.models;
 
+import org.apache.commons.lang3.StringUtils;
+import javax.faces.model.SelectItem;
+
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
-public class Person {
+public class Person extends Entity {
 	private int id;
 	private String uid;
 	private String name;
@@ -12,6 +15,15 @@ public class Person {
 	private String email;
 	private String notes;
 	private Object picture;
+
+	@Override
+	public SelectItem getSelectItem() {
+		return new SelectItem(id, getFullName());
+	}
+
+	public String getFullName() {
+		return StringUtils.joinWith(" ", surname, name, patronymic);
+	}
 
 	public int getId() {
 		return id;

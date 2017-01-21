@@ -2,9 +2,12 @@ package com.grsu.reader.models;
 
 import com.grsu.reader.utils.DateUtils;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.model.SelectItem;
 import java.time.LocalDateTime;
 
-public class Lesson {
+@ManagedBean(name = "newInstanceOfLesson")
+public class Lesson extends Entity {
 	private int id;
 	private String name;
 	private int timeBefore;
@@ -13,6 +16,11 @@ public class Lesson {
 	private Discipline discipline;
 	private Lecturer lecturer;
 	private Stream stream;
+
+	@Override
+	public SelectItem getSelectItem() {
+		return new SelectItem(id, name);
+	}
 
 	public String getDate() {
 		return DateUtils.formatDate(createDate);

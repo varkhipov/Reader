@@ -6,10 +6,36 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.grsu.reader.utils.DBUtils.buildPreparedStatement;
 
 public class FacultyDAO {
+	public static List<Faculty> getFaculties(Connection connection) {
+		List<Faculty> faculties = new ArrayList<>();
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"SELECT * FROM Faculty;"
+			);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				faculties.add(new Faculty(
+						resultSet.getInt("id"),
+						resultSet.getString("name")
+				));
+			}
+			resultSet.close();
+			preparedStatement.close();
+		} catch (Exception e) {
+			System.out.println("Error In getFaculties() -->" + e.getMessage());
+			return faculties;
+		}
+		return faculties;
+	}
+	
 	public static Faculty getFacultyById(Connection connection, int id) {
 		Faculty faculty = null;
 		try {

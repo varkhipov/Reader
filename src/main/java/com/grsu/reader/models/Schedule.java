@@ -1,8 +1,9 @@
 package com.grsu.reader.models;
 
+import javax.faces.model.SelectItem;
 import java.time.LocalTime;
 
-public class Schedule {
+public class Schedule extends Entity {
 	private int id;
 	private LocalTime begin;
 	private LocalTime end;
@@ -15,6 +16,11 @@ public class Schedule {
 		this.begin = begin;
 		this.end = end;
 		this.number = number;
+	}
+
+	@Override
+	public SelectItem getSelectItem() {
+		return new SelectItem(id, String.format("[%s] %s - %s", number, begin, end));
 	}
 
 	public int getId() {

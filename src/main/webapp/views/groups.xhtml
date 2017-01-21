@@ -5,6 +5,26 @@
                 xmlns:p="http://primefaces.org/ui"
 >
     <h:form id="groupsForm">
+        <p:dataTable var="group" value="#{groupBean.groups}">
+            <f:facet name="header">
+                #{msg['groups']}
+            </f:facet>
+            <p:column headerText="#{msg['group.name']}">
+                <h:outputText value="#{group.name}"/>
+            </p:column>
+
+            <p:column headerText="#{msg['group.faculty']}">
+                <h:outputText value="#{group.faculty.name}"/>
+            </p:column>
+
+            <p:column styleClass="options">
+                <p:commandButton update=":groupInfoForm" oncomplete="PF('groupDialog').show()"
+                                 icon="fa fa-fw fa-search" title="View">
+                    <f:setPropertyActionListener value="#{group}" target="#{groupBean.selectedGroup}"/>
+                    <p:resetInput target=":groupInfoForm:groupDetail"/>
+                </p:commandButton>
+            </p:column>
+        </p:dataTable>
 
     </h:form>
 </ui:composition>

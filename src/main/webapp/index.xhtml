@@ -14,6 +14,7 @@
     <h:head>
         <title>RFID Reader</title>
         <h:outputStylesheet name="css/style.css"/>
+        <h:outputScript name="js/scripts.js"/>
     </h:head>
 
     <h:body>
@@ -21,7 +22,7 @@
             <ui:include src="views/menu.xhtml"/>
 
             <h:panelGroup id="views" rendered="#{sessionBean.connected}">
-                <ui:include src="views/studentInfo.xhtml"/>
+                <ui:include src="views/dialogs.xhtml"/>
                 <ui:include src="views/#{sessionBean.activeView}.xhtml"/>
             </h:panelGroup>
         </h:panelGroup>

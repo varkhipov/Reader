@@ -1,6 +1,10 @@
 package com.grsu.reader.models;
 
-public class Stream {
+import javax.faces.bean.ManagedBean;
+import javax.faces.model.SelectItem;
+
+@ManagedBean(name = "newInstanceOfStream")
+public class Stream extends Entity {
 	private int id;
 	private String name;
 
@@ -9,6 +13,16 @@ public class Stream {
 	public Stream(int id, String name) {
 		this.id = id;
 		this.name = name;
+	}
+
+	public Stream(Stream stream) {
+		this.id = stream.getId();
+		this.name = stream.getName();
+	}
+
+	@Override
+	public SelectItem getSelectItem() {
+		return new SelectItem(id, name);
 	}
 
 	public int getId() {

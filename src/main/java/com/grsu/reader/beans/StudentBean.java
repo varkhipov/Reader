@@ -1,12 +1,18 @@
 package com.grsu.reader.beans;
 
 import com.grsu.reader.dao.StudentDAO;
+import com.grsu.reader.models.Group;
 import com.grsu.reader.models.Student;
+import org.primefaces.model.DualListModel;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.model.SelectItem;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.grsu.reader.utils.FacesUtils.execute;
@@ -19,24 +25,42 @@ public class StudentBean implements Serializable {
 	private Student selectedStudent;
 	private Student copyOfSelectedStudent; // used to detect changes
 
+	private DualListModel<Group> selectedGroups;
+
 	@ManagedProperty(value = "#{databaseBean}")
 	private DatabaseBean databaseBean;
 
-	public void setDatabaseBean(DatabaseBean databaseBean) {
-		this.databaseBean = databaseBean;
-	}
-
-	public Student getSelectedStudent() {
-		return selectedStudent;
-	}
-
-	public Student getCopyOfSelectedStudent() {
-		return copyOfSelectedStudent;
-	}
+	@ManagedProperty(value = "#{sessionBean}")
+	private SessionBean sessionBean;
 
 	public void setSelectedStudent(Student selectedStudent) {
 		this.selectedStudent = selectedStudent;
 		copyOfSelectedStudent = this.selectedStudent == null ? null : new Student(selectedStudent);
+	}
+
+	public DualListModel<Group> getSelectedGroups() {
+		if (selectedStudent == null) {
+			setSelectedGroups(new DualListModel<>(
+					sessionBean.getGroups(),
+					Collections.emptyList()
+			));
+		} else if (selectedGroups == null) {
+			List<Group> sourceGroups = new ArrayList<>(sessionBean.getGroups());
+			sourceGroups.removeAll(selectedStudent.getGroups());
+
+			setSelectedGroups(new DualListModel<>(
+					sourceGroups,
+					selectedStudent.getGroups()
+			));
+		}
+		return selectedGroups;
+	}
+
+	public void setSelectedGroups(DualListModel<Group> selectedGroups) {
+		this.selectedGroups = selectedGroups;
+		if (selectedStudent != null) {
+			selectedStudent.setGroups(selectedGroups == null ? null : selectedGroups.getTarget());
+		}
 	}
 
 	public boolean isInfoChanged() {
@@ -44,7 +68,11 @@ public class StudentBean implements Serializable {
 	}
 
 	public List<Student> getStudents() {
-		return StudentDAO.getStudents(databaseBean.getConnection());
+		return sessionBean.getStudents();
+	}
+
+	public List<SelectItem> getGroupsItems() {
+		return sessionBean.getGroupsItems();
 	}
 
 	public void closeDialog() {
@@ -53,6 +81,7 @@ public class StudentBean implements Serializable {
 
 	public void exit() {
 		setSelectedStudent(null);
+		setSelectedGroups(null);
 		closeDialog();
 	}
 
@@ -62,6 +91,7 @@ public class StudentBean implements Serializable {
 		} else {
 			StudentDAO.update(databaseBean.getConnection(), selectedStudent);
 		}
+		sessionBean.updateStudents();
 		update("views");
 	}
 
@@ -72,8 +102,25 @@ public class StudentBean implements Serializable {
 
 	public void delete() {
 		StudentDAO.delete(databaseBean.getConnection(), selectedStudent);
+		sessionBean.updateStudents();
 		update("views");
 		closeDialog();
+	}
+
+	public void setDatabaseBean(DatabaseBean databaseBean) {
+		this.databaseBean = databaseBean;
+	}
+
+	public void setSessionBean(SessionBean sessionBean) {
+		this.sessionBean = sessionBean;
+	}
+
+	public Student getSelectedStudent() {
+		return selectedStudent;
+	}
+
+	public Student getCopyOfSelectedStudent() {
+		return copyOfSelectedStudent;
 	}
 
 }

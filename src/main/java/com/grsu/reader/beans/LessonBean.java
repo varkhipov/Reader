@@ -25,6 +25,29 @@ public class LessonBean implements Serializable {
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
 
+	public List<Lesson> getLessons() {
+		return sessionBean.getLessons();
+	}
+
+	public List<Student> getLessonStudents() {
+		if (selectedLesson == null) {
+			return Collections.emptyList();
+		}
+		List<Class> classes = LessonClassDAO.getClassesByLessonId(
+				databaseBean.getConnection(),
+				selectedLesson.getId()
+		);
+
+		List<Student> students = new ArrayList<>();
+		for (Class cls : classes) {
+			students.addAll(StudentClassDAO.getStudentsByClassId(
+					databaseBean.getConnection(),
+					cls.getId())
+			);
+		}
+		return students;
+	}
+
 	public void setDatabaseBean(DatabaseBean databaseBean) {
 		this.databaseBean = databaseBean;
 	}
@@ -39,28 +62,5 @@ public class LessonBean implements Serializable {
 
 	public void setSelectedLesson(Lesson selectedLesson) {
 		this.selectedLesson = selectedLesson;
-	}
-
-	public List<Lesson> getLessons() {
-		return LessonDAO.getLessons(databaseBean.getConnection());
-	}
-
-	public List<Student> getLessonStudents() {
-		if (sessionBean.getCurrentLesson() == null) {
-			return Collections.emptyList();
-		}
-		List<Class> classes = LessonClassDAO.getClassesByLessonId(
-				databaseBean.getConnection(),
-				sessionBean.getCurrentLesson().getId()
-		);
-
-		List<Student> students = new ArrayList<>();
-		for (Class cls : classes) {
-			students.addAll(StudentClassDAO.getStudentsByClassId(
-					databaseBean.getConnection(),
-					cls.getId())
-			);
-		}
-		return students;
 	}
 }

@@ -8,10 +8,37 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.grsu.reader.utils.DBUtils.buildPreparedStatement;
 
 public class ClassDAO {
+	public static List<Class> getClasses(Connection connection) {
+		List<Class> cls = new ArrayList<>();
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"SELECT * FROM Class;"
+			);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				cls.add(new Class(
+						resultSet.getInt("id"),
+						LocalDate.parse(resultSet.getString("date")),
+						ScheduleDAO.getScheduleById(connection, resultSet.getInt("scheduleId"))
+				));
+			}
+			resultSet.close();
+			preparedStatement.close();
+		} catch (Exception e) {
+			System.out.println("Error In getClasses() -->" + e.getMessage());
+			return cls;
+		}
+		return cls;
+	}
+
 	public static Class getClassById(Connection connection, int id) {
 		Class cls = null;
 		try {
