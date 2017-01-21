@@ -6,10 +6,36 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.grsu.reader.utils.DBUtils.buildPreparedStatement;
 
 public class DisciplineDAO {
+	public static List<Discipline> getDisciplines(Connection connection) {
+		List<Discipline> schedules = new ArrayList<>();
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"SELECT * FROM Discipline;"
+			);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				schedules.add(new Discipline(
+						resultSet.getInt("id"),
+						resultSet.getString("name")
+				));
+			}
+			resultSet.close();
+			preparedStatement.close();
+		} catch (Exception e) {
+			System.out.println("Error In getDisciplines() -->" + e.getMessage());
+			return schedules;
+		}
+		return schedules;
+	}
+	
 	public static Discipline getDisciplineById(Connection connection, int id) {
 		Discipline discipline = null;
 		try {

@@ -1,15 +1,18 @@
 package com.grsu.reader.models;
 
+import com.grsu.reader.constants.Constants;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.faces.bean.ManagedBean;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
+
+import static com.grsu.reader.constants.Constants.GROUPS_DELIMITER;
 
 @ManagedBean(name = "newInstanceOfStudent")
 public class Student extends Person {
-
-	public Student() {
-	}
+	public Student() {}
 
 	public Student(Student student) {
 		setId(student.getId());
@@ -20,17 +23,32 @@ public class Student extends Person {
 		setPhone(student.getPhone());
 		setEmail(student.getEmail());
 		setNotes(student.getNotes());
-		setGroup(student.getGroup());
+		setGroups(student.getGroups());
 	}
 
-	private Group group;
+	private List<Group> groups;
 
-	public Group getGroup() {
-		return group;
+	public String getGroupNames() {
+		StringBuilder sb = new StringBuilder();
+		for (Group group : getGroups()) {
+			sb.append(group.getName());
+			sb.append(GROUPS_DELIMITER);
+		}
+		if (sb.length() > 0) {
+			sb.setLength(sb.length() - GROUPS_DELIMITER.length());
+		}
+		return sb.toString();
 	}
 
-	public void setGroup(Group group) {
-		this.group = group;
+	public List<Group> getGroups() {
+		if (groups == null) {
+			return Collections.emptyList();
+		}
+		return groups;
+	}
+
+	public void setGroups(List<Group> groups) {
+		this.groups = groups;
 	}
 
 	@Override
@@ -44,7 +62,7 @@ public class Student extends Person {
 				", phone='" + getPhone() + '\'' +
 				", email='" + getEmail() + '\'' +
 				", notes='" + getNotes() + '\'' +
-				", group=" + group +
+				", groups=" + groups +
 //				", picture=" + getPicture() +
 				'}';
 	}
@@ -63,7 +81,7 @@ public class Student extends Person {
 					&& StringUtils.equals(getPhone(), student.getPhone())
 					&& StringUtils.equals(getEmail(), student.getEmail())
 					&& StringUtils.equals(getNotes(), student.getNotes())
-					&& Objects.equals(getGroup(), student.getGroup());
+					&& Objects.equals(getGroups(), student.getGroups());
 		}
 		return false;
 	}

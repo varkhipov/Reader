@@ -1,5 +1,6 @@
 package com.grsu.reader.dao;
 
+import com.grsu.reader.models.Group;
 import com.grsu.reader.models.Student;
 
 import java.sql.Connection;
@@ -25,10 +26,7 @@ public class StudentDAO {
 		student.setNotes(resultSet.getString("notes"));
 		// TODO: add photo
 
-		String groupId = resultSet.getString("groupId");
-		if (groupId != null) {
-			student.setGroup(GroupDAO.getGroupById(connection, Integer.valueOf(groupId)));
-		}
+		student.setGroups(StudentGroupDAO.getGroupsByStudentId(connection, student.getId()));
 		return student;
 	}
 
@@ -97,6 +95,29 @@ public class StudentDAO {
 		return student;
 	}
 
+
+	public static int getStudentIdByUID(Connection connection, String uid) {
+		int id = 0;
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"SELECT id FROM Student WHERE uid = ?;",
+					uid
+			);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				id = resultSet.getInt(1);
+			}
+			resultSet.close();
+			preparedStatement.close();
+		} catch (Exception e) {
+			System.out.println("Error In getStudentIdByUID() [returned 0] -->" + e.getMessage());
+			return id;
+		}
+		return id;
+	}
+
 	public static void create(Connection connection, Student student) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
@@ -104,11 +125,11 @@ public class StudentDAO {
 					"INSERT INTO Student (" +
 								"uid, name, surname, " +
 								"patronymic, phone, email, " +
-								"notes, groupId" +
+								"notes" +
 							") VALUES (" +
 								"?, ?, ?, " +
 								"?, ?, ?, " +
-								"?, ?" +
+								"?" +
 							");",
 					student.getUid(),
 					student.getName(),
@@ -116,15 +137,22 @@ public class StudentDAO {
 					student.getPatronymic(),
 					student.getPhone(),
 					student.getEmail(),
-					student.getNotes(),
-					student.getGroup() != null && student.getGroup().getId() != 0
-							? student.getGroup().getId()
-							: null
+					student.getNotes()
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+
+		int newStudentId = getStudentIdByUID(connection, student.getUid());
+		if (newStudentId == 0) {
+			System.out.println("Error in [com.grsu.reader.dao.StudentDAO.create]. " +
+					"No groups added for student with id 0: " + student);
+		} else {
+			for (Group group : student.getGroups()) {
+				StudentGroupDAO.create(connection, newStudentId, group.getId());
+			}
 		}
 	}
 
@@ -136,7 +164,7 @@ public class StudentDAO {
 							"SET " +
 								"uid = ?, name = ?, surname = ?, " +
 								"patronymic = ?, phone = ?, email = ?, " +
-								"notes = ?, groupId = ? " +
+								"notes = ? " +
 							"WHERE id = ?;",
 					student.getUid(),
 					student.getName(),
@@ -145,9 +173,6 @@ public class StudentDAO {
 					student.getPhone(),
 					student.getEmail(),
 					student.getNotes(),
-					student.getGroup() != null && student.getGroup().getId() != 0
-							? student.getGroup().getId()
-							: null,
 
 					student.getId()
 			);
@@ -156,9 +181,16 @@ public class StudentDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		StudentGroupDAO.deleteByStudentId(connection, student.getId());
+		for (Group group : student.getGroups()) {
+			StudentGroupDAO.create(connection, student.getId(), group.getId());
+		}
 	}
 
 	public static void delete(Connection connection, Student student) {
+		StudentGroupDAO.deleteByStudentId(connection, student.getId());
+
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,

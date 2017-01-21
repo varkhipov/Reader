@@ -19,14 +19,6 @@ public class MenuBean implements Serializable {
 	@ManagedProperty(value = "#{databaseBean}")
 	private DatabaseBean databaseBean;
 
-	public void setSessionBean(SessionBean sessionBean) {
-		this.sessionBean = sessionBean;
-	}
-
-	public void setDatabaseBean(DatabaseBean databaseBean) {
-		this.databaseBean = databaseBean;
-	}
-
 /*
 	public void save() {
 		addMessage("Success", "Data saved");
@@ -51,6 +43,7 @@ public class MenuBean implements Serializable {
 				System.out.println("No connection to db.");
 			} else {
 				sessionBean.setConnected(true);
+				sessionBean.initData();
 			}
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -72,5 +65,13 @@ public class MenuBean implements Serializable {
 
 	public void addStudent() {
 		//
+	}
+
+	public void setSessionBean(SessionBean sessionBean) {
+		this.sessionBean = sessionBean;
+	}
+
+	public void setDatabaseBean(DatabaseBean databaseBean) {
+		this.databaseBean = databaseBean;
 	}
 }

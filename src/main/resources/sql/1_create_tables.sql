@@ -1,6 +1,19 @@
 COMMIT;
 BEGIN;
 
+-- LECTURER
+CREATE TABLE Lecturer (
+  id            INTEGER PRIMARY KEY,
+  uid           TEXT UNIQUE,
+  name          TEXT NOT NULL,
+  surname       TEXT NOT NULL,
+  patronymic    TEXT,
+  phone         TEXT,
+  email         TEXT,
+  notes         TEXT,
+  photo         BLOB
+);
+
 -- SCHEDULE
 CREATE TABLE Schedule (
   id            INTEGER PRIMARY KEY,
@@ -43,19 +56,6 @@ CREATE TABLE Stream_Group (
   FOREIGN KEY (groupId)       REFERENCES [Group](id)
 );
 
--- LECTURER
-CREATE TABLE Lecturer (
-  id            INTEGER PRIMARY KEY,
-  uid           TEXT UNIQUE,
-  name          TEXT NOT NULL,
-  surname       TEXT NOT NULL,
-  patronymic    TEXT,
-  phone         TEXT,
-  email         TEXT,
-  notes         TEXT,
-  photo         BLOB
-);
-
 -- STUDENT
 CREATE TABLE Student (
   id            INTEGER PRIMARY KEY,
@@ -66,8 +66,14 @@ CREATE TABLE Student (
   phone         TEXT,
   email         TEXT,
   notes         TEXT,
-  photo         BLOB,
-  groupId       INTEGER,
+  photo         BLOB
+);
+
+-- STUDENT_GROUP
+CREATE TABLE Student_Group (
+  studentId     INTEGER NOT NULL,
+  groupId       INTEGER NOT NULL,
+  FOREIGN KEY (studentId)     REFERENCES Student(id),
   FOREIGN KEY (groupId)       REFERENCES [Group](id)
 );
 
@@ -77,7 +83,7 @@ CREATE TABLE Lesson (
   name          TEXT NOT NULL,
   timeBefore    INTEGER,
   timeAfter     INTEGER,
-  createDate    TEXT,
+  createDate    TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%S','now', 'localtime')),
   disciplineId  INTEGER NOT NULL,
   lecturerId    INTEGER NOT NULL,
   streamId      INTEGER,
@@ -106,6 +112,7 @@ CREATE TABLE Lesson_Class (
 CREATE TABLE Student_Class (
   studentId     INTEGER NOT NULL,
   classId       INTEGER NOT NULL,
+  present       INTEGER NOT NULL DEFAULT 0,
   FOREIGN KEY (studentId)     REFERENCES Student(id),
   FOREIGN KEY (classId)       REFERENCES Class(id)
 );

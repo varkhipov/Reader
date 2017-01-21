@@ -35,3 +35,7 @@ body {
 .menu {
     margin-bottom: 25px;
 }
+
+.studentDetail {
+    max-height: 90%;
+}

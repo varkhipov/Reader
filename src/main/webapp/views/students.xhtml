@@ -5,20 +5,18 @@
                 xmlns:p="http://primefaces.org/ui"
 >
     <h:form id="studentsForm">
-        <p:growl id="msgs" showDetail="true"/>
-
-        <p:dataTable var="student" value="#{studentBean.students}">
+        <p:dataTable var="student" value="#{studentBean.students}" sortBy="#{student.fullName}">
             <f:facet name="header">
                 #{msg['students']}
             </f:facet>
             <p:column headerText="#{msg['student.uid']}">
                 <h:outputText value="#{student.uid}"/>
             </p:column>
-            <p:column headerText="#{msg['student.name']}">
-                <h:outputText value="#{student.name}"/>
+            <p:column headerText="#{msg['student.name']}" sortBy="#{student.fullName}">
+                <h:outputText value="#{student.fullName}"/>
             </p:column>
-            <p:column headerText="#{msg['student.group']}">
-                <h:outputText value="#{student.group.name}"/>
+            <p:column headerText="#{msg['student.groups']}" sortBy="#{student.groupNames}">
+                <h:outputText value="#{student.groupNames}" escape="false"/>
             </p:column>
             <p:column styleClass="options">
                 <p:commandButton update=":studentInfoForm" oncomplete="PF('studentDialog').show()"

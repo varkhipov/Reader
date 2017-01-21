@@ -26,16 +26,23 @@ INSERT INTO Lecturer (uid, name, surname) VALUES ('TEST_LECTURER_UID_1', 'Пре
 
 INSERT INTO Student (uid, name, surname) VALUES ('TEST_UID_1', 'Student w/o group', '_1');
 INSERT INTO Student (uid, name, surname) VALUES ('TEST_UID_2', 'Студент без группы', '2');
-INSERT INTO Student (uid, name, surname, groupId) VALUES ('TEST_UID_3', 'Student w group', '_1', 1);
-INSERT INTO Student (uid, name, surname, groupId) VALUES ('TEST_UID_4', 'Студент в группе', '_2', 2);
-INSERT INTO Student (uid, name, surname, groupId) VALUES ('TEST_UID_5', 'Студент в группе', '_3', 3);
-INSERT INTO Student (uid, name, surname, groupId) VALUES ('TEST_UID_6', 'Студент в группе', '_4', 4);
-INSERT INTO Student (uid, name, surname, groupId) VALUES ('TEST_UID_7', 'Студент в группе (прогул)', '_5', 4);
+INSERT INTO Student (uid, name, surname) VALUES ('TEST_UID_3', 'Student w group', '_1');
+INSERT INTO Student (uid, name, surname) VALUES ('TEST_UID_4', 'Студент в группе', '_2');
+INSERT INTO Student (uid, name, surname) VALUES ('TEST_UID_5', 'Студент в группе', '_3');
+INSERT INTO Student (uid, name, surname) VALUES ('TEST_UID_6', 'Студент в группе', '_4');
+INSERT INTO Student (uid, name, surname) VALUES ('TEST_UID_7', 'Студент в группе (прогул)', '_5');
 
-INSERT INTO Lesson (name, createDate, disciplineId, lecturerId, streamId)
-  VALUES ('lesson name 1', '2017-01-01T10:10:10.100', 1, 1, 1);
-INSERT INTO Lesson (name, createDate, disciplineId, lecturerId, streamId)
-  VALUES ('какая-то лекция 1', '2017-01-05T13:21:08.519', 2, 2, 2);
+INSERT INTO Student_Group (studentId, groupId) VALUES (3, 1);
+INSERT INTO Student_Group (studentId, groupId) VALUES (4, 2);
+INSERT INTO Student_Group (studentId, groupId) VALUES (5, 3);
+INSERT INTO Student_Group (studentId, groupId) VALUES (6, 4);
+INSERT INTO Student_Group (studentId, groupId) VALUES (7, 4);
+INSERT INTO Student_Group (studentId, groupId) VALUES (7, 1);
+
+INSERT INTO Lesson (name, disciplineId, lecturerId, streamId)
+  VALUES ('lesson name 1', 1, 1, 1);
+INSERT INTO Lesson (name, disciplineId, lecturerId, streamId)
+  VALUES ('какая-то лекция 1', 2, 2, 2);
 
 INSERT INTO Class (date, scheduleId) VALUES ('2017-01-01', 2);
 INSERT INTO Class (date, scheduleId) VALUES ('2016-12-13', 4);

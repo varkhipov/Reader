@@ -1,6 +1,10 @@
 package com.grsu.reader.models;
 
-public class Discipline {
+import javax.faces.bean.ManagedBean;
+import javax.faces.model.SelectItem;
+
+@ManagedBean(name = "newInstanceOfDiscipline")
+public class Discipline extends Entity {
 	private int id;
 	private String name;
 
@@ -9,6 +13,11 @@ public class Discipline {
 	public Discipline(int id, String name) {
 		this.id = id;
 		this.name = name;
+	}
+
+	@Override
+	public SelectItem getSelectItem() {
+		return new SelectItem(id, name);
 	}
 
 	public int getId() {

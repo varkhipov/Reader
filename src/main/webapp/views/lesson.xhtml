@@ -5,28 +5,21 @@
                 xmlns:p="http://primefaces.org/ui"
 >
     <h:form id="lessonForm">
-        <p:growl id="msgs" showDetail="true"/>
         <p:commandButton value="#{msg['btn.backToLessons']}" icon="fa fa-fw fa-arrow-left"
                          actionListener="#{sessionBean.setActiveView('lessons')}" update="@([id$=views])"/>
 
-        <p:dataTable var="student" value="#{lessonBean.lessonStudents}">
+        <p:dataTable var="student" value="#{lessonBean.lessonStudents}" sortBy="#{student.fullName}">
             <f:facet name="header">
                 #{msg['students']}
             </f:facet>
             <p:column headerText="#{msg['lesson.uid']}">
                 <h:outputText value="#{student.uid}"/>
             </p:column>
-            <p:column headerText="#{msg['lesson.name']}">
-                <h:outputText value="#{student.name}"/>
-            </p:column>
-            <p:column headerText="#{msg['lesson.surname']}">
-                <h:outputText value="#{student.surname}"/>
-            </p:column>
-            <p:column headerText="#{msg['lesson.patronymic']}">
-                <h:outputText value="#{student.patronymic}"/>
+            <p:column headerText="#{msg['lesson.name']}" sortBy="#{student.fullName}">
+                <h:outputText value="#{student.fullName}"/>
             </p:column>
             <p:column headerText="#{msg['lesson.group']}">
-                <h:outputText value="#{student.group.name}"/>
+                <h:outputText value="#{student.groupNames}"/>
             </p:column>
             <p:column styleClass="options">
                 <p:commandButton update=":studentInfoForm" oncomplete="PF('studentDialog').show()"

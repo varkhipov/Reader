@@ -5,8 +5,6 @@
                 xmlns:p="http://primefaces.org/ui"
 >
     <h:form id="lessonsForm">
-        <p:growl id="msgs" showDetail="true"/>
-
         <p:dataTable var="lesson" value="#{lessonBean.lessons}">
             <f:facet name="header">
                 #{msg['lessons']}
@@ -29,7 +27,7 @@
             <p:column styleClass="options">
                 <p:commandButton actionListener="#{menuBean.changeView('lesson')}" update="@([id$=views])"
                                  icon="fa fa-fw fa-search" title="#{msg['option.view']}">
-                    <f:setPropertyActionListener value="#{lesson}" target="#{sessionBean.currentLesson}"/>
+                    <f:setPropertyActionListener value="#{lesson}" target="#{lessonBean.selectedLesson}"/>
                 </p:commandButton>
             </p:column>
         </p:dataTable>

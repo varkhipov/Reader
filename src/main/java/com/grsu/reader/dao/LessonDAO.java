@@ -1,8 +1,6 @@
 package com.grsu.reader.dao;
 
 import com.grsu.reader.models.Lesson;
-import com.grsu.reader.models.Lesson;
-import com.grsu.reader.models.Stream;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.grsu.reader.utils.DBUtils.*;
+import static com.grsu.reader.utils.DBUtils.buildPreparedStatement;
 
 public class LessonDAO {
 
@@ -89,16 +87,15 @@ public class LessonDAO {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
 					"INSERT INTO Lesson (" +
-								"name, timeBefore. timeAfter, createDate, " +
+								"name, timeBefore. timeAfter, " +
 								"disciplineId, lecturerId, streamId" +
 							") VALUES (" +
-								"?, ?, ?, ?, " +
+								"?, ?, ?, " +
 								"?, ?, ?" +
 							");",
 					lesson.getName(),
 					lesson.getTimeBefore(),
 					lesson.getTimeAfter(),
-					lesson.getCreateDate(),
 					lesson.getDiscipline() != null && lesson.getDiscipline().getId() != 0
 							? lesson.getDiscipline().getId()
 							: null,
@@ -122,13 +119,12 @@ public class LessonDAO {
 					connection,
 					"UPDATE Lesson " +
 							"SET " +
-								"name = ?, timeBefore = ?, timeAfter = ?, createDate = ?, " +
+								"name = ?, timeBefore = ?, timeAfter = ?, " +
 								"disciplineId = ?, lecturerId = ?, streamId = ? " +
 							"WHERE id = ?;",
 					lesson.getName(),
 					lesson.getTimeBefore(),
 					lesson.getTimeAfter(),
-					lesson.getCreateDate(),
 					lesson.getDiscipline() != null && lesson.getDiscipline().getId() != 0
 							? lesson.getDiscipline().getId()
 							: null,
