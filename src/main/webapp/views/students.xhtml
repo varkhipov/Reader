@@ -5,17 +5,25 @@
                 xmlns:p="http://primefaces.org/ui"
 >
     <h:form id="studentsForm">
-        <p:dataTable var="student" value="#{studentBean.students}" sortBy="#{student.fullName}">
+        <p:dataTable var="student" value="#{studentBean.students}"
+                     rows="10"
+                     paginator="true"
+                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     rowsPerPageTemplate="5,10,15,25,50"
+                     sortBy="#{student.fullName}" filteredValue="#{studentBean.filteredStudents}">
+            <p:ajax event="filter" update="@this"/>
             <f:facet name="header">
                 #{msg['students']}
             </f:facet>
             <p:column headerText="#{msg['student.uid']}">
                 <h:outputText value="#{student.uid}"/>
             </p:column>
-            <p:column headerText="#{msg['student.name']}" sortBy="#{student.fullName}">
+            <p:column headerText="#{msg['student.name']}" sortBy="#{student.fullName}"
+                      filterBy="#{student.fullName}" filterMatchMode="contains">
                 <h:outputText value="#{student.fullName}"/>
             </p:column>
-            <p:column headerText="#{msg['student.groups']}" sortBy="#{student.groupNames}">
+            <p:column headerText="#{msg['student.groups']}" sortBy="#{student.groupNames}"
+                      filterBy="#{student.groupNames}" filterMatchMode="contains">
                 <h:outputText value="#{student.groupNames}" escape="false"/>
             </p:column>
             <p:column styleClass="options">

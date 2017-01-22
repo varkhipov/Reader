@@ -10,13 +10,6 @@ import java.util.List;
 
 
 public class WebUtils {
-	// http://localhost:8080/index.xhtml
-	// TODO: get from property file
-	private static final String DEFAULT_PROTOCOL = "http";
-	private static final String DEFAULT_PORT = "8080";
-	private static final String DEFAULT_BASE_URL = "localhost";
-	private static final String DEFAULT_RELATIVE_URL = "index.xhtml";
-
 	/**
 	 * Opens web page at specified URI in new system default browser window
 	 * https://www.mkyong.com/java/open-browser-in-java-windows-or-linux/
@@ -100,7 +93,12 @@ public class WebUtils {
 	}
 
 	public static URI getDefaultPageURI() {
-		return buildURI(DEFAULT_PROTOCOL, DEFAULT_BASE_URL, DEFAULT_PORT, DEFAULT_RELATIVE_URL);
+		return buildURI(
+				PropertyUtils.getProperty("web.protocol"),
+				PropertyUtils.getProperty("web.base.url"),
+				PropertyUtils.getProperty("web.port"),
+				PropertyUtils.getProperty("web.relative.url")
+		);
 	}
 
 	public static void openDefaultPage() {

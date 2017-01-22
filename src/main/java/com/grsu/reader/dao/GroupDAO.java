@@ -62,6 +62,28 @@ public class GroupDAO {
 		return group;
 	}
 
+	public static List<Integer> getGroupsIdsByFacultyId(Connection connection, int facultyId) {
+		List<Integer> ids = new ArrayList<>();
+			try {
+				PreparedStatement preparedStatement = buildPreparedStatement(
+						connection,
+						"SELECT id FROM [Group] WHERE facultyId = ?;",
+						facultyId
+				);
+				ResultSet resultSet = preparedStatement.executeQuery();
+
+				while (resultSet.next()) {
+					ids.add(resultSet.getInt(1));
+				}
+				resultSet.close();
+				preparedStatement.close();
+			} catch (Exception e) {
+				System.out.println("Error In getGroupsIdsByFacultyId() -->" + e.getMessage());
+				return null;
+			}
+		return ids;
+	}
+
 	public static void create(Connection connection, Group group) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
@@ -98,17 +120,29 @@ public class GroupDAO {
 		}
 	}
 
-	public static void delete(Connection connection, Group group) {
+	public static void delete(Connection connection, int id) {
+		StudentGroupDAO.deleteByGroupId(connection, id);
+		StreamGroupDAO.deleteByGroupId(connection, id);
+
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
 					"DELETE FROM [Group] WHERE id = ?;",
-					group.getId()
+					id
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+
+	public static void deleteByFacultyId(Connection connection, int facultyId) {
+		List<Integer> ids = getGroupsIdsByFacultyId(connection, facultyId);
+		if (ids != null) {
+			for (Integer id : ids) {
+				delete(connection, id);
+			}
 		}
 	}
 }

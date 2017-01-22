@@ -5,8 +5,8 @@
                 xmlns:p="http://primefaces.org/ui"
 >
     <h:form id="studentInfoForm">
-        <p:dialog header="#{msg['student.info']}" widgetVar="studentDialog" position="center"
-                  modal="true" showEffect="fade" hideEffect="fade" resizable="true" fitViewport="true"
+        <p:dialog header="#{msg['student.info']}" widgetVar="studentDialog" position="center" draggable="false"
+                  modal="true" showEffect="fade" hideEffect="fade" resizable="false" fitViewport="true"
                   onHide="PF('studentDialog').content.empty()"
                   onShow="resizeDialogHeightByPercent(this.id, 100)">
 

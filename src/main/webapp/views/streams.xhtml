@@ -12,6 +12,9 @@
             <p:column headerText="#{msg['stream.name']}">
                 <h:outputText value="#{stream.name}"/>
             </p:column>
+            <p:column headerText="#{msg['stream.groups']}">
+                <h:outputText value="#{stream.groupNames}" escape="false"/>
+            </p:column>
             <p:column styleClass="options">
                 <p:commandButton update=":streamInfoForm" oncomplete="PF('streamDialog').show()"
                                  icon="fa fa-fw fa-search" title="View">

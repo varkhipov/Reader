@@ -63,7 +63,7 @@ public class MenuBean implements Serializable {
 		sessionBean.setActiveView(viewName);
 	}
 
-	public void addStudent() {
+	public void addStudentVisit() {
 		//
 	}
 

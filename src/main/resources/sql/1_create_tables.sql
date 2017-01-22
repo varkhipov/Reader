@@ -69,7 +69,7 @@ CREATE TABLE Student (
   photo         BLOB
 );
 
--- STUDENT_GROUP
+-- STUDENT-GROUP
 CREATE TABLE Student_Group (
   studentId     INTEGER NOT NULL,
   groupId       INTEGER NOT NULL,

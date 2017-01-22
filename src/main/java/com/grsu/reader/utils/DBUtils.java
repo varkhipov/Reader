@@ -1,9 +1,6 @@
 package com.grsu.reader.utils;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 import static com.grsu.reader.utils.FileUtils.*;
 import static com.grsu.reader.utils.PropertyUtils.*;
@@ -70,5 +67,35 @@ public class DBUtils {
 		PreparedStatement preparedStatement = connection.prepareStatement(sql);
 		setValues(preparedStatement, values);
 		return preparedStatement;
+	}
+
+	/**
+	 * Return last inserted row Id. Note: function works only for current connection.
+	 *
+	 * http://www.sqlite.org/lang_corefunc.html#last_insert_rowid
+	 * "The last_insert_rowid() function returns the ROWID of the last row insert
+	 * from the database connection which invoked the function."
+	 *
+	 * @param connection
+	 * @return
+	 */
+	public static int getLastInsertRowId(Connection connection) {
+		int id = 0;
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"SELECT last_insert_rowid();"
+			);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				id = resultSet.getInt(1);
+			}
+			resultSet.close();
+			preparedStatement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return id;
 	}
 }

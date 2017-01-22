@@ -61,13 +61,13 @@ public class StreamGroupDAO {
 		return groups;
 	}
 
-	public static void create(Connection connection, Stream stream, Group group) {
+	public static void create(Connection connection, int streamId, int groupId) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
 					"INSERT INTO Stream_Group (streamId, groupId) VALUES (?, ?);",
-					stream.getId(),
-					group.getId()
+					streamId,
+					groupId
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();

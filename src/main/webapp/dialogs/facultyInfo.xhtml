@@ -5,8 +5,8 @@
                 xmlns:p="http://primefaces.org/ui"
 >
     <h:form id="facultyInfoForm">
-        <p:dialog header="Faculty Info" widgetVar="facultyDialog" position="center"
-                  modal="true" showEffect="fade" hideEffect="fade" resizable="true" fitViewport="true"
+        <p:dialog header="Faculty Info" widgetVar="facultyDialog" position="center" draggable="false"
+                  modal="true" showEffect="fade" hideEffect="fade" resizable="false" fitViewport="true"
                   onHide="PF('facultyDialog').content.empty()">
 
             <p:ajax event="close" listener="#{facultyBean.exit}"/>

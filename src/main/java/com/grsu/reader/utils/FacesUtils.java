@@ -23,4 +23,8 @@ public class FacesUtils {
 	public static void execute(String javascript) {
 		RequestContext.getCurrentInstance().execute(javascript);
 	}
+
+	public static void closeDialog(String id) {
+		execute("PF('" + id + "').hide();");
+	}
 }

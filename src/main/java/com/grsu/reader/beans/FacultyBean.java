@@ -9,7 +9,7 @@ import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.util.List;
 
-import static com.grsu.reader.utils.FacesUtils.execute;
+import static com.grsu.reader.utils.FacesUtils.closeDialog;
 import static com.grsu.reader.utils.FacesUtils.update;
 
 @ManagedBean(name = "facultyBean")
@@ -38,13 +38,9 @@ public class FacultyBean implements Serializable {
 		return sessionBean.getFaculties();
 	}
 
-	public void closeDialog() {
-		execute("PF('facultyDialog').hide();");
-	}
-
 	public void exit() {
 		setSelectedFaculty(null);
-		closeDialog();
+		closeDialog("facultyDialog");
 	}
 
 	public void save() {
@@ -66,7 +62,7 @@ public class FacultyBean implements Serializable {
 		FacultyDAO.delete(databaseBean.getConnection(), selectedFaculty);
 		sessionBean.updateFaculties();
 		update("views");
-		closeDialog();
+		exit();
 	}
 
 	public void setDatabaseBean(DatabaseBean databaseBean) {

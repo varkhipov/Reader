@@ -15,6 +15,11 @@ public class Discipline extends Entity {
 		this.name = name;
 	}
 
+	public Discipline(Discipline discipline) {
+		this.id = discipline.getId();
+		this.name = discipline.getName();
+	}
+
 	@Override
 	public SelectItem getSelectItem() {
 		return new SelectItem(id, name);

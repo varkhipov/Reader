@@ -189,6 +189,7 @@ public class StudentDAO {
 	}
 
 	public static void delete(Connection connection, Student student) {
+		StudentClassDAO.deleteByStudentId(connection, student.getId());
 		StudentGroupDAO.deleteByStudentId(connection, student.getId());
 
 		try {

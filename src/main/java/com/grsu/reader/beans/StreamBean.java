@@ -1,15 +1,19 @@
 package com.grsu.reader.beans;
 
 import com.grsu.reader.dao.StreamDAO;
+import com.grsu.reader.models.Group;
 import com.grsu.reader.models.Stream;
+import org.primefaces.model.DualListModel;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import static com.grsu.reader.utils.FacesUtils.execute;
+import static com.grsu.reader.utils.FacesUtils.closeDialog;
 import static com.grsu.reader.utils.FacesUtils.update;
 
 @ManagedBean(name = "streamBean")
@@ -18,6 +22,8 @@ public class StreamBean implements Serializable {
 
 	private Stream selectedStream;
 	private Stream copyOfSelectedStream;
+
+	private DualListModel<Group> selectedGroups;
 
 	@ManagedProperty(value = "#{databaseBean}")
 	private DatabaseBean databaseBean;
@@ -30,6 +36,31 @@ public class StreamBean implements Serializable {
 		copyOfSelectedStream = this.selectedStream == null ? null : new Stream(selectedStream);
 	}
 
+	public DualListModel<Group> getSelectedGroups() {
+		if (selectedStream == null) {
+			setSelectedGroups(new DualListModel<>(
+					sessionBean.getGroups(),
+					Collections.emptyList()
+			));
+		} else if (selectedGroups == null) {
+			List<Group> sourceGroups = new ArrayList<>(sessionBean.getGroups());
+			sourceGroups.removeAll(selectedStream.getGroups());
+
+			setSelectedGroups(new DualListModel<>(
+					sourceGroups,
+					selectedStream.getGroups()
+			));
+		}
+		return selectedGroups;
+	}
+
+	public void setSelectedGroups(DualListModel<Group> selectedGroups) {
+		this.selectedGroups = selectedGroups;
+		if (selectedStream != null) {
+			selectedStream.setGroups(selectedGroups == null ? null : selectedGroups.getTarget());
+		}
+	}
+
 	public boolean isInfoChanged() {
 		return selectedStream != null && !selectedStream.equals(copyOfSelectedStream);
 	}
@@ -38,13 +69,10 @@ public class StreamBean implements Serializable {
 		return sessionBean.getStreams();
 	}
 
-	public void closeDialog() {
-		execute("PF('streamDialog').hide();");
-	}
-
 	public void exit() {
 		setSelectedStream(null);
-		closeDialog();
+		setSelectedGroups(null);
+		closeDialog("streamDialog");
 	}
 
 	public void save() {
@@ -66,7 +94,7 @@ public class StreamBean implements Serializable {
 		StreamDAO.delete(databaseBean.getConnection(), selectedStream);
 		sessionBean.updateStreams();
 		update("views");
-		closeDialog();
+		exit();
 	}
 
 	public void setDatabaseBean(DatabaseBean databaseBean) {

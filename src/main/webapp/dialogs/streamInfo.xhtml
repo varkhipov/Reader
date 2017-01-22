@@ -1,0 +1,51 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+>
+    <h:form id="streamInfoForm">
+        <p:dialog header="#{msg['stream.info']}" widgetVar="streamDialog" position="center" draggable="false"
+                  modal="true" showEffect="fade" hideEffect="fade" resizable="false" fitViewport="true"
+                  onHide="PF('streamDialog').content.empty()">
+
+            <p:ajax event="close" listener="#{streamBean.exit}"/>
+
+            <p:outputPanel id="streamDetail" mode="native" styleClass="streamDetail">
+                <p:commandButton value="#{msg['btn.delete']}" icon="fa fa-fw fa-remove"
+                                 rendered="#{streamBean.selectedStream != null
+                                             and streamBean.selectedStream.id != 0}"
+                                 actionListener="#{streamBean.delete}"/>
+
+
+                <p:panelGrid columns="2" rendered="#{not empty streamBean.selectedStream}"
+                             columnClasses="label,value">
+                    <f:facet name="header">
+                        <p:graphicImage name="images/noavatar.png" width="150" height="150"/>
+                    </f:facet>
+
+                    <p:outputLabel for="name" value="#{msg['stream.info.name']}"/>
+                    <p:inputText id="name" value="#{streamBean.selectedStream.name}" required="true">
+                        <p:ajax update=":streamInfoForm:streamDetail"/>
+                    </p:inputText>
+
+                    <p:outputLabel for="groups" value="#{msg['stream.info.groups']}"/>
+                    <p:pickList id="groups" value="#{streamBean.selectedGroups}"
+                                showCheckbox="true" showSourceFilter="true"
+                                showTargetFilter="true" filterMatchMode="contains"
+                                var="group" itemValue="#{group}" itemLabel="#{group.name}"
+                                converter="entityConverter">
+
+                        <p:ajax event="transfer" update=":streamInfoForm:streamDetail"/>
+                    </p:pickList>
+                </p:panelGrid>
+
+                <p:outputPanel rendered="#{streamBean.infoChanged}">
+                    <p:commandButton value="#{msg['btn.save.exit']}" icon="fa fa-fw fa-save"
+                                     actionListener="#{streamBean.saveAndExit}"
+                                     update=":streamInfoForm:streamDetail"/>
+                </p:outputPanel>
+            </p:outputPanel>
+        </p:dialog>
+    </h:form>
+</ui:composition>

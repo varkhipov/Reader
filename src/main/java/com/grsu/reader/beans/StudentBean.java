@@ -5,7 +5,6 @@ import com.grsu.reader.models.Group;
 import com.grsu.reader.models.Student;
 import org.primefaces.model.DualListModel;
 
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -15,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.grsu.reader.utils.FacesUtils.execute;
+import static com.grsu.reader.utils.FacesUtils.closeDialog;
 import static com.grsu.reader.utils.FacesUtils.update;
 
 @ManagedBean(name = "studentBean")
@@ -26,6 +25,7 @@ public class StudentBean implements Serializable {
 	private Student copyOfSelectedStudent; // used to detect changes
 
 	private DualListModel<Group> selectedGroups;
+	private List<Student> filteredStudents;
 
 	@ManagedProperty(value = "#{databaseBean}")
 	private DatabaseBean databaseBean;
@@ -75,14 +75,10 @@ public class StudentBean implements Serializable {
 		return sessionBean.getGroupsItems();
 	}
 
-	public void closeDialog() {
-		execute("PF('studentDialog').hide();");
-	}
-
 	public void exit() {
 		setSelectedStudent(null);
 		setSelectedGroups(null);
-		closeDialog();
+		closeDialog("studentDialog");
 	}
 
 	public void save() {
@@ -104,7 +100,7 @@ public class StudentBean implements Serializable {
 		StudentDAO.delete(databaseBean.getConnection(), selectedStudent);
 		sessionBean.updateStudents();
 		update("views");
-		closeDialog();
+		exit();
 	}
 
 	public void setDatabaseBean(DatabaseBean databaseBean) {
@@ -123,4 +119,11 @@ public class StudentBean implements Serializable {
 		return copyOfSelectedStudent;
 	}
 
+	public List<Student> getFilteredStudents() {
+		return filteredStudents;
+	}
+
+	public void setFilteredStudents(List<Student> filteredStudents) {
+		this.filteredStudents = filteredStudents;
+	}
 }

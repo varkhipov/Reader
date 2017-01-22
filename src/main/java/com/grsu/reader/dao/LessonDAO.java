@@ -145,6 +145,8 @@ public class LessonDAO {
 	}
 
 	public static void delete(Connection connection, Lesson lesson) {
+		LessonClassDAO.deleteByLessonId(connection, lesson.getId());
+
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,

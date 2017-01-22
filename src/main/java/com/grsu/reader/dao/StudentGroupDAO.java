@@ -38,6 +38,29 @@ public class StudentGroupDAO {
 		return students;
 	}
 
+	public static List<Student> getStudentsExcludeGroupId(Connection connection, int id) {
+		List<Student> students = new ArrayList<>();
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"SELECT DISTINCT studentId FROM Student_Group WHERE groupId != ?;",
+					id
+			);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				students.add(getStudentById(connection, resultSet.getInt(1)));
+			}
+
+			resultSet.close();
+			preparedStatement.close();
+		} catch (Exception e) {
+			System.out.println("Error In getStudentsExcludeGroupId() -->" + e.getMessage());
+			return students;
+		}
+		return students;
+	}
+
 	public static List<Group> getGroupsByStudentId(Connection connection, int id) {
 		List<Group> groups = new ArrayList<>();
 		try {

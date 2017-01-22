@@ -88,6 +88,8 @@ public class FacultyDAO {
 	}
 
 	public static void delete(Connection connection, Faculty faculty) {
+		GroupDAO.deleteByFacultyId(connection, faculty.getId()); // TODO: delete or update to null?
+
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,

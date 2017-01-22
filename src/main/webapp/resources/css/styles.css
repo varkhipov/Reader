@@ -28,6 +28,10 @@ body {
     text-align: center;
 }
 
+.groupOptions {
+    width: 15%;
+}
+
 .ui-datatable {
     margin-top: 25px;
 }
@@ -38,4 +42,18 @@ body {
 
 .studentDetail {
     max-height: 90%;
+}
+
+.groupStudentsDialog {
+    width: 90%;
+    height: 90%;
+}
+
+.groupStudentsDetail {
+    border: none;
+}
+
+.groupStudentsDetail > .ui-datatable {
+    margin-top: 0;
+    margin-bottom: 5%;
 }
