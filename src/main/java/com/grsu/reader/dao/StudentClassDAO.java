@@ -33,7 +33,7 @@ public class StudentClassDAO {
 			resultSet.close();
 			preparedStatement.close();
 		} catch (Exception e) {
-			System.out.println("Error In getPresentStudentsByClassId() -->" + e.getMessage());
+			System.out.println("Error In getStudentsByClassId(id, present) -->" + e.getMessage());
 			return students;
 		}
 		return students;
@@ -56,7 +56,7 @@ public class StudentClassDAO {
 			resultSet.close();
 			preparedStatement.close();
 		} catch (Exception e) {
-			System.out.println("Error In getStudentsByClassId() -->" + e.getMessage());
+			System.out.println("Error In getStudentsByClassId(id) -->" + e.getMessage());
 			return students;
 		}
 		return students;
