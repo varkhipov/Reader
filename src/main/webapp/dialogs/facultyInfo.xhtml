@@ -5,14 +5,14 @@
                 xmlns:p="http://primefaces.org/ui"
 >
     <h:form id="facultyInfoForm">
-        <p:dialog header="Faculty Info" widgetVar="facultyDialog" position="center" draggable="false"
+        <p:dialog header="#{msg['faculty.info']}" widgetVar="facultyDialog" position="center" draggable="false"
                   modal="true" showEffect="fade" hideEffect="fade" resizable="false" fitViewport="true"
                   onHide="PF('facultyDialog').content.empty()">
 
             <p:ajax event="close" listener="#{facultyBean.exit}"/>
 
             <p:outputPanel id="facultyDetail">
-                <p:commandButton value="Delete" icon="fa fa-fw fa-remove"
+                <p:commandButton value="#{msg['btn.delete']}" icon="fa fa-fw fa-remove"
                                  rendered="#{facultyBean.selectedFaculty != null
                                              and facultyBean.selectedFaculty.id != 0}"
                                  actionListener="#{facultyBean.delete}"/>
@@ -20,14 +20,14 @@
                 <p:panelGrid columns="2" rendered="#{not empty facultyBean.selectedFaculty}"
                              columnClasses="label,value">
 
-                    <p:outputLabel for="name" value="Name:"/>
+                    <p:outputLabel for="name" value="#{msg['faculty.name']}:"/>
                     <p:inputText id="name" value="#{facultyBean.selectedFaculty.name}" required="true">
                         <p:ajax update=":facultyInfoForm:facultyDetail"/>
                     </p:inputText>
                 </p:panelGrid>
 
                 <p:outputPanel rendered="#{facultyBean.infoChanged}">
-                    <p:commandButton value="Save and Exit" icon="fa fa-fw fa-save"
+                    <p:commandButton value="#{msg['btn.save.exit']}" icon="fa fa-fw fa-save"
                                      actionListener="#{facultyBean.saveAndExit}"
                                      update=":facultyInfoForm:facultyDetail"/>
                 </p:outputPanel>

@@ -5,14 +5,14 @@
                 xmlns:p="http://primefaces.org/ui"
 >
     <h:form id="disciplineInfoForm">
-        <p:dialog header="Discipline Info" widgetVar="disciplineDialog" position="center" draggable="false"
+        <p:dialog header="#{msg['discipline.info']}" widgetVar="disciplineDialog" position="center" draggable="false"
                   modal="true" showEffect="fade" hideEffect="fade" resizable="false" fitViewport="true"
                   onHide="PF('disciplineDialog').content.empty()">
 
             <p:ajax event="close" listener="#{disciplineBean.exit}"/>
 
             <p:outputPanel id="disciplineDetail">
-                <p:commandButton value="Delete" icon="fa fa-fw fa-remove"
+                <p:commandButton value="#{msg['btn.delete']}" icon="fa fa-fw fa-remove"
                                  rendered="#{disciplineBean.selectedDiscipline != null
                                              and disciplineBean.selectedDiscipline.id != 0}"
                                  actionListener="#{disciplineBean.delete}"/>
@@ -20,14 +20,14 @@
                 <p:panelGrid columns="2" rendered="#{not empty disciplineBean.selectedDiscipline}"
                              columnClasses="label,value">
 
-                    <p:outputLabel for="name" value="Name:"/>
+                    <p:outputLabel for="name" value="#{msg['discipline.name']}:"/>
                     <p:inputText id="name" value="#{disciplineBean.selectedDiscipline.name}" required="true">
                         <p:ajax update=":disciplineInfoForm:disciplineDetail"/>
                     </p:inputText>
                 </p:panelGrid>
 
                 <p:outputPanel rendered="#{disciplineBean.infoChanged}">
-                    <p:commandButton value="Save and Exit" icon="fa fa-fw fa-save"
+                    <p:commandButton value="#{msg['btn.save.exit']}" icon="fa fa-fw fa-save"
                                      actionListener="#{disciplineBean.saveAndExit}"
                                      update=":disciplineInfoForm:disciplineDetail"/>
                 </p:outputPanel>

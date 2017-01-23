@@ -5,7 +5,7 @@
                 xmlns:p="http://primefaces.org/ui"
 >
     <h:form id="lessonInfoForm">
-        <p:dialog header="Lesson Info" widgetVar="lessonDialog" position="center" draggable="false"
+        <p:dialog header="#{msg['lesson.info']}" widgetVar="lessonDialog" position="center" draggable="false"
                   modal="true" showEffect="fade" hideEffect="fade" resizable="false" fitViewport="true"
                   onHide="PF('lessonDialog').content.empty()">
 
@@ -15,26 +15,26 @@
                 <p:panelGrid columns="2" rendered="#{not empty lessonBean.selectedLesson}"
                              columnClasses="label,value">
 
-                    <p:outputLabel for="name" value="Name:"/>
+                    <p:outputLabel for="name" value="#{msg['lesson.name']}:"/>
                     <p:inputText id="name" value="#{lessonBean.selectedLesson.name}" required="true">
                         <p:ajax update=":lessonInfoForm:lessonDetail"/>
                     </p:inputText>
 
-                    <p:outputLabel for="class" value="Discipline"/>
+                    <p:outputLabel for="class" value="#{msg['lesson.discipline']}"/>
                     <p:selectOneMenu id="class" value="#{lessonBean.selectedDisciplineId}" required="true">
                         <f:selectItem itemValue="#{0}" itemLabel="#{msg['select.discipline']}"/>
                         <f:selectItems value="#{lessonBean.disciplinesItems}"/>
                         <p:ajax update=":lessonInfoForm:lessonDetail"/>
                     </p:selectOneMenu>
 
-                    <p:outputLabel for="schedule" value="Schedule"/>
+                    <p:outputLabel for="schedule" value="#{msg['lesson.schedule']}"/>
                     <p:selectOneMenu id="schedule" value="#{lessonBean.selectedScheduleId}" required="true">
                         <f:selectItem itemValue="#{0}" itemLabel="#{msg['select.schedule']}"/>
                         <f:selectItems value="#{lessonBean.schedulesItems}"/>
                         <p:ajax update=":lessonInfoForm:lessonDetail"/>
                     </p:selectOneMenu>
 
-                    <p:outputLabel for="stream" value="Stream"/>
+                    <p:outputLabel for="stream" value="#{msg['lesson.stream']}"/>
                     <p:selectOneMenu id="stream" value="#{lessonBean.selectedStreamId}" required="true">
                         <f:selectItem itemValue="#{0}" itemLabel="#{msg['select.stream']}"/>
                         <f:selectItems value="#{lessonBean.streamsItems}"/>
@@ -44,7 +44,7 @@
                 </p:panelGrid>
 
                 <p:outputPanel rendered="#{lessonBean.infoChanged}">
-                    <p:commandButton value="Save and Exit" icon="fa fa-fw fa-save"
+                    <p:commandButton value="#{msg['btn.save.exit']}" icon="fa fa-fw fa-save"
                                      actionListener="#{lessonBean.createLesson}"
                                      update="@([id$=views])"/>
                 </p:outputPanel>

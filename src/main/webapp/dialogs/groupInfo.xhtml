@@ -12,7 +12,7 @@
             <p:ajax event="close" listener="#{groupBean.exitInfo}"/>
 
             <p:outputPanel id="groupInfoDetail">
-                <p:commandButton value="Delete" icon="fa fa-fw fa-remove"
+                <p:commandButton value="#{msg['btn.delete']}" icon="fa fa-fw fa-remove"
                                  rendered="#{groupBean.selectedGroup != null
                                              and groupBean.selectedGroup.id != 0}"
                                  actionListener="#{groupBean.deleteGroup}"/>
@@ -27,14 +27,14 @@
                         <p:ajax update=":groupInfoForm:groupInfoDetail"/>
                     </p:selectOneMenu>
 
-                    <p:outputLabel for="name" value="Name:"/>
+                    <p:outputLabel for="name" value="#{msg['group.name']}:"/>
                     <p:inputText id="name" value="#{groupBean.selectedGroup.name}" required="true">
                         <p:ajax update=":groupInfoForm:groupInfoDetail"/>
                     </p:inputText>
                 </p:panelGrid>
 
                 <p:outputPanel rendered="#{groupBean.infoChanged}">
-                    <p:commandButton value="Save and Exit" icon="fa fa-fw fa-save"
+                    <p:commandButton value="#{msg['btn.save.exit']}" icon="fa fa-fw fa-save"
                                      actionListener="#{groupBean.saveAndExit}"
                                      update=":groupInfoForm:groupInfoDetail"/>
                 </p:outputPanel>
