@@ -18,6 +18,11 @@ public class Class extends Entity {
 		this.schedule = schedule;
 	}
 
+	public Class(LocalDate date, Schedule schedule) {
+		this.date = date;
+		this.schedule = schedule;
+	}
+
 	@Override
 	public SelectItem getSelectItem() {
 		return new SelectItem(id, String.format("[%s] %s", schedule.getNumber(), date));

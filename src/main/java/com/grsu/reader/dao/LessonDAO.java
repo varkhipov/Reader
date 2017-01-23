@@ -24,17 +24,21 @@ public class LessonDAO {
 
 		lesson.setDiscipline(
 				DisciplineDAO.getDisciplineById(connection,
-						Integer.valueOf(resultSet.getString("disciplineId")))
+						resultSet.getInt("disciplineId"))
 		);
 
 		lesson.setLecturer(
 				LecturerDAO.getLecturerById(connection,
-						Integer.valueOf(resultSet.getString("lecturerId")))
+						resultSet.getInt("lecturerId"))
 		);
 
 		lesson.setStream(
 				StreamDAO.getStreamById(connection,
-						Integer.valueOf(resultSet.getString("streamId")))
+						resultSet.getInt("streamId"))
+		);
+
+		lesson.setClasses(
+				LessonClassDAO.getClassesByLessonId(connection, lesson.getId())
 		);
 		return lesson;
 	}
@@ -87,7 +91,7 @@ public class LessonDAO {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
 					"INSERT INTO Lesson (" +
-								"name, timeBefore. timeAfter, " +
+								"name, timeBefore, timeAfter, " +
 								"disciplineId, lecturerId, streamId" +
 							") VALUES (" +
 								"?, ?, ?, " +

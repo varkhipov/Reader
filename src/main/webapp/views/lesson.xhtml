@@ -5,29 +5,63 @@
                 xmlns:p="http://primefaces.org/ui"
 >
     <h:form id="lessonForm">
-        <p:commandButton value="#{msg['btn.backToLessons']}" icon="fa fa-fw fa-arrow-left"
-                         actionListener="#{sessionBean.setActiveView('lessons')}" update="@([id$=views])"/>
+        <p:panelGrid id="lessonButtons" columns="5" styleClass="noBorder">
+            <p:commandButton value="#{msg['btn.backToLessons']}" icon="fa fa-fw fa-arrow-left"
+                             actionListener="#{sessionBean.setActiveView('lessons')}" update="@([id$=views])"/>
 
-        <p:dataTable var="student" value="#{lessonBean.lessonStudents}" sortBy="#{student.fullName}">
-            <f:facet name="header">
-                #{msg['students']}
-            </f:facet>
-            <p:column headerText="#{msg['lesson.uid']}">
-                <h:outputText value="#{student.uid}"/>
-            </p:column>
-            <p:column headerText="#{msg['lesson.name']}" sortBy="#{student.fullName}">
-                <h:outputText value="#{student.fullName}"/>
-            </p:column>
-            <p:column headerText="#{msg['lesson.group']}">
-                <h:outputText value="#{student.groupNames}"/>
-            </p:column>
-            <p:column styleClass="options">
-                <p:commandButton update=":studentInfoForm" oncomplete="PF('studentDialog').show()"
-                                 icon="fa fa-fw fa-search" title="#{msg['option.view']}">
-                    <f:setPropertyActionListener value="#{student}" target="#{studentBean.selectedStudent}"/>
-                    <p:resetInput target=":studentInfoForm:studentDetail"/>
-                </p:commandButton>
-            </p:column>
-        </p:dataTable>
+            <p:commandButton value="#{msg['btn.startRecord']}" icon="fa fa-fw fa-play"
+                             update=":lessonForm:lessonButtons"
+                             actionListener="#{lessonBean.startRecord}"
+                             rendered="#{not lessonBean.recordStarted}"/>
+
+            <p:commandButton value="#{msg['btn.stopRecord']}" icon="fa fa-fw fa-stop"
+                             update=":lessonForm:lessonButtons"
+                             actionListener="#{lessonBean.stopRecord}"
+                             rendered="#{lessonBean.recordStarted}"/>
+
+            <p:commandButton value="#{msg['btn.enableSound']}" icon="fa fa-fw fa-volume-up"
+                             update=":lessonForm:lessonButtons"
+                             actionListener="#{lessonBean.enableSound}"
+                             rendered="#{lessonBean.recordStarted and not lessonBean.soundEnabled}"/>
+            <p:commandButton value="#{msg['btn.disableSound']}" icon="fa fa-fw fa-volume-off"
+                             update=":lessonForm:lessonButtons"
+                             actionListener="#{lessonBean.disableSound}"
+                             rendered="#{lessonBean.recordStarted and lessonBean.soundEnabled}"/>
+
+            <p:commandButton value="#{msg['btn.addVisit']}" icon="fa fa-fw fa-user-plus"
+                             update=":lessonForm"
+                             actionListener="#{lessonBean.addVisit}"
+                             rendered="#{lessonBean.recordStarted}"/>
+        </p:panelGrid>
+
+        <p:panel id="presentStudents" header="#{msg['lesson.students.present']}"
+                 toggleable="true" styleClass="noBorder lessonStudents">
+            <p:dataTable var="pStudent" value="#{lessonBean.presentStudents}" sortBy="#{pStudent.fullName}">
+                <p:column headerText="#{msg['lesson.student.uid']}">
+                    <h:outputText value="#{pStudent.uid}"/>
+                </p:column>
+                <p:column headerText="#{msg['lesson.student.name']}" sortBy="#{pStudent.fullName}">
+                    <h:outputText value="#{pStudent.fullName}"/>
+                </p:column>
+                <p:column headerText="#{msg['lesson.student.group']}" sortBy="#{pStudent.groupNames}">
+                    <h:outputText value="#{pStudent.groupNames}" escape="false"/>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+
+        <p:panel id="absentStudents" header="#{msg['lesson.students.absent']}"
+                 toggleable="true" styleClass="noBorder lessonStudents">
+            <p:dataTable var="aStudent" value="#{lessonBean.absentStudents}" sortBy="#{aStudent.fullName}">
+                <p:column headerText="#{msg['lesson.student.uid']}">
+                    <h:outputText value="#{aStudent.uid}"/>
+                </p:column>
+                <p:column headerText="#{msg['lesson.student.name']}" sortBy="#{aStudent.fullName}">
+                    <h:outputText value="#{aStudent.fullName}"/>
+                </p:column>
+                <p:column headerText="#{msg['lesson.student.group']}" sortBy="#{aStudent.groupNames}">
+                    <h:outputText value="#{aStudent.groupNames}" escape="false"/>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
     </h:form>
 </ui:composition>

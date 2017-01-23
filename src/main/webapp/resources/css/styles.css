@@ -49,11 +49,34 @@ body {
     height: 90%;
 }
 
-.groupStudentsDetail {
+.noBorder {
     border: none;
 }
 
-.groupStudentsDetail > .ui-datatable {
+.noBorder > .ui-datatable {
     margin-top: 0;
     margin-bottom: 5%;
+}
+
+.noBorder .ui-widget-content {
+    border: none;
+}
+
+.noBorder .ui-widget-content .ui-panelgrid-cell {
+    border: none;
+    padding-left: 0;
+}
+
+.lessonStudents .ui-datatable {
+    margin: 0;
+}
+
+/* Sorry for that. I will fix it, I promise! :( */
+.lessonStudents {
+    margin-top: 25px;
+    padding: 0 !important;
+}
+
+.lessonStudents > .ui-panel-content {
+    padding: 0 !important;
 }

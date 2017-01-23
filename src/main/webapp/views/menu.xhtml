@@ -32,7 +32,12 @@
                         <p:resetInput target=":streamInfoForm:streamDetail"/>
                     </p:menuitem>
 
-                    <p:menuitem value="#{msg['menu.file.new.lesson']}" icon="fa fa-fw fa-book"/>
+                    <p:menuitem value="#{msg['menu.file.new.lesson']}" icon="fa fa-fw fa-book"
+                                update=":lessonInfoForm" oncomplete="PF('lessonDialog').show()">
+                        <f:setPropertyActionListener value="#{newInstanceOfLesson}"
+                                                     target="#{lessonBean.selectedLesson}"/>
+                        <p:resetInput target=":lessonInfoForm:lessonDetail"/>
+                    </p:menuitem>
 
                     <p:menuitem value="#{msg['menu.file.new.group']}" icon="fa fa-fw fa-users"
                                 update=":groupInfoForm" oncomplete="PF('groupInfoDialog').show()">
@@ -84,11 +89,6 @@
                 <p:menuitem value="#{msg['menu.show.students']}" icon="fa fa-fw fa-user"
                             actionListener="#{menuBean.changeView('students')}" update="@([id$=views])"/>
             </p:submenu>
-
-
-            <p:menuitem value="#{msg['menu.addStudentVisit']}" icon="fa fa-fw fa-user-plus"
-                        rendered="#{sessionBean.connected}"
-                        actionListener="#{menuBean.addStudentVisit}"/>
 
             <f:facet name="options">
                 <h:panelGrid columns="2" style="margin-right: 10px">

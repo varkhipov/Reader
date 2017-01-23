@@ -18,9 +18,13 @@ public class Schedule extends Entity {
 		this.number = number;
 	}
 
+	public String getCaption() {
+		return String.format("[%s] %s - %s", number, begin, end);
+	}
+
 	@Override
 	public SelectItem getSelectItem() {
-		return new SelectItem(id, String.format("[%s] %s - %s", number, begin, end));
+		return new SelectItem(id, getCaption());
 	}
 
 	public int getId() {

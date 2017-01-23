@@ -15,6 +15,30 @@ import static com.grsu.reader.dao.StudentDAO.getStudentById;
 import static com.grsu.reader.utils.DBUtils.buildPreparedStatement;
 
 public class StudentClassDAO {
+	public static List<Student> getStudentsByClassId(Connection connection, int id, boolean present) {
+		List<Student> students = new ArrayList<>();
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"SELECT studentId FROM Student_Class WHERE classId = ? AND present = ?;",
+					id,
+					present ? 1 : 0
+			);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				students.add(getStudentById(connection, resultSet.getInt(1)));
+			}
+
+			resultSet.close();
+			preparedStatement.close();
+		} catch (Exception e) {
+			System.out.println("Error In getPresentStudentsByClassId() -->" + e.getMessage());
+			return students;
+		}
+		return students;
+	}
+
 	public static List<Student> getStudentsByClassId(Connection connection, int id) {
 		List<Student> students = new ArrayList<>();
 		try {
@@ -76,13 +100,30 @@ public class StudentClassDAO {
 		}
 	}
 
-	public static void updateByStudentId(Connection connection, Student student, Class cls) {
+	public static void create(Connection connection, Student student, Class cls, boolean present) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE Student_Class SET classId = ? WHERE studentId = ?;",
+					"INSERT INTO Student_Class (studentId, classId, present) VALUES (?, ?, ?);",
+					student.getId(),
 					cls.getId(),
-					student.getId()
+					present ? 1 : 0
+			);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void updateByStudentId(Connection connection, int studentId, int classId, boolean present) {
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"UPDATE Student_Class SET present = ? WHERE classId = ? AND studentId = ?;",
+					present ? 1 : 0,
+					classId,
+					studentId
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();

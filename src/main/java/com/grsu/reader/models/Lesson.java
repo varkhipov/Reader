@@ -1,10 +1,13 @@
 package com.grsu.reader.models;
 
 import com.grsu.reader.utils.DateUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.model.SelectItem;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 
 @ManagedBean(name = "newInstanceOfLesson")
 public class Lesson extends Entity {
@@ -16,6 +19,21 @@ public class Lesson extends Entity {
 	private Discipline discipline;
 	private Lecturer lecturer;
 	private Stream stream;
+	private List<Class> classes;
+
+	public Lesson() {}
+
+	public Lesson(Lesson lesson) {
+		id = lesson.getId();
+		name = lesson.getName();
+		timeBefore = lesson.getTimeBefore();
+		timeAfter = lesson.getTimeAfter();
+		createDate = lesson.getCreateDate();
+		discipline = lesson.getDiscipline();
+		lecturer = lesson.getLecturer();
+		stream = lesson.getStream();
+		classes = lesson.getClasses();
+	}
 
 	@Override
 	public SelectItem getSelectItem() {
@@ -94,6 +112,14 @@ public class Lesson extends Entity {
 		this.stream = stream;
 	}
 
+	public List<Class> getClasses() {
+		return classes;
+	}
+
+	public void setClasses(List<Class> classes) {
+		this.classes = classes;
+	}
+	
 	@Override
 	public String toString() {
 		return "Lesson{" +
@@ -106,5 +132,19 @@ public class Lesson extends Entity {
 				", lecturer=" + lecturer +
 				", stream=" + stream +
 				'}';
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) return false;
+		if (this == obj) return true;
+
+		if (obj.getClass() != null && obj instanceof Lesson) {
+			Lesson lesson = (Lesson) obj;
+			return StringUtils.equals(name, lesson.getName())
+					&& Objects.equals(discipline, lesson.getDiscipline())
+					&& Objects.equals(stream, lesson.getStream());
+		}
+		return false;
 	}
 }

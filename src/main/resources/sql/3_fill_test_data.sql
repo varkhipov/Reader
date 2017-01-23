@@ -52,11 +52,11 @@ INSERT INTO Lesson_Class (lessonId, classId) VALUES (1, 1);
 INSERT INTO Lesson_Class (lessonId, classId) VALUES (2, 2);
 INSERT INTO Lesson_Class (lessonId, classId) VALUES (2, 3);
 
-INSERT INTO Student_Class (studentId, classId) VALUES (1, 2);
-INSERT INTO Student_Class (studentId, classId) VALUES (2, 3);
-INSERT INTO Student_Class (studentId, classId) VALUES (3, 1);
-INSERT INTO Student_Class (studentId, classId) VALUES (4, 2);
-INSERT INTO Student_Class (studentId, classId) VALUES (5, 1);
-INSERT INTO Student_Class (studentId, classId) VALUES (6, 3);
+INSERT INTO Student_Class (studentId, classId, present) VALUES (1, 2, 1);
+INSERT INTO Student_Class (studentId, classId, present) VALUES (2, 3, 1);
+INSERT INTO Student_Class (studentId, classId, present) VALUES (3, 1, 1);
+INSERT INTO Student_Class (studentId, classId, present) VALUES (4, 2, 1);
+INSERT INTO Student_Class (studentId, classId, present) VALUES (5, 1, 1);
+INSERT INTO Student_Class (studentId, classId, present) VALUES (6, 3, 1);
 
 COMMIT;

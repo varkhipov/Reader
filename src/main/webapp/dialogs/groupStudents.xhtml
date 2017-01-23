@@ -11,7 +11,7 @@
 
             <p:ajax event="close" listener="#{groupBean.exitStudents}"/>
 
-            <p:scrollPanel id="groupStudentsDetail" mode="native" styleClass="groupStudentsDetail">
+            <p:scrollPanel id="groupStudentsDetail" mode="native" styleClass="noBorder">
                 <p:dataTable var="student" value="#{groupBean.groupStudents}"
                              sortBy="#{student.fullName}" filteredValue="#{groupBean.filteredGroupStudents}">
                     <p:column headerText="#{msg['student.uid']}">

@@ -6,10 +6,6 @@
 >
     <h:form id="studentsForm">
         <p:dataTable var="student" value="#{studentBean.students}"
-                     rows="10"
-                     paginator="true"
-                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                     rowsPerPageTemplate="5,10,15,25,50"
                      sortBy="#{student.fullName}" filteredValue="#{studentBean.filteredStudents}">
             <p:ajax event="filter" update="@this"/>
             <f:facet name="header">

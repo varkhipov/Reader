@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+>
+    <h:form id="lessonInfoForm">
+        <p:dialog header="Lesson Info" widgetVar="lessonDialog" position="center" draggable="false"
+                  modal="true" showEffect="fade" hideEffect="fade" resizable="false" fitViewport="true"
+                  onHide="PF('lessonDialog').content.empty()">
+
+            <p:ajax event="close" listener="#{lessonBean.exit}"/>
+
+            <p:outputPanel id="lessonDetail">
+                <p:panelGrid columns="2" rendered="#{not empty lessonBean.selectedLesson}"
+                             columnClasses="label,value">
+
+                    <p:outputLabel for="name" value="Name:"/>
+                    <p:inputText id="name" value="#{lessonBean.selectedLesson.name}" required="true">
+                        <p:ajax update=":lessonInfoForm:lessonDetail"/>
+                    </p:inputText>
+
+                    <p:outputLabel for="class" value="Discipline"/>
+                    <p:selectOneMenu id="class" value="#{lessonBean.selectedDisciplineId}" required="true">
+                        <f:selectItem itemValue="#{0}" itemLabel="#{msg['select.discipline']}"/>
+                        <f:selectItems value="#{lessonBean.disciplinesItems}"/>
+                        <p:ajax update=":lessonInfoForm:lessonDetail"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="schedule" value="Schedule"/>
+                    <p:selectOneMenu id="schedule" value="#{lessonBean.selectedScheduleId}" required="true">
+                        <f:selectItem itemValue="#{0}" itemLabel="#{msg['select.schedule']}"/>
+                        <f:selectItems value="#{lessonBean.schedulesItems}"/>
+                        <p:ajax update=":lessonInfoForm:lessonDetail"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="stream" value="Stream"/>
+                    <p:selectOneMenu id="stream" value="#{lessonBean.selectedStreamId}" required="true">
+                        <f:selectItem itemValue="#{0}" itemLabel="#{msg['select.stream']}"/>
+                        <f:selectItems value="#{lessonBean.streamsItems}"/>
+                        <p:ajax update=":lessonInfoForm:lessonDetail"/>
+                    </p:selectOneMenu>
+
+                </p:panelGrid>
+
+                <p:outputPanel rendered="#{lessonBean.infoChanged}">
+                    <p:commandButton value="Save and Exit" icon="fa fa-fw fa-save"
+                                     actionListener="#{lessonBean.createLesson}"
+                                     update="@([id$=views])"/>
+                </p:outputPanel>
+            </p:outputPanel>
+        </p:dialog>
+    </h:form>
+</ui:composition>
