@@ -18,6 +18,7 @@ public class StudentDAO {
 		Student student = new Student();
 		student.setId(resultSet.getInt("id"));
 		student.setUid(resultSet.getString("uid"));
+		student.setParsedUid(resultSet.getInt("parsedUid"));
 		student.setName(resultSet.getString("name"));
 		student.setSurname(resultSet.getString("surname"));
 		student.setPatronymic(resultSet.getString("patronymic"));
@@ -123,15 +124,14 @@ public class StudentDAO {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
 					"INSERT INTO Student (" +
-								"uid, name, surname, " +
-								"patronymic, phone, email, " +
-								"notes" +
+								"uid, parsedUid, name, surname, " +
+								"patronymic, phone, email, notes" +
 							") VALUES (" +
-								"?, ?, ?, " +
-								"?, ?, ?, " +
-								"?" +
+								"?, ?, ?, ?, " +
+								"?, ?, ?, ?" +
 							");",
 					student.getUid(),
+					student.getParsedUid(),
 					student.getName(),
 					student.getSurname(),
 					student.getPatronymic(),
@@ -162,11 +162,11 @@ public class StudentDAO {
 					connection,
 					"UPDATE Student " +
 							"SET " +
-								"uid = ?, name = ?, surname = ?, " +
-								"patronymic = ?, phone = ?, email = ?, " +
-								"notes = ? " +
+								"uid = ?, parsedUid = ?, name = ?, surname = ?, " +
+								"patronymic = ?, phone = ?, email = ?, notes = ? " +
 							"WHERE id = ?;",
 					student.getUid(),
+					student.getParsedUid(),
 					student.getName(),
 					student.getSurname(),
 					student.getPatronymic(),

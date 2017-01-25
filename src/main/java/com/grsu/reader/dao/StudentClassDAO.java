@@ -116,7 +116,7 @@ public class StudentClassDAO {
 		}
 	}
 
-	public static void updateByStudentId(Connection connection, int studentId, int classId, boolean present) {
+	public static void updateByStudentId(Connection connection, int studentId, int classId, boolean present) throws SQLException {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,

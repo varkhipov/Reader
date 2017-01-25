@@ -15,27 +15,22 @@
                 <p:panelGrid columns="2" rendered="#{not empty lessonBean.selectedLesson}"
                              columnClasses="label,value">
 
-                    <p:outputLabel for="name" value="#{msg['lesson.name']}:"/>
-                    <p:inputText id="name" value="#{lessonBean.selectedLesson.name}" required="true">
-                        <p:ajax update=":lessonInfoForm:lessonDetail"/>
-                    </p:inputText>
-
                     <p:outputLabel for="class" value="#{msg['lesson.discipline']}"/>
-                    <p:selectOneMenu id="class" value="#{lessonBean.selectedDisciplineId}" required="true">
+                    <p:selectOneMenu id="class" value="#{lessonBean.selectedDisciplineId}">
                         <f:selectItem itemValue="#{0}" itemLabel="#{msg['select.discipline']}"/>
                         <f:selectItems value="#{lessonBean.disciplinesItems}"/>
                         <p:ajax update=":lessonInfoForm:lessonDetail"/>
                     </p:selectOneMenu>
 
                     <p:outputLabel for="schedule" value="#{msg['lesson.schedule']}"/>
-                    <p:selectOneMenu id="schedule" value="#{lessonBean.selectedScheduleId}" required="true">
+                    <p:selectOneMenu id="schedule" value="#{lessonBean.selectedScheduleId}">
                         <f:selectItem itemValue="#{0}" itemLabel="#{msg['select.schedule']}"/>
                         <f:selectItems value="#{lessonBean.schedulesItems}"/>
                         <p:ajax update=":lessonInfoForm:lessonDetail"/>
                     </p:selectOneMenu>
 
                     <p:outputLabel for="stream" value="#{msg['lesson.stream']}"/>
-                    <p:selectOneMenu id="stream" value="#{lessonBean.selectedStreamId}" required="true">
+                    <p:selectOneMenu id="stream" value="#{lessonBean.selectedStreamId}">
                         <f:selectItem itemValue="#{0}" itemLabel="#{msg['select.stream']}"/>
                         <f:selectItems value="#{lessonBean.streamsItems}"/>
                         <p:ajax update=":lessonInfoForm:lessonDetail"/>

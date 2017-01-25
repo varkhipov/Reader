@@ -49,6 +49,10 @@ body {
     height: 90%;
 }
 
+.v-align-top .ui-panelgrid-cell {
+    vertical-align: top;
+}
+
 .noBorder {
     border: none;
 }

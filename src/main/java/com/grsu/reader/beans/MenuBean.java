@@ -1,6 +1,7 @@
 package com.grsu.reader.beans;
 
 import com.grsu.reader.utils.FacesUtils;
+import com.grsu.reader.utils.SerialUtils;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -51,6 +52,7 @@ public class MenuBean implements Serializable {
 	}
 
 	public void disconnect() {
+		SerialUtils.disconnect();
 		databaseBean.disconnect();
 		if (databaseBean.isConnected()) {
 			System.out.println("Still not disconnected.");

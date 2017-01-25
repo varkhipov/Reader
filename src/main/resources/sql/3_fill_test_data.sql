@@ -24,13 +24,13 @@ INSERT INTO Stream_Group (streamId, groupId) VALUES (2, 4);
 INSERT INTO Lecturer (name, surname) VALUES ('Lecturer', '1');
 INSERT INTO Lecturer (uid, name, surname) VALUES ('TEST_LECTURER_UID_1', 'Преподаватель', '2');
 
-INSERT INTO Student (uid, name, surname) VALUES ('TEST_UID_1', 'Student w/o group', '_1');
-INSERT INTO Student (uid, name, surname) VALUES ('TEST_UID_2', 'Студент без группы', '2');
-INSERT INTO Student (uid, name, surname) VALUES ('TEST_UID_3', 'Student w group', '_1');
-INSERT INTO Student (uid, name, surname) VALUES ('TEST_UID_4', 'Студент в группе', '_2');
-INSERT INTO Student (uid, name, surname) VALUES ('TEST_UID_5', 'Студент в группе', '_3');
-INSERT INTO Student (uid, name, surname) VALUES ('TEST_UID_6', 'Студент в группе', '_4');
-INSERT INTO Student (uid, name, surname) VALUES ('TEST_UID_7', 'Студент в группе (прогул)', '_5');
+INSERT INTO Student (uid, parsedUid, name, surname) VALUES ('00000000', 0, 'Student w/o group', '_1');
+INSERT INTO Student (uid, parsedUid, name, surname) VALUES ('11111111', 286331153, 'Студент без группы', '2');
+INSERT INTO Student (uid, parsedUid, name, surname) VALUES ('22222222', 572662306, 'Student w group', '_1');
+INSERT INTO Student (uid, parsedUid, name, surname) VALUES ('33333333', 858993459, 'Студент в группе', '_2');
+INSERT INTO Student (uid, parsedUid, name, surname) VALUES ('AAAAAAAA', -1431655766, 'Студент в группе', '_3');
+INSERT INTO Student (uid, parsedUid, name, surname) VALUES ('BBBBBBBB', -1145324613, 'Студент в группе', '_4');
+INSERT INTO Student (uid, parsedUid, name, surname) VALUES ('FFFFFFFF', -1, 'Студент в группе (прогул)', '_5');
 
 INSERT INTO Student_Group (studentId, groupId) VALUES (3, 1);
 INSERT INTO Student_Group (studentId, groupId) VALUES (4, 2);

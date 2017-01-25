@@ -4,12 +4,14 @@ import com.grsu.reader.dao.*;
 import com.grsu.reader.models.*;
 import com.grsu.reader.models.Class;
 import com.grsu.reader.utils.DBUtils;
+import com.grsu.reader.utils.SerialUtils;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -26,9 +28,14 @@ public class LessonBean implements Serializable {
 	private int selectedScheduleId;
 	private boolean recordStarted = false;
 	private boolean soundEnabled = true;
+
 	private List<Class> classes;
+
 	private List<Student> presentStudents;
+	private List<Student> filteredPresentStudents;
+
 	private List<Student> absentStudents;
+	private List<Student> filteredAbsentStudents;
 
 
 	@ManagedProperty(value = "#{databaseBean}")
@@ -54,6 +61,11 @@ public class LessonBean implements Serializable {
 
 	public void createLesson() {
 		if (selectedLesson != null) {
+			selectedLesson.setName(String.format("%s [%s]",
+					selectedLesson.getDiscipline().getName(),
+					selectedLesson.getStream().getName()
+					)
+			);
 			selectedLesson.setClasses(Arrays.asList(
 					new Class(
 							LocalDate.now(),
@@ -114,27 +126,11 @@ public class LessonBean implements Serializable {
 						selectedLesson.getClasses().get(0)
 				);
 			}
+			sessionBean.updateLessons();
+			sessionBean.setActiveView("lessons");
 			update("views");
 		}
 		exit();
-	}
-
-	private void addListener() {
-//		addVisit(new Student());
-	}
-
-	public void addVisit() {
-		if (!absentStudents.isEmpty()) {
-			Student student = new Student(absentStudents.get(0));
-			presentStudents.add(student);
-			absentStudents.remove(student);
-			StudentClassDAO.updateByStudentId(
-					databaseBean.getConnection(),
-					student.getId(),
-					selectedLesson.getClasses().get(0).getId(),
-					true
-			);
-		}
 	}
 
 	private void initPresentStudents() {
@@ -177,16 +173,32 @@ public class LessonBean implements Serializable {
 		}
 	}
 
-	private void processStudent() {
+	public boolean processStudent(Student student) {
+		presentStudents.add(student);
+		absentStudents.remove(student);
 
+		try {
+			StudentClassDAO.updateByStudentId(
+					databaseBean.getConnection(),
+					student.getId(),
+					selectedLesson.getClasses().get(0).getId(),
+					true
+			);
+		} catch (SQLException e) {
+			System.out.println("Student not added. Uid[ " + student.getUid() + " ]. Reason: SQLException:\n" + e);
+			return false;
+		}
+
+		System.out.println("Student added");
+		return true;
 	}
 
 	public void startRecord() {
-		recordStarted = true;
+		recordStarted = SerialUtils.connect(this);
 	}
 
 	public void stopRecord() {
-		recordStarted = false;
+		recordStarted = !SerialUtils.disconnect();
 	}
 
 	public void enableSound() {
@@ -197,18 +209,18 @@ public class LessonBean implements Serializable {
 		soundEnabled = false;
 	}
 
-
 	/* GETTERS & SETTERS */
+	public void setSelectedLesson(Lesson selectedLesson) {
+		this.selectedLesson = selectedLesson;
+		copyOfSelectedLesson = this.selectedLesson == null ? null : new Lesson(selectedLesson);
+		if (selectedLesson != null) {
+			initPresentStudents();
+			initAbsentStudents();
+		}
+	}
+
 	public List<SelectItem> getSchedulesItems() {
 		return sessionBean.getSchedulesItems();
-	}
-
-	public int getSelectedScheduleId() {
-		return selectedScheduleId;
-	}
-
-	public void setSelectedScheduleId(int selectedScheduleId) {
-		this.selectedScheduleId = selectedScheduleId;
 	}
 
 	public List<SelectItem> getDisciplinesItems() {
@@ -226,10 +238,6 @@ public class LessonBean implements Serializable {
 		selectedLesson.setDiscipline(getEntityById(sessionBean.getDisciplines(), selectedDisciplineId));
 	}
 
-	public List<SelectItem> getStreamsItems() {
-		return sessionBean.getStreamsItems();
-	}
-
 	public int getSelectedStreamId() {
 		if (selectedLesson.getStream() == null) {
 			return 0;
@@ -239,6 +247,18 @@ public class LessonBean implements Serializable {
 
 	public void setSelectedStreamId(int selectedStreamId) {
 		selectedLesson.setStream(getEntityById(sessionBean.getStreams(), selectedStreamId));
+	}
+
+	public int getSelectedScheduleId() {
+		return selectedScheduleId;
+	}
+
+	public void setSelectedScheduleId(int selectedScheduleId) {
+		this.selectedScheduleId = selectedScheduleId;
+	}
+
+	public List<SelectItem> getStreamsItems() {
+		return sessionBean.getStreamsItems();
 	}
 
 	public List<Lesson> getLessons() {
@@ -255,15 +275,6 @@ public class LessonBean implements Serializable {
 
 	public Lesson getSelectedLesson() {
 		return selectedLesson;
-	}
-
-	public void setSelectedLesson(Lesson selectedLesson) {
-		this.selectedLesson = selectedLesson;
-		copyOfSelectedLesson = this.selectedLesson == null ? null : new Lesson(selectedLesson);
-		if (selectedLesson != null) {
-			initPresentStudents();
-			initAbsentStudents();
-		}
 	}
 
 	public boolean isRecordStarted() {
@@ -298,11 +309,27 @@ public class LessonBean implements Serializable {
 		this.presentStudents = presentStudents;
 	}
 
+	public List<Student> getFilteredPresentStudents() {
+		return filteredPresentStudents;
+	}
+
+	public void setFilteredPresentStudents(List<Student> filteredPresentStudents) {
+		this.filteredPresentStudents = filteredPresentStudents;
+	}
+
 	public List<Student> getAbsentStudents() {
 		return absentStudents;
 	}
 
 	public void setAbsentStudents(List<Student> absentStudents) {
 		this.absentStudents = absentStudents;
+	}
+
+	public List<Student> getFilteredAbsentStudents() {
+		return filteredAbsentStudents;
+	}
+
+	public void setFilteredAbsentStudents(List<Student> filteredAbsentStudents) {
+		this.filteredAbsentStudents = filteredAbsentStudents;
 	}
 }

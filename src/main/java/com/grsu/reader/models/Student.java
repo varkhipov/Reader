@@ -17,6 +17,7 @@ public class Student extends Person {
 	public Student(Student student) {
 		setId(student.getId());
 		setUid(student.getUid());
+		setParsedUid(student.getParsedUid());
 		setName(student.getName());
 		setSurname(student.getSurname());
 		setPatronymic(student.getPatronymic());
@@ -56,6 +57,7 @@ public class Student extends Person {
 		return "Student{" +
 				"id=" + getId() +
 				", uid='" + getUid() + '\'' +
+				", parsedUid='" + getParsedUid() + '\'' +
 				", name='" + getName() + '\'' +
 				", surname='" + getSurname() + '\'' +
 				", patronymic='" + getPatronymic() + '\'' +
@@ -75,6 +77,7 @@ public class Student extends Person {
 		if (obj.getClass() != null && obj instanceof Student) {
 			Student student = (Student) obj;
 			return StringUtils.equals(getUid(), student.getUid())
+					&& getParsedUid() == student.getParsedUid()
 					&& StringUtils.equals(getName(), student.getName())
 					&& StringUtils.equals(getSurname(), student.getSurname())
 					&& StringUtils.equals(getPatronymic(), student.getPatronymic())

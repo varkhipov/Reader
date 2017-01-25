@@ -8,6 +8,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 public class Person extends Entity {
 	private int id;
 	private String uid;
+	private int parsedUid;
 	private String name;
 	private String surname;
 	private String patronymic;
@@ -15,6 +16,15 @@ public class Person extends Entity {
 	private String email;
 	private String notes;
 	private Object picture;
+
+	public void setIntToUid(int intUid) {
+		uid = Integer.toHexString(intUid).toUpperCase();
+	}
+
+	//http://stackoverflow.com/a/7038867/7464024
+	public void setHexToParsedUid(String hexUid) {
+		parsedUid = (int) Long.parseLong(hexUid, 16);
+	}
 
 	@Override
 	public SelectItem getSelectItem() {
@@ -39,6 +49,14 @@ public class Person extends Entity {
 
 	public void setUid(String uid) {
 		this.uid = isEmpty(uid) ? null : uid;
+	}
+
+	public int getParsedUid() {
+		return parsedUid;
+	}
+
+	public void setParsedUid(int parsedUid) {
+		this.parsedUid = parsedUid;
 	}
 
 	public String getName() {

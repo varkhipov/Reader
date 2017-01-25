@@ -60,6 +60,7 @@ CREATE TABLE Stream_Group (
 CREATE TABLE Student (
   id            INTEGER PRIMARY KEY,
   uid           TEXT NOT NULL UNIQUE,
+  parsedUid     INTEGER NOT NULL,
   name          TEXT NOT NULL,
   surname       TEXT NOT NULL,
   patronymic    TEXT,

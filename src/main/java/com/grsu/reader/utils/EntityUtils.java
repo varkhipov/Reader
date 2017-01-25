@@ -1,12 +1,23 @@
 package com.grsu.reader.utils;
 
 import com.grsu.reader.models.Entity;
+import com.grsu.reader.models.Lesson;
+import com.grsu.reader.models.Person;
 
 import javax.faces.model.SelectItem;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EntityUtils {
+	public static <T extends Entity> boolean entityExists(List<T> entities, int id) {
+		for (Entity entity : entities) {
+			if (id == entity.getId()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static <T extends Entity> T getEntityById(List<T> entities, int id) {
 		if (id == 0) return null;
 		for (Entity entity : entities) {
@@ -45,5 +56,25 @@ public class EntityUtils {
 			items.add(entity.getSelectItem());
 		}
 		return items;
+	}
+
+	public static boolean personExists(List<? extends Person> persons, String uid) {
+		if (uid == null || uid.isEmpty()) return false;
+		for (Person person : persons) {
+			if (uid.equals(person.getUid())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static <T extends Person> T getPersonByUid(List<T> persons, String uid) {
+		if (uid == null || uid.isEmpty()) return null;
+		for (Person person : persons) {
+			if (uid.equals(person.getUid())) {
+				return (T) person;
+			}
+		}
+		return null;
 	}
 }
