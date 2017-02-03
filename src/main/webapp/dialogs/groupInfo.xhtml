@@ -20,9 +20,9 @@
                 <p:panelGrid columns="2" rendered="#{not empty groupBean.selectedGroup}"
                              columnClasses="label,value">
 
-                    <p:outputLabel for="faculty" value="#{msg['group.info.faculty']}"/>
-                    <p:selectOneMenu id="faculty" value="#{groupBean.selectedFacultyId}">
-                        <f:selectItem itemValue="#{0}" itemLabel="#{msg['select.faculty']}"/>
+                    <p:outputLabel for="department" value="#{msg['group.info.department']}"/>
+                    <p:selectOneMenu id="department" value="#{groupBean.selectedDepartmentId}">
+                        <f:selectItem itemValue="#{0}" itemLabel="#{msg['select.department']}"/>
                         <f:selectItems value="#{groupBean.facultiesItems}"/>
                         <p:ajax update=":groupInfoForm:groupInfoDetail"/>
                     </p:selectOneMenu>

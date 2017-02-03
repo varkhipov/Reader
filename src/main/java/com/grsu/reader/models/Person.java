@@ -9,13 +9,12 @@ public class Person extends Entity {
 	private int id;
 	private String uid;
 	private int parsedUid;
-	private String name;
-	private String surname;
+	private String firstName;
+	private String lastName;
 	private String patronymic;
 	private String phone;
 	private String email;
-	private String notes;
-	private Object picture;
+	private Object image;
 
 	public void setIntToUid(int intUid) {
 		uid = Integer.toHexString(intUid).toUpperCase();
@@ -32,7 +31,7 @@ public class Person extends Entity {
 	}
 
 	public String getFullName() {
-		return StringUtils.joinWith(" ", surname, name, patronymic);
+		return StringUtils.joinWith(" ", lastName, firstName, patronymic);
 	}
 
 	public int getId() {
@@ -59,20 +58,20 @@ public class Person extends Entity {
 		this.parsedUid = parsedUid;
 	}
 
-	public String getName() {
-		return name;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setName(String name) {
-		this.name = isEmpty(name) ? null : name;
+	public void setFirstName(String firstName) {
+		this.firstName = isEmpty(firstName) ? null : firstName;
 	}
 
-	public String getSurname() {
-		return surname;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setSurname(String surname) {
-		this.surname = isEmpty(surname) ? null : surname;
+	public void setLastName(String lastName) {
+		this.lastName = isEmpty(lastName) ? null : lastName;
 	}
 
 	public String getPatronymic() {
@@ -99,20 +98,12 @@ public class Person extends Entity {
 		this.email = isEmpty(email) ? null : email;
 	}
 
-	public String getNotes() {
-		return notes;
+	public Object getImage() {
+		return image;
 	}
 
-	public void setNotes(String notes) {
-		this.notes = isEmpty(notes) ? null : notes;
-	}
-
-	public Object getPicture() {
-		return picture;
-	}
-
-	public void setPicture(Object picture) {
-		this.picture = picture;
+	public void setImage(Object image) {
+		this.image = image;
 	}
 
 	@Override
@@ -120,13 +111,12 @@ public class Person extends Entity {
 		return "Person{" +
 				"id=" + id +
 				", uid='" + uid + '\'' +
-				", name='" + name + '\'' +
-				", surname='" + surname + '\'' +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
 				", patronymic='" + patronymic + '\'' +
 				", phone='" + phone + '\'' +
 				", email='" + email + '\'' +
-				", notes='" + notes + '\'' +
-//				", picture=" + picture +
+//				", image=" + image +
 				'}';
 	}
 }

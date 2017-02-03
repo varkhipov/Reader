@@ -28,7 +28,7 @@ public class StreamDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT * FROM Stream;"
+					"SELECT id, name FROM STREAM;"
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -49,7 +49,7 @@ public class StreamDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT * FROM Stream WHERE id = ?;",
+					"SELECT id, name FROM STREAM WHERE id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -70,7 +70,7 @@ public class StreamDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"INSERT INTO Stream (name) VALUES (?);",
+					"INSERT INTO STREAM (name) VALUES (?);",
 					stream.getName()
 			);
 			preparedStatement.executeUpdate();
@@ -95,7 +95,7 @@ public class StreamDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE Stream SET name = ? WHERE id = ?;",
+					"UPDATE STREAM SET name = ? WHERE id = ?;",
 					stream.getName(),
 					stream.getId()
 			);
@@ -117,7 +117,7 @@ public class StreamDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM Stream WHERE id = ?;",
+					"DELETE FROM STREAM WHERE id = ?;",
 					stream.getId()
 			);
 			preparedStatement.executeUpdate();

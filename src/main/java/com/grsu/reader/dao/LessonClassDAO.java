@@ -20,7 +20,7 @@ public class LessonClassDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT lessonId FROM Lesson_Class WHERE classId = ?;",
+					"SELECT lesson_id FROM LESSON_CLASS WHERE class_id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -43,7 +43,7 @@ public class LessonClassDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT classId FROM Lesson_Class WHERE lessonId = ?;",
+					"SELECT class_id FROM LESSON_CLASS WHERE lesson_id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -65,7 +65,7 @@ public class LessonClassDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"INSERT INTO Lesson_Class (lessonId, classId) VALUES (?, ?);",
+					"INSERT INTO LESSON_CLASS (lesson_id, class_id) VALUES (?, ?);",
 					lesson.getId(),
 					cls.getId()
 			);
@@ -80,7 +80,7 @@ public class LessonClassDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE Lesson_Class SET classId = ? WHERE lessonId = ?;",
+					"UPDATE LESSON_CLASS SET class_id = ? WHERE lesson_id = ?;",
 					cls.getId(),
 					lesson.getId()
 			);
@@ -95,7 +95,7 @@ public class LessonClassDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE Lesson_Class SET lessonId = ? WHERE classId = ?;",
+					"UPDATE LESSON_CLASS SET lesson_id = ? WHERE class_id = ?;",
 					lesson.getId(),
 					cls.getId()
 			);
@@ -110,7 +110,7 @@ public class LessonClassDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM Lesson_Class WHERE lessonId = ? AND classId = ?;",
+					"DELETE FROM LESSON_CLASS WHERE lesson_id = ? AND class_id = ?;",
 					lesson.getId(),
 					cls.getId()
 			);
@@ -125,7 +125,7 @@ public class LessonClassDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM Lesson_Class WHERE lessonId = ?;",
+					"DELETE FROM LESSON_CLASS WHERE lesson_id = ?;",
 					id
 			);
 			preparedStatement.executeUpdate();
@@ -139,7 +139,7 @@ public class LessonClassDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM Lesson_Class WHERE classId = ?;",
+					"DELETE FROM LESSON_CLASS WHERE class_id = ?;",
 					id
 			);
 			preparedStatement.executeUpdate();

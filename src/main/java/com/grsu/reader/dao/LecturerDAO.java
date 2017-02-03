@@ -14,12 +14,11 @@ public class LecturerDAO {
 		Lecturer lecturer = new Lecturer();
 		lecturer.setId(resultSet.getInt("id"));
 		lecturer.setUid(resultSet.getString("uid"));
-		lecturer.setName(resultSet.getString("name"));
-		lecturer.setSurname(resultSet.getString("surname"));
+		lecturer.setFirstName(resultSet.getString("first_name"));
+		lecturer.setLastName(resultSet.getString("last_name"));
 		lecturer.setPatronymic(resultSet.getString("patronymic"));
 		lecturer.setPhone(resultSet.getString("phone"));
 		lecturer.setEmail(resultSet.getString("email"));
-		lecturer.setNotes(resultSet.getString("notes"));
 		// TODO: add photo
 		return lecturer;
 	}
@@ -29,7 +28,7 @@ public class LecturerDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT * FROM Lecturer WHERE id = ?;",
+					"SELECT id, uid, first_name, last_name, patronymic, phone, email FROM LECTURER WHERE id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();

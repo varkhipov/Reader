@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.model.SelectItem;
+import java.util.List;
 import java.util.Objects;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -12,20 +13,21 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 public class Group extends Entity {
 	private int id;
 	private String name;
-	private Faculty faculty;
+	private Department department;
+	private List<Student> students;
 
 	public Group() {}
 
-	public Group(int id, String name, Faculty faculty) {
+	public Group(int id, String name, Department department) {
 		this.id = id;
 		this.name = name;
-		this.faculty = faculty;
+		this.department = department;
 	}
 
 	public Group(Group group) {
 		this.id = group.getId();
 		this.name = group.getName();
-		this.faculty = group.getFaculty();
+		this.department = group.getDepartment();
 	}
 
 	public SelectItem getSelectItem() {
@@ -48,12 +50,20 @@ public class Group extends Entity {
 		this.name = isEmpty(name) ? null : name;
 	}
 
-	public Faculty getFaculty() {
-		return faculty;
+	public Department getDepartment() {
+		return department;
 	}
 
-	public void setFaculty(Faculty faculty) {
-		this.faculty = faculty;
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
+
+	public List<Student> getStudents() {
+		return students;
+	}
+
+	public void setStudents(List<Student> students) {
+		this.students = students;
 	}
 
 	@Override
@@ -61,7 +71,7 @@ public class Group extends Entity {
 		return "Group{" +
 				"id=" + id +
 				", name='" + name + '\'' +
-				", faculty=" + faculty +
+				", department=" + department +
 				'}';
 	}
 
@@ -73,7 +83,7 @@ public class Group extends Entity {
 		if (obj.getClass() != null && obj instanceof Group) {
 			Group group = (Group) obj;
 			return StringUtils.equals(name, group.getName())
-					&& Objects.equals(faculty, group.getFaculty());
+					&& Objects.equals(department, group.getDepartment());
 		}
 		return false;
 	}

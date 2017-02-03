@@ -20,7 +20,7 @@ public class StreamGroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT streamId FROM Stream_Group WHERE groupId = ?;",
+					"SELECT stream_id FROM STREAM_GROUP WHERE group_id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -43,7 +43,7 @@ public class StreamGroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT groupId FROM Stream_Group WHERE streamId = ?;",
+					"SELECT group_id FROM STREAM_GROUP WHERE stream_id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -65,7 +65,7 @@ public class StreamGroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"INSERT INTO Stream_Group (streamId, groupId) VALUES (?, ?);",
+					"INSERT INTO STREAM_GROUP (stream_id, group_id) VALUES (?, ?);",
 					streamId,
 					groupId
 			);
@@ -80,7 +80,7 @@ public class StreamGroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE Stream_Group SET groupId = ? WHERE streamId = ?;",
+					"UPDATE STREAM_GROUP SET group_id = ? WHERE stream_id = ?;",
 					group.getId(),
 					stream.getId()
 			);
@@ -95,7 +95,7 @@ public class StreamGroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE Stream_Group SET streamId = ? WHERE groupId = ?;",
+					"UPDATE STREAM_GROUP SET stream_id = ? WHERE group_id = ?;",
 					stream.getId(),
 					group.getId()
 			);
@@ -110,7 +110,7 @@ public class StreamGroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM Stream_Group WHERE streamId = ? AND groupId = ?;",
+					"DELETE FROM STREAM_GROUP WHERE stream_id = ? AND group_id = ?;",
 					stream.getId(),
 					group.getId()
 			);
@@ -125,7 +125,7 @@ public class StreamGroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM Stream_Group WHERE streamId = ?;",
+					"DELETE FROM STREAM_GROUP WHERE stream_id = ?;",
 					id
 			);
 			preparedStatement.executeUpdate();
@@ -139,7 +139,7 @@ public class StreamGroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM Stream_Group WHERE groupId = ?;",
+					"DELETE FROM STREAM_GROUP WHERE group_id = ?;",
 					id
 			);
 			preparedStatement.executeUpdate();

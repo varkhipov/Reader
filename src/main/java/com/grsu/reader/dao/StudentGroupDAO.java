@@ -20,7 +20,7 @@ public class StudentGroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT studentId FROM Student_Group WHERE groupId = ?;",
+					"SELECT student_id FROM STUDENT_GROUP WHERE group_id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -43,7 +43,7 @@ public class StudentGroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT DISTINCT studentId FROM Student_Group WHERE groupId != ?;",
+					"SELECT DISTINCT student_id FROM STUDENT_GROUP WHERE group_id != ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -66,7 +66,7 @@ public class StudentGroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT groupId FROM Student_Group WHERE studentId = ?;",
+					"SELECT group_id FROM STUDENT_GROUP WHERE student_id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -89,7 +89,7 @@ public class StudentGroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"INSERT INTO Student_Group (studentId, groupId) VALUES (?, ?);",
+					"INSERT INTO STUDENT_GROUP (student_id, group_id) VALUES (?, ?);",
 					studentId,
 					groupId
 			);
@@ -104,7 +104,7 @@ public class StudentGroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE Student_Group SET groupId = ? WHERE studentId = ?;",
+					"UPDATE STUDENT_GROUP SET group_id = ? WHERE student_id = ?;",
 					group.getId(),
 					student.getId()
 			);
@@ -119,7 +119,7 @@ public class StudentGroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE Student_Group SET studentId = ? WHERE groupId = ?;",
+					"UPDATE STUDENT_GROUP SET student_id = ? WHERE group_id = ?;",
 					student.getId(),
 					group.getId()
 			);
@@ -134,7 +134,7 @@ public class StudentGroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM Student_Group WHERE studentId = ? AND groupId = ?;",
+					"DELETE FROM STUDENT_GROUP WHERE student_id = ? AND group_id = ?;",
 					student.getId(),
 					group.getId()
 			);
@@ -149,7 +149,7 @@ public class StudentGroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM Student_Group WHERE studentId = ?;",
+					"DELETE FROM STUDENT_GROUP WHERE student_id = ?;",
 					id
 			);
 			preparedStatement.executeUpdate();
@@ -163,7 +163,7 @@ public class StudentGroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM Student_Group WHERE groupId = ?;",
+					"DELETE FROM STUDENT_GROUP WHERE group_id = ?;",
 					id
 			);
 			preparedStatement.executeUpdate();

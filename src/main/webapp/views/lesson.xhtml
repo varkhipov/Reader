@@ -38,7 +38,7 @@
                      toggleable="true" styleClass="noBorder lessonStudents">
                 <p:dataTable var="pStudent" value="#{lessonBean.presentStudents}"
                              sortBy="#{pStudent.fullName}" filteredValue="#{lessonBean.filteredPresentStudents}">
-                    <p:column headerText="#{msg['lesson.student.name']}" sortBy="#{pStudent.fullName}"
+                    <p:column headerText="#{msg['lesson.student.firstName']}" sortBy="#{pStudent.fullName}"
                               filterBy="#{pStudent.fullName}" filterMatchMode="contains">
                         <h:outputText value="#{pStudent.fullName}"/>
                     </p:column>
@@ -49,7 +49,7 @@
                      toggleable="true" styleClass="noBorder lessonStudents">
                 <p:dataTable var="aStudent" value="#{lessonBean.absentStudents}"
                              sortBy="#{aStudent.fullName}" filteredValue="#{lessonBean.filteredAbsentStudents}">
-                    <p:column headerText="#{msg['lesson.student.name']}" sortBy="#{aStudent.fullName}"
+                    <p:column headerText="#{msg['lesson.student.firstName']}" sortBy="#{aStudent.fullName}"
                               filterBy="#{aStudent.fullName}" filterMatchMode="contains">
                         <h:outputText value="#{aStudent.fullName}"/>
                     </p:column>

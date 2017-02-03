@@ -142,15 +142,15 @@ public class GroupBean implements Serializable {
 		}
 	}
 
-	public int getSelectedFacultyId() {
-		if (selectedGroup.getFaculty() == null) {
+	public int getSelectedDepartmentId() {
+		if (selectedGroup.getDepartment() == null) {
 			return 0;
 		}
-		return selectedGroup.getFaculty().getId();
+		return selectedGroup.getDepartment().getId();
 	}
 
 	public void setSelectedFacultyId(int selectedFacultyId) {
-		selectedGroup.setFaculty(getEntityById(sessionBean.getFaculties(), selectedFacultyId));
+		selectedGroup.setDepartment(getEntityById(sessionBean.getFaculties(), selectedFacultyId));
 	}
 
 	public List<Student> getGroupStudents() {

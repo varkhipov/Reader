@@ -11,18 +11,18 @@
             <p:submenu label="#{msg['menu.file']}" icon="fa fa-fw fa-small fa-file-o"
                        rendered="#{sessionBean.connected}">
                 <p:submenu label="#{msg['menu.file.new']}" icon="fa fa-fw fa-plus">
-                    <p:menuitem value="#{msg['menu.file.new.discipline']}" icon="fa fa-fw fa-paperclip"
+                    <p:menuitem value="#{msg['menu.file.new.course']}" icon="fa fa-fw fa-paperclip"
                                 update=":disciplineInfoForm" oncomplete="PF('disciplineDialog').show()">
                         <f:setPropertyActionListener value="#{newInstanceOfDiscipline}"
-                                                     target="#{disciplineBean.selectedDiscipline}"/>
+                                                     target="#{disciplineBean.selectedCourse}"/>
                         <p:resetInput target=":disciplineInfoForm:disciplineDetail"/>
                     </p:menuitem>
 
-                    <p:menuitem value="#{msg['menu.file.new.faculty']}" icon="fa fa-fw fa-list-alt"
-                                update=":facultyInfoForm" oncomplete="PF('facultyDialog').show()">
-                        <f:setPropertyActionListener value="#{newInstanceOfFaculty}"
-                                                     target="#{facultyBean.selectedFaculty}"/>
-                        <p:resetInput target=":facultyInfoForm:facultyDetail"/>
+                    <p:menuitem value="#{msg['menu.file.new.department']}" icon="fa fa-fw fa-list-alt"
+                                update=":departmentInfoForm" oncomplete="PF('departmentDialog').show()">
+                        <f:setPropertyActionListener value="#{newInstanceOfDepartment}"
+                                                     target="#{departmentBean.selectedDepartment}"/>
+                        <p:resetInput target=":departmentInfoForm:departmentDetail"/>
                     </p:menuitem>
 
                     <p:menuitem value="#{msg['menu.file.new.stream']}" icon="fa fa-fw fa-code-fork"
@@ -69,8 +69,8 @@
 
             <p:submenu label="#{msg['menu.show']}" icon="fa fa-fw fa-bars"
                        rendered="#{sessionBean.connected}">
-                <p:menuitem value="#{msg['menu.show.disciplines']}" icon="fa fa-fw fa-paperclip"
-                            actionListener="#{menuBean.changeView('disciplines')}" update="@([id$=views])"/>
+                <p:menuitem value="#{msg['menu.show.courses']}" icon="fa fa-fw fa-paperclip"
+                            actionListener="#{menuBean.changeView('courses')}" update="@([id$=views])"/>
                 <p:menuitem value="#{msg['menu.show.faculties']}" icon="fa fa-fw fa-list-alt"
                             actionListener="#{menuBean.changeView('faculties')}" update="@([id$=views])"/>
                 <p:menuitem value="#{msg['menu.show.streams']}" icon="fa fa-fw fa-code-fork"

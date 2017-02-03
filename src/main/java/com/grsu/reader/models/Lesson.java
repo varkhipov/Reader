@@ -13,26 +13,30 @@ import java.util.Objects;
 public class Lesson extends Entity {
 	private int id;
 	private String name;
-	private int timeBefore;
-	private int timeAfter;
+	private String description;
 	private LocalDateTime createDate;
-	private Discipline discipline;
-	private Lecturer lecturer;
-	private Stream stream;
+	private LessonType lessonType;
+	private Course course;
+	private Group group;
 	private List<Class> classes;
 
-	public Lesson() {}
+	public Lesson() {
+	}
+
+	public Lesson(int id, String name, String description, LocalDateTime createDate, LessonType lessonType, Course course, Group group, List<Class> classes) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.createDate = createDate;
+		this.lessonType = lessonType;
+		this.course = course;
+		this.group = group;
+		this.classes = classes;
+	}
 
 	public Lesson(Lesson lesson) {
-		id = lesson.getId();
-		name = lesson.getName();
-		timeBefore = lesson.getTimeBefore();
-		timeAfter = lesson.getTimeAfter();
-		createDate = lesson.getCreateDate();
-		discipline = lesson.getDiscipline();
-		lecturer = lesson.getLecturer();
-		stream = lesson.getStream();
-		classes = lesson.getClasses();
+		this(lesson.getId(), lesson.getName(), lesson.getDescription(), lesson.getCreateDate(), lesson.getLessonType(), lesson.getCourse(),
+				lesson.getGroup(), lesson.getClasses());
 	}
 
 	@Override
@@ -40,14 +44,7 @@ public class Lesson extends Entity {
 		return new SelectItem(id, name);
 	}
 
-	public String getDate() {
-		return DateUtils.formatDate(createDate);
-	}
-
-	public String getTime() {
-		return DateUtils.formatTime(createDate);
-	}
-
+	@Override
 	public int getId() {
 		return id;
 	}
@@ -64,20 +61,12 @@ public class Lesson extends Entity {
 		this.name = name;
 	}
 
-	public int getTimeBefore() {
-		return timeBefore;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setTimeBefore(int timeBefore) {
-		this.timeBefore = timeBefore;
-	}
-
-	public int getTimeAfter() {
-		return timeAfter;
-	}
-
-	public void setTimeAfter(int timeAfter) {
-		this.timeAfter = timeAfter;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public LocalDateTime getCreateDate() {
@@ -88,28 +77,28 @@ public class Lesson extends Entity {
 		this.createDate = createDate;
 	}
 
-	public Discipline getDiscipline() {
-		return discipline;
+	public LessonType getLessonType() {
+		return lessonType;
 	}
 
-	public void setDiscipline(Discipline discipline) {
-		this.discipline = discipline;
+	public void setLessonType(LessonType lessonType) {
+		this.lessonType = lessonType;
 	}
 
-	public Lecturer getLecturer() {
-		return lecturer;
+	public Course getCourse() {
+		return course;
 	}
 
-	public void setLecturer(Lecturer lecturer) {
-		this.lecturer = lecturer;
+	public void setCourse(Course course) {
+		this.course = course;
 	}
 
-	public Stream getStream() {
-		return stream;
+	public Group getGroup() {
+		return group;
 	}
 
-	public void setStream(Stream stream) {
-		this.stream = stream;
+	public void setGroup(Group group) {
+		this.group = group;
 	}
 
 	public List<Class> getClasses() {
@@ -119,32 +108,18 @@ public class Lesson extends Entity {
 	public void setClasses(List<Class> classes) {
 		this.classes = classes;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Lesson{" +
 				"id=" + id +
 				", name='" + name + '\'' +
-				", timeBefore=" + timeBefore +
-				", timeAfter=" + timeAfter +
+				", description='" + description + '\'' +
 				", createDate=" + createDate +
-				", discipline=" + discipline +
-				", lecturer=" + lecturer +
-				", stream=" + stream +
+				", lessonType=" + lessonType +
+				", course=" + course +
+				", group=" + group +
+				", classes=" + classes +
 				'}';
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) return false;
-		if (this == obj) return true;
-
-		if (obj.getClass() != null && obj instanceof Lesson) {
-			Lesson lesson = (Lesson) obj;
-			return StringUtils.equals(name, lesson.getName())
-					&& Objects.equals(discipline, lesson.getDiscipline())
-					&& Objects.equals(stream, lesson.getStream());
-		}
-		return false;
 	}
 }

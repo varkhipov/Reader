@@ -19,7 +19,7 @@ public class ScheduleDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT * FROM Schedule;"
+					"SELECT id, begin, end, number FROM SCHEDULE;"
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -45,7 +45,7 @@ public class ScheduleDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT * FROM Schedule WHERE id = ?;",
+					"SELECT id, begin, end, number FROM SCHEDULE WHERE id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -71,7 +71,7 @@ public class ScheduleDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"INSERT INTO Schedule (begin, end, number) VALUES (?, ?, ?);",
+					"INSERT INTO SCHEDULE (begin, end, number) VALUES (?, ?, ?);",
 					schedule.getBegin(),
 					schedule.getEnd(),
 					schedule.getNumber()
@@ -87,7 +87,7 @@ public class ScheduleDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE Schedule " +
+					"UPDATE SCHEDULE " +
 							"SET " +
 								"begin = ?, " +
 								"end = ?, " +
@@ -109,7 +109,7 @@ public class ScheduleDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM Schedule WHERE id = ?;",
+					"DELETE FROM SCHEDULE WHERE id = ?;",
 					schedule.getId()
 			);
 			preparedStatement.executeUpdate();

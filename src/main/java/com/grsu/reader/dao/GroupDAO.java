@@ -1,32 +1,45 @@
 package com.grsu.reader.dao;
 
 import com.grsu.reader.models.Group;
+import com.grsu.reader.models.Lesson;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.grsu.reader.utils.DBUtils.*;
 
 public class GroupDAO {
+	private static Group mapFromResultSet(Connection connection, ResultSet resultSet) throws SQLException {
+		Group group = new Group();
+		group.setId(resultSet.getInt("id"));
+		group.setName(resultSet.getString("name"));
+		group.setDepartment(
+				DepartmentDAO.getDepartmentById(connection,
+						resultSet.getInt("department_id"))
+		);
+		group.setStudents(
+				StudentGroupDAO.getStudentsByGroupId(connection, group.getId())
+		);
+
+		return group;
+	}
+
 	public static List<Group> getGroups(Connection connection) {
 		List<Group> groups = new ArrayList<>();
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT * FROM [Group];"
+					"SELECT id, name, department_id FROM [GROUP];"
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
-				groups.add(new Group(
-						resultSet.getInt("id"),
-						resultSet.getString("name"),
-						FacultyDAO.getFacultyById(connection, resultSet.getInt("facultyId"))
-				));
+				groups.add(mapFromResultSet(connection, resultSet));
 			}
 			resultSet.close();
 			preparedStatement.close();
@@ -36,51 +49,48 @@ public class GroupDAO {
 		}
 		return groups;
 	}
-	
+
 	public static Group getGroupById(Connection connection, int id) {
 		Group group = null;
-			try {
-				PreparedStatement preparedStatement = buildPreparedStatement(
-						connection,
-						"SELECT * FROM [Group] WHERE id = ?;",
-						id
-				);
-				ResultSet resultSet = preparedStatement.executeQuery();
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"SELECT id, name, department_id FROM [GROUP] WHERE id = ?;",
+					id
+			);
+			ResultSet resultSet = preparedStatement.executeQuery();
 
-				while (resultSet.next()) {
-					group = new Group();
-					group.setId(resultSet.getInt("id"));
-					group.setName(resultSet.getString("name"));
-					group.setFaculty(FacultyDAO.getFacultyById(connection, resultSet.getInt("facultyId")));
-				}
-				resultSet.close();
-				preparedStatement.close();
-			} catch (Exception e) {
-				System.out.println("Error In getGroupById() -->" + e.getMessage());
-				return group;
+			while (resultSet.next()) {
+				group = mapFromResultSet(connection, resultSet);
 			}
+			resultSet.close();
+			preparedStatement.close();
+		} catch (Exception e) {
+			System.out.println("Error In getGroupById() -->" + e.getMessage());
+			return group;
+		}
 		return group;
 	}
 
-	public static List<Integer> getGroupsIdsByFacultyId(Connection connection, int facultyId) {
+	public static List<Integer> getGroupsIdsByFacultyId(Connection connection, int department_id) {
 		List<Integer> ids = new ArrayList<>();
-			try {
-				PreparedStatement preparedStatement = buildPreparedStatement(
-						connection,
-						"SELECT id FROM [Group] WHERE facultyId = ?;",
-						facultyId
-				);
-				ResultSet resultSet = preparedStatement.executeQuery();
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"SELECT id FROM [GROUP] WHERE department_id = ?;",
+					department_id
+			);
+			ResultSet resultSet = preparedStatement.executeQuery();
 
-				while (resultSet.next()) {
-					ids.add(resultSet.getInt(1));
-				}
-				resultSet.close();
-				preparedStatement.close();
-			} catch (Exception e) {
-				System.out.println("Error In getGroupsIdsByFacultyId() -->" + e.getMessage());
-				return null;
+			while (resultSet.next()) {
+				ids.add(resultSet.getInt(1));
 			}
+			resultSet.close();
+			preparedStatement.close();
+		} catch (Exception e) {
+			System.out.println("Error In getGroupsIdsByFacultyId() -->" + e.getMessage());
+			return null;
+		}
 		return ids;
 	}
 
@@ -88,10 +98,10 @@ public class GroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"INSERT INTO [Group] (name, facultyId) VALUES (?, ?);",
+					"INSERT INTO [GROUP] (name, department_id) VALUES (?, ?);",
 					group.getName(),
-					group.getFaculty() != null && group.getFaculty().getId() != 0
-							? group.getFaculty().getId()
+					group.getDepartment() != null && group.getDepartment().getId() != 0
+							? group.getDepartment().getId()
 							: null
 			);
 			preparedStatement.executeUpdate();
@@ -105,10 +115,10 @@ public class GroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE [Group] SET name = ?, facultyId = ? WHERE id = ?;",
+					"UPDATE [GROUP] SET name = ?, department_id = ? WHERE id = ?;",
 					group.getName(),
-					group.getFaculty() != null && group.getFaculty().getId() != 0
-							? group.getFaculty().getId()
+					group.getDepartment() != null && group.getDepartment().getId() != 0
+							? group.getDepartment().getId()
 							: null,
 
 					group.getId()
@@ -127,7 +137,7 @@ public class GroupDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM [Group] WHERE id = ?;",
+					"DELETE FROM [GROUP] WHERE id = ?;",
 					id
 			);
 			preparedStatement.executeUpdate();
@@ -137,8 +147,8 @@ public class GroupDAO {
 		}
 	}
 
-	public static void deleteByFacultyId(Connection connection, int facultyId) {
-		List<Integer> ids = getGroupsIdsByFacultyId(connection, facultyId);
+	public static void deleteByFacultyId(Connection connection, int department_id) {
+		List<Integer> ids = getGroupsIdsByFacultyId(connection, department_id);
 		if (ids != null) {
 			for (Integer id : ids) {
 				delete(connection, id);

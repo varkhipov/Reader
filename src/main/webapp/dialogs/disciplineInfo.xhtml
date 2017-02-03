@@ -5,7 +5,7 @@
                 xmlns:p="http://primefaces.org/ui"
 >
     <h:form id="disciplineInfoForm">
-        <p:dialog header="#{msg['discipline.info']}" widgetVar="disciplineDialog" position="center" draggable="false"
+        <p:dialog header="#{msg['course.info']}" widgetVar="disciplineDialog" position="center" draggable="false"
                   modal="true" showEffect="fade" hideEffect="fade" resizable="false" fitViewport="true"
                   onHide="PF('disciplineDialog').content.empty()">
 
@@ -13,15 +13,15 @@
 
             <p:outputPanel id="disciplineDetail">
                 <p:commandButton value="#{msg['btn.delete']}" icon="fa fa-fw fa-remove"
-                                 rendered="#{disciplineBean.selectedDiscipline != null
-                                             and disciplineBean.selectedDiscipline.id != 0}"
+                                 rendered="#{disciplineBean.selectedCourse != null
+                                             and disciplineBean.selectedCourse.id != 0}"
                                  actionListener="#{disciplineBean.delete}"/>
 
-                <p:panelGrid columns="2" rendered="#{not empty disciplineBean.selectedDiscipline}"
+                <p:panelGrid columns="2" rendered="#{not empty disciplineBean.selectedCourse}"
                              columnClasses="label,value">
 
-                    <p:outputLabel for="name" value="#{msg['discipline.name']}:"/>
-                    <p:inputText id="name" value="#{disciplineBean.selectedDiscipline.name}" required="true">
+                    <p:outputLabel for="name" value="#{msg['course.name']}:"/>
+                    <p:inputText id="name" value="#{disciplineBean.selectedCourse.name}" required="true">
                         <p:ajax update=":disciplineInfoForm:disciplineDetail"/>
                     </p:inputText>
                 </p:panelGrid>

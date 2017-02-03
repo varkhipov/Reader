@@ -18,28 +18,29 @@ public class LessonDAO {
 		Lesson lesson = new Lesson();
 		lesson.setId(resultSet.getInt("id"));
 		lesson.setName(resultSet.getString("name"));
-		lesson.setTimeBefore(resultSet.getInt("timeBefore"));
-		lesson.setTimeAfter(resultSet.getInt("timeAfter"));
-		lesson.setCreateDate(LocalDateTime.parse(resultSet.getString("createDate")));
+		lesson.setDescription(resultSet.getString("description"));
+		lesson.setCreateDate(LocalDateTime.parse(resultSet.getString("create_date")));
 
-		lesson.setDiscipline(
-				DisciplineDAO.getDisciplineById(connection,
-						resultSet.getInt("disciplineId"))
+		lesson.setCourse(
+				CourseDAO.getCourseById(connection,
+						resultSet.getInt("course_id"))
 		);
 
-		lesson.setLecturer(
-				LecturerDAO.getLecturerById(connection,
-						resultSet.getInt("lecturerId"))
+		lesson.setGroup(
+				GroupDAO.getGroupById(connection,
+						resultSet.getInt("group_id"))
 		);
 
-		lesson.setStream(
-				StreamDAO.getStreamById(connection,
-						resultSet.getInt("streamId"))
+
+		lesson.setLessonType(
+				LessonTypeDAO.getLessonTypeById(connection,
+						resultSet.getInt("type_id"))
 		);
 
 		lesson.setClasses(
 				LessonClassDAO.getClassesByLessonId(connection, lesson.getId())
 		);
+
 		return lesson;
 	}
 
@@ -48,7 +49,7 @@ public class LessonDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT * FROM Lesson;"
+					"SELECT id, name, description, course_id, create_date, type_id, group_id FROM LESSON;"
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -69,7 +70,7 @@ public class LessonDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT * FROM Lesson WHERE id = ?;",
+					"SELECT id, name, description, course_id, create_date, type_id, group_id FROM LESSON WHERE id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -85,29 +86,27 @@ public class LessonDAO {
 		}
 		return lesson;
 	}
-	
+
 	public static void create(Connection connection, Lesson lesson) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"INSERT INTO Lesson (" +
-								"name, timeBefore, timeAfter, " +
-								"disciplineId, lecturerId, streamId" +
+					"INSERT INTO LESSON (" +
+							"name, description, course_id, type_id, group_id" +
 							") VALUES (" +
-								"?, ?, ?, " +
-								"?, ?, ?" +
+							"?, ?, " +
+							"?, ?, ?" +
 							");",
 					lesson.getName(),
-					lesson.getTimeBefore(),
-					lesson.getTimeAfter(),
-					lesson.getDiscipline() != null && lesson.getDiscipline().getId() != 0
-							? lesson.getDiscipline().getId()
+					lesson.getDescription(),
+					lesson.getCourse() != null && lesson.getCourse().getId() != 0
+							? lesson.getCourse().getId()
 							: null,
-					lesson.getLecturer() != null && lesson.getLecturer().getId() != 0
-							? lesson.getLecturer().getId()
+					lesson.getLessonType() != null && lesson.getLessonType().getId() != 0
+							? lesson.getLessonType().getId()
 							: null,
-					lesson.getStream() != null && lesson.getStream().getId() != 0
-							? lesson.getStream().getId()
+					lesson.getGroup() != null && lesson.getGroup().getId() != 0
+							? lesson.getGroup().getId()
 							: null
 			);
 			preparedStatement.executeUpdate();
@@ -121,22 +120,21 @@ public class LessonDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE Lesson " +
+					"UPDATE LESSON " +
 							"SET " +
-								"name = ?, timeBefore = ?, timeAfter = ?, " +
-								"disciplineId = ?, lecturerId = ?, streamId = ? " +
+							"name = ?, description = ?, course_id = ?, " +
+							"type_id = ?, group_id = ? " +
 							"WHERE id = ?;",
 					lesson.getName(),
-					lesson.getTimeBefore(),
-					lesson.getTimeAfter(),
-					lesson.getDiscipline() != null && lesson.getDiscipline().getId() != 0
-							? lesson.getDiscipline().getId()
+					lesson.getDescription(),
+					lesson.getCourse() != null && lesson.getCourse().getId() != 0
+							? lesson.getCourse().getId()
 							: null,
-					lesson.getLecturer() != null && lesson.getLecturer().getId() != 0
-							? lesson.getLecturer().getId()
+					lesson.getLessonType() != null && lesson.getLessonType().getId() != 0
+							? lesson.getLessonType().getId()
 							: null,
-					lesson.getStream() != null && lesson.getStream().getId() != 0
-							? lesson.getStream().getId()
+					lesson.getGroup() != null && lesson.getGroup().getId() != 0
+							? lesson.getGroup().getId()
 							: null,
 
 					lesson.getId()
@@ -154,7 +152,7 @@ public class LessonDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM Lesson WHERE id = ?;",
+					"DELETE FROM LESSON WHERE id = ?;",
 					lesson.getId()
 			);
 			preparedStatement.executeUpdate();

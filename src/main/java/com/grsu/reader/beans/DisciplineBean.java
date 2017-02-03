@@ -1,7 +1,7 @@
 package com.grsu.reader.beans;
 
-import com.grsu.reader.dao.DisciplineDAO;
-import com.grsu.reader.models.Discipline;
+import com.grsu.reader.dao.CourseDAO;
+import com.grsu.reader.models.Course;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -16,8 +16,8 @@ import static com.grsu.reader.utils.FacesUtils.update;
 @ViewScoped
 public class DisciplineBean implements Serializable {
 
-	private Discipline selectedDiscipline;
-	private Discipline copyOfSelectedDiscipline;
+	private Course selectedCourse;
+	private Course copyOfSelectedCourse;
 
 	@ManagedProperty(value = "#{databaseBean}")
 	private DatabaseBean databaseBean;
@@ -25,29 +25,29 @@ public class DisciplineBean implements Serializable {
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
 
-	public void setSelectedDiscipline(Discipline selectedDiscipline) {
-		this.selectedDiscipline = selectedDiscipline;
-		copyOfSelectedDiscipline = this.selectedDiscipline == null ? null : new Discipline(selectedDiscipline);
+	public void setSelectedCourse(Course selectedCourse) {
+		this.selectedCourse = selectedCourse;
+		copyOfSelectedCourse = this.selectedCourse == null ? null : new Course(selectedCourse);
 	}
 
 	public boolean isInfoChanged() {
-		return selectedDiscipline != null && !selectedDiscipline.equals(copyOfSelectedDiscipline);
+		return selectedCourse != null && !selectedCourse.equals(copyOfSelectedCourse);
 	}
 
-	public List<Discipline> getDisciplines() {
-		return sessionBean.getDisciplines();
+	public List<Course> getCourses() {
+		return sessionBean.getCourses();
 	}
 
 	public void exit() {
-		setSelectedDiscipline(null);
+		setSelectedCourse(null);
 		closeDialog("disciplineDialog");
 	}
 
 	public void save() {
-		if (selectedDiscipline.getId() == 0) {
-			DisciplineDAO.create(databaseBean.getConnection(), selectedDiscipline);
+		if (selectedCourse.getId() == 0) {
+			CourseDAO.create(databaseBean.getConnection(), selectedCourse);
 		} else {
-			DisciplineDAO.update(databaseBean.getConnection(), selectedDiscipline);
+			CourseDAO.update(databaseBean.getConnection(), selectedCourse);
 		}
 		sessionBean.updateDisciplines();
 		update("views");
@@ -59,7 +59,7 @@ public class DisciplineBean implements Serializable {
 	}
 
 	public void delete() {
-		DisciplineDAO.delete(databaseBean.getConnection(), selectedDiscipline);
+		CourseDAO.delete(databaseBean.getConnection(), selectedCourse);
 		sessionBean.updateDisciplines();
 		update("views");
 		exit();
@@ -73,12 +73,12 @@ public class DisciplineBean implements Serializable {
 		this.sessionBean = sessionBean;
 	}
 
-	public Discipline getSelectedDiscipline() {
-		return selectedDiscipline;
+	public Course getSelectedCourse() {
+		return selectedCourse;
 	}
 
-	public Discipline getCopyOfSelectedDiscipline() {
-		return copyOfSelectedDiscipline;
+	public Course getCopyOfSelectedCourse() {
+		return copyOfSelectedCourse;
 	}
 
 }

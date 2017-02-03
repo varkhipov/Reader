@@ -22,9 +22,9 @@ public class SessionBean implements Serializable {
 
 	private List<Schedule> schedules;
 	private List<SelectItem> schedulesItems;
-	private List<Discipline> disciplines;
+	private List<Course> courses;
 	private List<SelectItem> disciplinesItems;
-	private List<Faculty> faculties;
+	private List<Department> faculties;
 	private List<SelectItem> facultiesItems;
 	private List<Stream> streams;
 	private List<SelectItem> streamsItems;
@@ -57,12 +57,12 @@ public class SessionBean implements Serializable {
 	}
 
 	public void updateDisciplines() {
-		disciplines = DisciplineDAO.getDisciplines(databaseBean.getConnection());
-		disciplinesItems = generateSelectItems(disciplines);
+		courses = CourseDAO.getCourses(databaseBean.getConnection());
+		disciplinesItems = generateSelectItems(courses);
 	}
 
 	public void updateFaculties() {
-		faculties = FacultyDAO.getFaculties(databaseBean.getConnection());
+		faculties = DepartmentDAO.getDepartments(databaseBean.getConnection());
 		facultiesItems = generateSelectItems(faculties);
 	}
 
@@ -127,12 +127,12 @@ public class SessionBean implements Serializable {
 		this.schedulesItems = schedulesItems;
 	}
 
-	public List<Discipline> getDisciplines() {
-		return disciplines;
+	public List<Course> getCourses() {
+		return courses;
 	}
 
-	public void setDisciplines(List<Discipline> disciplines) {
-		this.disciplines = disciplines;
+	public void setCourses(List<Course> courses) {
+		this.courses = courses;
 	}
 
 	public List<SelectItem> getDisciplinesItems() {
@@ -143,11 +143,11 @@ public class SessionBean implements Serializable {
 		this.disciplinesItems = disciplinesItems;
 	}
 
-	public List<Faculty> getFaculties() {
+	public List<Department> getFaculties() {
 		return faculties;
 	}
 
-	public void setFaculties(List<Faculty> faculties) {
+	public void setFaculties(List<Department> faculties) {
 		this.faculties = faculties;
 	}
 

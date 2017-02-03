@@ -1,6 +1,6 @@
 package com.grsu.reader.dao;
 
-import com.grsu.reader.models.Discipline;
+import com.grsu.reader.models.Department;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,62 +11,64 @@ import java.util.List;
 
 import static com.grsu.reader.utils.DBUtils.buildPreparedStatement;
 
-public class DisciplineDAO {
-	public static List<Discipline> getDisciplines(Connection connection) {
-		List<Discipline> schedules = new ArrayList<>();
+public class DepartmentDAO {
+	public static List<Department> getDepartments(Connection connection) {
+		List<Department> departments = new ArrayList<>();
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT * FROM Discipline;"
+					"SELECT id, name, abbreviation FROM DEPARTMENT;"
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
-				schedules.add(new Discipline(
+				departments.add(new Department(
 						resultSet.getInt("id"),
-						resultSet.getString("name")
+						resultSet.getString("name"),
+						resultSet.getString("abbreviation")
 				));
 			}
 			resultSet.close();
 			preparedStatement.close();
 		} catch (Exception e) {
-			System.out.println("Error In getDisciplines() -->" + e.getMessage());
-			return schedules;
+			System.out.println("Error In getDepartments() -->" + e.getMessage());
+			return departments;
 		}
-		return schedules;
+		return departments;
 	}
-	
-	public static Discipline getDisciplineById(Connection connection, int id) {
-		Discipline discipline = null;
+
+	public static Department getDepartmentById(Connection connection, int id) {
+		Department department = null;
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT * FROM Discipline WHERE id = ?;",
+					"SELECT id, name, abbreviation FROM DEPARTMENT WHERE id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
-				discipline = new Discipline(
+				department = new Department(
 						resultSet.getInt("id"),
-						resultSet.getString("name")
-				);
+						resultSet.getString("name"),
+						resultSet.getString("abbreviation"));
 			}
 			resultSet.close();
 			preparedStatement.close();
 		} catch (Exception e) {
-			System.out.println("Error In getDisciplineById() -->" + e.getMessage());
-			return discipline;
+			System.out.println("Error In getDepartmentById() -->" + e.getMessage());
+			return department;
 		}
-		return discipline;
+		return department;
 	}
 
-	public static void create(Connection connection, Discipline discipline) {
+	public static void create(Connection connection, Department department) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"INSERT INTO Discipline (name) VALUES (?);",
-					discipline.getName()
+					"INSERT INTO DEPARTMENT (name) VALUES (?, ?);",
+					department.getName(),
+					department.getAbbreviation()
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
@@ -75,13 +77,14 @@ public class DisciplineDAO {
 		}
 	}
 
-	public static void update(Connection connection, Discipline discipline) {
+	public static void update(Connection connection, Department department) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE Discipline SET name = ? WHERE id = ?;",
-					discipline.getName(),
-					discipline.getId()
+					"UPDATE DEPARTMENT SET name = ?, abbreviation = ? WHERE id = ?;",
+					department.getName(),
+					department.getAbbreviation(),
+					department.getId()
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
@@ -90,12 +93,14 @@ public class DisciplineDAO {
 		}
 	}
 
-	public static void delete(Connection connection, Discipline discipline) {
+	public static void delete(Connection connection, Department department) {
+		GroupDAO.deleteByFacultyId(connection, department.getId()); // TODO: delete or update to null?
+
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM Discipline WHERE id = ?;",
-					discipline.getId()
+					"DELETE FROM DEPARTMENT WHERE id = ?;",
+					department.getId()
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();

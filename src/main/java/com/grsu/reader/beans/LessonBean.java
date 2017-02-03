@@ -4,6 +4,7 @@ import com.grsu.reader.dao.*;
 import com.grsu.reader.models.*;
 import com.grsu.reader.models.Class;
 import com.grsu.reader.utils.DBUtils;
+import com.grsu.reader.utils.DateUtils;
 import com.grsu.reader.utils.SerialUtils;
 
 import javax.faces.bean.ManagedBean;
@@ -62,8 +63,8 @@ public class LessonBean implements Serializable {
 	public void createLesson() {
 		if (selectedLesson != null) {
 			selectedLesson.setName(String.format("%s [%s]",
-					selectedLesson.getDiscipline().getName(),
-					selectedLesson.getStream().getName()
+					selectedLesson.getCourse().getName(),
+					LocalDate.now()
 					)
 			);
 			selectedLesson.setClasses(Arrays.asList(
@@ -75,12 +76,12 @@ public class LessonBean implements Serializable {
 							)
 					)
 			));
-			selectedLesson.setLecturer(
-					LecturerDAO.getLecturerById(
-							databaseBean.getConnection(),
-							1
-					)
-			);
+//			selectedLesson.setLecturer(
+//					LecturerDAO.getLecturerById(
+//							databaseBean.getConnection(),
+//							1
+//					)
+//			);
 
 			LessonDAO.create(
 					databaseBean.getConnection(),
@@ -108,7 +109,7 @@ public class LessonBean implements Serializable {
 
 			List<Group> groups = StreamGroupDAO.getGroupsByStreamId(
 					databaseBean.getConnection(),
-					selectedLesson.getStream().getId()
+					selectedLesson.getCourse().getStream().getId()
 			);
 
 			List<Student> students = new ArrayList<>();
@@ -154,7 +155,7 @@ public class LessonBean implements Serializable {
 	}
 
 	private void initAbsentStudents() {
-		if (selectedLesson == null || selectedLesson.getStream() == null) {
+		if (selectedLesson == null || selectedLesson.getCourse().getStream() == null) {
 			absentStudents = null;
 		} else {
 			List<Class> classes = LessonClassDAO.getClassesByLessonId(
@@ -228,25 +229,25 @@ public class LessonBean implements Serializable {
 	}
 
 	public int getSelectedDisciplineId() {
-		if (selectedLesson.getDiscipline() == null) {
+		if (selectedLesson.getCourse() == null) {
 			return 0;
 		}
-		return selectedLesson.getDiscipline().getId();
+		return selectedLesson.getCourse().getId();
 	}
 
 	public void setSelectedDisciplineId(int selectedDisciplineId) {
-		selectedLesson.setDiscipline(getEntityById(sessionBean.getDisciplines(), selectedDisciplineId));
+		selectedLesson.setCourse(getEntityById(sessionBean.getCourses(), selectedDisciplineId));
 	}
 
 	public int getSelectedStreamId() {
-		if (selectedLesson.getStream() == null) {
+		if (selectedLesson.getCourse().getStream() == null) {
 			return 0;
 		}
-		return selectedLesson.getStream().getId();
+		return selectedLesson.getCourse().getStream().getId();
 	}
 
 	public void setSelectedStreamId(int selectedStreamId) {
-		selectedLesson.setStream(getEntityById(sessionBean.getStreams(), selectedStreamId));
+		selectedLesson.getCourse().setStream(getEntityById(sessionBean.getStreams(), selectedStreamId));
 	}
 
 	public int getSelectedScheduleId() {

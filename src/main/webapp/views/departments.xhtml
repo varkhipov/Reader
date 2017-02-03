@@ -4,19 +4,19 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
 >
-    <h:form id="disciplinesForm">
-        <p:dataTable var="discipline" value="#{disciplineBean.disciplines}">
+    <h:form id="facultiesForm">
+        <p:dataTable var="department" value="#{departmentBean.faculties}">
             <f:facet name="header">
-                #{msg['disciplines']}
+                #{msg['departments']}
             </f:facet>
-            <p:column headerText="#{msg['discipline.name']}">
-                <h:outputText value="#{discipline.name}"/>
+            <p:column headerText="#{msg['department.name']}">
+                <h:outputText value="#{department.name}"/>
             </p:column>
             <p:column styleClass="options">
-                <p:commandButton update=":disciplineInfoForm" oncomplete="PF('disciplineDialog').show()"
+                <p:commandButton update=":departmentInfoForm" oncomplete="PF('departmentDialog').show()"
                                  icon="fa fa-fw fa-search" title="View">
-                    <f:setPropertyActionListener value="#{discipline}" target="#{disciplineBean.selectedDiscipline}"/>
-                    <p:resetInput target=":disciplineInfoForm:disciplineDetail"/>
+                    <f:setPropertyActionListener value="#{department}" target="#{departmentBean.selectedDepartment}"/>
+                    <p:resetInput target=":departmentInfoForm:departmentDetail"/>
                 </p:commandButton>
             </p:column>
         </p:dataTable>

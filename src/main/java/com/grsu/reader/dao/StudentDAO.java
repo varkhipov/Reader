@@ -18,13 +18,12 @@ public class StudentDAO {
 		Student student = new Student();
 		student.setId(resultSet.getInt("id"));
 		student.setUid(resultSet.getString("uid"));
-		student.setParsedUid(resultSet.getInt("parsedUid"));
-		student.setName(resultSet.getString("name"));
-		student.setSurname(resultSet.getString("surname"));
+		student.setParsedUid(resultSet.getInt("parsed_uid"));
+		student.setFirstName(resultSet.getString("first_name"));
+		student.setLastName(resultSet.getString("last_name"));
 		student.setPatronymic(resultSet.getString("patronymic"));
 		student.setPhone(resultSet.getString("phone"));
 		student.setEmail(resultSet.getString("email"));
-		student.setNotes(resultSet.getString("notes"));
 		// TODO: add photo
 
 		student.setGroups(StudentGroupDAO.getGroupsByStudentId(connection, student.getId()));
@@ -36,7 +35,7 @@ public class StudentDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT * FROM Student;"
+					"SELECT id, uid, parsed_uid, first_name, last_name, patronymic, phone, email FROM STUDENT;"
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -57,7 +56,7 @@ public class StudentDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT * FROM Student WHERE id = ?;",
+					"SELECT id, uid, parsed_uid, first_name, last_name, patronymic, phone, email FROM STUDENT WHERE id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -79,7 +78,7 @@ public class StudentDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT * FROM Student WHERE uid = ?;",
+					"SELECT id, uid, parsed_uid, first_name, last_name, patronymic, phone, email FROM STUDENT WHERE uid = ?;",
 					uid
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -102,7 +101,7 @@ public class StudentDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT id FROM Student WHERE uid = ?;",
+					"SELECT id FROM STUDENT WHERE uid = ?;",
 					uid
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -123,21 +122,20 @@ public class StudentDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"INSERT INTO Student (" +
-								"uid, parsedUid, name, surname, " +
-								"patronymic, phone, email, notes" +
+					"INSERT INTO STUDENT (" +
+								"uid, parsedUid, first_name, last_name, " +
+								"patronymic, phone, email" +
 							") VALUES (" +
 								"?, ?, ?, ?, " +
-								"?, ?, ?, ?" +
+								"?, ?, ?" +
 							");",
 					student.getUid(),
 					student.getParsedUid(),
-					student.getName(),
-					student.getSurname(),
+					student.getFirstName(),
+					student.getLastName(),
 					student.getPatronymic(),
 					student.getPhone(),
-					student.getEmail(),
-					student.getNotes()
+					student.getEmail()
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
@@ -160,19 +158,18 @@ public class StudentDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE Student " +
+					"UPDATE STUDENT " +
 							"SET " +
-								"uid = ?, parsedUid = ?, name = ?, surname = ?, " +
-								"patronymic = ?, phone = ?, email = ?, notes = ? " +
+								"uid = ?, parsedUid = ?, first_name = ?, last_name = ?, " +
+								"patronymic = ?, phone = ?, email = ? " +
 							"WHERE id = ?;",
 					student.getUid(),
 					student.getParsedUid(),
-					student.getName(),
-					student.getSurname(),
+					student.getFirstName(),
+					student.getLastName(),
 					student.getPatronymic(),
 					student.getPhone(),
 					student.getEmail(),
-					student.getNotes(),
 
 					student.getId()
 			);
@@ -195,7 +192,7 @@ public class StudentDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM Student WHERE id = ?;",
+					"DELETE FROM STUDENT WHERE id = ?;",
 					student.getId()
 			);
 			preparedStatement.executeUpdate();
