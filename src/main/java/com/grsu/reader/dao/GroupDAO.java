@@ -1,13 +1,12 @@
 package com.grsu.reader.dao;
 
 import com.grsu.reader.models.Group;
-import com.grsu.reader.models.Lesson;
+import com.grsu.reader.utils.DBUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +20,6 @@ public class GroupDAO {
 		group.setDepartment(
 				DepartmentDAO.getDepartmentById(connection,
 						resultSet.getInt("department_id"))
-		);
-		group.setStudents(
-				StudentGroupDAO.getStudentsByGroupId(connection, group.getId())
 		);
 
 		return group;
@@ -72,7 +68,7 @@ public class GroupDAO {
 		return group;
 	}
 
-	public static List<Integer> getGroupsIdsByFacultyId(Connection connection, int department_id) {
+	public static List<Integer> getGroupsIdsByDepartmentId(Connection connection, int department_id) {
 		List<Integer> ids = new ArrayList<>();
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
@@ -88,13 +84,13 @@ public class GroupDAO {
 			resultSet.close();
 			preparedStatement.close();
 		} catch (Exception e) {
-			System.out.println("Error In getGroupsIdsByFacultyId() -->" + e.getMessage());
+			System.out.println("Error In getGroupsIdsByDepartmentId() -->" + e.getMessage());
 			return null;
 		}
 		return ids;
 	}
 
-	public static void create(Connection connection, Group group) {
+	public static int create(Connection connection, Group group) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
@@ -106,9 +102,11 @@ public class GroupDAO {
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
+			return DBUtils.getLastInsertRowId(connection);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return 0;
 	}
 
 	public static void update(Connection connection, Group group) {
@@ -147,8 +145,8 @@ public class GroupDAO {
 		}
 	}
 
-	public static void deleteByFacultyId(Connection connection, int department_id) {
-		List<Integer> ids = getGroupsIdsByFacultyId(connection, department_id);
+	public static void deleteByDepartmentId(Connection connection, int department_id) {
+		List<Integer> ids = getGroupsIdsByDepartmentId(connection, department_id);
 		if (ids != null) {
 			for (Integer id : ids) {
 				delete(connection, id);

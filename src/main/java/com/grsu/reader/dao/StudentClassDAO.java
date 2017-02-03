@@ -15,14 +15,14 @@ import static com.grsu.reader.dao.StudentDAO.getStudentById;
 import static com.grsu.reader.utils.DBUtils.buildPreparedStatement;
 
 public class StudentClassDAO {
-	public static List<Student> getStudentsByClassId(Connection connection, int id, boolean present) {
+	public static List<Student> getStudentsByClassId(Connection connection, int id, boolean registered) {
 		List<Student> students = new ArrayList<>();
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT studentId FROM Student_Class WHERE classId = ? AND present = ?;",
+					"SELECT student_id FROM STUDENT_CLASS WHERE class_id = ? AND registered = ?;",
 					id,
-					present ? 1 : 0
+					registered ? 1 : 0
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -33,7 +33,7 @@ public class StudentClassDAO {
 			resultSet.close();
 			preparedStatement.close();
 		} catch (Exception e) {
-			System.out.println("Error In getStudentsByClassId(id, present) -->" + e.getMessage());
+			System.out.println("Error In getStudentsByClassId(id, registered) -->" + e.getMessage());
 			return students;
 		}
 		return students;
@@ -44,7 +44,7 @@ public class StudentClassDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT studentId FROM Student_Class WHERE classId = ?;",
+					"SELECT student_id FROM STUDENT_CLASS WHERE class_id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -67,7 +67,7 @@ public class StudentClassDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT classId FROM Student_Class WHERE studentId = ?;",
+					"SELECT class_id FROM STUDENT_CLASS WHERE student_id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -89,7 +89,7 @@ public class StudentClassDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"INSERT INTO Student_Class (studentId, classId) VALUES (?, ?);",
+					"INSERT INTO STUDENT_CLASS (student_id, class_id) VALUES (?, ?);",
 					student.getId(),
 					cls.getId()
 			);
@@ -100,14 +100,14 @@ public class StudentClassDAO {
 		}
 	}
 
-	public static void create(Connection connection, Student student, Class cls, boolean present) {
+	public static void create(Connection connection, Student student, Class cls, boolean registered) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"INSERT INTO Student_Class (studentId, classId, present) VALUES (?, ?, ?);",
+					"INSERT INTO STUDENT_CLASS (student_id, class_id, registered) VALUES (?, ?, ?);",
 					student.getId(),
 					cls.getId(),
-					present ? 1 : 0
+					registered ? 1 : 0
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
@@ -116,12 +116,12 @@ public class StudentClassDAO {
 		}
 	}
 
-	public static void updateByStudentId(Connection connection, int studentId, int classId, boolean present) throws SQLException {
+	public static void updateByStudentId(Connection connection, int studentId, int classId, boolean registered) throws SQLException {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE Student_Class SET present = ? WHERE classId = ? AND studentId = ?;",
-					present ? 1 : 0,
+					"UPDATE STUDENT_CLASS SET registered = ? WHERE classId = ? AND class_id = ?;",
+					registered ? 1 : 0,
 					classId,
 					studentId
 			);
@@ -136,7 +136,7 @@ public class StudentClassDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE Student_Class SET studentId = ? WHERE classId = ?;",
+					"UPDATE STUDENT_CLASS SET student_id = ? WHERE class_id = ?;",
 					student.getId(),
 					cls.getId()
 			);
@@ -151,7 +151,7 @@ public class StudentClassDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM Student_Class WHERE studentId = ? AND classId = ?;",
+					"DELETE FROM STUDENT_CLASS WHERE student_id = ? AND class_id = ?;",
 					student.getId(),
 					cls.getId()
 			);
@@ -166,7 +166,7 @@ public class StudentClassDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM Student_Class WHERE studentId = ?;",
+					"DELETE FROM STUDENT_CLASS WHERE student_id = ?;",
 					id
 			);
 			preparedStatement.executeUpdate();
@@ -180,7 +180,7 @@ public class StudentClassDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"DELETE FROM Student_Class WHERE classId = ?;",
+					"DELETE FROM STUDENT_CLASS WHERE class_id = ?;",
 					id
 			);
 			preparedStatement.executeUpdate();

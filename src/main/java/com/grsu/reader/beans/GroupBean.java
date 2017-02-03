@@ -106,8 +106,8 @@ public class GroupBean implements Serializable {
 		return sessionBean.getGroups();
 	}
 
-	public List<SelectItem> getFacultiesItems() {
-		return sessionBean.getFacultiesItems();
+	public List<SelectItem> getDepartmentsItems() {
+		return sessionBean.getDepartmentsItems();
 	}
 
 	public Group getSelectedGroup() {
@@ -149,8 +149,8 @@ public class GroupBean implements Serializable {
 		return selectedGroup.getDepartment().getId();
 	}
 
-	public void setSelectedFacultyId(int selectedFacultyId) {
-		selectedGroup.setDepartment(getEntityById(sessionBean.getFaculties(), selectedFacultyId));
+	public void setSelectedDepartmentId(int selectedDepartmentId) {
+		selectedGroup.setDepartment(getEntityById(sessionBean.getDepartments(), selectedDepartmentId));
 	}
 
 	public List<Student> getGroupStudents() {

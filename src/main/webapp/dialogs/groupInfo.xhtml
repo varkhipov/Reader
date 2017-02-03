@@ -23,7 +23,7 @@
                     <p:outputLabel for="department" value="#{msg['group.info.department']}"/>
                     <p:selectOneMenu id="department" value="#{groupBean.selectedDepartmentId}">
                         <f:selectItem itemValue="#{0}" itemLabel="#{msg['select.department']}"/>
-                        <f:selectItems value="#{groupBean.facultiesItems}"/>
+                        <f:selectItems value="#{groupBean.departmentsItems}"/>
                         <p:ajax update=":groupInfoForm:groupInfoDetail"/>
                     </p:selectOneMenu>
 

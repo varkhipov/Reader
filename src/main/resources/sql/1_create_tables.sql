@@ -4,7 +4,8 @@ BEGIN;
 -- LECTURER
 CREATE TABLE LECTURER (
   id                INTEGER PRIMARY KEY AUTOINCREMENT,
-  uid               INTEGER,
+  uid               TEXT,
+  parsed_uid        TEXT,
   first_name        TEXT,
   last_name         TEXT,
   patronymic        TEXT,

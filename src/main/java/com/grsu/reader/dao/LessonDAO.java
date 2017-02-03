@@ -1,6 +1,7 @@
 package com.grsu.reader.dao;
 
 import com.grsu.reader.models.Lesson;
+import com.grsu.reader.utils.DBUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -87,7 +88,7 @@ public class LessonDAO {
 		return lesson;
 	}
 
-	public static void create(Connection connection, Lesson lesson) {
+	public static int create(Connection connection, Lesson lesson) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
@@ -111,9 +112,11 @@ public class LessonDAO {
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
+			return DBUtils.getLastInsertRowId(connection);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return 0;
 	}
 
 	public static void update(Connection connection, Lesson lesson) {

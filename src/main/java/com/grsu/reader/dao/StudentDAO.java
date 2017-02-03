@@ -118,7 +118,7 @@ public class StudentDAO {
 		return id;
 	}
 
-	public static void create(Connection connection, Student student) {
+	public static int create(Connection connection, Student student) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
@@ -152,6 +152,7 @@ public class StudentDAO {
 				StudentGroupDAO.create(connection, newStudentId, group.getId());
 			}
 		}
+		return newStudentId;
 	}
 
 	public static void update(Connection connection, Student student) {

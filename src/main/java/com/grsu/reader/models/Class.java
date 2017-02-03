@@ -3,24 +3,28 @@ package com.grsu.reader.models;
 import javax.faces.bean.ManagedBean;
 import javax.faces.model.SelectItem;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @ManagedBean(name = "newInstanceOfClass")
 public class Class extends Entity {
 	private int id;
 	private LocalDate date;
 	private Schedule schedule;
+	private LocalTime sessionStart;
+	private LocalTime sessionEnd;
 
 	public Class() {}
 
-	public Class(int id, LocalDate date, Schedule schedule) {
+	public Class(int id, LocalDate date, Schedule schedule, LocalTime sessionStart, LocalTime sessionEnd) {
 		this.id = id;
 		this.date = date;
 		this.schedule = schedule;
+		this.sessionStart = sessionStart;
+		this.sessionEnd = sessionEnd;
 	}
 
-	public Class(LocalDate date, Schedule schedule) {
-		this.date = date;
-		this.schedule = schedule;
+	public Class(Schedule schedule) {
+		this(0, null, schedule, null, null);
 	}
 
 	@Override
@@ -52,12 +56,30 @@ public class Class extends Entity {
 		this.schedule = schedule;
 	}
 
+	public LocalTime getSessionStart() {
+		return sessionStart;
+	}
+
+	public void setSessionStart(LocalTime sessionStart) {
+		this.sessionStart = sessionStart;
+	}
+
+	public LocalTime getSessionEnd() {
+		return sessionEnd;
+	}
+
+	public void setSessionEnd(LocalTime sessionEnd) {
+		this.sessionEnd = sessionEnd;
+	}
+
 	@Override
 	public String toString() {
 		return "Class{" +
 				"id=" + id +
 				", date=" + date +
 				", schedule=" + schedule +
+				", sessionStart=" + sessionStart +
+				", sessionEnd=" + sessionEnd +
 				'}';
 	}
 }

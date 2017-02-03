@@ -2,6 +2,7 @@ package com.grsu.reader.dao;
 
 import com.grsu.reader.models.Group;
 import com.grsu.reader.models.Stream;
+import com.grsu.reader.utils.DBUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.grsu.reader.utils.DBUtils.buildPreparedStatement;
-import static com.grsu.reader.utils.DBUtils.getLastInsertRowId;
 
 public class StreamDAO {
 
@@ -66,7 +66,7 @@ public class StreamDAO {
 		return stream;
 	}
 
-	public static void create(Connection connection, Stream stream) {
+	public static int create(Connection connection, Stream stream) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
@@ -80,7 +80,7 @@ public class StreamDAO {
 		}
 
 		//TODO: probaly use same function in StudentDAO#create too
-		int newStreamId = getLastInsertRowId(connection);
+		int newStreamId = DBUtils.getLastInsertRowId(connection);
 		if (newStreamId == 0) {
 			System.out.println("Error in [com.grsu.reader.dao.StreamDAO.create]. " +
 					"No groups added for stream with id 0: " + stream);
@@ -89,6 +89,7 @@ public class StreamDAO {
 				StreamGroupDAO.create(connection, newStreamId, group.getId());
 			}
 		}
+		return newStreamId;
 	}
 
 	public static void update(Connection connection, Stream stream) {

@@ -69,7 +69,6 @@ public class LessonBean implements Serializable {
 			);
 			selectedLesson.setClasses(Arrays.asList(
 					new Class(
-							LocalDate.now(),
 							ScheduleDAO.getScheduleById(
 									databaseBean.getConnection(),
 									selectedScheduleId

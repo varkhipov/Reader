@@ -2,6 +2,7 @@ package com.grsu.reader.dao;
 
 import com.grsu.reader.models.Course;
 import com.grsu.reader.models.Student;
+import com.grsu.reader.utils.DBUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -66,7 +67,7 @@ public class CourseDAO {
 		return course;
 	}
 
-	public static void create(Connection connection, Course course) {
+	public static int create(Connection connection, Course course) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
@@ -79,9 +80,11 @@ public class CourseDAO {
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
+			return DBUtils.getLastInsertRowId(connection);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return 0;
 	}
 
 	public static void update(Connection connection, Course course) {

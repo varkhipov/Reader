@@ -24,8 +24,8 @@ public class SessionBean implements Serializable {
 	private List<SelectItem> schedulesItems;
 	private List<Course> courses;
 	private List<SelectItem> disciplinesItems;
-	private List<Department> faculties;
-	private List<SelectItem> facultiesItems;
+	private List<Department> departments;
+	private List<SelectItem> departmentsItems;
 	private List<Stream> streams;
 	private List<SelectItem> streamsItems;
 	private List<Group> groups;
@@ -43,7 +43,7 @@ public class SessionBean implements Serializable {
 	public void initData() {
 		updateSchedules();
 		updateDisciplines();
-		updateFaculties();
+		updateDepartments();
 		updateStreams();
 		updateGroups();
 		updateStudents();
@@ -61,9 +61,9 @@ public class SessionBean implements Serializable {
 		disciplinesItems = generateSelectItems(courses);
 	}
 
-	public void updateFaculties() {
-		faculties = DepartmentDAO.getDepartments(databaseBean.getConnection());
-		facultiesItems = generateSelectItems(faculties);
+	public void updateDepartments() {
+		departments = DepartmentDAO.getDepartments(databaseBean.getConnection());
+		departmentsItems = generateSelectItems(departments);
 	}
 
 	public void updateStreams() {
@@ -143,20 +143,20 @@ public class SessionBean implements Serializable {
 		this.disciplinesItems = disciplinesItems;
 	}
 
-	public List<Department> getFaculties() {
-		return faculties;
+	public List<Department> getDepartments() {
+		return departments;
 	}
 
-	public void setFaculties(List<Department> faculties) {
-		this.faculties = faculties;
+	public void setDepartments(List<Department> departments) {
+		this.departments = departments;
 	}
 
-	public List<SelectItem> getFacultiesItems() {
-		return facultiesItems;
+	public List<SelectItem> getDepartmentsItems() {
+		return departmentsItems;
 	}
 
-	public void setFacultiesItems(List<SelectItem> facultiesItems) {
-		this.facultiesItems = facultiesItems;
+	public void setDepartmentsItems(List<SelectItem> departmentsItems) {
+		this.departmentsItems = departmentsItems;
 	}
 
 	public List<Stream> getStreams() {

@@ -13,16 +13,10 @@
                 <h:outputText value="#{lesson.name}"/>
             </p:column>
             <p:column headerText="#{msg['lesson.createDate']}">
-                <h:outputText value="#{lesson.date} #{lesson.time}"/>
+                <h:outputText value="#{lesson.createDate}"/>
             </p:column>
             <p:column headerText="#{msg['lesson.course']}">
                 <h:outputText value="#{lesson.course.name}"/>
-            </p:column>
-            <p:column headerText="#{msg['lesson.stream']}">
-                <h:outputText value="#{lesson.stream.name}"/>
-            </p:column>
-            <p:column rendered="#{false}" headerText="#{msg['lesson.lecturer']}">
-                <h:outputText value="#{lesson.lecturer.firstName}"/>
             </p:column>
             <p:column styleClass="options">
                 <p:commandButton actionListener="#{menuBean.changeView('lesson')}" update="@([id$=views])"

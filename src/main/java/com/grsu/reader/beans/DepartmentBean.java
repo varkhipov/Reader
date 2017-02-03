@@ -34,13 +34,13 @@ public class DepartmentBean implements Serializable {
 		return selectedDepartment != null && !selectedDepartment.equals(copyOfSelectedDepartment);
 	}
 
-	public List<Department> getFaculties() {
-		return sessionBean.getFaculties();
+	public List<Department> getDepartments() {
+		return sessionBean.getDepartments();
 	}
 
 	public void exit() {
 		setSelectedDepartment(null);
-		closeDialog("facultyDialog");
+		closeDialog("departmentDialog");
 	}
 
 	public void save() {
@@ -49,7 +49,7 @@ public class DepartmentBean implements Serializable {
 		} else {
 			DepartmentDAO.update(databaseBean.getConnection(), selectedDepartment);
 		}
-		sessionBean.updateFaculties();
+		sessionBean.updateDepartments();
 		update("views");
 	}
 
@@ -60,7 +60,7 @@ public class DepartmentBean implements Serializable {
 
 	public void delete() {
 		DepartmentDAO.delete(databaseBean.getConnection(), selectedDepartment);
-		sessionBean.updateFaculties();
+		sessionBean.updateDepartments();
 		update("views");
 		exit();
 	}

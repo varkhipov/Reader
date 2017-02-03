@@ -1,6 +1,7 @@
 package com.grsu.reader.dao;
 
 import com.grsu.reader.models.Department;
+import com.grsu.reader.utils.DBUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -62,7 +63,7 @@ public class DepartmentDAO {
 		return department;
 	}
 
-	public static void create(Connection connection, Department department) {
+	public static int create(Connection connection, Department department) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
@@ -72,9 +73,11 @@ public class DepartmentDAO {
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
+			return DBUtils.getLastInsertRowId(connection);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return 0;
 	}
 
 	public static void update(Connection connection, Department department) {
@@ -94,7 +97,7 @@ public class DepartmentDAO {
 	}
 
 	public static void delete(Connection connection, Department department) {
-		GroupDAO.deleteByFacultyId(connection, department.getId()); // TODO: delete or update to null?
+		GroupDAO.deleteByDepartmentId(connection, department.getId()); // TODO: delete or update to null?
 
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
