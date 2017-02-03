@@ -120,7 +120,7 @@ public class StudentClassDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE STUDENT_CLASS SET registered = ? WHERE classId = ? AND class_id = ?;",
+					"UPDATE STUDENT_CLASS SET registered = ? WHERE class_id = ? AND class_id = ?;",
 					registered ? 1 : 0,
 					classId,
 					studentId

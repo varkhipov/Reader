@@ -24,6 +24,18 @@
                     <p:inputText id="name" value="#{courseBean.selectedCourse.name}" required="true">
                         <p:ajax update=":courseInfoForm:courseDetail"/>
                     </p:inputText>
+
+                    <p:outputLabel for="stream" value="#{msg['course.stream']}"/>
+                    <p:selectOneMenu id="stream" value="#{courseBean.selectedCourse.stream}" required="true" converter="entityConverter">
+                        <f:selectItem itemValue="#{null}" itemLabel="#{msg['select.stream']}"/>
+                        <f:selectItems value="#{sessionBean.streams}" var="stream" itemLabel="#{stream.name}" itemValue="#{stream}"/>
+                        <p:ajax update=":courseInfoForm:courseDetail"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="description" value="#{msg['course.description']}:"/>
+                    <p:inputTextarea id="description" value="#{courseBean.selectedCourse.description}">
+                        <p:ajax update=":courseInfoForm:courseDetail"/>
+                    </p:inputTextarea>
                 </p:panelGrid>
 
                 <p:outputPanel rendered="#{courseBean.infoChanged}">

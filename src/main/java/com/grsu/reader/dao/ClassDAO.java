@@ -24,8 +24,14 @@ public class ClassDAO {
 		aClass.setSchedule(
 				ScheduleDAO.getScheduleById(connection, resultSet.getInt("schedule_id"))
 		);
-		aClass.setSessionStart(LocalTime.parse(resultSet.getString("session_start")));
-		aClass.setSessionEnd(LocalTime.parse(resultSet.getString("session_end")));
+		String sessionStart = resultSet.getString("session_start");
+		if (sessionStart != null) {
+			aClass.setSessionStart(LocalTime.parse(sessionStart));
+		}
+		String sessionEnd = resultSet.getString("session_end");
+		if (sessionEnd != null) {
+			aClass.setSessionEnd(LocalTime.parse(sessionEnd));
+		}
 
 		return aClass;
 	}

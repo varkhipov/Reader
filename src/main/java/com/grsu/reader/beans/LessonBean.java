@@ -68,35 +68,26 @@ public class LessonBean implements Serializable {
 			);
 			selectedLesson.setClasses(Arrays.asList(
 					new Class(
+							LocalDate.now(),
 							ScheduleDAO.getScheduleById(
 									databaseBean.getConnection(),
 									selectedScheduleId
 							)
 					)
 			));
-//			selectedLesson.setLecturer(
-//					LecturerDAO.getLecturerById(
-//							databaseBean.getConnection(),
-//							1
-//					)
-//			);
 
-			LessonDAO.create(
+			int lessonId = LessonDAO.create(
 					databaseBean.getConnection(),
 					selectedLesson
 			);
-			selectedLesson.setId(DBUtils.getLastInsertRowId(
-					databaseBean.getConnection()
-			));
+			selectedLesson.setId(lessonId);
 
 			for (Class cls : selectedLesson.getClasses()) {
-				ClassDAO.create(
+				int classId = ClassDAO.create(
 						databaseBean.getConnection(),
 						cls
 				);
-				cls.setId(DBUtils.getLastInsertRowId(
-						databaseBean.getConnection()
-				));
+				cls.setId(classId);
 
 				LessonClassDAO.create(
 						databaseBean.getConnection(),
@@ -133,7 +124,7 @@ public class LessonBean implements Serializable {
 	}
 
 	private void initPresentStudents() {
-		if (selectedLesson == null) {
+		if (selectedLesson == null || selectedLesson.getCourse() == null) {
 			presentStudents = null;
 		} else {
 			List<Class> classes = LessonClassDAO.getClassesByLessonId(
@@ -153,7 +144,7 @@ public class LessonBean implements Serializable {
 	}
 
 	private void initAbsentStudents() {
-		if (selectedLesson == null || selectedLesson.getCourse().getStream() == null) {
+		if (selectedLesson == null || selectedLesson.getCourse() == null) {
 			absentStudents = null;
 		} else {
 			List<Class> classes = LessonClassDAO.getClassesByLessonId(
@@ -189,6 +180,26 @@ public class LessonBean implements Serializable {
 		}
 
 		System.out.println("Student added");
+		return true;
+	}
+
+	public boolean removeStudent(Student student) {
+		presentStudents.remove(student);
+		absentStudents.add(student);
+
+		try {
+			StudentClassDAO.updateByStudentId(
+					databaseBean.getConnection(),
+					student.getId(),
+					selectedLesson.getClasses().get(0).getId(),
+					false
+			);
+		} catch (SQLException e) {
+			System.out.println("Student not removed. Uid[ " + student.getUid() + " ]. Reason: SQLException:\n" + e);
+			return false;
+		}
+
+		System.out.println("Student removed");
 		return true;
 	}
 
@@ -235,17 +246,6 @@ public class LessonBean implements Serializable {
 
 	public void setSelectedCourseId(int selectedCourseId) {
 		selectedLesson.setCourse(getEntityById(sessionBean.getCourses(), selectedCourseId));
-	}
-
-	public int getSelectedStreamId() {
-		if (selectedLesson.getCourse().getStream() == null) {
-			return 0;
-		}
-		return selectedLesson.getCourse().getStream().getId();
-	}
-
-	public void setSelectedStreamId(int selectedStreamId) {
-		selectedLesson.getCourse().setStream(getEntityById(sessionBean.getStreams(), selectedStreamId));
 	}
 
 	public int getSelectedScheduleId() {

@@ -34,7 +34,8 @@
         </p:panelGrid>
 
         <p:panelGrid id="lessonTables" columns="5" styleClass="noBorder v-align-top">
-            <p:panel id="presentStudents" header="#{msg['lesson.students.present']}"
+            <p:panel id="presentStudents"
+                     header="#{msg['lesson.students.present']} - #{lessonBean.presentStudents.size()}"
                      toggleable="true" styleClass="noBorder lessonStudents">
                 <p:dataTable var="pStudent" value="#{lessonBean.presentStudents}"
                              sortBy="#{pStudent.fullName}" filteredValue="#{lessonBean.filteredPresentStudents}">
@@ -42,16 +43,28 @@
                               filterBy="#{pStudent.fullName}" filterMatchMode="contains">
                         <h:outputText value="#{pStudent.fullName}"/>
                     </p:column>
+                    <p:column styleClass="groupOptions">
+                        <p:commandButton update=":lessonForm:lessonTables"
+                                         icon="fa fa-fw fa-minus" title="Remove"
+                                         styleClass="red"
+                                         actionListener="#{lessonBean.removeStudent(pStudent)}"/>
+                    </p:column>
                 </p:dataTable>
             </p:panel>
 
-            <p:panel id="absentStudents" header="#{msg['lesson.students.absent']}"
+            <p:panel id="absentStudents" header="#{msg['lesson.students.absent']} - #{lessonBean.absentStudents.size()}"
                      toggleable="true" styleClass="noBorder lessonStudents">
                 <p:dataTable var="aStudent" value="#{lessonBean.absentStudents}"
                              sortBy="#{aStudent.fullName}" filteredValue="#{lessonBean.filteredAbsentStudents}">
                     <p:column headerText="#{msg['lesson.student.firstName']}" sortBy="#{aStudent.fullName}"
                               filterBy="#{aStudent.fullName}" filterMatchMode="contains">
                         <h:outputText value="#{aStudent.fullName}"/>
+                    </p:column>
+                    <p:column styleClass="groupOptions">
+                        <p:commandButton update=":lessonForm:lessonTables"
+                                         icon="fa fa-fw fa-plus" title="Add"
+                                         styleClass="green"
+                                         actionListener="#{lessonBean.processStudent(aStudent)}"/>
                     </p:column>
                 </p:dataTable>
             </p:panel>

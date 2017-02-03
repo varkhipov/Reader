@@ -29,13 +29,6 @@
                         <p:ajax update=":lessonInfoForm:lessonDetail"/>
                     </p:selectOneMenu>
 
-                    <p:outputLabel for="stream" value="#{msg['lesson.stream']}"/>
-                    <p:selectOneMenu id="stream" value="#{lessonBean.selectedStreamId}">
-                        <f:selectItem itemValue="#{0}" itemLabel="#{msg['select.stream']}"/>
-                        <f:selectItems value="#{lessonBean.streamsItems}"/>
-                        <p:ajax update=":lessonInfoForm:lessonDetail"/>
-                    </p:selectOneMenu>
-
                 </p:panelGrid>
 
                 <p:outputPanel rendered="#{lessonBean.infoChanged}">

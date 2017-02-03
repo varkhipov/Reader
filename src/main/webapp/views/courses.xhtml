@@ -12,6 +12,9 @@
             <p:column headerText="#{msg['course.name']}">
                 <h:outputText value="#{course.name}"/>
             </p:column>
+            <p:column headerText="#{msg['course.stream']}">
+                <h:outputText value="#{course.stream.name}"/>
+            </p:column>
             <p:column styleClass="options">
                 <p:commandButton update=":courseInfoForm" oncomplete="PF('courseDialog').show()"
                                  icon="fa fa-fw fa-search" title="View">

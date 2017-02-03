@@ -84,3 +84,12 @@ body {
 .lessonStudents > .ui-panel-content {
     padding: 0 !important;
 }
+
+/* Color */
+.green {
+    color: #008000 !important;
+}
+
+.red {
+    color: #ff0000 !important;
+}

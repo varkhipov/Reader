@@ -24,6 +24,9 @@ public class EntityConverter implements Converter {
 	@Override
 	public String getAsString(FacesContext context, UIComponent component, Object entity) {
 		synchronized (entities) {
+			if (entity == null) {
+				return null;
+			}
 			if (!entities.containsKey(entity)) {
 				Entity e = (Entity) entity;
 				entities.put(e, e.getId());

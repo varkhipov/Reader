@@ -23,8 +23,8 @@ public class Class extends Entity {
 		this.sessionEnd = sessionEnd;
 	}
 
-	public Class(Schedule schedule) {
-		this(0, null, schedule, null, null);
+	public Class(LocalDate date, Schedule schedule) {
+		this(0, date, schedule, null, null);
 	}
 
 	@Override
