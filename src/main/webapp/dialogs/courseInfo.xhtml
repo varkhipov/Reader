@@ -1,0 +1,37 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+>
+    <h:form id="courseInfoForm">
+        <p:dialog header="#{msg['course.info']}" widgetVar="courseDialog" position="center" draggable="false"
+                  modal="true" showEffect="fade" hideEffect="fade" resizable="false" fitViewport="true"
+                  onHide="PF('courseDialog').content.empty()">
+
+            <p:ajax event="close" listener="#{courseBean.exit}"/>
+
+            <p:outputPanel id="courseDetail">
+                <p:commandButton value="#{msg['btn.delete']}" icon="fa fa-fw fa-remove"
+                                 rendered="#{courseBean.selectedCourse != null
+                                             and courseBean.selectedCourse.id != 0}"
+                                 actionListener="#{courseBean.delete}"/>
+
+                <p:panelGrid columns="2" rendered="#{not empty courseBean.selectedCourse}"
+                             columnClasses="label,value">
+
+                    <p:outputLabel for="name" value="#{msg['course.name']}:"/>
+                    <p:inputText id="name" value="#{courseBean.selectedCourse.name}" required="true">
+                        <p:ajax update=":courseInfoForm:courseDetail"/>
+                    </p:inputText>
+                </p:panelGrid>
+
+                <p:outputPanel rendered="#{courseBean.infoChanged}">
+                    <p:commandButton value="#{msg['btn.save.exit']}" icon="fa fa-fw fa-save"
+                                     actionListener="#{courseBean.saveAndExit}"
+                                     update=":courseInfoForm:courseDetail"/>
+                </p:outputPanel>
+            </p:outputPanel>
+        </p:dialog>
+    </h:form>
+</ui:composition>

@@ -123,7 +123,7 @@ public class StudentDAO {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
 					"INSERT INTO STUDENT (" +
-								"uid, parsedUid, first_name, last_name, " +
+								"uid, parsed_uid, first_name, last_name, " +
 								"patronymic, phone, email" +
 							") VALUES (" +
 								"?, ?, ?, ?, " +
@@ -161,7 +161,7 @@ public class StudentDAO {
 					connection,
 					"UPDATE STUDENT " +
 							"SET " +
-								"uid = ?, parsedUid = ?, first_name = ?, last_name = ?, " +
+								"uid = ?, parsed_uid = ?, first_name = ?, last_name = ?, " +
 								"patronymic = ?, phone = ?, email = ? " +
 							"WHERE id = ?;",
 					student.getUid(),

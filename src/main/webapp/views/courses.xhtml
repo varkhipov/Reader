@@ -4,8 +4,8 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
 >
-    <h:form id="disciplinesForm">
-        <p:dataTable var="course" value="#{disciplineBean.courses}">
+    <h:form id="coursesForm">
+        <p:dataTable var="course" value="#{courseBean.courses}">
             <f:facet name="header">
                 #{msg['courses']}
             </f:facet>
@@ -13,10 +13,10 @@
                 <h:outputText value="#{course.name}"/>
             </p:column>
             <p:column styleClass="options">
-                <p:commandButton update=":disciplineInfoForm" oncomplete="PF('disciplineDialog').show()"
+                <p:commandButton update=":courseInfoForm" oncomplete="PF('courseDialog').show()"
                                  icon="fa fa-fw fa-search" title="View">
-                    <f:setPropertyActionListener value="#{course}" target="#{disciplineBean.selectedCourse}"/>
-                    <p:resetInput target=":disciplineInfoForm:disciplineDetail"/>
+                    <f:setPropertyActionListener value="#{course}" target="#{courseBean.selectedCourse}"/>
+                    <p:resetInput target=":courseInfoForm:courseDetail"/>
                 </p:commandButton>
             </p:column>
         </p:dataTable>

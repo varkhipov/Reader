@@ -16,9 +16,9 @@
                              columnClasses="label,value">
 
                     <p:outputLabel for="class" value="#{msg['lesson.course']}"/>
-                    <p:selectOneMenu id="class" value="#{lessonBean.selectedDisciplineId}">
+                    <p:selectOneMenu id="class" value="#{lessonBean.selectedCourseId}">
                         <f:selectItem itemValue="#{0}" itemLabel="#{msg['select.course']}"/>
-                        <f:selectItems value="#{lessonBean.disciplinesItems}"/>
+                        <f:selectItems value="#{lessonBean.coursesItems}"/>
                         <p:ajax update=":lessonInfoForm:lessonDetail"/>
                     </p:selectOneMenu>
 

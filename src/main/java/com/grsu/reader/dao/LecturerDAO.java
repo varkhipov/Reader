@@ -14,6 +14,7 @@ public class LecturerDAO {
 		Lecturer lecturer = new Lecturer();
 		lecturer.setId(resultSet.getInt("id"));
 		lecturer.setUid(resultSet.getString("uid"));
+		lecturer.setParsedUid(resultSet.getInt("parsed_uid"));
 		lecturer.setFirstName(resultSet.getString("first_name"));
 		lecturer.setLastName(resultSet.getString("last_name"));
 		lecturer.setPatronymic(resultSet.getString("patronymic"));
@@ -28,7 +29,7 @@ public class LecturerDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT id, uid, first_name, last_name, patronymic, phone, email FROM LECTURER WHERE id = ?;",
+					"SELECT id, uid, parsed_uid, first_name, last_name, patronymic, phone, email FROM LECTURER WHERE id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();

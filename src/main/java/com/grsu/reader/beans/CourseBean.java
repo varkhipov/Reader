@@ -12,9 +12,9 @@ import java.util.List;
 import static com.grsu.reader.utils.FacesUtils.closeDialog;
 import static com.grsu.reader.utils.FacesUtils.update;
 
-@ManagedBean(name = "disciplineBean")
+@ManagedBean(name = "courseBean")
 @ViewScoped
-public class DisciplineBean implements Serializable {
+public class CourseBean implements Serializable {
 
 	private Course selectedCourse;
 	private Course copyOfSelectedCourse;
@@ -40,7 +40,7 @@ public class DisciplineBean implements Serializable {
 
 	public void exit() {
 		setSelectedCourse(null);
-		closeDialog("disciplineDialog");
+		closeDialog("courseDialog");
 	}
 
 	public void save() {
@@ -49,7 +49,7 @@ public class DisciplineBean implements Serializable {
 		} else {
 			CourseDAO.update(databaseBean.getConnection(), selectedCourse);
 		}
-		sessionBean.updateDisciplines();
+		sessionBean.updateCourses();
 		update("views");
 	}
 
@@ -60,7 +60,7 @@ public class DisciplineBean implements Serializable {
 
 	public void delete() {
 		CourseDAO.delete(databaseBean.getConnection(), selectedCourse);
-		sessionBean.updateDisciplines();
+		sessionBean.updateCourses();
 		update("views");
 		exit();
 	}

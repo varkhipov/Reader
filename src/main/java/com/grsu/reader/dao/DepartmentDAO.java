@@ -67,7 +67,7 @@ public class DepartmentDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"INSERT INTO DEPARTMENT (name) VALUES (?, ?);",
+					"INSERT INTO DEPARTMENT (name, abbreviation) VALUES (?, ?);",
 					department.getName(),
 					department.getAbbreviation()
 			);

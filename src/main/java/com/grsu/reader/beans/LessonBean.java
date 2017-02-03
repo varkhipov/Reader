@@ -4,7 +4,6 @@ import com.grsu.reader.dao.*;
 import com.grsu.reader.models.*;
 import com.grsu.reader.models.Class;
 import com.grsu.reader.utils.DBUtils;
-import com.grsu.reader.utils.DateUtils;
 import com.grsu.reader.utils.SerialUtils;
 
 import javax.faces.bean.ManagedBean;
@@ -223,19 +222,19 @@ public class LessonBean implements Serializable {
 		return sessionBean.getSchedulesItems();
 	}
 
-	public List<SelectItem> getDisciplinesItems() {
-		return sessionBean.getDisciplinesItems();
+	public List<SelectItem> getCoursesItems() {
+		return sessionBean.getCoursesItems();
 	}
 
-	public int getSelectedDisciplineId() {
+	public int getSelectedCourseId() {
 		if (selectedLesson.getCourse() == null) {
 			return 0;
 		}
 		return selectedLesson.getCourse().getId();
 	}
 
-	public void setSelectedDisciplineId(int selectedDisciplineId) {
-		selectedLesson.setCourse(getEntityById(sessionBean.getCourses(), selectedDisciplineId));
+	public void setSelectedCourseId(int selectedCourseId) {
+		selectedLesson.setCourse(getEntityById(sessionBean.getCourses(), selectedCourseId));
 	}
 
 	public int getSelectedStreamId() {

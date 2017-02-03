@@ -4,7 +4,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.model.SelectItem;
 import java.util.List;
 
-@ManagedBean(name = "newInstanceOfDiscipline")
+@ManagedBean(name = "newInstanceOfCourse")
 public class Course extends Entity {
 	private int id;
 	private String name;

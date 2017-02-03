@@ -66,10 +66,6 @@
                         <p:ajax update=":studentInfoForm:studentDetail"/>
                     </h:inputText>
 
-                    <h:outputText value="#{msg['student.info.notes']}"/>
-                    <h:inputTextarea value="#{studentBean.selectedStudent.notes}">
-                        <p:ajax update=":studentInfoForm:studentDetail"/>
-                    </h:inputTextarea>
                 </p:panelGrid>
 
                 <p:outputPanel rendered="#{studentBean.infoChanged}">

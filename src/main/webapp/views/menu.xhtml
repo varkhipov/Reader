@@ -12,10 +12,10 @@
                        rendered="#{sessionBean.connected}">
                 <p:submenu label="#{msg['menu.file.new']}" icon="fa fa-fw fa-plus">
                     <p:menuitem value="#{msg['menu.file.new.course']}" icon="fa fa-fw fa-paperclip"
-                                update=":disciplineInfoForm" oncomplete="PF('disciplineDialog').show()">
-                        <f:setPropertyActionListener value="#{newInstanceOfDiscipline}"
-                                                     target="#{disciplineBean.selectedCourse}"/>
-                        <p:resetInput target=":disciplineInfoForm:disciplineDetail"/>
+                                update=":courseInfoForm" oncomplete="PF('courseDialog').show()">
+                        <f:setPropertyActionListener value="#{newInstanceOfCourse}"
+                                                     target="#{courseBean.selectedCourse}"/>
+                        <p:resetInput target=":courseInfoForm:courseDetail"/>
                     </p:menuitem>
 
                     <p:menuitem value="#{msg['menu.file.new.department']}" icon="fa fa-fw fa-list-alt"
