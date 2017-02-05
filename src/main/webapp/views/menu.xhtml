@@ -10,7 +10,8 @@
         <p:panel id="menuToggler" header="#{msg['menu']}"
                  toggleable="true" toggleOrientation="horizontal">
             <p:menubar id="menu" autoDisplay="#{false}" styleClass="alignMenuItems">
-                <p:submenu label="#{msg['menu.file.new']}" icon="fa fa-fw fa-plus">
+                <p:submenu label="#{msg['menu.file.new']}" icon="fa fa-fw fa-plus"
+                           rendered="#{sessionBean.connected}">
                     <p:menuitem value="#{msg['menu.file.new.course']}" icon="fa fa-fw fa-paperclip"
                                 update=":courseInfoForm" oncomplete="PF('courseDialog').show()">
                         <f:setPropertyActionListener value="#{newInstanceOfCourse}"
