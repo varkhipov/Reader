@@ -18,6 +18,10 @@ public class Group extends Entity {
 
 	public Group() {}
 
+	public Group(String name) {
+		this.name = name;
+	}
+
 	public Group(int id, String name, Department department) {
 		this.id = id;
 		this.name = name;

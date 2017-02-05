@@ -119,6 +119,12 @@ public class StudentDAO {
 	}
 
 	public static int create(Connection connection, Student student) {
+		if (student.getUid() == null || student.getUid().isEmpty()) {
+			System.out.println("Warning! Student [ "
+					+ student.getFullName()
+					+ " ] has no UID and will be added to database without it."
+			);
+		}
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
@@ -152,6 +158,7 @@ public class StudentDAO {
 				StudentGroupDAO.create(connection, newStudentId, group.getId());
 			}
 		}
+		System.out.println("Student [ " + student.getFullName() + " ] successfully added to database.");
 		return newStudentId;
 	}
 

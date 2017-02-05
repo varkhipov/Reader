@@ -32,7 +32,7 @@
                 </p:panelGrid>
 
                 <p:outputPanel rendered="#{lessonBean.infoChanged}">
-                    <p:commandButton value="#{msg['btn.save.exit']}" icon="fa fa-fw fa-save"
+                    <p:commandButton value="#{msg['btn.startSession']}" icon="fa fa-fw fa-play"
                                      actionListener="#{lessonBean.createLesson}"
                                      update="@([id$=views])"/>
                 </p:outputPanel>

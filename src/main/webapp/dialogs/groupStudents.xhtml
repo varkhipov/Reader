@@ -14,9 +14,6 @@
             <p:scrollPanel id="groupStudentsDetail" mode="native" styleClass="noBorder">
                 <p:dataTable var="student" value="#{groupBean.groupStudents}"
                              sortBy="#{student.fullName}" filteredValue="#{groupBean.filteredGroupStudents}">
-                    <p:column headerText="#{msg['student.uid']}">
-                        <h:outputText value="#{student.uid}"/>
-                    </p:column>
                     <p:column headerText="#{msg['student.name']}" sortBy="#{student.fullName}"
                               filterBy="#{student.fullName}" filterMatchMode="contains">
                         <h:outputText value="#{student.fullName}"/>

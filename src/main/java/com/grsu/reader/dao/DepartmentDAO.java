@@ -63,6 +63,31 @@ public class DepartmentDAO {
 		return department;
 	}
 
+	public static Department getDepartmentByName(Connection connection, String name) {
+		Department department = null;
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"SELECT id, name, abbreviation FROM DEPARTMENT WHERE name = ?;",
+					name
+			);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				department = new Department(
+						resultSet.getInt("id"),
+						resultSet.getString("name"),
+						resultSet.getString("abbreviation"));
+			}
+			resultSet.close();
+			preparedStatement.close();
+		} catch (Exception e) {
+			System.out.println("Error In getDepartmentByName() -->" + e.getMessage());
+			return department;
+		}
+		return department;
+	}
+
 	public static int create(Connection connection, Department department) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(

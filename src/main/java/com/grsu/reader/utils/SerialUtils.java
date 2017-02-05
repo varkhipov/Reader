@@ -30,10 +30,11 @@ public class SerialUtils {
 	}
 
 	public static boolean disconnect() {
-		if (serialPort.isOpened()) {
+		if (serialPort != null && serialPort.isOpened()) {
 			try {
 				serialPort.closePort();
 				Runtime.getRuntime().removeShutdownHook(shutdownHook);
+				System.out.println("Reader disconnected");
 			} catch (SerialPortException e) {
 				e.printStackTrace();
 				return false;
@@ -41,7 +42,6 @@ public class SerialUtils {
 				return false;
 			}
 		}
-		System.out.println("Reader disconnected");
 		return true;
 	}
 

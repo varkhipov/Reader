@@ -68,6 +68,28 @@ public class GroupDAO {
 		return group;
 	}
 
+	public static Group getGroupByName(Connection connection, String name) {
+		Group group = null;
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"SELECT id, name, department_id FROM [GROUP] WHERE name = ?;",
+					name
+			);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				group = mapFromResultSet(connection, resultSet);
+			}
+			resultSet.close();
+			preparedStatement.close();
+		} catch (Exception e) {
+			System.out.println("Error In getGroupByName() -->" + e.getMessage());
+			return group;
+		}
+		return group;
+	}
+
 	public static List<Integer> getGroupsIdsByDepartmentId(Connection connection, int department_id) {
 		List<Integer> ids = new ArrayList<>();
 		try {
@@ -102,6 +124,7 @@ public class GroupDAO {
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
+			System.out.println("Group [ " + group.getName() + " ] successfully added to database.");
 			return DBUtils.getLastInsertRowId(connection);
 		} catch (SQLException e) {
 			e.printStackTrace();

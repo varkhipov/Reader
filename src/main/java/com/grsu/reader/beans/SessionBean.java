@@ -3,6 +3,7 @@ package com.grsu.reader.beans;
 import com.grsu.reader.dao.*;
 import com.grsu.reader.models.*;
 import com.grsu.reader.models.Class;
+import com.grsu.reader.utils.CSVUtils;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -41,6 +42,7 @@ public class SessionBean implements Serializable {
 	private DatabaseBean databaseBean;
 
 	public void initData() {
+		CSVUtils.updateGroupsFromCSV(databaseBean.getConnection());
 		updateSchedules();
 		updateCourses();
 		updateDepartments();

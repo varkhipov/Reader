@@ -16,7 +16,8 @@ public class Person extends Entity {
 	private String email;
 	private Object image;
 
-	public void setIntToUid(int intUid) {
+	// TODO: give more clear names
+	public void setIntToHexUid(int intUid) {
 		uid = Integer.toHexString(intUid).toUpperCase();
 	}
 

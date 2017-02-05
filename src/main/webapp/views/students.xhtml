@@ -11,9 +11,6 @@
             <f:facet name="header">
                 #{msg['students']}
             </f:facet>
-            <p:column headerText="#{msg['student.uid']}">
-                <h:outputText value="#{student.uid}"/>
-            </p:column>
             <p:column headerText="#{msg['student.name']}" sortBy="#{student.fullName}"
                       filterBy="#{student.fullName}" filterMatchMode="contains">
                 <h:outputText value="#{student.fullName}"/>
