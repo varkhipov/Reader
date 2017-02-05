@@ -11,7 +11,8 @@
 
         <p:panelGrid id="lessonButtons" columns="5" styleClass="noBorder lessonButtons">
             <p:commandButton value="#{msg['btn.backToLessons']}" icon="fa fa-fw fa-arrow-left"
-                             actionListener="#{lessonBean.returnToLessons}" update="@([id$=views])"/>
+                             actionListener="#{lessonBean.returnToLessons}" update="@([id$=views])"
+                             rendered="#{false}"/>
 
             <p:commandButton value="#{msg['btn.startRecord']}" icon="fa fa-fw fa-play"
                              update=":lessonForm:lessonButtons"
