@@ -1,6 +1,7 @@
 package com.grsu.reader.beans;
 
 import com.grsu.reader.utils.DBUtils;
+import com.grsu.reader.utils.SerialUtils;
 
 import javax.annotation.PreDestroy;
 import javax.faces.bean.ApplicationScoped;
@@ -28,7 +29,6 @@ public class DatabaseBean implements Serializable {
 		this.connection = connection;
 	}
 
-	//@PostConstruct
 	public void connect() throws SQLException, ClassNotFoundException {
 		connection = DBUtils.connect();
 		if (connection != null) {
@@ -38,6 +38,8 @@ public class DatabaseBean implements Serializable {
 
 	@PreDestroy
 	public void disconnect() {
+		//TODO: remove from here, make separate bean
+		SerialUtils.disconnect();
 		try {
 			DBUtils.closeDB(connection);
 			connected = false;

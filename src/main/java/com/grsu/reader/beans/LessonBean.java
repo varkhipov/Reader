@@ -4,6 +4,7 @@ import com.grsu.reader.constants.Constants;
 import com.grsu.reader.dao.*;
 import com.grsu.reader.models.*;
 import com.grsu.reader.models.Class;
+import com.grsu.reader.utils.DateUtils;
 import com.grsu.reader.utils.FacesUtils;
 import com.grsu.reader.utils.SerialUtils;
 
@@ -15,6 +16,7 @@ import java.io.Serializable;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.grsu.reader.utils.EntityUtils.getEntityById;
@@ -27,6 +29,7 @@ public class LessonBean implements Serializable {
 
 	private Lesson selectedLesson;
 	private Lesson copyOfSelectedLesson;
+	private Student processedStudent;
 	private int selectedScheduleId;
 	private boolean recordStarted = false;
 	private boolean soundEnabled = true;
@@ -58,6 +61,7 @@ public class LessonBean implements Serializable {
 
 	public void returnToLessons() {
 		setSelectedLesson(null);
+		setProcessedStudent(null);
 		sessionBean.setActiveView("lessons");
 	}
 
@@ -65,7 +69,7 @@ public class LessonBean implements Serializable {
 		if (selectedLesson != null) {
 			selectedLesson.setName(String.format("%s [%s]",
 					selectedLesson.getCourse().getName(),
-					LocalDate.now()
+					DateUtils.formatDate(LocalDateTime.now())
 					)
 			);
 			selectedLesson.setClasses(Arrays.asList(
@@ -182,6 +186,7 @@ public class LessonBean implements Serializable {
 			return false;
 		}
 
+		processedStudent = student;
 		FacesUtils.push("/register", student);
 		System.out.println("Student added");
 		return true;
@@ -290,6 +295,14 @@ public class LessonBean implements Serializable {
 
 	public void setSelectedScheduleId(int selectedScheduleId) {
 		this.selectedScheduleId = selectedScheduleId;
+	}
+
+	public Student getProcessedStudent() {
+		return processedStudent;
+	}
+
+	public void setProcessedStudent(Student processedStudent) {
+		this.processedStudent = processedStudent;
 	}
 
 	public List<SelectItem> getStreamsItems() {

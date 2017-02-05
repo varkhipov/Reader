@@ -33,7 +33,7 @@ public class SerialUtils {
 		if (serialPort != null && serialPort.isOpened()) {
 			try {
 				serialPort.closePort();
-				Runtime.getRuntime().removeShutdownHook(shutdownHook);
+//				Runtime.getRuntime().removeShutdownHook(shutdownHook);
 				System.out.println("Reader disconnected");
 			} catch (SerialPortException e) {
 				e.printStackTrace();

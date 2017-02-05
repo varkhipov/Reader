@@ -85,6 +85,18 @@ body {
     margin-left: 5%;
 }
 
+.visitLabel {
+    font-weight: bold;
+}
+
+.visitInfo,
+.visitInfo .ui-panel,
+.visitInfo .ui-panel-content,
+.visitInfo .ui-panel-content .ui-widget-content,
+.visitInfo div.ui-panel-content{
+    padding-left: 0px;
+}
+
 /* Sorry for that. I will fix it, I promise! :( */
 .lessonStudents {
     padding: 0 !important;

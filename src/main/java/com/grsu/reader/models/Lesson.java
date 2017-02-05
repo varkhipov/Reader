@@ -39,6 +39,10 @@ public class Lesson extends Entity {
 				lesson.getGroup(), lesson.getClasses());
 	}
 
+	public String getFormattedCreateDate() {
+		return DateUtils.formatDateTime(createDate);
+	}
+
 	@Override
 	public SelectItem getSelectItem() {
 		return new SelectItem(id, name);

@@ -7,6 +7,7 @@ import com.grsu.reader.utils.CSVUtils;
 import com.grsu.reader.utils.SerialUtils;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -59,6 +60,7 @@ public class SessionBean implements Serializable {
 		}
 	}
 
+	@PreDestroy
 	public void disconnect() {
 		SerialUtils.disconnect();
 		databaseBean.disconnect();
