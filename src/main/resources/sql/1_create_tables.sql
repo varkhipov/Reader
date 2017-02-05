@@ -116,9 +116,11 @@ CREATE TABLE CLASS (
   id                INTEGER PRIMARY KEY AUTOINCREMENT,
   date              TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%S','now', 'localtime')),
   schedule_id       INTEGER,
+  lesson_id       INTEGER,
   session_start     TEXT,
   session_end       TEXT,
   FOREIGN KEY (schedule_id)    REFERENCES SCHEDULE(id)
+  FOREIGN KEY (lesson_id)    REFERENCES LESSON(id)
 );
 
 -- NOTE_TYPE
@@ -172,15 +174,6 @@ CREATE TABLE STUDENT_CLASS (
   registration_type TEXT,
   mark              TEXT,
   FOREIGN KEY (student_id)     REFERENCES STUDENT(id),
-  FOREIGN KEY (class_id)       REFERENCES CLASS(id)
-);
-
--- LESSON-CLASS
-CREATE TABLE LESSON_CLASS (
-  id                INTEGER PRIMARY KEY AUTOINCREMENT,
-  lesson_id         INTEGER,
-  class_id          INTEGER,
-  FOREIGN KEY (lesson_id)      REFERENCES LESSON(id),
   FOREIGN KEY (class_id)       REFERENCES CLASS(id)
 );
 

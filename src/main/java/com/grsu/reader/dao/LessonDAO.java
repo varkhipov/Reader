@@ -39,7 +39,7 @@ public class LessonDAO {
 		);
 
 		lesson.setClasses(
-				LessonClassDAO.getClassesByLessonId(connection, lesson.getId())
+				ClassDAO.getClassesByLessonId(connection, lesson.getId())
 		);
 
 		return lesson;
@@ -150,7 +150,7 @@ public class LessonDAO {
 	}
 
 	public static void delete(Connection connection, Lesson lesson) {
-		LessonClassDAO.deleteByLessonId(connection, lesson.getId());
+		ClassDAO.deleteByLessonId(connection, lesson.getId());
 
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(

@@ -58,16 +58,10 @@ INSERT INTO LESSON (name, description, course_id, type_id, group_id)
   VALUES ('Занятие3', 'ОписаниеЗанятие3', 1, 2, 1);
 
 
-INSERT INTO CLASS (date, schedule_id) VALUES ('2017-01-01', 2);
-INSERT INTO CLASS (date, schedule_id) VALUES ('2017-01-02', 3);
-INSERT INTO CLASS (date, schedule_id) VALUES ('2017-02-02', 4);
-INSERT INTO CLASS (date, schedule_id) VALUES ('2017-02-03', 1);
-
-INSERT INTO LESSON_CLASS (lesson_id, class_id) VALUES (1, 1);
-INSERT INTO LESSON_CLASS (lesson_id, class_id) VALUES (2, 2);
-INSERT INTO LESSON_CLASS (lesson_id, class_id) VALUES (3, 3);
-INSERT INTO LESSON_CLASS (lesson_id, class_id) VALUES (3, 4);
-
+INSERT INTO CLASS (date, schedule_id, lesson_id) VALUES ('2017-01-01', 2, 1);
+INSERT INTO CLASS (date, schedule_id, lesson_id) VALUES ('2017-01-02', 3, 2);
+INSERT INTO CLASS (date, schedule_id, lesson_id) VALUES ('2017-02-02', 4, 3);
+INSERT INTO CLASS (date, schedule_id, lesson_id) VALUES ('2017-02-03', 1, 3);
 
 INSERT INTO STUDENT_CLASS (student_id, class_id, registered, mark) VALUES (1, 2, 1, '!');
 INSERT INTO STUDENT_CLASS (student_id, class_id, registered, mark) VALUES (2, 2, 1, '+');

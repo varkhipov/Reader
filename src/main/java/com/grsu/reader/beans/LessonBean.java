@@ -31,8 +31,6 @@ public class LessonBean implements Serializable {
 	private boolean recordStarted = false;
 	private boolean soundEnabled = true;
 
-	private List<Class> classes;
-
 	private List<Student> presentStudents;
 	private List<Student> filteredPresentStudents;
 
@@ -76,7 +74,8 @@ public class LessonBean implements Serializable {
 							ScheduleDAO.getScheduleById(
 									databaseBean.getConnection(),
 									selectedScheduleId
-							)
+							),
+							this.selectedLesson
 					)
 			));
 
@@ -92,12 +91,6 @@ public class LessonBean implements Serializable {
 						cls
 				);
 				cls.setId(classId);
-
-				LessonClassDAO.create(
-						databaseBean.getConnection(),
-						selectedLesson,
-						cls
-				);
 			}
 
 			List<Group> groups = StreamGroupDAO.getGroupsByStreamId(
@@ -131,12 +124,8 @@ public class LessonBean implements Serializable {
 		if (selectedLesson == null || selectedLesson.getCourse() == null) {
 			presentStudents = null;
 		} else {
-			List<Class> classes = LessonClassDAO.getClassesByLessonId(
-					databaseBean.getConnection(),
-					selectedLesson.getId()
-			);
 			List<Student> students = new ArrayList<>();
-			for (Class cls : classes) {
+			for (Class cls : selectedLesson.getClasses()) {
 				students.addAll(StudentClassDAO.getStudentsByClassId(
 						databaseBean.getConnection(),
 						cls.getId(),
@@ -151,12 +140,8 @@ public class LessonBean implements Serializable {
 		if (selectedLesson == null || selectedLesson.getCourse() == null) {
 			absentStudents = null;
 		} else {
-			List<Class> classes = LessonClassDAO.getClassesByLessonId(
-					databaseBean.getConnection(),
-					selectedLesson.getId()
-			);
 			List<Student> students = new ArrayList<>();
-			for (Class cls : classes) {
+			for (Class cls : selectedLesson.getClasses()) {
 				students.addAll(StudentClassDAO.getStudentsByClassId(
 						databaseBean.getConnection(),
 						cls.getId(),
@@ -264,6 +249,11 @@ public class LessonBean implements Serializable {
 		soundEnabled = false;
 	}
 
+	public void removeLesson(Lesson lesson) {
+		LessonDAO.delete(databaseBean.getConnection(), lesson);
+		getLessons().remove(lesson);
+	}
+
 	/* GETTERS & SETTERS */
 	public void setSelectedLesson(Lesson selectedLesson) {
 		this.selectedLesson = selectedLesson;
@@ -328,14 +318,6 @@ public class LessonBean implements Serializable {
 
 	public void setRecordStarted(boolean recordStarted) {
 		this.recordStarted = recordStarted;
-	}
-
-	public List<Class> getClasses() {
-		return classes;
-	}
-
-	public void setClasses(List<Class> classes) {
-		this.classes = classes;
 	}
 
 	public boolean isSoundEnabled() {

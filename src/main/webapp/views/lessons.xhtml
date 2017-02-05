@@ -18,11 +18,14 @@
             <p:column headerText="#{msg['lesson.course']}">
                 <h:outputText value="#{lesson.course.name}"/>
             </p:column>
-            <p:column styleClass="options">
+            <p:column styleClass="groupOptions">
                 <p:commandButton actionListener="#{menuBean.changeView('lesson')}" update="@([id$=views])"
                                  icon="fa fa-fw fa-search" title="#{msg['option.view']}">
                     <f:setPropertyActionListener value="#{lesson}" target="#{lessonBean.selectedLesson}"/>
                 </p:commandButton>
+                <p:commandButton actionListener="#{lessonBean.removeLesson(lesson)}" update=":lessonsForm"
+                                 icon="fa fa-fw fa-minus" title="#{msg['option.remove']}"
+                                 styleClass="red"/>
             </p:column>
         </p:dataTable>
 

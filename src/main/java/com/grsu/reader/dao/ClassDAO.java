@@ -2,6 +2,7 @@ package com.grsu.reader.dao;
 
 import com.grsu.reader.models.Class;
 import com.grsu.reader.models.Course;
+import com.grsu.reader.models.Lesson;
 import com.grsu.reader.utils.DBUtils;
 import com.grsu.reader.utils.DateUtils;
 
@@ -24,6 +25,9 @@ public class ClassDAO {
 		aClass.setSchedule(
 				ScheduleDAO.getScheduleById(connection, resultSet.getInt("schedule_id"))
 		);
+//		aClass.setLesson(
+//				LessonDAO.getLessonById(connection, resultSet.getInt("lesson_id"))
+//		);
 		String sessionStart = resultSet.getString("session_start");
 		if (sessionStart != null) {
 			aClass.setSessionStart(LocalTime.parse(sessionStart));
@@ -41,7 +45,7 @@ public class ClassDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT id, date, schedule_id, session_start, session_end FROM CLASS;"
+					"SELECT id, date, schedule_id, lesson_id, session_start, session_end FROM CLASS;"
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -62,7 +66,7 @@ public class ClassDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT id, date, schedule_id, session_start, session_end FROM CLASS WHERE id = ?;",
+					"SELECT id, date, schedule_id, lesson_id, session_start, session_end FROM CLASS WHERE id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -79,14 +83,42 @@ public class ClassDAO {
 		return cls;
 	}
 
+	public static List<Class> getClassesByLessonId(Connection connection, int id) {
+		List<Class> cls = new ArrayList<>();
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"SELECT id, date, schedule_id, lesson_id, session_start, session_end " +
+							"FROM CLASS " +
+							"WHERE lesson_id = ?;",
+					id
+			);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				cls.add(mapFromResultSet(connection, resultSet));
+			}
+			resultSet.close();
+			preparedStatement.close();
+		} catch (Exception e) {
+			System.out.println("Error In getClassById() -->" + e.getMessage());
+			return cls;
+		}
+		return cls;
+	}
+
 	public static int create(Connection connection, Class cls) {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"INSERT INTO CLASS (date, schedule_id, session_start, session_end) VALUES (?, ?, ?, ?);",
+					"INSERT INTO CLASS (date, schedule_id, lesson_id, session_start, session_end) " +
+							"VALUES (?, ?, ?, ?, ?);",
 					cls.getDate(),
 					cls.getSchedule() != null && cls.getSchedule().getId() != 0
 							? cls.getSchedule().getId()
+							: null,
+					cls.getLesson() != null && cls.getLesson().getId() != 0
+							? cls.getLesson().getId()
 							: null,
 					cls.getSessionStart(),
 					cls.getSessionEnd()
@@ -108,12 +140,16 @@ public class ClassDAO {
 					"UPDATE CLASS SET " +
 							"date = ?, " +
 							"schedule_id= ? " +
+							"lesson_id = ?" +
 							"session_start = ?" +
 							"session_end= ?" +
 							"WHERE id = ?;",
 					cls.getDate(),
 					cls.getSchedule() != null && cls.getSchedule().getId() != 0
 							? cls.getSchedule().getId()
+							: null,
+					cls.getLesson() != null && cls.getLesson().getId() != 0
+							? cls.getLesson().getId()
 							: null,
 					cls.getSessionStart(),
 					cls.getSessionEnd(),
@@ -129,13 +165,41 @@ public class ClassDAO {
 
 	public static void delete(Connection connection, Class cls) {
 		StudentClassDAO.deleteByClassId(connection, cls.getId());
-		LessonClassDAO.deleteByClassId(connection, cls.getId());
 
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
 					"DELETE FROM CLASS WHERE id = ?;",
 					cls.getId()
+			);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void deleteByLessonId(Connection connection, int id) {
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"SELECT id " +
+							"FROM CLASS " +
+							"WHERE lesson_id = ?;",
+					id
+			);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				StudentClassDAO.deleteByClassId(connection, resultSet.getInt(1));
+			}
+			resultSet.close();
+			preparedStatement.close();
+
+			preparedStatement = buildPreparedStatement(
+					connection,
+					"DELETE FROM CLASS WHERE lesson_id = ?;",
+					id
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();

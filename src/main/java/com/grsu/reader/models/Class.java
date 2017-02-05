@@ -10,21 +10,24 @@ public class Class extends Entity {
 	private int id;
 	private LocalDate date;
 	private Schedule schedule;
+	private Lesson lesson;
 	private LocalTime sessionStart;
 	private LocalTime sessionEnd;
 
-	public Class() {}
+	public Class() {
+	}
 
-	public Class(int id, LocalDate date, Schedule schedule, LocalTime sessionStart, LocalTime sessionEnd) {
+	public Class(int id, LocalDate date, Schedule schedule, Lesson lesson, LocalTime sessionStart, LocalTime sessionEnd) {
 		this.id = id;
 		this.date = date;
 		this.schedule = schedule;
+		this.lesson = lesson;
 		this.sessionStart = sessionStart;
 		this.sessionEnd = sessionEnd;
 	}
 
-	public Class(LocalDate date, Schedule schedule) {
-		this(0, date, schedule, null, null);
+	public Class(LocalDate date, Schedule schedule, Lesson lesson) {
+		this(0, date, schedule, lesson, null, null);
 	}
 
 	@Override
@@ -56,6 +59,14 @@ public class Class extends Entity {
 		this.schedule = schedule;
 	}
 
+	public Lesson getLesson() {
+		return lesson;
+	}
+
+	public void setLesson(Lesson lesson) {
+		this.lesson = lesson;
+	}
+
 	public LocalTime getSessionStart() {
 		return sessionStart;
 	}
@@ -78,6 +89,7 @@ public class Class extends Entity {
 				"id=" + id +
 				", date=" + date +
 				", schedule=" + schedule +
+				", lesson=" + lesson +
 				", sessionStart=" + sessionStart +
 				", sessionEnd=" + sessionEnd +
 				'}';
