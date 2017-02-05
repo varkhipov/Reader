@@ -30,6 +30,11 @@
                         <p:ajax update=":studentInfoForm:studentDetail"/>
                     </p:inputText>
 
+                    <p:outputLabel for="cardUid" value="#{msg['student.info.cardUid']}"/>
+                    <p:inputText id="cardUid" value="#{studentBean.selectedStudent.parsedUid}">
+                        <p:ajax update=":studentInfoForm:studentDetail"/>
+                    </p:inputText>
+
                     <p:outputLabel for="lastName" value="#{msg['student.info.lastName']}"/>
                     <p:inputText id="lastName" value="#{studentBean.selectedStudent.lastName}" required="true">
                         <p:ajax update=":studentInfoForm:studentDetail"/>

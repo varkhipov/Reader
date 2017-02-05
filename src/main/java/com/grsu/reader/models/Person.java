@@ -23,7 +23,11 @@ public class Person extends Entity {
 
 	//http://stackoverflow.com/a/7038867/7464024
 	public void setHexToParsedUid(String hexUid) {
-		parsedUid = (int) Long.parseLong(hexUid, 16);
+		try {
+			parsedUid = (int) Long.parseLong(hexUid, 16);
+		} catch (NumberFormatException ex) {
+			this.parsedUid = 0;
+		}
 	}
 
 	@Override
@@ -48,7 +52,14 @@ public class Person extends Entity {
 	}
 
 	public void setUid(String uid) {
-		this.uid = isEmpty(uid) ? null : uid;
+		if (isEmpty(uid)) {
+			this.uid = null;
+		} else {
+			this.uid = uid.toUpperCase();
+			if (this.parsedUid == 0) {
+				setHexToParsedUid(this.uid);
+			}
+		}
 	}
 
 	public int getParsedUid() {
@@ -57,6 +68,9 @@ public class Person extends Entity {
 
 	public void setParsedUid(int parsedUid) {
 		this.parsedUid = parsedUid;
+		if (this.parsedUid != 0 && this.uid == null) {
+			setIntToHexUid(this.parsedUid);
+		}
 	}
 
 	public String getFirstName() {
