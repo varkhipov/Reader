@@ -117,6 +117,63 @@ public class StudentClassDAO {
 		}
 	}
 
+	public static void updateStudentClassInfo(Connection connection,
+											  int studentId,
+											  int classId,
+											  boolean registered,
+											  LocalTime registrationTime,
+											  String registrationType) throws SQLException {
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"SELECT count(id) as count FROM STUDENT_CLASS WHERE class_id = ? AND student_id = ?;",
+					classId,
+					studentId
+			);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			int count = 0;
+			while (resultSet.next()) {
+				count = resultSet.getInt("count");
+			}
+			resultSet.close();
+			preparedStatement.close();
+
+			if (count == 0) {
+				preparedStatement = buildPreparedStatement(
+						connection,
+						"INSERT INTO STUDENT_CLASS (student_id, class_id, registered, " +
+								"registration_time, registration_type) " +
+								"VALUES (?, ?, ?, ?, ?)",
+						studentId,
+						classId,
+						registered ? 1 : 0,
+						registrationTime,
+						registrationType
+				);
+				preparedStatement.executeUpdate();
+				preparedStatement.close();
+			} else {
+				preparedStatement = buildPreparedStatement(
+						connection,
+						"UPDATE STUDENT_CLASS SET registered = ?, registration_time = ?, registration_type = ? " +
+								"WHERE class_id = ? AND student_id = ?;",
+						registered ? 1 : 0,
+						registrationTime,
+						registrationType,
+						classId,
+						studentId
+				);
+				preparedStatement.executeUpdate();
+				preparedStatement.close();
+			}
+
+			preparedStatement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+
 	public static void updateByStudentId(Connection connection, int studentId,
 										 int classId, boolean registered, LocalTime registrationTime, String registrationType) throws SQLException {
 		try {

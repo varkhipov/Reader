@@ -39,6 +39,8 @@ public class LessonBean implements Serializable {
 	private List<Student> absentStudents;
 	private List<Student> filteredAbsentStudents;
 
+	private List<Student> allStudents;
+	private List<Student> filteredAllStudents;
 
 	@ManagedProperty(value = "#{databaseBean}")
 	private DatabaseBean databaseBean;
@@ -165,12 +167,20 @@ public class LessonBean implements Serializable {
 		}
 	}
 
+	public void initAllStudents() {
+		List<Student> allStudents = new ArrayList<>(sessionBean.getStudents());
+		allStudents.removeAll(this.presentStudents);
+		allStudents.removeAll(this.absentStudents);
+		setAllStudents(allStudents);
+	}
+
 	public boolean processStudent(Student student) {
 		presentStudents.add(student);
 		absentStudents.remove(student);
+		allStudents.remove(student);
 
 		try {
-			StudentClassDAO.updateByStudentId(
+			StudentClassDAO.updateStudentClassInfo(
 					databaseBean.getConnection(),
 					student.getId(),
 					selectedLesson.getClasses().get(0).getId(),
@@ -191,9 +201,10 @@ public class LessonBean implements Serializable {
 	public boolean addStudent(Student student) {
 		presentStudents.add(student);
 		absentStudents.remove(student);
+		allStudents.remove(student);
 
 		try {
-			StudentClassDAO.updateByStudentId(
+			StudentClassDAO.updateStudentClassInfo(
 					databaseBean.getConnection(),
 					student.getId(),
 					selectedLesson.getClasses().get(0).getId(),
@@ -213,9 +224,10 @@ public class LessonBean implements Serializable {
 	public boolean removeStudent(Student student) {
 		presentStudents.remove(student);
 		absentStudents.add(student);
+		//TODO: if from allStudents
 
 		try {
-			StudentClassDAO.updateByStudentId(
+			StudentClassDAO.updateStudentClassInfo(
 					databaseBean.getConnection(),
 					student.getId(),
 					selectedLesson.getClasses().get(0).getId(),
@@ -255,6 +267,7 @@ public class LessonBean implements Serializable {
 		if (selectedLesson != null) {
 			initPresentStudents();
 			initAbsentStudents();
+			initAllStudents();
 		}
 	}
 
@@ -360,4 +373,27 @@ public class LessonBean implements Serializable {
 	public void setFilteredAbsentStudents(List<Student> filteredAbsentStudents) {
 		this.filteredAbsentStudents = filteredAbsentStudents;
 	}
+
+	public List<Student> getAllStudents() {
+		return allStudents;
+	}
+
+	public void setAllStudents(List<Student> allStudents) {
+		this.allStudents = allStudents;
+	}
+
+	public List<Student> getFilteredAllStudents() {
+		return filteredAllStudents;
+	}
+
+	public void setFilteredAllStudents(List<Student> filteredAllStudents) {
+		this.filteredAllStudents = filteredAllStudents;
+	}
+
+	public void exitStudents() {
+		setFilteredAllStudents(null);
+		update("views");
+		closeDialog("addStudentsDialog");
+	}
+
 }

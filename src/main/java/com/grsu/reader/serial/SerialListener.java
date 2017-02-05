@@ -33,6 +33,13 @@ public class SerialListener implements SerialPortEventListener {
 					System.out.println("Received card with uid: " + uid);
 
 					Student student = EntityUtils.getPersonByUid(lessonBean.getAbsentStudents(), uid);
+					if (student == null) {
+						if (EntityUtils.getPersonByUid(lessonBean.getPresentStudents(), uid) != null) {
+							System.out.println("Student not added. Reason: Uid[ " + uid + " ] already exists.");
+						} else {
+							student = EntityUtils.getPersonByUid(lessonBean.getAllStudents(), uid);
+						}
+					}
 					if (student != null) {
 						SerialUtils.sendResponse(
 								serialPort,
@@ -40,11 +47,7 @@ public class SerialListener implements SerialPortEventListener {
 								lessonBean.isSoundEnabled()
 						);
 					} else {
-						if (EntityUtils.getPersonByUid(lessonBean.getPresentStudents(), uid) != null) {
-							System.out.println("Student not added. Reason: Uid[ " + uid + " ] already exists.");
-						} else {
-							System.out.println("Student not added. Reason: Uid[ " + uid + " ] is not from present groups.");
-						}
+						System.out.println("Student not added. Reason: Uid[ " + uid + " ] is not from present groups.");
 						SerialUtils.sendResponse(
 								serialPort,
 								false,

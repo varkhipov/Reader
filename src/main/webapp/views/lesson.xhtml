@@ -31,6 +31,10 @@
                              update=":lessonForm:lessonButtons"
                              actionListener="#{lessonBean.disableSound}"
                              rendered="#{lessonBean.recordStarted and lessonBean.soundEnabled}"/>
+            <p:commandButton value="#{msg['btn.addVisit']}" icon="fa fa-fw fa-plus"
+                             actionListener="#{lessonBean.initAllStudents}"
+                             oncomplete="PF('addStudentsDialog').show()"
+                             update=":addStudentsForm:studentDetail"/>
         </p:panelGrid>
 
         <p:panelGrid id="lessonTables" columns="5" styleClass="noBorder v-align-top">
