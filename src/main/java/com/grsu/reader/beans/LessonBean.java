@@ -43,6 +43,8 @@ public class LessonBean implements Serializable {
 	private List<Student> allStudents;
 	private List<Student> filteredAllStudents;
 
+	private List<Student> lessonStudents;
+
 	@ManagedProperty(value = "#{databaseBean}")
 	private DatabaseBean databaseBean;
 
@@ -167,6 +169,19 @@ public class LessonBean implements Serializable {
 		this.allStudents = allStudents;
 	}
 
+	private void initLessonStudents() {
+		if (selectedLesson.getCourse() != null) {
+			if (selectedLesson.getGroup() != null) {
+				lessonStudents = selectedLesson.getGroup().getStudents();
+			} else {
+				lessonStudents = new ArrayList<>();
+				for (Group group : selectedLesson.getCourse().getStream().getGroups()) {
+					lessonStudents.addAll(StudentGroupDAO.getStudentsByGroupId(databaseBean.getConnection(), group.getId()));
+				}
+			}
+		}
+	}
+
 	public boolean processStudent(Student student) {
 		presentStudents.add(student);
 		absentStudents.remove(student);
@@ -216,19 +231,24 @@ public class LessonBean implements Serializable {
 	}
 
 	public boolean removeStudent(Student student) {
-		presentStudents.remove(student);
-		absentStudents.add(student);
-		//TODO: if from allStudents
-
 		try {
-			StudentClassDAO.updateStudentClassInfo(
-					databaseBean.getConnection(),
-					student.getId(),
-					selectedLesson.getClasses().get(0).getId(),
-					false,
-					null,
-					null
-			);
+			if (lessonStudents.contains(student)) {
+				StudentClassDAO.updateStudentClassInfo(
+						databaseBean.getConnection(),
+						student.getId(),
+						selectedLesson.getClasses().get(0).getId(),
+						false,
+						null,
+						null
+				);
+				absentStudents.add(student);
+			} else {
+				StudentClassDAO.deleteByStudentId(databaseBean.getConnection(), student.getId());
+				allStudents.add(student);
+			}
+
+			presentStudents.remove(student);
+
 		} catch (SQLException e) {
 			System.out.println("Student not removed. Uid[ " + student.getUid() + " ]. Reason: SQLException:\n" + e);
 			return false;
@@ -267,6 +287,7 @@ public class LessonBean implements Serializable {
 			initPresentStudents();
 			initAbsentStudents();
 			initAllStudents();
+			initLessonStudents();
 		}
 	}
 
