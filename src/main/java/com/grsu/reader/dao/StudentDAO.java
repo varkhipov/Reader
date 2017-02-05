@@ -2,6 +2,7 @@ package com.grsu.reader.dao;
 
 import com.grsu.reader.models.Group;
 import com.grsu.reader.models.Student;
+import com.grsu.reader.utils.DBUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -149,7 +150,7 @@ public class StudentDAO {
 			e.printStackTrace();
 		}
 
-		int newStudentId = getStudentIdByUID(connection, student.getUid());
+		int newStudentId = DBUtils.getLastInsertRowId(connection);
 		if (newStudentId == 0) {
 			System.out.println("Error in [com.grsu.reader.dao.StudentDAO.create]. " +
 					"No groups added for student with id 0: " + student);
