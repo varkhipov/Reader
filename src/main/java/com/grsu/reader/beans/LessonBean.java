@@ -194,7 +194,7 @@ public class LessonBean implements Serializable {
 					selectedLesson.getClasses().get(0).getId(),
 					true,
 					LocalTime.now(),
-					Constants.REGISTRATION_TYPE_MANUAL
+					Constants.REGISTRATION_TYPE_AUTOMATIC
 			);
 		} catch (SQLException e) {
 			System.out.println("Student not added. Uid[ " + student.getUid() + " ]. Reason: SQLException:\n" + e);
@@ -219,7 +219,7 @@ public class LessonBean implements Serializable {
 					selectedLesson.getClasses().get(0).getId(),
 					true,
 					LocalTime.now(),
-					Constants.REGISTRATION_TYPE_AUTOMATIC
+					Constants.REGISTRATION_TYPE_MANUAL
 			);
 		} catch (SQLException e) {
 			System.out.println("Student not added. Uid[ " + student.getUid() + " ]. Reason: SQLException:\n" + e);
