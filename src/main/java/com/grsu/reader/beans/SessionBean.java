@@ -4,12 +4,15 @@ import com.grsu.reader.dao.*;
 import com.grsu.reader.models.*;
 import com.grsu.reader.models.Class;
 import com.grsu.reader.utils.CSVUtils;
+import com.grsu.reader.utils.SerialUtils;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.model.SelectItem;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.List;
 
 import static com.grsu.reader.utils.EntityUtils.generateSelectItems;
@@ -40,6 +43,31 @@ public class SessionBean implements Serializable {
 
 	@ManagedProperty(value = "#{databaseBean}")
 	private DatabaseBean databaseBean;
+
+	@PostConstruct
+	public void connect() {
+		try {
+			databaseBean.connect();
+			if (!databaseBean.isConnected()) {
+				System.out.println("No connection to db.");
+			} else {
+				setConnected(true);
+				initData();
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void disconnect() {
+		SerialUtils.disconnect();
+		databaseBean.disconnect();
+		if (databaseBean.isConnected()) {
+			System.out.println("Still not disconnected.");
+		} else {
+			setConnected(false);
+		}
+	}
 
 	public void initData() {
 		CSVUtils.updateGroupsFromCSV(databaseBean.getConnection());

@@ -38,27 +38,11 @@ public class MenuBean implements Serializable {
 	}
 
 	public void connect() {
-		try {
-			databaseBean.connect();
-			if (!databaseBean.isConnected()) {
-				System.out.println("No connection to db.");
-			} else {
-				sessionBean.setConnected(true);
-				sessionBean.initData();
-			}
-		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+		sessionBean.connect();
 	}
 
 	public void disconnect() {
-		SerialUtils.disconnect();
-		databaseBean.disconnect();
-		if (databaseBean.isConnected()) {
-			System.out.println("Still not disconnected.");
-		} else {
-			sessionBean.setConnected(false);
-		}
+		sessionBean.disconnect();
 	}
 
 	public void changeView(String viewName) {

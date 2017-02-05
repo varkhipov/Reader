@@ -9,7 +9,7 @@
             <p:ajax event="message" update="lessonTables"/>
         </p:socket>
 
-        <p:panelGrid id="lessonButtons" columns="5" styleClass="noBorder">
+        <p:panelGrid id="lessonButtons" columns="5" styleClass="noBorder lessonButtons">
             <p:commandButton value="#{msg['btn.backToLessons']}" icon="fa fa-fw fa-arrow-left"
                              actionListener="#{sessionBean.setActiveView('lessons')}" update="@([id$=views])"/>
 

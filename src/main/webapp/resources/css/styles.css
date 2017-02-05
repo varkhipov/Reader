@@ -32,12 +32,18 @@ body {
     width: 15%;
 }
 
-.ui-datatable {
-    margin-top: 25px;
+.menu {
+    /*margin-bottom: 25px;*/
 }
 
-.menu {
-    margin-bottom: 25px;
+.menu .ui-panel .ui-panel-content {
+    padding: 0;
+    border: none;
+}
+
+.ui-panel-collapsed-h {
+    position: absolute;
+    z-index: 5000;
 }
 
 .studentDetail {
@@ -75,9 +81,12 @@ body {
     margin: 0;
 }
 
+.lessonButtons {
+    margin-left: 5%;
+}
+
 /* Sorry for that. I will fix it, I promise! :( */
 .lessonStudents {
-    margin-top: 25px;
     padding: 0 !important;
 }
 
