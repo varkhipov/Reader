@@ -13,4 +13,9 @@ public final class Constants {
 	
 	//BEANS
 	public final static String GROUPS_DELIMITER = ",<br/>";
+
+	//REGISTRATION TYPE
+	public final static String REGISTRATION_TYPE_MANUAL = "MANUAL";
+	public final static String REGISTRATION_TYPE_AUTOMATIC = "AUTOMATIC";
+
 }

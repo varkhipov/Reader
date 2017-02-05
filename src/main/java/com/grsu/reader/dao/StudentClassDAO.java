@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,12 +117,15 @@ public class StudentClassDAO {
 		}
 	}
 
-	public static void updateByStudentId(Connection connection, int studentId, int classId, boolean registered) throws SQLException {
+	public static void updateByStudentId(Connection connection, int studentId,
+										 int classId, boolean registered, LocalTime registrationTime, String registrationType) throws SQLException {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE STUDENT_CLASS SET registered = ? WHERE class_id = ? AND class_id = ?;",
+					"UPDATE STUDENT_CLASS SET registered = ?, registration_time = ?, registration_type = ? WHERE class_id = ? AND student_id = ?;",
 					registered ? 1 : 0,
+					registrationTime,
+					registrationType,
 					classId,
 					studentId
 			);

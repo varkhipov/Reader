@@ -1,9 +1,9 @@
 package com.grsu.reader.beans;
 
+import com.grsu.reader.constants.Constants;
 import com.grsu.reader.dao.*;
 import com.grsu.reader.models.*;
 import com.grsu.reader.models.Class;
-import com.grsu.reader.utils.DBUtils;
 import com.grsu.reader.utils.SerialUtils;
 
 import javax.faces.bean.ManagedBean;
@@ -13,6 +13,7 @@ import javax.faces.model.SelectItem;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 import static com.grsu.reader.utils.EntityUtils.getEntityById;
@@ -172,7 +173,31 @@ public class LessonBean implements Serializable {
 					databaseBean.getConnection(),
 					student.getId(),
 					selectedLesson.getClasses().get(0).getId(),
-					true
+					true,
+					LocalTime.now(),
+					Constants.REGISTRATION_TYPE_MANUAL
+			);
+		} catch (SQLException e) {
+			System.out.println("Student not added. Uid[ " + student.getUid() + " ]. Reason: SQLException:\n" + e);
+			return false;
+		}
+
+		System.out.println("Student added");
+		return true;
+	}
+
+	public boolean addStudent(Student student) {
+		presentStudents.add(student);
+		absentStudents.remove(student);
+
+		try {
+			StudentClassDAO.updateByStudentId(
+					databaseBean.getConnection(),
+					student.getId(),
+					selectedLesson.getClasses().get(0).getId(),
+					true,
+					LocalTime.now(),
+					Constants.REGISTRATION_TYPE_AUTOMATIC
 			);
 		} catch (SQLException e) {
 			System.out.println("Student not added. Uid[ " + student.getUid() + " ]. Reason: SQLException:\n" + e);
@@ -192,7 +217,9 @@ public class LessonBean implements Serializable {
 					databaseBean.getConnection(),
 					student.getId(),
 					selectedLesson.getClasses().get(0).getId(),
-					false
+					false,
+					null,
+					null
 			);
 		} catch (SQLException e) {
 			System.out.println("Student not removed. Uid[ " + student.getUid() + " ]. Reason: SQLException:\n" + e);
