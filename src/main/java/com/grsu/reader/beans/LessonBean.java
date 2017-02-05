@@ -169,9 +169,13 @@ public class LessonBean implements Serializable {
 
 	public void initAllStudents() {
 		List<Student> allStudents = new ArrayList<>(sessionBean.getStudents());
-		allStudents.removeAll(this.presentStudents);
-		allStudents.removeAll(this.absentStudents);
-		setAllStudents(allStudents);
+		if (presentStudents != null) {
+			allStudents.removeAll(presentStudents);
+		}
+		if (absentStudents != null) {
+			allStudents.removeAll(absentStudents);
+		}
+		this.allStudents = allStudents;
 	}
 
 	public boolean processStudent(Student student) {
