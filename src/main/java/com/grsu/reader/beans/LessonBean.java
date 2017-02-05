@@ -4,6 +4,7 @@ import com.grsu.reader.constants.Constants;
 import com.grsu.reader.dao.*;
 import com.grsu.reader.models.*;
 import com.grsu.reader.models.Class;
+import com.grsu.reader.utils.FacesUtils;
 import com.grsu.reader.utils.SerialUtils;
 
 import javax.faces.bean.ManagedBean;
@@ -182,6 +183,7 @@ public class LessonBean implements Serializable {
 			return false;
 		}
 
+		FacesUtils.push("/register", student);
 		System.out.println("Student added");
 		return true;
 	}

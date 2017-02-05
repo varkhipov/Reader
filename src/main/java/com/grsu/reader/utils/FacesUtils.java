@@ -1,6 +1,8 @@
 package com.grsu.reader.utils;
 
 import org.primefaces.context.RequestContext;
+import org.primefaces.push.EventBus;
+import org.primefaces.push.EventBusFactory;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -26,5 +28,10 @@ public class FacesUtils {
 
 	public static void closeDialog(String id) {
 		execute("PF('" + id + "').hide();");
+	}
+
+	public static void push(String channel, Object data) {
+		EventBus eventBus = EventBusFactory.getDefault().eventBus();
+		eventBus.publish(channel, data);
 	}
 }

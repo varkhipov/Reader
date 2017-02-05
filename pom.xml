@@ -24,6 +24,12 @@
 			<version>RELEASE</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.atmosphere</groupId>
+			<artifactId>atmosphere-runtime</artifactId>
+			<version>RELEASE</version>
+		</dependency>
+
 		<!-- OmniFaces -->
 		<!--<dependency>-->
 		<!--<groupId>org.omnifaces</groupId>-->

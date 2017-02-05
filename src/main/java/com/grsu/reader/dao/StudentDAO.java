@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.grsu.reader.utils.DBUtils.*;
+import static com.grsu.reader.utils.DBUtils.buildPreparedStatement;
 
 public class StudentDAO {
 
