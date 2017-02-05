@@ -56,9 +56,7 @@ public class Person extends Entity {
 			this.uid = null;
 		} else {
 			this.uid = uid.toUpperCase();
-			if (this.parsedUid == 0) {
-				setHexToParsedUid(this.uid);
-			}
+			setHexToParsedUid(this.uid);
 		}
 	}
 
@@ -68,7 +66,7 @@ public class Person extends Entity {
 
 	public void setParsedUid(int parsedUid) {
 		this.parsedUid = parsedUid;
-		if (this.parsedUid != 0 && this.uid == null) {
+		if (this.parsedUid != 0) {
 			setIntToHexUid(this.parsedUid);
 		}
 	}
