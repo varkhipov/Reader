@@ -185,7 +185,9 @@ public class LessonBean implements Serializable {
 	public boolean processStudent(Student student) {
 		presentStudents.add(student);
 		absentStudents.remove(student);
-		allStudents.remove(student);
+		if (filteredAbsentStudents != null) {
+			filteredAbsentStudents.remove(student);
+		}
 
 		try {
 			StudentClassDAO.updateStudentClassInfo(
@@ -210,7 +212,13 @@ public class LessonBean implements Serializable {
 	public boolean addStudent(Student student) {
 		presentStudents.add(student);
 		absentStudents.remove(student);
+		if (filteredAbsentStudents != null) {
+			filteredAbsentStudents.remove(student);
+		}
 		allStudents.remove(student);
+		if (filteredAllStudents != null) {
+			filteredAllStudents.remove(student);
+		}
 
 		try {
 			StudentClassDAO.updateStudentClassInfo(
@@ -248,6 +256,9 @@ public class LessonBean implements Serializable {
 			}
 
 			presentStudents.remove(student);
+			if (filteredPresentStudents != null) {
+				filteredPresentStudents.remove(student);
+			}
 
 		} catch (SQLException e) {
 			System.out.println("Student not removed. Uid[ " + student.getUid() + " ]. Reason: SQLException:\n" + e);
