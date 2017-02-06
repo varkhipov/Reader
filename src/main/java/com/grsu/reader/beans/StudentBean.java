@@ -98,7 +98,9 @@ public class StudentBean implements Serializable {
 
 	public void delete() {
 		StudentDAO.delete(databaseBean.getConnection(), selectedStudent);
-		filteredStudents.clear();
+		if (filteredStudents != null) {
+			filteredStudents.clear();
+		}
 		sessionBean.updateStudents();
 		update("views");
 		exit();

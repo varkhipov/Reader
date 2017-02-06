@@ -156,10 +156,15 @@ public class CSVUtils {
 			System.out.println("Group [ " + groupName + " ] is empty and not added to database.");
 		}
 
-		if (file.delete()) {
-			System.out.println("File [" + fileName + "] is deleted.");
-		} else {
-			System.out.println("Delete operation for file [" + fileName + "] is failed.");
+		try {
+			reader.close();
+			if (file.delete()) {
+				System.out.println("File [" + fileName + "] is deleted.");
+			} else {
+				System.out.println("Delete operation for file [" + fileName + "] is failed.");
+			}
+		} catch (IOException e) {
+			System.out.println("Warning! Close stream for file [" + fileName + "] failed!");
 		}
 
 		return group;
@@ -179,7 +184,6 @@ public class CSVUtils {
 			System.out.println("No card ID for [ " + student.getFullName() + " ]. Need to add UID manually.");
 		} else {
 			student.setCardId(Integer.parseInt(record[3]));
-			student.setIntToHexUid(Integer.parseInt(record[3]));
 		}
 		return student;
 	}

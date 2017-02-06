@@ -4,8 +4,8 @@ BEGIN;
 -- LECTURER
 CREATE TABLE LECTURER (
   id                INTEGER PRIMARY KEY AUTOINCREMENT,
-  card_uid               TEXT,
-  card_id        INTEGER,
+  card_uid          TEXT,
+  card_id           INTEGER,
   first_name        TEXT,
   last_name         TEXT,
   patronymic        TEXT,
@@ -46,13 +46,13 @@ CREATE TABLE STREAM (
   description       TEXT,
   create_date       TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%S','now', 'localtime')),
   lecturer_id       INTEGER,
-  discipline_id         INTEGER,
+  discipline_id     INTEGER,
   department_id     INTEGER,
   course            INTEGER,
   active            INTEGER,
   expiration_date   TEXT,
   FOREIGN KEY (lecturer_id)    REFERENCES LECTURER(id),
-  FOREIGN KEY (discipline_id)      REFERENCES [DISCIPLINE](id),
+  FOREIGN KEY (discipline_id)  REFERENCES [DISCIPLINE](id),
   FOREIGN KEY (department_id)  REFERENCES DEPARTMENT(id)
 );
 
@@ -78,8 +78,8 @@ CREATE TABLE [GROUP] (
 -- STUDENT
 CREATE TABLE STUDENT (
   id                INTEGER PRIMARY KEY AUTOINCREMENT,
-  card_uid               TEXT,
-  card_id       TEXT,
+  card_uid          TEXT,
+  card_id           TEXT,
   first_name        TEXT,
   last_name         TEXT,
   patronymic        TEXT,
@@ -123,11 +123,11 @@ CREATE TABLE CLASS (
   id                INTEGER PRIMARY KEY AUTOINCREMENT,
   date              TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%S','now', 'localtime')),
   schedule_id       INTEGER,
-  lesson_id       INTEGER,
+  lesson_id         INTEGER,
   session_start     TEXT,
   session_end       TEXT,
   FOREIGN KEY (schedule_id)    REFERENCES SCHEDULE(id),
-  FOREIGN KEY (lesson_id)    REFERENCES LESSON(id)
+  FOREIGN KEY (lesson_id)      REFERENCES LESSON(id)
 );
 
 -- NOTE_TYPE

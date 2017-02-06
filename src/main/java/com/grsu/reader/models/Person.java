@@ -16,15 +16,14 @@ public class Person extends Entity {
 	private String email;
 	private Object image;
 
-	// TODO: give more clear names
-	public void setIntToHexUid(int intUid) {
-		cardUid = Integer.toHexString(intUid).toUpperCase();
+	public void setCardUidFromCardId(int cardId) {
+		cardUid = Integer.toHexString(cardId).toUpperCase();
 	}
 
 	//http://stackoverflow.com/a/7038867/7464024
-	public void setHexToParsedUid(String hexUid) {
+	public void setCardIdFromCardUid(String cardUid) {
 		try {
-			cardId = (int) Long.parseLong(hexUid, 16);
+			cardId = (int) Long.parseLong(cardUid, 16);
 		} catch (NumberFormatException ex) {
 			this.cardId = 0;
 		}
@@ -56,7 +55,7 @@ public class Person extends Entity {
 			this.cardUid = null;
 		} else {
 			this.cardUid = cardUid.toUpperCase();
-			setHexToParsedUid(this.cardUid);
+			setCardIdFromCardUid(this.cardUid);
 		}
 	}
 
@@ -67,7 +66,7 @@ public class Person extends Entity {
 	public void setCardId(int cardId) {
 		this.cardId = cardId;
 		if (this.cardId != 0) {
-			setIntToHexUid(this.cardId);
+			setCardUidFromCardId(this.cardId);
 		}
 	}
 
