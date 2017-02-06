@@ -1,10 +1,7 @@
 package com.grsu.reader.dao;
 
 import com.grsu.reader.models.Class;
-import com.grsu.reader.models.Course;
-import com.grsu.reader.models.Lesson;
 import com.grsu.reader.utils.DBUtils;
-import com.grsu.reader.utils.DateUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

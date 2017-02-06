@@ -4,8 +4,8 @@ BEGIN;
 -- LECTURER
 CREATE TABLE LECTURER (
   id                INTEGER PRIMARY KEY AUTOINCREMENT,
-  uid               TEXT,
-  parsed_uid        TEXT,
+  card_uid               TEXT,
+  card_id        INTEGER,
   first_name        TEXT,
   last_name         TEXT,
   patronymic        TEXT,
@@ -42,7 +42,18 @@ CREATE TABLE DEPARTMENT (
 CREATE TABLE STREAM (
   id                INTEGER PRIMARY KEY AUTOINCREMENT,
   name              TEXT,
-  image             BLOB
+  image             BLOB,
+  description       TEXT,
+  create_date       TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%S','now', 'localtime')),
+  lecturer_id       INTEGER,
+  discipline_id         INTEGER,
+  department_id     INTEGER,
+  course            INTEGER,
+  active            INTEGER,
+  expiration_date   TEXT,
+  FOREIGN KEY (lecturer_id)    REFERENCES LECTURER(id),
+  FOREIGN KEY (discipline_id)      REFERENCES [DISCIPLINE](id),
+  FOREIGN KEY (department_id)  REFERENCES DEPARTMENT(id)
 );
 
 -- GROUP_TYPE
@@ -67,8 +78,8 @@ CREATE TABLE [GROUP] (
 -- STUDENT
 CREATE TABLE STUDENT (
   id                INTEGER PRIMARY KEY AUTOINCREMENT,
-  uid               TEXT,
-  parsed_uid        TEXT,
+  card_uid               TEXT,
+  card_id       TEXT,
   first_name        TEXT,
   last_name         TEXT,
   patronymic        TEXT,
@@ -77,18 +88,14 @@ CREATE TABLE STUDENT (
   image             BLOB
 );
 
--- COURSE
-CREATE TABLE COURSE (
+-- DISCIPLINE
+CREATE TABLE DISCIPLINE (
   id                INTEGER PRIMARY KEY AUTOINCREMENT,
   name              TEXT,
   description       TEXT,
   create_date       TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%S','now', 'localtime')),
-  lecturer_id       INTEGER,
-  stream_id         INTEGER,
   active            INTEGER,
-  expiration_date   TEXT,
-  FOREIGN KEY (lecturer_id)    REFERENCES LECTURER(id),
-  FOREIGN KEY (stream_id)      REFERENCES [GROUP](id)
+  expiration_date   TEXT
 );
 
 -- LESSON_TYPE
@@ -102,11 +109,11 @@ CREATE TABLE LESSON (
   id                INTEGER PRIMARY KEY AUTOINCREMENT,
   name              TEXT,
   description       TEXT,
-  course_id         INTEGER,
+  stream_id         INTEGER,
   create_date       TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%S','now', 'localtime')),
   type_id           INTEGER,
   group_id          INTEGER,
-  FOREIGN KEY (course_id)      REFERENCES COURSE(id),
+  FOREIGN KEY (stream_id)      REFERENCES STREAM(id),
   FOREIGN KEY (type_id)        REFERENCES LESSON_TYPE(id),
   FOREIGN KEY (group_id)       REFERENCES [GROUP](id)
 );
@@ -119,7 +126,7 @@ CREATE TABLE CLASS (
   lesson_id       INTEGER,
   session_start     TEXT,
   session_end       TEXT,
-  FOREIGN KEY (schedule_id)    REFERENCES SCHEDULE(id)
+  FOREIGN KEY (schedule_id)    REFERENCES SCHEDULE(id),
   FOREIGN KEY (lesson_id)    REFERENCES LESSON(id)
 );
 

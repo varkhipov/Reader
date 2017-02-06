@@ -22,9 +22,9 @@ public class LessonDAO {
 		lesson.setDescription(resultSet.getString("description"));
 		lesson.setCreateDate(LocalDateTime.parse(resultSet.getString("create_date")));
 
-		lesson.setCourse(
-				CourseDAO.getCourseById(connection,
-						resultSet.getInt("course_id"))
+		lesson.setStream(
+				StreamDAO.getStreamById(connection,
+						resultSet.getInt("stream_id"))
 		);
 
 		lesson.setGroup(
@@ -50,7 +50,7 @@ public class LessonDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT id, name, description, course_id, create_date, type_id, group_id FROM LESSON;"
+					"SELECT id, name, description, stream_id, create_date, type_id, group_id FROM LESSON;"
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -71,7 +71,7 @@ public class LessonDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT id, name, description, course_id, create_date, type_id, group_id FROM LESSON WHERE id = ?;",
+					"SELECT id, name, description, stream_id, create_date, type_id, group_id FROM LESSON WHERE id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -93,15 +93,15 @@ public class LessonDAO {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
 					"INSERT INTO LESSON (" +
-							"name, description, course_id, type_id, group_id" +
+							"name, description, stream_id, type_id, group_id" +
 							") VALUES (" +
 							"?, ?, " +
 							"?, ?, ?" +
 							");",
 					lesson.getName(),
 					lesson.getDescription(),
-					lesson.getCourse() != null && lesson.getCourse().getId() != 0
-							? lesson.getCourse().getId()
+					lesson.getStream() != null && lesson.getStream().getId() != 0
+							? lesson.getStream().getId()
 							: null,
 					lesson.getLessonType() != null && lesson.getLessonType().getId() != 0
 							? lesson.getLessonType().getId()
@@ -125,13 +125,13 @@ public class LessonDAO {
 					connection,
 					"UPDATE LESSON " +
 							"SET " +
-							"name = ?, description = ?, course_id = ?, " +
+							"name = ?, description = ?, stream_id = ?, " +
 							"type_id = ?, group_id = ? " +
 							"WHERE id = ?;",
 					lesson.getName(),
 					lesson.getDescription(),
-					lesson.getCourse() != null && lesson.getCourse().getId() != 0
-							? lesson.getCourse().getId()
+					lesson.getStream() != null && lesson.getStream().getId() != 0
+							? lesson.getStream().getId()
 							: null,
 					lesson.getLessonType() != null && lesson.getLessonType().getId() != 0
 							? lesson.getLessonType().getId()

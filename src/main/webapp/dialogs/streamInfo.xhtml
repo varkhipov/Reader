@@ -20,12 +20,29 @@
 
                 <p:panelGrid columns="2" rendered="#{not empty streamBean.selectedStream}"
                              columnClasses="label,value">
-                    <f:facet name="header">
-                        <p:graphicImage name="images/noavatar.png" width="150" height="150"/>
-                    </f:facet>
+
+                    <p:outputLabel for="discipline" value="#{msg['stream.info.discipline']}"/>
+                    <p:selectOneMenu id="discipline" value="#{streamBean.selectedStream.discipline}"  converter="entityConverter" required="true">
+                        <f:selectItem itemValue="#{null}" itemLabel="#{msg['select.discipline']}"/>
+                        <f:selectItems value="#{sessionBean.disciplines}" var="discipline" itemLabel="#{discipline.name}" itemValue="#{discipline}"/>
+                        <p:ajax update=":streamInfoForm:streamDetail"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="department" value="#{msg['stream.info.department']}"/>
+                    <p:selectOneMenu id="department" value="#{streamBean.selectedStream.department}"  converter="entityConverter" required="true">
+                        <f:selectItem itemValue="#{null}" itemLabel="#{msg['select.department']}"/>
+                        <f:selectItems value="#{sessionBean.departments}" var="department" itemLabel="#{department.name}" itemValue="#{department}"/>
+                        <p:ajax update=":streamInfoForm:streamDetail"/>
+                    </p:selectOneMenu>
+
 
                     <p:outputLabel for="name" value="#{msg['stream.info.name']}"/>
                     <p:inputText id="name" value="#{streamBean.selectedStream.name}" required="true">
+                        <p:ajax update=":streamInfoForm:streamDetail"/>
+                    </p:inputText>
+
+                    <p:outputLabel for="course" value="#{msg['stream.info.course']}"/>
+                    <p:inputText id="course" value="#{streamBean.selectedStream.course}">
                         <p:ajax update=":streamInfoForm:streamDetail"/>
                     </p:inputText>
 

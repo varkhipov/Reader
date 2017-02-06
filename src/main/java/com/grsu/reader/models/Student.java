@@ -15,8 +15,8 @@ public class Student extends Person {
 
 	public Student(Student student) {
 		setId(student.getId());
-		setUid(student.getUid());
-		setParsedUid(student.getParsedUid());
+		setCardUid(student.getCardUid());
+		setCardId(student.getCardId());
 		setFirstName(student.getFirstName());
 		setLastName(student.getLastName());
 		setPatronymic(student.getPatronymic());
@@ -54,8 +54,8 @@ public class Student extends Person {
 	public String toString() {
 		return "Student{" +
 				"id=" + getId() +
-				", uid='" + getUid() + '\'' +
-				", parsedUid='" + getParsedUid() + '\'' +
+				", uid='" + getCardUid() + '\'' +
+				", parsedUid='" + getCardId() + '\'' +
 				", name='" + getFirstName() + '\'' +
 				", surname='" + getLastName() + '\'' +
 				", patronymic='" + getPatronymic() + '\'' +
@@ -73,8 +73,8 @@ public class Student extends Person {
 
 		if (obj.getClass() != null && obj instanceof Student) {
 			Student student = (Student) obj;
-			return StringUtils.equals(getUid(), student.getUid())
-					&& getParsedUid() == student.getParsedUid()
+			return StringUtils.equals(getCardUid(), student.getCardUid())
+					&& getCardId() == student.getCardId()
 					&& StringUtils.equals(getFirstName(), student.getFirstName())
 					&& StringUtils.equals(getLastName(), student.getLastName())
 					&& StringUtils.equals(getPatronymic(), student.getPatronymic())

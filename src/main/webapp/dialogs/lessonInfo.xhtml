@@ -15,10 +15,10 @@
                 <p:panelGrid columns="2" rendered="#{not empty lessonBean.selectedLesson}"
                              columnClasses="label,value">
 
-                    <p:outputLabel for="course" value="#{msg['lesson.course']}"/>
-                    <p:selectOneMenu id="course" value="#{lessonBean.selectedCourseId}">
-                        <f:selectItem itemValue="#{0}" itemLabel="#{msg['select.course']}"/>
-                        <f:selectItems value="#{lessonBean.coursesItems}"/>
+                    <p:outputLabel for="stream" value="#{msg['lesson.stream']}"/>
+                    <p:selectOneMenu id="stream" value="#{lessonBean.selectedLesson.stream}"  converter="entityConverter" required="true">
+                        <f:selectItem itemValue="#{null}" itemLabel="#{msg['select.stream']}"/>
+                        <f:selectItems value="#{sessionBean.streams}" var="stream" itemLabel="#{stream.name}" itemValue="#{stream}"/>
                         <p:ajax update=":lessonInfoForm:lessonDetail"/>
                     </p:selectOneMenu>
 

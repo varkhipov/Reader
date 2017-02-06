@@ -12,11 +12,11 @@
             <p:menubar id="menu" autoDisplay="#{false}" styleClass="alignMenuItems">
                 <p:submenu label="#{msg['menu.file.new']}" icon="fa fa-fw fa-plus"
                            rendered="#{sessionBean.connected}">
-                    <p:menuitem value="#{msg['menu.file.new.course']}" icon="fa fa-fw fa-paperclip"
-                                update=":courseInfoForm" oncomplete="PF('courseDialog').show()">
-                        <f:setPropertyActionListener value="#{newInstanceOfCourse}"
-                                                     target="#{courseBean.selectedCourse}"/>
-                        <p:resetInput target=":courseInfoForm:courseDetail"/>
+                    <p:menuitem value="#{msg['menu.file.new.discipline']}" icon="fa fa-fw fa-paperclip"
+                                update=":disciplineInfoForm" oncomplete="PF('disciplineDialog').show()">
+                        <f:setPropertyActionListener value="#{newInstanceOfDiscipline}"
+                                                     target="#{disciplineBean.selectedDiscipline}"/>
+                        <p:resetInput target=":disciplineInfoForm:disciplineDetail"/>
                     </p:menuitem>
 
                     <p:menuitem value="#{msg['menu.file.new.department']}" icon="fa fa-fw fa-list-alt"
@@ -65,8 +65,8 @@
 
                 <p:submenu label="#{msg['menu.show']}" icon="fa fa-fw fa-bars"
                            rendered="#{sessionBean.connected}">
-                    <p:menuitem value="#{msg['menu.show.courses']}" icon="fa fa-fw fa-paperclip"
-                                actionListener="#{menuBean.changeView('courses')}" update="@([id$=views])"/>
+                    <p:menuitem value="#{msg['menu.show.disciplines']}" icon="fa fa-fw fa-paperclip"
+                                actionListener="#{menuBean.changeView('disciplines')}" update="@([id$=views])"/>
                     <p:menuitem value="#{msg['menu.show.departments']}" icon="fa fa-fw fa-list-alt"
                                 actionListener="#{menuBean.changeView('departments')}" update="@([id$=views])"/>
                     <p:menuitem value="#{msg['menu.show.streams']}" icon="fa fa-fw fa-code-fork"

@@ -2,27 +2,24 @@ package com.grsu.reader.models;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.model.SelectItem;
-import java.util.List;
 
-@ManagedBean(name = "newInstanceOfCourse")
-public class Course extends Entity {
+@ManagedBean(name = "newInstanceOfDiscipline")
+public class Discipline extends Entity {
 	private int id;
 	private String name;
 	private String description;
-	private Stream stream;
 
-	public Course() {
+	public Discipline() {
 	}
 
-	public Course(int id, String name, String description, Stream stream) {
+	public Discipline(int id, String name, String description) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
-		this.stream = stream;
 	}
 
-	public Course(Course course) {
-		this(course.getId(), course.getName(), course.getDescription(), course.getStream());
+	public Discipline(Discipline discipline) {
+		this(discipline.getId(), discipline.getName(), discipline.getDescription());
 	}
 
 	@Override
@@ -55,21 +52,12 @@ public class Course extends Entity {
 		this.description = description;
 	}
 
-	public Stream getStream() {
-		return stream;
-	}
-
-	public void setStream(Stream stream) {
-		this.stream = stream;
-	}
-
 	@Override
 	public String toString() {
-		return "Course{" +
+		return "Discipline{" +
 				"id=" + id +
 				", name='" + name + '\'' +
 				", description='" + description + '\'' +
-				", stream=" + stream +
 				'}';
 	}
 }

@@ -25,13 +25,13 @@
                         <p:graphicImage name="images/noavatar.png" width="150" height="150"/>
                     </f:facet>
 
-                    <p:outputLabel for="uid" value="#{msg['student.info.uid']}"/>
-                    <p:inputText id="uid" value="#{studentBean.selectedStudent.uid}" required="true">
+                    <p:outputLabel for="cardUid" value="#{msg['student.info.cardUid']}"/>
+                    <p:inputText id="cardUid" value="#{studentBean.selectedStudent.cardUid}" required="true">
                         <p:ajax update=":studentInfoForm:studentDetail"/>
                     </p:inputText>
 
-                    <p:outputLabel for="cardUid" value="#{msg['student.info.cardUid']}"/>
-                    <p:inputText id="cardUid" value="#{studentBean.selectedStudent.parsedUid}">
+                    <p:outputLabel for="cardId" value="#{msg['student.info.cardId']}"/>
+                    <p:inputText id="cardId" value="#{studentBean.selectedStudent.cardId}">
                         <p:ajax update=":studentInfoForm:studentDetail"/>
                     </p:inputText>
 

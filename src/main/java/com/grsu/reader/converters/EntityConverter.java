@@ -2,15 +2,13 @@ package com.grsu.reader.converters;
 
 import com.grsu.reader.models.Entity;
 
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
-import java.util.WeakHashMap;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.WeakHashMap;
 
 
 /**
@@ -29,8 +27,8 @@ public class EntityConverter implements Converter {
 			}
 			if (!entities.containsKey(entity)) {
 				Entity e = (Entity) entity;
-				entities.put(e, e.getId());
-				return String.valueOf(e.getId());
+				entities.put(e, e.hashCode());
+				return String.valueOf(e.hashCode());
 			} else {
 				return entities.get(entity).toString();
 			}

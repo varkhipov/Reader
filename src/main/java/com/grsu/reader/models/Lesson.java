@@ -1,13 +1,11 @@
 package com.grsu.reader.models;
 
 import com.grsu.reader.utils.DateUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.model.SelectItem;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @ManagedBean(name = "newInstanceOfLesson")
 public class Lesson extends Entity {
@@ -16,26 +14,26 @@ public class Lesson extends Entity {
 	private String description;
 	private LocalDateTime createDate;
 	private LessonType lessonType;
-	private Course course;
+	private Stream stream;
 	private Group group;
 	private List<Class> classes;
 
 	public Lesson() {
 	}
 
-	public Lesson(int id, String name, String description, LocalDateTime createDate, LessonType lessonType, Course course, Group group, List<Class> classes) {
+	public Lesson(int id, String name, String description, LocalDateTime createDate, LessonType lessonType, Stream stream, Group group, List<Class> classes) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.createDate = createDate;
 		this.lessonType = lessonType;
-		this.course = course;
+		this.stream = stream;
 		this.group = group;
 		this.classes = classes;
 	}
 
 	public Lesson(Lesson lesson) {
-		this(lesson.getId(), lesson.getName(), lesson.getDescription(), lesson.getCreateDate(), lesson.getLessonType(), lesson.getCourse(),
+		this(lesson.getId(), lesson.getName(), lesson.getDescription(), lesson.getCreateDate(), lesson.getLessonType(), lesson.getStream(),
 				lesson.getGroup(), lesson.getClasses());
 	}
 
@@ -89,12 +87,12 @@ public class Lesson extends Entity {
 		this.lessonType = lessonType;
 	}
 
-	public Course getCourse() {
-		return course;
+	public Stream getStream() {
+		return stream;
 	}
 
-	public void setCourse(Course course) {
-		this.course = course;
+	public void setStream(Stream stream) {
+		this.stream = stream;
 	}
 
 	public Group getGroup() {
@@ -121,7 +119,7 @@ public class Lesson extends Entity {
 				", description='" + description + '\'' +
 				", createDate=" + createDate +
 				", lessonType=" + lessonType +
-				", course=" + course +
+				", stream=" + stream +
 				", group=" + group +
 				", classes=" + classes +
 				'}';

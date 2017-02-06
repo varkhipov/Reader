@@ -27,8 +27,8 @@ public class SessionBean implements Serializable {
 
 	private List<Schedule> schedules;
 	private List<SelectItem> schedulesItems;
-	private List<Course> courses;
-	private List<SelectItem> coursesItems;
+	private List<Discipline> disciplines;
+	private List<SelectItem> disciplinesItems;
 	private List<Department> departments;
 	private List<SelectItem> departmentsItems;
 	private List<Stream> streams;
@@ -74,7 +74,7 @@ public class SessionBean implements Serializable {
 	public void initData() {
 		CSVUtils.updateGroupsFromCSV(databaseBean.getConnection());
 		updateSchedules();
-		updateCourses();
+		updateDisciplines();
 		updateDepartments();
 		updateStreams();
 		updateGroups();
@@ -88,9 +88,9 @@ public class SessionBean implements Serializable {
 		schedulesItems = generateSelectItems(schedules);
 	}
 
-	public void updateCourses() {
-		courses = CourseDAO.getCourses(databaseBean.getConnection());
-		coursesItems = generateSelectItems(courses);
+	public void updateDisciplines() {
+		disciplines = DisciplineDAO.getDisciplines(databaseBean.getConnection());
+		disciplinesItems = generateSelectItems(disciplines);
 	}
 
 	public void updateDepartments() {
@@ -159,20 +159,20 @@ public class SessionBean implements Serializable {
 		this.schedulesItems = schedulesItems;
 	}
 
-	public List<Course> getCourses() {
-		return courses;
+	public List<Discipline> getDisciplines() {
+		return disciplines;
 	}
 
-	public void setCourses(List<Course> courses) {
-		this.courses = courses;
+	public void setDisciplines(List<Discipline> disciplines) {
+		this.disciplines = disciplines;
 	}
 
-	public List<SelectItem> getCoursesItems() {
-		return coursesItems;
+	public List<SelectItem> getDisciplinesItems() {
+		return disciplinesItems;
 	}
 
-	public void setCoursesItems(List<SelectItem> coursesItems) {
-		this.coursesItems = coursesItems;
+	public void setDisciplinesItems(List<SelectItem> disciplinesItems) {
+		this.disciplinesItems = disciplinesItems;
 	}
 
 	public List<Department> getDepartments() {

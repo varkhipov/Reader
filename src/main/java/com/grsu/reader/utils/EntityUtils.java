@@ -1,7 +1,6 @@
 package com.grsu.reader.utils;
 
 import com.grsu.reader.models.Entity;
-import com.grsu.reader.models.Lesson;
 import com.grsu.reader.models.Person;
 
 import javax.faces.model.SelectItem;
@@ -61,7 +60,7 @@ public class EntityUtils {
 	public static boolean personExists(List<? extends Person> persons, String uid) {
 		if (uid == null || uid.isEmpty()) return false;
 		for (Person person : persons) {
-			if (uid.equals(person.getUid())) {
+			if (uid.equals(person.getCardUid())) {
 				return true;
 			}
 		}
@@ -71,7 +70,7 @@ public class EntityUtils {
 	public static <T extends Person> T getPersonByUid(List<T> persons, String uid) {
 		if (uid == null || uid.isEmpty()) return null;
 		for (Person person : persons) {
-			if (uid.equals(person.getUid())) {
+			if (uid.equals(person.getCardUid())) {
 				return (T) person;
 			}
 		}

@@ -18,8 +18,8 @@ public class StudentDAO {
 	private static Student mapFromResultSet(Connection connection, ResultSet resultSet) throws SQLException {
 		Student student = new Student();
 		student.setId(resultSet.getInt("id"));
-		student.setUid(resultSet.getString("uid"));
-		student.setParsedUid(resultSet.getInt("parsed_uid"));
+		student.setCardUid(resultSet.getString("card_uid"));
+		student.setCardId(resultSet.getInt("card_id"));
 		student.setFirstName(resultSet.getString("first_name"));
 		student.setLastName(resultSet.getString("last_name"));
 		student.setPatronymic(resultSet.getString("patronymic"));
@@ -36,7 +36,7 @@ public class StudentDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT id, uid, parsed_uid, first_name, last_name, patronymic, phone, email FROM STUDENT;"
+					"SELECT id, card_uid, card_id, first_name, last_name, patronymic, phone, email FROM STUDENT;"
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -57,7 +57,7 @@ public class StudentDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT id, uid, parsed_uid, first_name, last_name, patronymic, phone, email FROM STUDENT WHERE id = ?;",
+					"SELECT id, card_uid, card_id, first_name, last_name, patronymic, phone, email FROM STUDENT WHERE id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -79,7 +79,7 @@ public class StudentDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT id, uid, parsed_uid, first_name, last_name, patronymic, phone, email FROM STUDENT WHERE uid = ?;",
+					"SELECT id, card_uid, card_id, first_name, last_name, patronymic, phone, email FROM STUDENT WHERE card_uid = ?;",
 					uid
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -102,7 +102,7 @@ public class StudentDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT id FROM STUDENT WHERE uid = ?;",
+					"SELECT id FROM STUDENT WHERE card_uid = ?;",
 					uid
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -120,7 +120,7 @@ public class StudentDAO {
 	}
 
 	public static int create(Connection connection, Student student) {
-		if (student.getUid() == null || student.getUid().isEmpty()) {
+		if (student.getCardUid() == null || student.getCardUid().isEmpty()) {
 			System.out.println("Warning! Student [ "
 					+ student.getFullName()
 					+ " ] has no UID and will be added to database without it."
@@ -130,14 +130,14 @@ public class StudentDAO {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
 					"INSERT INTO STUDENT (" +
-								"uid, parsed_uid, first_name, last_name, " +
+								"card_uid, card_id, first_name, last_name, " +
 								"patronymic, phone, email" +
 							") VALUES (" +
 								"?, ?, ?, ?, " +
 								"?, ?, ?" +
 							");",
-					student.getUid(),
-					student.getParsedUid(),
+					student.getCardUid(),
+					student.getCardId(),
 					student.getFirstName(),
 					student.getLastName(),
 					student.getPatronymic(),
@@ -169,11 +169,11 @@ public class StudentDAO {
 					connection,
 					"UPDATE STUDENT " +
 							"SET " +
-								"uid = ?, parsed_uid = ?, first_name = ?, last_name = ?, " +
+								"card_uid = ?, card_id = ?, first_name = ?, last_name = ?, " +
 								"patronymic = ?, phone = ?, email = ? " +
 							"WHERE id = ?;",
-					student.getUid(),
-					student.getParsedUid(),
+					student.getCardUid(),
+					student.getCardId(),
 					student.getFirstName(),
 					student.getLastName(),
 					student.getPatronymic(),

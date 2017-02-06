@@ -15,8 +15,8 @@
             <p:column headerText="#{msg['lesson.createDate']}">
                 <h:outputText value="#{lesson.formattedCreateDate}"/>
             </p:column>
-            <p:column headerText="#{msg['lesson.course']}">
-                <h:outputText value="#{lesson.course.name}"/>
+            <p:column headerText="#{msg['lesson.stream']}">
+                <h:outputText value="#{lesson.stream.name}"/>
             </p:column>
             <p:column styleClass="groupOptions">
                 <p:commandButton actionListener="#{menuBean.changeView('lesson')}" update="@([id$=views])"

@@ -11,20 +11,26 @@ import static com.grsu.reader.constants.Constants.GROUPS_DELIMITER;
 public class Stream extends Entity {
 	private int id;
 	private String name;
+	private String description;
+	private Discipline discipline;
+	private Department department;
+	private Integer course;
 	private List<Group> groups;
 
 	public Stream() {}
 
-	public Stream(int id, String name, List<Group> groups) {
+	public Stream(int id, String name, String description, Discipline discipline, Department department, Integer course, List<Group> groups) {
 		this.id = id;
 		this.name = name;
+		this.description = description;
+		this.discipline = discipline;
+		this.department = department;
+		this.course = course;
 		this.groups = groups;
 	}
 
 	public Stream(Stream stream) {
-		this.id = stream.getId();
-		this.name = stream.getName();
-		this.groups = stream.getGroups();
+		this(stream.getId(), stream.getName(), stream.getDescription(), stream.getDiscipline(), stream.getDepartment(), stream.getCourse(), stream.getGroups());
 	}
 
 	@Override
@@ -69,6 +75,38 @@ public class Stream extends Entity {
 
 	public void setGroups(List<Group> groups) {
 		this.groups = groups;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Discipline getDiscipline() {
+		return discipline;
+	}
+
+	public void setDiscipline(Discipline discipline) {
+		this.discipline = discipline;
+	}
+
+	public Department getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
+
+	public Integer getCourse() {
+		return course;
+	}
+
+	public void setCourse(Integer course) {
+		this.course = course;
 	}
 
 	@Override

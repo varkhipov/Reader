@@ -7,8 +7,8 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class Person extends Entity {
 	private int id;
-	private String uid;
-	private int parsedUid;
+	private String cardUid;
+	private int cardId;
 	private String firstName;
 	private String lastName;
 	private String patronymic;
@@ -18,15 +18,15 @@ public class Person extends Entity {
 
 	// TODO: give more clear names
 	public void setIntToHexUid(int intUid) {
-		uid = Integer.toHexString(intUid).toUpperCase();
+		cardUid = Integer.toHexString(intUid).toUpperCase();
 	}
 
 	//http://stackoverflow.com/a/7038867/7464024
 	public void setHexToParsedUid(String hexUid) {
 		try {
-			parsedUid = (int) Long.parseLong(hexUid, 16);
+			cardId = (int) Long.parseLong(hexUid, 16);
 		} catch (NumberFormatException ex) {
-			this.parsedUid = 0;
+			this.cardId = 0;
 		}
 	}
 
@@ -47,27 +47,27 @@ public class Person extends Entity {
 		this.id = id;
 	}
 
-	public String getUid() {
-		return uid;
+	public String getCardUid() {
+		return cardUid;
 	}
 
-	public void setUid(String uid) {
-		if (isEmpty(uid)) {
-			this.uid = null;
+	public void setCardUid(String cardUid) {
+		if (isEmpty(cardUid)) {
+			this.cardUid = null;
 		} else {
-			this.uid = uid.toUpperCase();
-			setHexToParsedUid(this.uid);
+			this.cardUid = cardUid.toUpperCase();
+			setHexToParsedUid(this.cardUid);
 		}
 	}
 
-	public int getParsedUid() {
-		return parsedUid;
+	public int getCardId() {
+		return cardId;
 	}
 
-	public void setParsedUid(int parsedUid) {
-		this.parsedUid = parsedUid;
-		if (this.parsedUid != 0) {
-			setIntToHexUid(this.parsedUid);
+	public void setCardId(int cardId) {
+		this.cardId = cardId;
+		if (this.cardId != 0) {
+			setIntToHexUid(this.cardId);
 		}
 	}
 
@@ -123,13 +123,14 @@ public class Person extends Entity {
 	public String toString() {
 		return "Person{" +
 				"id=" + id +
-				", uid='" + uid + '\'' +
+				", cardUid='" + cardUid + '\'' +
+				", cardId=" + cardId +
 				", firstName='" + firstName + '\'' +
 				", lastName='" + lastName + '\'' +
 				", patronymic='" + patronymic + '\'' +
 				", phone='" + phone + '\'' +
 				", email='" + email + '\'' +
-//				", image=" + image +
+				", image=" + image +
 				'}';
 	}
 }

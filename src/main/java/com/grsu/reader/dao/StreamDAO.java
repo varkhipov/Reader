@@ -19,6 +19,21 @@ public class StreamDAO {
 		Stream stream = new Stream();
 		stream.setId(resultSet.getInt("id"));
 		stream.setName(resultSet.getString("name"));
+		stream.setDescription(resultSet.getString("description"));
+		stream.setCourse(resultSet.getInt("course"));
+
+		stream.setDiscipline(
+				DisciplineDAO.getDisciplineById(
+						connection,
+						resultSet.getInt("discipline_id"))
+		);
+
+		stream.setDepartment(
+				DepartmentDAO.getDepartmentById(
+						connection,
+						resultSet.getInt("department_id"))
+		);
+
 		stream.setGroups(StreamGroupDAO.getGroupsByStreamId(connection, stream.getId()));
 		return stream;
 	}
@@ -28,7 +43,7 @@ public class StreamDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT id, name FROM STREAM;"
+					"SELECT id, name, description, course, discipline_id, department_id FROM STREAM;"
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -49,7 +64,7 @@ public class StreamDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"SELECT id, name FROM STREAM WHERE id = ?;",
+					"SELECT id, name, description, course, discipline_id, department_id FROM STREAM WHERE id = ?;",
 					id
 			);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -70,8 +85,18 @@ public class StreamDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"INSERT INTO STREAM (name) VALUES (?);",
-					stream.getName()
+					"INSERT INTO STREAM (name, description, course, discipline_id, department_id) " +
+							"VALUES (?, ?, ?, ?, ?);",
+					stream.getName(),
+					stream.getDescription(),
+					stream.getCourse(),
+					stream.getDiscipline() != null && stream.getDiscipline().getId() != 0
+							? stream.getDiscipline().getId()
+							: null,
+					stream.getDepartment() != null && stream.getDepartment().getId() != 0
+							? stream.getDepartment().getId()
+							: null
+
 			);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
@@ -96,8 +121,17 @@ public class StreamDAO {
 		try {
 			PreparedStatement preparedStatement = buildPreparedStatement(
 					connection,
-					"UPDATE STREAM SET name = ? WHERE id = ?;",
+					"UPDATE STREAM SET name = ?, description = ?, course = ?, " +
+							"discipline_id = ?, department_id = ? WHERE id = ?;",
 					stream.getName(),
+					stream.getDescription(),
+					stream.getCourse(),
+					stream.getDiscipline() != null && stream.getDiscipline().getId() != 0
+							? stream.getDiscipline().getId()
+							: null,
+					stream.getDepartment() != null && stream.getDepartment().getId() != 0
+							? stream.getDepartment().getId()
+							: null,
 					stream.getId()
 			);
 			preparedStatement.executeUpdate();

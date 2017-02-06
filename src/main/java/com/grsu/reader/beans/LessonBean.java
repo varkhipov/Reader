@@ -70,7 +70,7 @@ public class LessonBean implements Serializable {
 	public void createLesson() {
 		if (selectedLesson != null) {
 			selectedLesson.setName(String.format("%s [%s]",
-					selectedLesson.getCourse().getName(),
+					selectedLesson.getStream().getName(),
 					DateUtils.formatDate(LocalDateTime.now())
 					)
 			);
@@ -101,7 +101,7 @@ public class LessonBean implements Serializable {
 
 			List<Group> groups = StreamGroupDAO.getGroupsByStreamId(
 					databaseBean.getConnection(),
-					selectedLesson.getCourse().getStream().getId()
+					selectedLesson.getStream().getId()
 			);
 
 			List<Student> students = new ArrayList<>();
@@ -127,7 +127,7 @@ public class LessonBean implements Serializable {
 	}
 
 	private void initPresentStudents() {
-		if (selectedLesson == null || selectedLesson.getCourse() == null) {
+		if (selectedLesson == null || selectedLesson.getStream() == null) {
 			presentStudents = null;
 		} else {
 			List<Student> students = new ArrayList<>();
@@ -143,7 +143,7 @@ public class LessonBean implements Serializable {
 	}
 
 	private void initAbsentStudents() {
-		if (selectedLesson == null || selectedLesson.getCourse() == null) {
+		if (selectedLesson == null || selectedLesson.getStream() == null) {
 			absentStudents = null;
 		} else {
 			List<Student> students = new ArrayList<>();
@@ -170,12 +170,12 @@ public class LessonBean implements Serializable {
 	}
 
 	private void initLessonStudents() {
-		if (selectedLesson.getCourse() != null) {
+		if (selectedLesson.getStream() != null) {
 			if (selectedLesson.getGroup() != null) {
 				lessonStudents = selectedLesson.getGroup().getStudents();
 			} else {
 				lessonStudents = new ArrayList<>();
-				for (Group group : selectedLesson.getCourse().getStream().getGroups()) {
+				for (Group group : selectedLesson.getStream().getGroups()) {
 					lessonStudents.addAll(StudentGroupDAO.getStudentsByGroupId(databaseBean.getConnection(), group.getId()));
 				}
 			}
@@ -199,7 +199,7 @@ public class LessonBean implements Serializable {
 					Constants.REGISTRATION_TYPE_AUTOMATIC
 			);
 		} catch (SQLException e) {
-			System.out.println("Student not added. Uid[ " + student.getUid() + " ]. Reason: SQLException:\n" + e);
+			System.out.println("Student not added. Uid[ " + student.getCardUid() + " ]. Reason: SQLException:\n" + e);
 			return false;
 		}
 
@@ -230,7 +230,7 @@ public class LessonBean implements Serializable {
 					Constants.REGISTRATION_TYPE_MANUAL
 			);
 		} catch (SQLException e) {
-			System.out.println("Student not added. Uid[ " + student.getUid() + " ]. Reason: SQLException:\n" + e);
+			System.out.println("Student not added. Uid[ " + student.getCardUid() + " ]. Reason: SQLException:\n" + e);
 			return false;
 		}
 
@@ -261,7 +261,7 @@ public class LessonBean implements Serializable {
 			}
 
 		} catch (SQLException e) {
-			System.out.println("Student not removed. Uid[ " + student.getUid() + " ]. Reason: SQLException:\n" + e);
+			System.out.println("Student not removed. Uid[ " + student.getCardUid() + " ]. Reason: SQLException:\n" + e);
 			return false;
 		}
 
@@ -306,19 +306,19 @@ public class LessonBean implements Serializable {
 		return sessionBean.getSchedulesItems();
 	}
 
-	public List<SelectItem> getCoursesItems() {
-		return sessionBean.getCoursesItems();
+	public List<SelectItem> getDisciplinesItems() {
+		return sessionBean.getDisciplinesItems();
 	}
 
-	public int getSelectedCourseId() {
-		if (selectedLesson.getCourse() == null) {
+	public int getSelectedStreamId() {
+		if (selectedLesson.getStream() == null) {
 			return 0;
 		}
-		return selectedLesson.getCourse().getId();
+		return selectedLesson.getStream().getId();
 	}
 
-	public void setSelectedCourseId(int selectedCourseId) {
-		selectedLesson.setCourse(getEntityById(sessionBean.getCourses(), selectedCourseId));
+	public void setSelectedStreamId(int selectedStreamId) {
+		selectedLesson.setStream(getEntityById(sessionBean.getStreams(), selectedStreamId));
 	}
 
 	public int getSelectedScheduleId() {

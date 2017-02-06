@@ -69,14 +69,14 @@ public class CSVUtils {
 
 	private static void processStudents(Connection connection, Group group) {
 		for (Student student : group.getStudents()) {
-			Student studentFromDB = StudentDAO.getStudentByUID(connection, student.getUid());
+			Student studentFromDB = StudentDAO.getStudentByUID(connection, student.getCardUid());
 			if (studentFromDB == null) {
 				student.setId(StudentDAO.create(connection, student));
 			} else {
 				studentFromDB.setLastName(student.getLastName());
 				studentFromDB.setFirstName(student.getFirstName());
 				studentFromDB.setPatronymic(student.getPatronymic());
-				studentFromDB.setParsedUid(student.getParsedUid());
+				studentFromDB.setCardId(student.getCardId());
 				student = studentFromDB;
 				StudentDAO.update(connection, student);
 			}
@@ -178,7 +178,7 @@ public class CSVUtils {
 		if (parsedUid == null || parsedUid.isEmpty()) {
 			System.out.println("No card ID for [ " + student.getFullName() + " ]. Need to add UID manually.");
 		} else {
-			student.setParsedUid(Integer.parseInt(record[3]));
+			student.setCardId(Integer.parseInt(record[3]));
 			student.setIntToHexUid(Integer.parseInt(record[3]));
 		}
 		return student;
