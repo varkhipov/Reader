@@ -72,10 +72,10 @@
             <p:panel id="presentStudents"
                      header="#{msg['lesson.students.present']} - #{lessonBean.presentStudents.size()}"
                      toggleable="true" styleClass="noBorder lessonStudents">
-                <p:dataTable var="pStudent" value="#{lessonBean.presentStudents}"
+                <p:dataTable var="pStudent" widgetVar="pStudentsTable" value="#{lessonBean.presentStudents}"
                              sortBy="#{pStudent.fullName}" filteredValue="#{lessonBean.filteredPresentStudents}">
-                    <p:column headerText="#{msg['lesson.student.name']}" sortBy="#{pStudent.fullName}"
-                              filterBy="#{pStudent.fullName}" filterMatchMode="contains">
+
+                    <p:column sortBy="#{pStudent.fullName}" filterBy="#{pStudent.fullName}" filterMatchMode="contains">
                         <h:outputText value="#{pStudent.fullName}"/>
                     </p:column>
                     <p:column styleClass="groupOptions">
@@ -89,10 +89,10 @@
 
             <p:panel id="absentStudents" header="#{msg['lesson.students.absent']} - #{lessonBean.absentStudents.size()}"
                      toggleable="true" styleClass="noBorder lessonStudents">
-                <p:dataTable var="aStudent" value="#{lessonBean.absentStudents}"
+                <p:dataTable var="aStudent" widgetVar="aStudentsTable" value="#{lessonBean.absentStudents}"
                              sortBy="#{aStudent.fullName}" filteredValue="#{lessonBean.filteredAbsentStudents}">
-                    <p:column headerText="#{msg['lesson.student.name']}" sortBy="#{aStudent.fullName}"
-                              filterBy="#{aStudent.fullName}" filterMatchMode="contains">
+
+                    <p:column sortBy="#{aStudent.fullName}" filterBy="#{aStudent.fullName}" filterMatchMode="contains">
                         <h:outputText value="#{aStudent.fullName}"/>
                     </p:column>
                     <p:column styleClass="groupOptions">

@@ -212,9 +212,6 @@ public class LessonBean implements Serializable {
 	public boolean addStudent(Student student) {
 		presentStudents.add(student);
 		absentStudents.remove(student);
-		if (filteredAbsentStudents != null) {
-			filteredAbsentStudents.remove(student);
-		}
 		allStudents.remove(student);
 		if (filteredAllStudents != null) {
 			filteredAllStudents.remove(student);
@@ -234,7 +231,9 @@ public class LessonBean implements Serializable {
 			return false;
 		}
 
-		System.out.println("Student added");
+		FacesUtils.execute("PF('aStudentsTable').clearFilters()");
+		FacesUtils.execute("PF('pStudentsTable').clearFilters()");
+//		System.out.println("Student added");
 		return true;
 	}
 
@@ -256,16 +255,15 @@ public class LessonBean implements Serializable {
 			}
 
 			presentStudents.remove(student);
-			if (filteredPresentStudents != null) {
-				filteredPresentStudents.remove(student);
-			}
 
 		} catch (SQLException e) {
 			System.out.println("Student not removed. Uid[ " + student.getCardUid() + " ]. Reason: SQLException:\n" + e);
 			return false;
 		}
 
-		System.out.println("Student removed");
+		FacesUtils.execute("PF('aStudentsTable').clearFilters()");
+		FacesUtils.execute("PF('pStudentsTable').clearFilters()");
+//		System.out.println("Student removed");
 		return true;
 	}
 
