@@ -13,9 +13,7 @@ INSERT INTO SCHEDULE (begin, end, number) VALUES ('18:15', '19:35', 7);
 INSERT INTO SCHEDULE (begin, end, number) VALUES ('19:50', '21:20', 8);
 
 -- FILL LESSON_TYPE
-INSERT INTO LESSON_TYPE (id, name) VALUES (1, 'LECTURE');
-INSERT INTO LESSON_TYPE (id, name) VALUES (2, 'PRACTICAL');
-INSERT INTO LESSON_TYPE (id, name) VALUES (3, 'LABORATORY');
-INSERT INTO LESSON_TYPE (id, name) VALUES (4, 'EXAM');
-
+INSERT INTO LESSON_TYPE (id, name) VALUES (1, 'Лекция');
+INSERT INTO LESSON_TYPE (id, name) VALUES (2, 'Практическое занятие');
+INSERT INTO LESSON_TYPE (id, name) VALUES (3, 'Лабораторное занятие');
 COMMIT;
