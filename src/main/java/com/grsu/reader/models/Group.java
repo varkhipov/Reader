@@ -80,15 +80,24 @@ public class Group extends Entity {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) return false;
-		if (this == obj) return true;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
 
-		if (obj.getClass() != null && obj instanceof Group) {
-			Group group = (Group) obj;
-			return StringUtils.equals(name, group.getName())
-					&& Objects.equals(department, group.getDepartment());
-		}
-		return false;
+		Group group = (Group) o;
+
+		if (id != group.id) return false;
+		if (name != null ? !name.equals(group.name) : group.name != null) return false;
+		if (department != null ? !department.equals(group.department) : group.department != null) return false;
+		return students != null ? students.equals(group.students) : group.students == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id;
+		result = 31 * result + (name != null ? name.hashCode() : 0);
+		result = 31 * result + (department != null ? department.hashCode() : 0);
+		result = 31 * result + (students != null ? students.hashCode() : 0);
+		return result;
 	}
 }

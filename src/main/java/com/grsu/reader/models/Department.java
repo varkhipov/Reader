@@ -71,14 +71,22 @@ public class Department extends Entity {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) return false;
-		if (this == obj) return true;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
 
-		if (obj.getClass() != null && obj instanceof Department) {
-			Department department = (Department) obj;
-			return StringUtils.equals(name, department.getName());
-		}
-		return false;
+		Department that = (Department) o;
+
+		if (id != that.id) return false;
+		if (name != null ? !name.equals(that.name) : that.name != null) return false;
+		return abbreviation != null ? abbreviation.equals(that.abbreviation) : that.abbreviation == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id;
+		result = 31 * result + (name != null ? name.hashCode() : 0);
+		result = 31 * result + (abbreviation != null ? abbreviation.hashCode() : 0);
+		return result;
 	}
 }

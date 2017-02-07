@@ -114,6 +114,39 @@ public class Stream extends Entity {
 		return "Stream{" +
 				"id=" + id +
 				", name='" + name + '\'' +
+				", description='" + description + '\'' +
+				", discipline=" + discipline +
+				", department=" + department +
+				", course=" + course +
+				", groups=" + groups +
 				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Stream stream = (Stream) o;
+
+		if (id != stream.id) return false;
+		if (name != null ? !name.equals(stream.name) : stream.name != null) return false;
+		if (description != null ? !description.equals(stream.description) : stream.description != null) return false;
+		if (discipline != null ? !discipline.equals(stream.discipline) : stream.discipline != null) return false;
+		if (department != null ? !department.equals(stream.department) : stream.department != null) return false;
+		if (course != null ? !course.equals(stream.course) : stream.course != null) return false;
+		return groups != null ? groups.equals(stream.groups) : stream.groups == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id;
+		result = 31 * result + (name != null ? name.hashCode() : 0);
+		result = 31 * result + (description != null ? description.hashCode() : 0);
+		result = 31 * result + (discipline != null ? discipline.hashCode() : 0);
+		result = 31 * result + (department != null ? department.hashCode() : 0);
+		result = 31 * result + (course != null ? course.hashCode() : 0);
+		result = 31 * result + (groups != null ? groups.hashCode() : 0);
+		return result;
 	}
 }

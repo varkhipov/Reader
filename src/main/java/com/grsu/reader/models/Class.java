@@ -32,7 +32,9 @@ public class Class extends Entity {
 
 	@Override
 	public SelectItem getSelectItem() {
-		return new SelectItem(id, String.format("[%s] %s", schedule.getNumber(), date));
+		return new SelectItem(id, String.format("[%s] %s",
+				schedule != null ? schedule.getNumber() : "",
+				date));
 	}
 
 	public int getId() {
