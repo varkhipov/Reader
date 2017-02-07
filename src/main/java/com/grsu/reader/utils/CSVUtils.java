@@ -181,7 +181,8 @@ public class CSVUtils {
 
 		String parsedUid = record[3];
 		if (parsedUid == null || parsedUid.isEmpty()) {
-			System.out.println("No card ID for [ " + student.getFullName() + " ]. Need to add UID manually.");
+			System.out.println("No card ID for [ " + student.getFullName() + " ]. Need to update UID manually.");
+			student.setCardUid("0");
 		} else {
 			student.setCardId(Integer.parseInt(record[3]));
 		}

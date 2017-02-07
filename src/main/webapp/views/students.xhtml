@@ -5,18 +5,19 @@
                 xmlns:p="http://primefaces.org/ui"
 >
     <h:form id="studentsForm">
-        <p:dataTable var="student" value="#{studentBean.students}"
+        <p:dataTable var="student" widgetVar="studentsTable" value="#{studentBean.students}"
                      sortBy="#{student.fullName}" filteredValue="#{studentBean.filteredStudents}">
             <p:ajax event="filter" update="@this"/>
             <f:facet name="header">
                 #{msg['students']}
             </f:facet>
-            <p:column headerText="#{msg['student.name']}" sortBy="#{student.fullName}"
-                      filterBy="#{student.fullName}" filterMatchMode="contains">
+            <p:column sortBy="#{student.cardUid}" filterBy="#{student.cardUid}" filterMatchMode="startsWith">
+                <h:outputText value="#{student.cardUid}"/>
+            </p:column>
+            <p:column sortBy="#{student.fullName}" filterBy="#{student.fullName}" filterMatchMode="startsWith">
                 <h:outputText value="#{student.fullName}"/>
             </p:column>
-            <p:column headerText="#{msg['student.groups']}" sortBy="#{student.groupNames}"
-                      filterBy="#{student.groupNames}" filterMatchMode="contains">
+            <p:column sortBy="#{student.groupNames}" filterBy="#{student.groupNames}" filterMatchMode="contains">
                 <h:outputText value="#{student.groupNames}" escape="false"/>
             </p:column>
             <p:column styleClass="options">

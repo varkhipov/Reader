@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.grsu.reader.utils.FacesUtils.closeDialog;
+import static com.grsu.reader.utils.FacesUtils.execute;
 import static com.grsu.reader.utils.FacesUtils.update;
 
 @ManagedBean(name = "studentBean")
@@ -102,7 +103,7 @@ public class StudentBean implements Serializable {
 			filteredStudents.clear();
 		}
 		sessionBean.updateStudents();
-		update("views");
+		execute("PF('studentsTable').clearFilters()");
 		exit();
 	}
 

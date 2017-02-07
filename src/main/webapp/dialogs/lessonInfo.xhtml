@@ -27,7 +27,7 @@
                     <p:outputLabel for="schedule" value="#{msg['lesson.schedule']}"/>
                     <p:selectOneMenu id="schedule" value="#{lessonBean.selectedScheduleId}"
                                      required="true">
-                        <f:selectItem itemValue="#{0}" itemLabel="#{msg['select.schedule']}"/>
+                        <f:selectItem itemValue="#{null}" itemLabel="#{msg['select.schedule']}"/>
                         <f:selectItems value="#{lessonBean.schedulesItems}"/>
                         <p:ajax update=":lessonInfoForm:lessonDetail"/>
                     </p:selectOneMenu>
