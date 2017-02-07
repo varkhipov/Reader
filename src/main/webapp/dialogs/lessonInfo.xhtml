@@ -16,14 +16,17 @@
                              columnClasses="label,value">
 
                     <p:outputLabel for="stream" value="#{msg['lesson.stream']}"/>
-                    <p:selectOneMenu id="stream" value="#{lessonBean.selectedLesson.stream}"  converter="entityConverter" required="true">
+                    <p:selectOneMenu id="stream" value="#{lessonBean.selectedLesson.stream}"
+                                     converter="entityConverter" required="true">
                         <f:selectItem itemValue="#{null}" itemLabel="#{msg['select.stream']}"/>
-                        <f:selectItems value="#{sessionBean.streams}" var="stream" itemLabel="#{stream.name}" itemValue="#{stream}"/>
+                        <f:selectItems value="#{sessionBean.streams}" var="stream"
+                                       itemLabel="#{stream.name}" itemValue="#{stream}"/>
                         <p:ajax update=":lessonInfoForm:lessonDetail"/>
                     </p:selectOneMenu>
 
                     <p:outputLabel for="schedule" value="#{msg['lesson.schedule']}"/>
-                    <p:selectOneMenu id="schedule" value="#{lessonBean.selectedScheduleId}">
+                    <p:selectOneMenu id="schedule" value="#{lessonBean.selectedScheduleId}"
+                                     required="true">
                         <f:selectItem itemValue="#{0}" itemLabel="#{msg['select.schedule']}"/>
                         <f:selectItems value="#{lessonBean.schedulesItems}"/>
                         <p:ajax update=":lessonInfoForm:lessonDetail"/>
@@ -33,8 +36,7 @@
 
                 <p:outputPanel rendered="#{lessonBean.infoChanged}">
                     <p:commandButton value="#{msg['btn.save.exit']}" icon="fa fa-fw fa-save"
-                                     actionListener="#{lessonBean.createLesson}"
-                                     update="@([id$=views])"/>
+                                     actionListener="#{lessonBean.createLesson}"/>
                 </p:outputPanel>
             </p:outputPanel>
         </p:dialog>
