@@ -4,14 +4,14 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
 >
-    <h:form id="streamInfoForm">
+    <h:form id="streamInfoForm" styleClass="edit-form">
         <p:dialog header="#{msg['stream.info']}" widgetVar="streamDialog" position="center" draggable="false"
                   modal="true" showEffect="fade" hideEffect="fade" resizable="false" fitViewport="true"
                   onHide="PF('streamDialog').content.empty()">
 
             <p:ajax event="close" listener="#{streamBean.exit}"/>
 
-            <p:outputPanel id="streamDetail" mode="native" styleClass="streamDetail">
+            <p:outputPanel id="streamDetail" mode="native" styleClass="streamDetail edit-panel">
                 <p:commandButton value="#{msg['btn.delete']}" icon="fa fa-fw fa-remove"
                                  rendered="#{streamBean.selectedStream != null
                                              and streamBean.selectedStream.id != 0}"
@@ -29,7 +29,7 @@
                     </p:selectOneMenu>
 
                     <p:outputLabel for="department" value="#{msg['stream.info.department']}"/>
-                    <p:selectOneMenu id="department" value="#{streamBean.selectedStream.department}"  converter="entityConverter" required="true">
+                    <p:selectOneMenu id="department" value="#{streamBean.selectedStream.department}"  converter="entityConverter">
                         <f:selectItem itemValue="#{null}" itemLabel="#{msg['select.department']}"/>
                         <f:selectItems value="#{sessionBean.departments}" var="department" itemLabel="#{department.name}" itemValue="#{department}"/>
                         <p:ajax update=":streamInfoForm:streamDetail"/>
@@ -41,10 +41,17 @@
                         <p:ajax update=":streamInfoForm:streamDetail"/>
                     </p:inputText>
 
-                    <p:outputLabel for="course" value="#{msg['stream.info.course']}"/>
-                    <p:inputText id="course" value="#{streamBean.selectedStream.course}">
+                    <p:outputLabel for="course" value="#{msg['label.course']}"/>
+                    <p:selectOneMenu id="course" value="#{streamBean.selectedStream.course}">
+                        <f:selectItem itemValue="#{null}" itemLabel="#{msg['select.course']}"/>
+                        <f:selectItem itemValue="#{1}" itemLabel="1"/>
+                        <f:selectItem itemValue="#{2}" itemLabel="2"/>
+                        <f:selectItem itemValue="#{3}" itemLabel="3"/>
+                        <f:selectItem itemValue="#{4}" itemLabel="4"/>
+                        <f:selectItem itemValue="#{5}" itemLabel="5"/>
+                        <f:selectItem itemValue="#{6}" itemLabel="6"/>
                         <p:ajax update=":streamInfoForm:streamDetail"/>
-                    </p:inputText>
+                    </p:selectOneMenu>
 
                     <p:outputLabel for="groups" value="#{msg['stream.info.groups']}"/>
                     <p:pickList id="groups" value="#{streamBean.selectedGroups}"
@@ -55,6 +62,11 @@
 
                         <p:ajax event="transfer" update=":streamInfoForm:streamDetail"/>
                     </p:pickList>
+
+                    <p:outputLabel for="description" value="#{msg['label.description']}"/>
+                    <p:inputTextarea id="description" value="#{streamBean.selectedStream.description}">
+                        <p:ajax update=":streamInfoForm:streamDetail"/>
+                    </p:inputTextarea>
                 </p:panelGrid>
 
                 <p:outputPanel rendered="#{streamBean.infoChanged}">

@@ -114,3 +114,13 @@ body {
 .red {
     color: #ff0000 !important;
 }
+
+/* Edit form */
+.edit-form .edit-panel .value > div,
+.edit-form .edit-panel .value input,
+.edit-form .edit-panel .value textarea {
+    width: 100%
+}
+.edit-form .edit-panel .value {
+    padding-right: 3rem;
+}

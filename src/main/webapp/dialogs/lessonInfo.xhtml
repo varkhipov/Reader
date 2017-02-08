@@ -4,28 +4,30 @@
 				xmlns:f="http://xmlns.jcp.org/jsf/core"
 				xmlns:p="http://primefaces.org/ui"
 >
-	<h:form id="lessonInfoForm">
+	<h:form id="lessonInfoForm" styleClass="edit-form">
 		<p:dialog header="#{msg['lesson.info']}" widgetVar="lessonDialog" position="center" draggable="false"
 				  modal="true" showEffect="fade" hideEffect="fade" resizable="false" fitViewport="true"
 				  onHide="PF('lessonDialog').content.empty()">
 
 			<p:ajax event="close" listener="#{lessonBean.exit}"/>
 
-			<p:outputPanel id="lessonDetail">
+			<p:outputPanel id="lessonDetail" styleClass="edit-panel">
 				<p:panelGrid columns="2" rendered="#{not empty lessonBean.selectedLesson}"
 							 columnClasses="label,value">
 
 					<p:outputLabel for="department" value="#{msg['lesson.department']}"/>
 					<p:selectOneMenu id="department" value="#{lessonBean.department}" converter="entityConverter">
 						<f:selectItem itemValue="#{null}" itemLabel="#{msg['select.department']}"/>
-						<f:selectItems value="#{sessionBean.departments}" var="department" itemLabel="#{department.name}" itemValue="#{department}"/>
+						<f:selectItems value="#{sessionBean.departments}" var="department"
+									   itemLabel="#{department.name}" itemValue="#{department}"/>
 						<p:ajax update=":lessonInfoForm:lessonDetail"/>
 					</p:selectOneMenu>
 
 					<p:outputLabel for="discipline" value="#{msg['lesson.discipline']}"/>
 					<p:selectOneMenu id="discipline" value="#{lessonBean.discipline}" converter="entityConverter">
 						<f:selectItem itemValue="#{null}" itemLabel="#{msg['select.discipline']}"/>
-						<f:selectItems value="#{sessionBean.disciplines}" var="discipline" itemLabel="#{discipline.name}" itemValue="#{discipline}"/>
+						<f:selectItems value="#{sessionBean.disciplines}" var="discipline"
+									   itemLabel="#{discipline.name}" itemValue="#{discipline}"/>
 						<p:ajax update=":lessonInfoForm:lessonDetail"/>
 					</p:selectOneMenu>
 
@@ -42,9 +44,11 @@
 					</p:selectOneMenu>
 
 					<p:outputLabel for="stream" value="#{msg['lesson.stream']}"/>
-					<p:selectOneMenu id="stream" value="#{lessonBean.selectedLesson.stream}" converter="entityConverter" required="true">
+					<p:selectOneMenu id="stream" value="#{lessonBean.selectedLesson.stream}" converter="entityConverter"
+									 required="true">
 						<f:selectItem itemValue="#{null}" itemLabel="#{msg['select.stream']}"/>
-						<f:selectItems value="#{lessonBean.filteredStream}" var="stream" itemLabel="#{stream.name}" itemValue="#{stream}"/>
+						<f:selectItems value="#{lessonBean.filteredStream}" var="stream" itemLabel="#{stream.name}"
+									   itemValue="#{stream}"/>
 						<p:ajax update=":lessonInfoForm:lessonDetail"/>
 					</p:selectOneMenu>
 
@@ -54,40 +58,52 @@
 					</p:inputText>
 
 					<p:outputLabel for="lessonType" value="#{msg['lesson.type']}"/>
-					<p:selectOneMenu id="lessonType" value="#{lessonBean.selectedLesson.lessonType}" converter="entityConverter" required="true">
+					<p:selectOneMenu id="lessonType" value="#{lessonBean.selectedLesson.lessonType}"
+									 converter="entityConverter" required="true">
 						<f:selectItem itemValue="#{null}" itemLabel="#{msg['select.lessonType']}"/>
-						<f:selectItems value="#{sessionBean.lessonTypes}" var="type" itemLabel="#{type.name}" itemValue="#{type}"/>
+						<f:selectItems value="#{sessionBean.lessonTypes}" var="type" itemLabel="#{type.name}"
+									   itemValue="#{type}"/>
 						<p:ajax update=":lessonInfoForm:lessonDetail"/>
 					</p:selectOneMenu>
 
 					<p:outputLabel for="group" value="#{msg['lesson.group']}"
 								   rendered="#{lessonBean.selectedLesson.lessonType ne null and lessonBean.selectedLesson.lessonType.id ne 1}"/>
-					<p:selectOneMenu id="group" value="#{lessonBean.selectedLesson.group}" converter="entityConverter" required="true"
+					<p:selectOneMenu id="group" value="#{lessonBean.selectedLesson.group}" converter="entityConverter"
+									 required="true"
 									 rendered="#{lessonBean.selectedLesson.lessonType ne null and lessonBean.selectedLesson.lessonType.id ne 1}">
 						<f:selectItem itemValue="#{null}" itemLabel="#{msg['select.group']}"/>
-						<f:selectItems value="#{lessonBean.selectedLesson.stream.groups}" var="group" itemLabel="#{group.name}" itemValue="#{group}"/>
+						<f:selectItems value="#{lessonBean.selectedLesson.stream.groups}" var="group"
+									   itemLabel="#{group.name}" itemValue="#{group}"/>
 						<p:ajax update=":lessonInfoForm:lessonDetail"/>
 					</p:selectOneMenu>
 
 					<p:outputLabel for="date" value="#{msg['lesson.date']}"/>
-					<p:calendar id="date" value="#{lessonBean.selectedLesson.classes[0].date}" converter="localDateConverter" pattern="dd.MM.yyyy">
+					<p:calendar id="date" value="#{lessonBean.selectedLesson.classes[0].date}"
+								converter="localDateConverter" pattern="dd.MM.yyyy">
 						<p:ajax update=":lessonInfoForm:lessonDetail"/>
 					</p:calendar>
 
 					<p:outputLabel for="schedule" value="#{msg['lesson.schedule']}"/>
-					<p:selectOneMenu id="schedule" value="#{lessonBean.selectedLesson.classes[0].schedule}" converter="entityConverter">
+					<p:selectOneMenu id="schedule" value="#{lessonBean.selectedLesson.classes[0].schedule}"
+									 converter="entityConverter" required="true">
 						<f:selectItem itemValue="#{null}" itemLabel="#{msg['select.schedule']}"/>
 						<f:selectItems value="#{sessionBean.schedules}" var="schedule" itemLabel="#{schedule.caption}"/>
 						<p:ajax update=":lessonInfoForm:lessonDetail"/>
 					</p:selectOneMenu>
 
+					<p:outputLabel for="description" value="#{msg['label.description']}"/>
+					<p:inputTextarea id="description" value="#{lessonBean.selectedLesson.description}">
+						<p:ajax update=":lessonInfoForm:lessonDetail"/>
+					</p:inputTextarea>
+
 				</p:panelGrid>
 
-                <p:outputPanel rendered="#{lessonBean.infoChanged}">
-                    <p:commandButton value="#{msg['btn.save.exit']}" icon="fa fa-fw fa-save"
-                                     actionListener="#{lessonBean.createLesson}"/>
-                </p:outputPanel>
-            </p:outputPanel>
-        </p:dialog>
-    </h:form>
+				<p:outputPanel rendered="#{lessonBean.infoChanged}">
+					<p:commandButton value="#{msg['btn.save.exit']}" icon="fa fa-fw fa-save"
+									 actionListener="#{lessonBean.createLesson}"
+									 update=":lessonInfoForm:lessonDetail"/>
+				</p:outputPanel>
+			</p:outputPanel>
+		</p:dialog>
+	</h:form>
 </ui:composition>
