@@ -13,7 +13,7 @@
 
 	<properties>
 		<war.name>ROOT</war.name>
-		<tomcat.webapps.path>/Users/anny/work/apache-tomcat-8.5.5/webapps</tomcat.webapps.path>
+		<tomcat.webapps.path>/home/zaychick-pavel/env/apache-tomcat-8.5.5/webapps</tomcat.webapps.path>
 
 		<maven.release.plugin.version>2.5.3</maven.release.plugin.version>
 		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
@@ -145,8 +145,20 @@
 					<tagNameFormat>${maven.build.timestamp}_@{project.version}</tagNameFormat>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.3</version>
+				<configuration>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<tagNameFormat>${maven.build.timestamp}_@{project.version}</tagNameFormat>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
+
+	<scm>
+		<connection>scm:git:https://github.com/varkhipov/Reader.git</connection>
+	</scm>
 
 	<scm>
 		<connection>scm:git:https://github.com/varkhipov/Reader.git</connection>
