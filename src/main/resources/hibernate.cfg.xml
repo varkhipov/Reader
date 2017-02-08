@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD//EN"
+		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<property name="connection.url">
+			jdbc:sqlite:/storage/storage/env/apache-tomcat-8.5.5/app_files/database/db.s3db
+		</property>
+		<property name="connection.driver_class">org.sqlite.JDBC</property>
+		<property name="dialect">com.grsu.reader.utils.db.SQLiteDialect</property>
+		<mapping class="com.grsu.reader.entities.Schedule"/>
+		<!-- <property name="connection.username"/> -->
+		<!-- <property name="connection.password"/> -->
+
+		<!-- DB schema will be updated if needed -->
+		<!-- <property name="hbm2ddl.auto">update</property> -->
+	</session-factory>
+</hibernate-configuration>
