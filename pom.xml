@@ -145,20 +145,8 @@
 					<tagNameFormat>${maven.build.timestamp}_@{project.version}</tagNameFormat>
 				</configuration>
 			</plugin>
-			<plugin>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5.3</version>
-				<configuration>
-					<autoVersionSubmodules>true</autoVersionSubmodules>
-					<tagNameFormat>${maven.build.timestamp}_@{project.version}</tagNameFormat>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
-
-	<scm>
-		<connection>scm:git:https://github.com/varkhipov/Reader.git</connection>
-	</scm>
 
 	<scm>
 		<connection>scm:git:https://github.com/varkhipov/Reader.git</connection>
