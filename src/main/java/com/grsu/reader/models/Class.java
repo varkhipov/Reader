@@ -1,11 +1,9 @@
 package com.grsu.reader.models;
 
-import javax.faces.bean.ManagedBean;
 import javax.faces.model.SelectItem;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@ManagedBean(name = "newInstanceOfClass")
 public class Class extends Entity {
 	private int id;
 	private LocalDate date;
@@ -15,6 +13,11 @@ public class Class extends Entity {
 	private LocalTime sessionEnd;
 
 	public Class() {
+	}
+
+	public Class(Lesson lesson) {
+		this.date = LocalDate.now();
+		this.lesson = lesson;
 	}
 
 	public Class(int id, LocalDate date, Schedule schedule, Lesson lesson, LocalTime sessionStart, LocalTime sessionEnd) {

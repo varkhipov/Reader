@@ -1,9 +1,11 @@
 package com.grsu.reader.models;
 
+import javax.faces.model.SelectItem;
+
 /**
  * Created by pavel on 2/3/17.
  */
-public class LessonType {
+public class LessonType extends Entity {
 	private int id;
 	private String name;
 
@@ -17,6 +19,11 @@ public class LessonType {
 
 	public int getId() {
 		return id;
+	}
+
+	@Override
+	public SelectItem getSelectItem() {
+		return new SelectItem(id, name);
 	}
 
 	public void setId(int id) {
@@ -37,5 +44,24 @@ public class LessonType {
 				"id=" + id +
 				", name='" + name + '\'' +
 				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		LessonType that = (LessonType) o;
+
+		if (id != that.id) return false;
+		return !(name != null ? !name.equals(that.name) : that.name != null);
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id;
+		result = 31 * result + (name != null ? name.hashCode() : 0);
+		return result;
 	}
 }

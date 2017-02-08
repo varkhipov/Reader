@@ -41,6 +41,7 @@ public class SessionBean implements Serializable {
 	private List<SelectItem> lessonsItems;
 	private List<Class> classes;
 	private List<SelectItem> classesItems;
+	private List<LessonType> lessonTypes;
 
 	@ManagedProperty(value = "#{databaseBean}")
 	private DatabaseBean databaseBean;
@@ -81,6 +82,7 @@ public class SessionBean implements Serializable {
 		updateStudents();
 		updateLessons();
 		updateClasses();
+		updateLessonTypes();
 	}
 
 	public void updateSchedules() {
@@ -121,6 +123,10 @@ public class SessionBean implements Serializable {
 	public void updateClasses() {
 		classes = ClassDAO.getClasses(databaseBean.getConnection());
 		classesItems = generateSelectItems(classes);
+	}
+
+	public void updateLessonTypes() {
+		lessonTypes = LessonTypeDAO.getLessonTypes(databaseBean.getConnection());
 	}
 
 	public void setDatabaseBean(DatabaseBean databaseBean) {
@@ -269,5 +275,13 @@ public class SessionBean implements Serializable {
 
 	public void setClassesItems(List<SelectItem> classesItems) {
 		this.classesItems = classesItems;
+	}
+
+	public List<LessonType> getLessonTypes() {
+		return lessonTypes;
+	}
+
+	public void setLessonTypes(List<LessonType> lessonTypes) {
+		this.lessonTypes = lessonTypes;
 	}
 }

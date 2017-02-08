@@ -5,6 +5,7 @@ import com.grsu.reader.utils.DateUtils;
 import javax.faces.bean.ManagedBean;
 import javax.faces.model.SelectItem;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @ManagedBean(name = "newInstanceOfLesson")
@@ -19,6 +20,7 @@ public class Lesson extends Entity {
 	private List<Class> classes;
 
 	public Lesson() {
+		this.classes = Arrays.asList(new Class(this));
 	}
 
 	public Lesson(int id, String name, String description, LocalDateTime createDate, LessonType lessonType, Stream stream, Group group, List<Class> classes) {

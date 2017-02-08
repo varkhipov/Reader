@@ -1,11 +1,8 @@
 package com.grsu.reader.models;
 
-import org.apache.commons.lang3.StringUtils;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.model.SelectItem;
 import java.util.List;
-import java.util.Objects;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 

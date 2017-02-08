@@ -17,7 +17,8 @@ public class Stream extends Entity {
 	private Integer course;
 	private List<Group> groups;
 
-	public Stream() {}
+	public Stream() {
+	}
 
 	public Stream(int id, String name, String description, Discipline discipline, Department department, Integer course, List<Group> groups) {
 		this.id = id;

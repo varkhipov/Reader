@@ -1,12 +1,22 @@
 package com.grsu.reader.beans;
 
 import com.grsu.reader.constants.Constants;
-import com.grsu.reader.dao.*;
-import com.grsu.reader.models.*;
+import com.grsu.reader.dao.ClassDAO;
+import com.grsu.reader.dao.LessonDAO;
+import com.grsu.reader.dao.StreamGroupDAO;
+import com.grsu.reader.dao.StudentClassDAO;
+import com.grsu.reader.dao.StudentGroupDAO;
 import com.grsu.reader.models.Class;
+import com.grsu.reader.models.Department;
+import com.grsu.reader.models.Discipline;
+import com.grsu.reader.models.Group;
+import com.grsu.reader.models.Lesson;
+import com.grsu.reader.models.Stream;
+import com.grsu.reader.models.Student;
 import com.grsu.reader.utils.DateUtils;
 import com.grsu.reader.utils.FacesUtils;
 import com.grsu.reader.utils.SerialUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -14,10 +24,12 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 import java.io.Serializable;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.grsu.reader.utils.EntityUtils.getEntityById;
 import static com.grsu.reader.utils.FacesUtils.closeDialog;
@@ -30,7 +42,6 @@ public class LessonBean implements Serializable {
 	private Lesson selectedLesson;
 	private Lesson copyOfSelectedLesson;
 	private Student processedStudent;
-	private int selectedScheduleId;
 	private boolean recordStarted = false;
 	private boolean soundEnabled = true;
 
@@ -45,6 +56,11 @@ public class LessonBean implements Serializable {
 
 	private List<Student> lessonStudents;
 
+	/* Filter */
+	private Department department;
+	private Discipline discipline;
+	private Integer course;
+
 	@ManagedProperty(value = "#{databaseBean}")
 	private DatabaseBean databaseBean;
 
@@ -57,7 +73,9 @@ public class LessonBean implements Serializable {
 
 	public void exit() {
 		setSelectedLesson(null);
-		setSelectedScheduleId(0);
+		department = null;
+		discipline = null;
+		course = null;
 		closeDialog("lessonDialog");
 	}
 
@@ -69,40 +87,39 @@ public class LessonBean implements Serializable {
 
 	public void createLesson() {
 		if (selectedLesson != null) {
-			selectedLesson.setName(String.format("%s [%s]",
-					selectedLesson.getStream().getName(),
-					DateUtils.formatDate(LocalDateTime.now())
-					)
-			);
-			selectedLesson.setClasses(Arrays.asList(
-					new Class(
-							LocalDate.now(),
-							ScheduleDAO.getScheduleById(
-									databaseBean.getConnection(),
-									selectedScheduleId
-							),
-							this.selectedLesson
-					)
-			));
-
-			int lessonId = LessonDAO.create(
-					databaseBean.getConnection(),
-					selectedLesson
-			);
-			selectedLesson.setId(lessonId);
-
-			for (Class cls : selectedLesson.getClasses()) {
-				int classId = ClassDAO.create(
-						databaseBean.getConnection(),
-						cls
+			if (StringUtils.isEmpty(selectedLesson.getName())) {
+				selectedLesson.setName(String.format("%s [%s]",
+						selectedLesson.getStream().getName(),
+						DateUtils.formatDate(LocalDateTime.now())
+						)
 				);
-				cls.setId(classId);
 			}
 
-			List<Group> groups = StreamGroupDAO.getGroupsByStreamId(
+			if (selectedLesson.getLessonType() == null || selectedLesson.getLessonType().getId() == 1) {
+				selectedLesson.setGroup(null);
+			}
+
+			selectedLesson.setId(LessonDAO.create(
 					databaseBean.getConnection(),
-					selectedLesson.getStream().getId()
-			);
+					selectedLesson
+			));
+
+			selectedLesson.getClasses().get(0).setId(ClassDAO.create(
+					databaseBean.getConnection(),
+					selectedLesson.getClasses().get(0)
+			));
+
+
+			List<Group> groups;
+
+			if (selectedLesson.getGroup() == null) {
+				groups = StreamGroupDAO.getGroupsByStreamId(
+						databaseBean.getConnection(),
+						selectedLesson.getStream().getId()
+				);
+			} else {
+				groups = Arrays.asList(selectedLesson.getGroup());
+			}
 
 			List<Student> students = new ArrayList<>();
 			for (Group group : groups) {
@@ -288,6 +305,18 @@ public class LessonBean implements Serializable {
 		getLessons().remove(lesson);
 	}
 
+	/* Filter */
+	public List<Stream> getFilteredStream() {
+		return sessionBean.getStreams().stream()
+				.filter(stream -> {
+					boolean discipline = (this.discipline == null) || (this.discipline.equals(stream.getDiscipline()));
+					boolean department = (this.department == null) || (this.department.equals(stream.getDepartment()));
+					boolean course = (this.course == null) || (this.course.equals(stream.getCourse()));
+					return discipline && department && course;
+				})
+				.collect(Collectors.toList());
+	}
+
 	/* GETTERS & SETTERS */
 	public void setSelectedLesson(Lesson selectedLesson) {
 		this.selectedLesson = selectedLesson;
@@ -317,14 +346,6 @@ public class LessonBean implements Serializable {
 
 	public void setSelectedStreamId(int selectedStreamId) {
 		selectedLesson.setStream(getEntityById(sessionBean.getStreams(), selectedStreamId));
-	}
-
-	public int getSelectedScheduleId() {
-		return selectedScheduleId;
-	}
-
-	public void setSelectedScheduleId(int selectedScheduleId) {
-		this.selectedScheduleId = selectedScheduleId;
 	}
 
 	public Student getProcessedStudent() {
@@ -417,6 +438,30 @@ public class LessonBean implements Serializable {
 
 	public void setFilteredAllStudents(List<Student> filteredAllStudents) {
 		this.filteredAllStudents = filteredAllStudents;
+	}
+
+	public Department getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
+
+	public Discipline getDiscipline() {
+		return discipline;
+	}
+
+	public void setDiscipline(Discipline discipline) {
+		this.discipline = discipline;
+	}
+
+	public Integer getCourse() {
+		return course;
+	}
+
+	public void setCourse(Integer course) {
+		this.course = course;
 	}
 
 	public void exitStudents() {

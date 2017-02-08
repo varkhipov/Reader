@@ -8,9 +8,9 @@ public class DateUtils {
 	private static final String FORMAT_TIME = "HH:mm";
 	private static final String FORMAT_DATE_TIME = "dd.MM.yyyy HH:mm";
 
-	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(FORMAT_DATE);
-	private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern(FORMAT_TIME);
-	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(FORMAT_DATE_TIME);
+	public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(FORMAT_DATE);
+	public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern(FORMAT_TIME);
+	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(FORMAT_DATE_TIME);
 
 	private static String formatDate(LocalDateTime date, DateTimeFormatter formatter) {
 		return date.format(formatter);

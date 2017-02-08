@@ -15,6 +15,9 @@
             <p:column headerText="#{msg['lesson.createDate']}">
                 <h:outputText value="#{lesson.formattedCreateDate}"/>
             </p:column>
+            <p:column headerText="#{msg['lesson.type']}">
+                <h:outputText value="#{lesson.lessonType ne null ? lesson.lessonType.name : ''}"/>
+            </p:column>
             <p:column headerText="#{msg['lesson.stream']}">
                 <h:outputText value="#{lesson.stream.name}"/>
             </p:column>

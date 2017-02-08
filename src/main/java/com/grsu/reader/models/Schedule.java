@@ -9,7 +9,8 @@ public class Schedule extends Entity {
 	private LocalTime end;
 	private String number;
 
-	public Schedule() {}
+	public Schedule() {
+	}
 
 	public Schedule(int id, LocalTime begin, LocalTime end, String number) {
 		this.id = id;
@@ -67,5 +68,28 @@ public class Schedule extends Entity {
 				", end=" + end +
 				", number='" + number + '\'' +
 				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Schedule schedule = (Schedule) o;
+
+		if (id != schedule.id) return false;
+		if (begin != null ? !begin.equals(schedule.begin) : schedule.begin != null) return false;
+		if (end != null ? !end.equals(schedule.end) : schedule.end != null) return false;
+		return !(number != null ? !number.equals(schedule.number) : schedule.number != null);
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id;
+		result = 31 * result + (begin != null ? begin.hashCode() : 0);
+		result = 31 * result + (end != null ? end.hashCode() : 0);
+		result = 31 * result + (number != null ? number.hashCode() : 0);
+		return result;
 	}
 }
