@@ -189,7 +189,7 @@ public class LessonBean implements Serializable {
 	private void initLessonStudents() {
 		if (selectedLesson.getStream() != null) {
 			if (selectedLesson.getGroup() != null) {
-				lessonStudents = selectedLesson.getGroup().getStudents();
+				lessonStudents = StudentGroupDAO.getStudentsByGroupId(databaseBean.getConnection(),selectedLesson.getGroup().getId());
 			} else {
 				lessonStudents = new ArrayList<>();
 				for (Group group : selectedLesson.getStream().getGroups()) {
