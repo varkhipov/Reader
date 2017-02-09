@@ -90,7 +90,7 @@ public class LessonBean implements Serializable {
 			if (StringUtils.isEmpty(selectedLesson.getName())) {
 				selectedLesson.setName(String.format("%s [%s]",
 						selectedLesson.getStream().getName(),
-						DateUtils.formatDate(LocalDateTime.now())
+						LocalDateTime.now()
 						)
 				);
 			}

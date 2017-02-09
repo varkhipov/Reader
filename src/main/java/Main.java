@@ -1,16 +1,15 @@
-import org.hibernate.HibernateException;
-import org.hibernate.Metamodel;
+import com.grsu.reader.utils.FileUtils;
+import org.hibernate.*;
 import org.hibernate.query.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import static com.grsu.reader.utils.PropertyUtils.*;
 
 import javax.persistence.metamodel.EntityType;
 
 import java.util.Map;
 
 /**
- * Created by pavel on 2/8/17.
+ *  Created by zaychick-pavel on 2/8/17.
  */
 public class Main {
 	private static final SessionFactory ourSessionFactory;
@@ -19,6 +18,7 @@ public class Main {
 		try {
 			Configuration configuration = new Configuration();
 			configuration.configure();
+			configuration.setProperty("hibernate.connection.url", "jdbc:sqlite:/storage/storage/env/apache-tomcat-8.5.5/app_files/database/db.s3db");
 
 			ourSessionFactory = configuration.buildSessionFactory();
 		} catch (Throwable ex) {
@@ -29,6 +29,7 @@ public class Main {
 	public static Session getSession() throws HibernateException {
 		return ourSessionFactory.openSession();
 	}
+
 
 	public static void main(final String[] args) throws Exception {
 		final Session session = getSession();
@@ -46,5 +47,6 @@ public class Main {
 		} finally {
 			session.close();
 		}
+
 	}
 }

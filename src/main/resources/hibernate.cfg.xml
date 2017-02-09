@@ -4,12 +4,19 @@
 		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
 	<session-factory>
-		<property name="connection.url">
-			jdbc:sqlite:/storage/storage/env/apache-tomcat-8.5.5/app_files/database/db.s3db
-		</property>
-		<property name="connection.driver_class">org.sqlite.JDBC</property>
 		<property name="dialect">com.grsu.reader.utils.db.SQLiteDialect</property>
+		<property name="connection.driver_class">org.sqlite.JDBC</property>
+		<mapping class="com.grsu.reader.entities.Class"/>
+		<mapping class="com.grsu.reader.entities.Department"/>
+		<mapping class="com.grsu.reader.entities.Discipline"/>
+		<mapping class="com.grsu.reader.entities.Group"/>
+		<mapping class="com.grsu.reader.entities.GroupType"/>
+		<mapping class="com.grsu.reader.entities.Lesson"/>
+		<mapping class="com.grsu.reader.entities.LessonType"/>
 		<mapping class="com.grsu.reader.entities.Schedule"/>
+		<mapping class="com.grsu.reader.entities.ScheduleVersion"/>
+		<mapping class="com.grsu.reader.entities.Stream"/>
+		<mapping class="com.grsu.reader.entities.Student"/>
 		<!-- <property name="connection.username"/> -->
 		<!-- <property name="connection.password"/> -->
 

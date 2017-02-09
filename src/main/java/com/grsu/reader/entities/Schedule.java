@@ -1,22 +1,41 @@
 package com.grsu.reader.entities;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import com.grsu.reader.converters.db.LocalTimeAttributeConverter;
+
+import javax.persistence.*;
+import java.time.LocalTime;
+import java.util.List;
 
 /**
- * Created by pavel on 2/8/17.
+ * Created by zaychick-pavel on 2/9/17.
  */
 @Entity
 public class Schedule {
-	private Integer id;
-	private String begin;
-	private String end;
-	private Integer number;
-
 	@Id
 	@Column(name = "id")
+	private Integer id;
+
+	@Basic
+	@Convert(converter = LocalTimeAttributeConverter.class)
+	@Column(name = "begin")
+	private LocalTime begin;
+
+	@Basic
+	@Convert(converter = LocalTimeAttributeConverter.class)
+	@Column(name = "end")
+	private LocalTime end;
+
+	@Basic
+	@Column(name = "number")
+	private Integer number;
+
+	@OneToMany(mappedBy = "schedule")
+	private List<Class> classes;
+
+	@ManyToOne
+	@JoinColumn(name = "version_id", referencedColumnName = "id")
+	private ScheduleVersion version;
+
 	public Integer getId() {
 		return id;
 	}
@@ -25,34 +44,44 @@ public class Schedule {
 		this.id = id;
 	}
 
-	@Basic
-	@Column(name = "begin")
-	public String getBegin() {
+	public LocalTime getBegin() {
 		return begin;
 	}
 
-	public void setBegin(String begin) {
+	public void setBegin(LocalTime begin) {
 		this.begin = begin;
 	}
 
-	@Basic
-	@Column(name = "end")
-	public String getEnd() {
+	public LocalTime getEnd() {
 		return end;
 	}
 
-	public void setEnd(String end) {
+	public void setEnd(LocalTime end) {
 		this.end = end;
 	}
 
-	@Basic
-	@Column(name = "number")
 	public Integer getNumber() {
 		return number;
 	}
 
 	public void setNumber(Integer number) {
 		this.number = number;
+	}
+
+	public List<Class> getClasses() {
+		return classes;
+	}
+
+	public void setClasses(List<Class> classes) {
+		this.classes = classes;
+	}
+
+	public ScheduleVersion getVersion() {
+		return version;
+	}
+
+	public void setVersion(ScheduleVersion version) {
+		this.version = version;
 	}
 
 	@Override
