@@ -1,9 +1,6 @@
 package com.grsu.reader.models;
 
-import org.apache.commons.lang3.StringUtils;
-
 import javax.faces.bean.ManagedBean;
-import javax.faces.model.SelectItem;
 
 @ManagedBean(name = "newInstanceOfDepartment")
 public class Department extends Entity {
@@ -30,11 +27,6 @@ public class Department extends Entity {
 
 	public Department(Department department) {
 		this(department.getId(), department.getName(), department.getAbbreviation());
-	}
-
-	@Override
-	public SelectItem getSelectItem() {
-		return new SelectItem(id, name);
 	}
 
 	public int getId() {

@@ -1,7 +1,6 @@
 package com.grsu.reader.models;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.model.SelectItem;
 import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -29,10 +28,6 @@ public class Group extends Entity {
 		this.id = group.getId();
 		this.name = group.getName();
 		this.department = group.getDepartment();
-	}
-
-	public SelectItem getSelectItem() {
-		return new SelectItem(id, name);
 	}
 
 	public int getId() {

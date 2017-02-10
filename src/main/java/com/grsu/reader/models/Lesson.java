@@ -3,7 +3,6 @@ package com.grsu.reader.models;
 import com.grsu.reader.utils.DateUtils;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.model.SelectItem;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -41,11 +40,6 @@ public class Lesson extends Entity {
 
 	public String getFormattedCreateDate() {
 		return DateUtils.formatDateTime(createDate);
-	}
-
-	@Override
-	public SelectItem getSelectItem() {
-		return new SelectItem(id, name);
 	}
 
 	@Override

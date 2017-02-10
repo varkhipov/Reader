@@ -1,8 +1,23 @@
 package com.grsu.reader.beans;
 
-import com.grsu.reader.dao.*;
-import com.grsu.reader.models.*;
+import com.grsu.reader.dao.ClassDAO;
+import com.grsu.reader.dao.DepartmentDAO;
+import com.grsu.reader.dao.DisciplineDAO;
+import com.grsu.reader.dao.GroupDAO;
+import com.grsu.reader.dao.LessonDAO;
+import com.grsu.reader.dao.LessonTypeDAO;
+import com.grsu.reader.dao.ScheduleDAO;
+import com.grsu.reader.dao.StreamDAO;
+import com.grsu.reader.dao.StudentDAO;
 import com.grsu.reader.models.Class;
+import com.grsu.reader.models.Department;
+import com.grsu.reader.models.Discipline;
+import com.grsu.reader.models.Group;
+import com.grsu.reader.models.Lesson;
+import com.grsu.reader.models.LessonType;
+import com.grsu.reader.models.Schedule;
+import com.grsu.reader.models.Stream;
+import com.grsu.reader.models.Student;
 import com.grsu.reader.utils.CSVUtils;
 import com.grsu.reader.utils.SerialUtils;
 
@@ -11,12 +26,9 @@ import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
-import javax.faces.model.SelectItem;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
-
-import static com.grsu.reader.utils.EntityUtils.generateSelectItems;
 
 @ManagedBean(name = "sessionBean")
 @SessionScoped
@@ -26,21 +38,13 @@ public class SessionBean implements Serializable {
 	private String activeView = "lessons";
 
 	private List<Schedule> schedules;
-	private List<SelectItem> schedulesItems;
 	private List<Discipline> disciplines;
-	private List<SelectItem> disciplinesItems;
 	private List<Department> departments;
-	private List<SelectItem> departmentsItems;
 	private List<Stream> streams;
-	private List<SelectItem> streamsItems;
 	private List<Group> groups;
-	private List<SelectItem> groupsItems;
 	private List<Student> students;
-	private List<SelectItem> studentsItems;
 	private List<Lesson> lessons;
-	private List<SelectItem> lessonsItems;
 	private List<Class> classes;
-	private List<SelectItem> classesItems;
 	private List<LessonType> lessonTypes;
 
 	@ManagedProperty(value = "#{databaseBean}")
@@ -87,42 +91,34 @@ public class SessionBean implements Serializable {
 
 	public void updateSchedules() {
 		schedules = ScheduleDAO.getSchedules(databaseBean.getConnection());
-		schedulesItems = generateSelectItems(schedules);
 	}
 
 	public void updateDisciplines() {
 		disciplines = DisciplineDAO.getDisciplines(databaseBean.getConnection());
-		disciplinesItems = generateSelectItems(disciplines);
 	}
 
 	public void updateDepartments() {
 		departments = DepartmentDAO.getDepartments(databaseBean.getConnection());
-		departmentsItems = generateSelectItems(departments);
 	}
 
 	public void updateStreams() {
 		streams = StreamDAO.getStreams(databaseBean.getConnection());
-		streamsItems = generateSelectItems(streams);
 	}
 
 	public void updateGroups() {
 		groups = GroupDAO.getGroups(databaseBean.getConnection());
-		groupsItems = generateSelectItems(groups);
 	}
 
 	public void updateStudents() {
 		students = StudentDAO.getStudents(databaseBean.getConnection());
-		studentsItems = generateSelectItems(students);
 	}
 
 	public void updateLessons() {
 		lessons = LessonDAO.getLessons(databaseBean.getConnection());
-		lessonsItems = generateSelectItems(lessons);
 	}
 
 	public void updateClasses() {
 		classes = ClassDAO.getClasses(databaseBean.getConnection());
-		classesItems = generateSelectItems(classes);
 	}
 
 	public void updateLessonTypes() {
@@ -157,28 +153,12 @@ public class SessionBean implements Serializable {
 		this.schedules = schedules;
 	}
 
-	public List<SelectItem> getSchedulesItems() {
-		return schedulesItems;
-	}
-
-	public void setSchedulesItems(List<SelectItem> schedulesItems) {
-		this.schedulesItems = schedulesItems;
-	}
-
 	public List<Discipline> getDisciplines() {
 		return disciplines;
 	}
 
 	public void setDisciplines(List<Discipline> disciplines) {
 		this.disciplines = disciplines;
-	}
-
-	public List<SelectItem> getDisciplinesItems() {
-		return disciplinesItems;
-	}
-
-	public void setDisciplinesItems(List<SelectItem> disciplinesItems) {
-		this.disciplinesItems = disciplinesItems;
 	}
 
 	public List<Department> getDepartments() {
@@ -189,28 +169,12 @@ public class SessionBean implements Serializable {
 		this.departments = departments;
 	}
 
-	public List<SelectItem> getDepartmentsItems() {
-		return departmentsItems;
-	}
-
-	public void setDepartmentsItems(List<SelectItem> departmentsItems) {
-		this.departmentsItems = departmentsItems;
-	}
-
 	public List<Stream> getStreams() {
 		return streams;
 	}
 
 	public void setStreams(List<Stream> streams) {
 		this.streams = streams;
-	}
-
-	public List<SelectItem> getStreamsItems() {
-		return streamsItems;
-	}
-
-	public void setStreamsItems(List<SelectItem> streamsItems) {
-		this.streamsItems = streamsItems;
 	}
 
 	public List<Group> getGroups() {
@@ -221,28 +185,12 @@ public class SessionBean implements Serializable {
 		this.groups = groups;
 	}
 
-	public List<SelectItem> getGroupsItems() {
-		return groupsItems;
-	}
-
-	public void setGroupsItems(List<SelectItem> groupsItems) {
-		this.groupsItems = groupsItems;
-	}
-
 	public List<Student> getStudents() {
 		return students;
 	}
 
 	public void setStudents(List<Student> students) {
 		this.students = students;
-	}
-
-	public List<SelectItem> getStudentsItems() {
-		return studentsItems;
-	}
-
-	public void setStudentsItems(List<SelectItem> studentsItems) {
-		this.studentsItems = studentsItems;
 	}
 
 	public List<Lesson> getLessons() {
@@ -253,28 +201,12 @@ public class SessionBean implements Serializable {
 		this.lessons = lessons;
 	}
 
-	public List<SelectItem> getLessonsItems() {
-		return lessonsItems;
-	}
-
-	public void setLessonsItems(List<SelectItem> lessonsItems) {
-		this.lessonsItems = lessonsItems;
-	}
-
 	public List<Class> getClasses() {
 		return classes;
 	}
 
 	public void setClasses(List<Class> classes) {
 		this.classes = classes;
-	}
-
-	public List<SelectItem> getClassesItems() {
-		return classesItems;
-	}
-
-	public void setClassesItems(List<SelectItem> classesItems) {
-		this.classesItems = classesItems;
 	}
 
 	public List<LessonType> getLessonTypes() {

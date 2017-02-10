@@ -21,7 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.model.SelectItem;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -329,14 +328,6 @@ public class LessonBean implements Serializable {
 		}
 	}
 
-	public List<SelectItem> getSchedulesItems() {
-		return sessionBean.getSchedulesItems();
-	}
-
-	public List<SelectItem> getDisciplinesItems() {
-		return sessionBean.getDisciplinesItems();
-	}
-
 	public int getSelectedStreamId() {
 		if (selectedLesson.getStream() == null) {
 			return 0;
@@ -354,10 +345,6 @@ public class LessonBean implements Serializable {
 
 	public void setProcessedStudent(Student processedStudent) {
 		this.processedStudent = processedStudent;
-	}
-
-	public List<SelectItem> getStreamsItems() {
-		return sessionBean.getStreamsItems();
 	}
 
 	public List<Lesson> getLessons() {
