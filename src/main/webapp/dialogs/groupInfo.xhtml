@@ -20,12 +20,13 @@
                 <p:panelGrid columns="2" rendered="#{not empty groupBean.selectedGroup}"
                              columnClasses="label,value">
 
-                    <p:outputLabel for="department" value="#{msg['group.info.department']}"/>
-                    <p:selectOneMenu id="department" value="#{groupBean.selectedDepartmentId}">
-                        <f:selectItem itemValue="#{0}" itemLabel="#{msg['select.department']}"/>
-                        <f:selectItems value="#{groupBean.departmentsItems}"/>
-                        <p:ajax update=":groupInfoForm:groupInfoDetail"/>
-                    </p:selectOneMenu>
+					<p:outputLabel for="department" value="#{msg['group.info.department']}"/>
+					<p:selectOneMenu id="department" value="#{groupBean.selectedGroup.department}" converter="entityConverter">
+						<f:selectItem itemValue="#{null}" itemLabel="#{msg['select.department']}"/>
+						<f:selectItems value="#{sessionBean.departments}" var="department"
+									   itemLabel="#{department.name}" itemValue="#{department}"/>
+						<p:ajax update=":groupInfoForm:groupInfoDetail"/>
+					</p:selectOneMenu>
 
                     <p:outputLabel for="name" value="#{msg['group.name']}:"/>
                     <p:inputText id="name" value="#{groupBean.selectedGroup.name}" required="true">
