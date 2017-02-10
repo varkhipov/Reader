@@ -13,8 +13,24 @@
 		<war.name>ROOT</war.name>
 		<tomcat.webapps.path>/home/zaychick-pavel/env/apache-tomcat-8.5.5/webapps</tomcat.webapps.path>
 
+		<maven.compiler.plugin.version>3.6.0</maven.compiler.plugin.version>
+		<maven.war.plugin.version>3.0.0</maven.war.plugin.version>
 		<maven.release.plugin.version>2.5.3</maven.release.plugin.version>
 		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+
+		<primefaces.version>6.0</primefaces.version>
+		<atmosphere.runtime.version>2.4.9</atmosphere.runtime.version>
+		<jsf.version>2.2.14</jsf.version>
+		<servlet.api.version>3.0-alpha-1</servlet.api.version>
+		<jsp.api.version>2.2.1-b03</jsp.api.version>
+		<jstl.api.version>1.2.1</jstl.api.version>
+		<cdi.api>2.0.Beta1</cdi.api>
+		<sqlite.jdbc.version>3.15.1</sqlite.jdbc.version>
+		<hibernate.core.version>5.2.6.Final</hibernate.core.version>
+		<scream.jssc.version>2.8.0</scream.jssc.version>
+		<apache.commons.lang.version>3.5</apache.commons.lang.version>
+		<apache.httpclient.version>4.5.3</apache.httpclient.version>
+		<opencsv.version>3.9</opencsv.version>
 	</properties>
 
 	<dependencies>
@@ -22,43 +38,36 @@
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>RELEASE</version>
+			<version>${primefaces.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.atmosphere</groupId>
 			<artifactId>atmosphere-runtime</artifactId>
-			<version>RELEASE</version>
+			<version>${atmosphere.runtime.version}</version>
 		</dependency>
-
-		<!-- OmniFaces -->
-		<!--<dependency>-->
-		<!--<groupId>org.omnifaces</groupId>-->
-		<!--<artifactId>omnifaces</artifactId>-->
-		<!--<version>2.5.1</version>-->
-		<!--</dependency>-->
 
 		<!-- JSF 2 -->
 		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-api</artifactId>
-			<version>RELEASE</version>
+			<version>${jsf.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-impl</artifactId>
-			<version>RELEASE</version>
+			<version>${jsf.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
-			<version>RELEASE</version>
+			<version>${servlet.api.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>jsp-api</artifactId>
-			<version>RELEASE</version>
+			<version>${jsp.api.version}</version>
 		</dependency>
 
 		<!-- Throws just an info message, but is confusing -->
@@ -68,21 +77,21 @@
 		<dependency>
 			<groupId>javax.enterprise</groupId>
 			<artifactId>cdi-api</artifactId>
-			<version>RELEASE</version>
+			<version>${cdi.api}</version>
 		</dependency>
 
 		<!-- JSF 2 <probably not used> -->
 		<dependency>
 			<groupId>javax.servlet.jsp.jstl</groupId>
 			<artifactId>javax.servlet.jsp.jstl-api</artifactId>
-			<version>RELEASE</version>
+			<version>${jstl.api.version}</version>
 		</dependency>
 
 		<!-- Database -->
 		<dependency>
 			<groupId>org.xerial</groupId>
 			<artifactId>sqlite-jdbc</artifactId>
-			<version>3.15.1</version>
+			<version>${sqlite.jdbc.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -90,7 +99,7 @@
 		<dependency>
 			<groupId>org.scream3r</groupId>
 			<artifactId>jssc</artifactId>
-			<version>2.8.0</version>
+			<version>${scream.jssc.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -98,26 +107,26 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>RELEASE</version>
+			<version>${apache.commons.lang.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>RELEASE</version>
+			<version>${apache.httpclient.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
-			<version>RELEASE</version>
+			<version>${opencsv.version}</version>
 		</dependency>
 
 		<!-- Hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>5.2.6.Final</version>
+			<version>${hibernate.core.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -127,7 +136,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.0</version>
+				<version>${maven.compiler.plugin.version}</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -137,7 +146,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>3.0.0</version>
+				<version>${maven.war.plugin.version}</version>
 				<configuration>
 					<outputDirectory>${tomcat.webapps.path}</outputDirectory>
 				</configuration>

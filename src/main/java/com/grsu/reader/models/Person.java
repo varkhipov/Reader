@@ -1,7 +1,6 @@
 package com.grsu.reader.models;
 
 import org.apache.commons.lang3.StringUtils;
-import javax.faces.model.SelectItem;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -27,11 +26,6 @@ public class Person extends Entity {
 		} catch (NumberFormatException ex) {
 			this.cardId = 0;
 		}
-	}
-
-	@Override
-	public SelectItem getSelectItem() {
-		return new SelectItem(id, getFullName());
 	}
 
 	public String getFullName() {

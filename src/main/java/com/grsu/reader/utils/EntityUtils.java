@@ -3,7 +3,6 @@ package com.grsu.reader.utils;
 import com.grsu.reader.models.Entity;
 import com.grsu.reader.models.Person;
 
-import javax.faces.model.SelectItem;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,14 +46,6 @@ public class EntityUtils {
 			}
 		}
 		return entityList;
-	}
-
-	public static <T extends Entity> List<SelectItem> generateSelectItems(List<T> entities) {
-		List<SelectItem> items = new ArrayList<>();
-		for (Entity entity : entities) {
-			items.add(entity.getSelectItem());
-		}
-		return items;
 	}
 
 	public static boolean personExists(List<? extends Person> persons, String uid) {

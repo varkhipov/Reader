@@ -1,7 +1,6 @@
 package com.grsu.reader.models;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.model.SelectItem;
 
 @ManagedBean(name = "newInstanceOfDiscipline")
 public class Discipline extends Entity {
@@ -20,11 +19,6 @@ public class Discipline extends Entity {
 
 	public Discipline(Discipline discipline) {
 		this(discipline.getId(), discipline.getName(), discipline.getDescription());
-	}
-
-	@Override
-	public SelectItem getSelectItem() {
-		return new SelectItem(id, name);
 	}
 
 	@Override

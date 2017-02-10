@@ -1,7 +1,6 @@
 package com.grsu.reader.models;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.model.SelectItem;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,11 +31,6 @@ public class Stream extends Entity {
 
 	public Stream(Stream stream) {
 		this(stream.getId(), stream.getName(), stream.getDescription(), stream.getDiscipline(), stream.getDepartment(), stream.getCourse(), stream.getGroups());
-	}
-
-	@Override
-	public SelectItem getSelectItem() {
-		return new SelectItem(id, name);
 	}
 
 	public int getId() {

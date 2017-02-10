@@ -1,7 +1,5 @@
 package com.grsu.reader.models;
 
-import javax.faces.model.SelectItem;
-
 /**
  * Created by pavel on 2/3/17.
  */
@@ -19,11 +17,6 @@ public class LessonType extends Entity {
 
 	public int getId() {
 		return id;
-	}
-
-	@Override
-	public SelectItem getSelectItem() {
-		return new SelectItem(id, name);
 	}
 
 	public void setId(int id) {
