@@ -11,8 +11,9 @@ import java.util.List;
  */
 @Entity
 @Table(name = "CLASS")
-public class Class {
+public class Class implements AssistantEntity {
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "id")
 	private Integer id;
 

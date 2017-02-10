@@ -1,12 +1,13 @@
-import com.grsu.reader.utils.FileUtils;
-import org.hibernate.*;
-import org.hibernate.query.Query;
+import com.grsu.reader.dao.AssistantEntityDAO;
+import com.grsu.reader.entities.Student;
+import org.hibernate.HibernateException;
+import org.hibernate.Metamodel;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import static com.grsu.reader.utils.PropertyUtils.*;
+import org.hibernate.query.Query;
 
 import javax.persistence.metamodel.EntityType;
-
-import java.util.Map;
 
 /**
  *  Created by zaychick-pavel on 2/8/17.
@@ -18,7 +19,7 @@ public class Main {
 		try {
 			Configuration configuration = new Configuration();
 			configuration.configure();
-			configuration.setProperty("hibernate.connection.url", "jdbc:sqlite:/storage/storage/env/apache-tomcat-8.5.5/app_files/database/db.s3db");
+			configuration.setProperty("hibernate.connection.url", "jdbc:sqlite:/home/zaychick-pavel/env/apache-tomcat-8.5.5/app_files/database/db.s3db");
 
 			ourSessionFactory = configuration.buildSessionFactory();
 		} catch (Throwable ex) {
@@ -44,6 +45,12 @@ public class Main {
 					System.out.println("  " + o);
 				}
 			}
+
+			AssistantEntityDAO entityDAO = new AssistantEntityDAO();
+			entityDAO.add(new Student());
+
+			System.out.println(entityDAO.getAll(Student.class));
+
 		} finally {
 			session.close();
 		}

@@ -11,8 +11,9 @@ import java.util.List;
  */
 @Entity
 @Table(name = "SCHEDULE_VERSION")
-public class ScheduleVersion {
+public class ScheduleVersion implements AssistantEntity {
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "id")
 	private Integer id;
 

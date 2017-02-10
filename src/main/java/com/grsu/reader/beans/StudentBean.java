@@ -8,7 +8,6 @@ import org.primefaces.model.DualListModel;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.model.SelectItem;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -70,10 +69,6 @@ public class StudentBean implements Serializable {
 
 	public List<Student> getStudents() {
 		return sessionBean.getStudents();
-	}
-
-	public List<SelectItem> getGroupsItems() {
-		return sessionBean.getGroupsItems();
 	}
 
 	public void exit() {

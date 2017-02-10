@@ -7,8 +7,9 @@ import java.util.List;
  * Created by zaychick-pavel on 2/9/17.
  */
 @Entity
-public class Student {
+public class Student implements AssistantEntity {
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 

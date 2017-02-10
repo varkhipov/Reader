@@ -11,8 +11,9 @@ import java.util.List;
  */
 @Entity
 @Table(name = "[GROUP]")
-public class Group {
+public class Group implements AssistantEntity {
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "id")
 	private Integer id;
 

@@ -1,7 +1,5 @@
 package com.grsu.reader.converters.db;
 
-import com.grsu.reader.utils.DateUtils;
-
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.time.LocalDate;

@@ -8,8 +8,9 @@ import java.util.List;
  */
 @Entity
 @Table(name = "GROUP_TYPE")
-public class GroupType {
+public class GroupType implements AssistantEntity {
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "id")
 	private Integer id;
 

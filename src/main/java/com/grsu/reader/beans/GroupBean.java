@@ -8,7 +8,6 @@ import com.grsu.reader.models.Student;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.model.SelectItem;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -104,10 +103,6 @@ public class GroupBean implements Serializable {
 	 */
 	public List<Group> getGroups() {
 		return sessionBean.getGroups();
-	}
-
-	public List<SelectItem> getDepartmentsItems() {
-		return sessionBean.getDepartmentsItems();
 	}
 
 	public Group getSelectedGroup() {

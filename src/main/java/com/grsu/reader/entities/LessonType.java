@@ -8,8 +8,9 @@ import java.util.List;
  */
 @Entity
 @Table(name = "LESSON_TYPE")
-public class LessonType {
+public class LessonType implements AssistantEntity {
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "id")
 	private Integer id;
 
