@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "SCHEDULE_VERSION")
 public class ScheduleVersion implements AssistantEntity {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 
@@ -27,7 +27,7 @@ public class ScheduleVersion implements AssistantEntity {
 	@Column(name = "end_date")
 	private LocalDateTime endDate;
 
-	@OneToMany(mappedBy = "version")
+	@OneToMany(mappedBy = "version", fetch = FetchType.EAGER)
 	private List<Schedule> schedules;
 
 	public Integer getId() {

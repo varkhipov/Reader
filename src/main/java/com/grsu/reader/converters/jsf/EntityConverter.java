@@ -1,6 +1,6 @@
-package com.grsu.reader.converters;
+package com.grsu.reader.converters.jsf;
 
-import com.grsu.reader.models.Entity;
+import com.grsu.reader.entities.AssistantEntity;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -14,10 +14,10 @@ import java.util.WeakHashMap;
 /**
  * http://stackoverflow.com/a/23213333
  */
-@FacesConverter(value = "entityConverter", forClass = Entity.class)
+@FacesConverter(value = "entityConverter", forClass = AssistantEntity.class)
 public class EntityConverter implements Converter {
 
-	private static Map<Entity, Integer> entities = new WeakHashMap<>();
+	private static Map<AssistantEntity, Integer> entities = new WeakHashMap<>();
 
 	@Override
 	public String getAsString(FacesContext context, UIComponent component, Object entity) {
@@ -26,7 +26,7 @@ public class EntityConverter implements Converter {
 				return null;
 			}
 			if (!entities.containsKey(entity)) {
-				Entity e = (Entity) entity;
+				AssistantEntity e = (AssistantEntity) entity;
 				entities.put(e, e.hashCode());
 				return String.valueOf(e.hashCode());
 			} else {
@@ -37,7 +37,7 @@ public class EntityConverter implements Converter {
 
 	@Override
 	public Object getAsObject(FacesContext context, UIComponent component, String id) {
-		for (Entry<Entity, Integer> entry : entities.entrySet()) {
+		for (Entry<AssistantEntity, Integer> entry : entities.entrySet()) {
 			if (entry.getValue().toString().equals(id)) {
 				return entry.getKey();
 			}

@@ -1,8 +1,9 @@
 package com.grsu.reader.beans;
 
+import com.grsu.reader.dao.EntityDAO;
 import com.grsu.reader.dao.StudentDAO;
-import com.grsu.reader.models.Group;
-import com.grsu.reader.models.Student;
+import com.grsu.reader.entities.Group;
+import com.grsu.reader.entities.Student;
 import org.primefaces.model.DualListModel;
 
 import javax.faces.bean.ManagedBean;
@@ -78,11 +79,11 @@ public class StudentBean implements Serializable {
 	}
 
 	public void save() {
-		if (selectedStudent.getId() == 0) {
+		/*if (selectedStudent.getId() == 0) {
 			StudentDAO.create(databaseBean.getConnection(), selectedStudent);
 		} else {
 			StudentDAO.update(databaseBean.getConnection(), selectedStudent);
-		}
+		}*/
 		sessionBean.updateStudents();
 		update("views");
 	}
@@ -93,7 +94,7 @@ public class StudentBean implements Serializable {
 	}
 
 	public void delete() {
-		StudentDAO.delete(databaseBean.getConnection(), selectedStudent);
+		new EntityDAO().delete(selectedStudent);
 		if (filteredStudents != null) {
 			filteredStudents.clear();
 		}

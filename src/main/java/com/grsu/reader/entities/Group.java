@@ -1,6 +1,8 @@
 package com.grsu.reader.entities;
 
 import com.grsu.reader.converters.db.LocalDateTimeAttributeConverter;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,7 +15,7 @@ import java.util.List;
 @Table(name = "[GROUP]")
 public class Group implements AssistantEntity {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 
@@ -41,21 +43,37 @@ public class Group implements AssistantEntity {
 	private List<Stream> streams;
 
 	@ManyToMany
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@JoinTable(name = "STUDENT_GROUP",
 			joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
 	private List<Student> students;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "department_id", referencedColumnName = "id")
 	private Department department;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "type_id", referencedColumnName = "id")
 	private GroupType type;
 
-	@OneToMany(mappedBy = "group")
+	@OneToMany(mappedBy = "group", fetch = FetchType.EAGER)
 	private List<Lesson> lessons;
+
+	public Group() {
+	}
+
+	public Group(Group group){
+		this.name = group.name;
+		this.image = group.image;
+		this.active = group.active;
+		this.expirationDate = group.expirationDate;
+		this.streams = group.streams;
+		this.students = group.students;
+		this.department = group.department;
+		this.type = group.type;
+		this.lessons = group.lessons;
+	}
 
 	public Integer getId() {
 		return id;
@@ -81,7 +99,7 @@ public class Group implements AssistantEntity {
 		this.image = image;
 	}
 
-	public Boolean getActive() {
+	public Boolean isActive() {
 		return active;
 	}
 

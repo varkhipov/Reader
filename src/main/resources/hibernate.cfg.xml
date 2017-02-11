@@ -17,6 +17,7 @@
 		<mapping class="com.grsu.reader.entities.ScheduleVersion"/>
 		<mapping class="com.grsu.reader.entities.Stream"/>
 		<mapping class="com.grsu.reader.entities.Student"/>
+		<mapping class="com.grsu.reader.entities.StudentClass"/>
 		<!-- <property name="connection.username"/> -->
 		<!-- <property name="connection.password"/> -->
 

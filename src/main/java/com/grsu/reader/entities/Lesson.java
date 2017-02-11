@@ -1,8 +1,12 @@
 package com.grsu.reader.entities;
 
 import com.grsu.reader.converters.db.LocalDateTimeAttributeConverter;
+import com.grsu.reader.utils.EntityUtils;
+import org.hibernate.annotations.*;
 
+import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
+import javax.persistence.Entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -10,9 +14,10 @@ import java.util.List;
  * Created by zaychick-pavel on 2/9/17.
  */
 @Entity
+@ManagedBean(name = "newInstanceOfLesson")
 public class Lesson implements AssistantEntity {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 
@@ -29,20 +34,36 @@ public class Lesson implements AssistantEntity {
 	@Column(name = "create_date")
 	private LocalDateTime createDate;
 
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "lesson")
 	private List<Class> classes;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "stream_id", referencedColumnName = "id")
 	private Stream stream;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "type_id", referencedColumnName = "id")
 	private LessonType type;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "group_id", referencedColumnName = "id")
 	private Group group;
+
+
+	public Lesson() {
+	}
+
+	public Lesson(Lesson lesson) {
+		this.id = lesson.id;
+		this.name = lesson.name;
+		this.description = lesson.description;
+		this.createDate = lesson.createDate;
+		this.classes = lesson.classes;
+		this.stream = lesson.stream;
+		this.type = lesson.type;
+		this.group = lesson.group;
+	}
 
 	public Integer getId() {
 		return id;
@@ -119,6 +140,10 @@ public class Lesson implements AssistantEntity {
 		if (name != null ? !name.equals(lesson.name) : lesson.name != null) return false;
 		if (description != null ? !description.equals(lesson.description) : lesson.description != null) return false;
 		if (createDate != null ? !createDate.equals(lesson.createDate) : lesson.createDate != null) return false;
+		if (!EntityUtils.compareEntityLists(classes, lesson.classes)) return false;
+		if (!EntityUtils.compareEntity(stream, lesson.stream)) return false;
+		if (!EntityUtils.compareEntity(type, lesson.type)) return false;
+		if (!EntityUtils.compareEntity(group, lesson.group)) return false;
 
 		return true;
 	}

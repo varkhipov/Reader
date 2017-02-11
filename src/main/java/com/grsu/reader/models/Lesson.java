@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-@ManagedBean(name = "newInstanceOfLesson")
+
 public class Lesson extends Entity {
 	private int id;
 	private String name;

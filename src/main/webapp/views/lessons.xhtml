@@ -13,10 +13,10 @@
                 <h:outputText value="#{lesson.name}"/>
             </p:column>
             <p:column headerText="#{msg['lesson.createDate']}">
-                <h:outputText value="#{lesson.formattedCreateDate}"/>
+                <h:outputText value="#{lesson.classes[0].date}"/>
             </p:column>
             <p:column headerText="#{msg['lesson.type']}">
-                <h:outputText value="#{lesson.lessonType ne null ? lesson.lessonType.name : ''}"/>
+                <h:outputText value="#{lesson.type ne null ? lesson.type.name : ''}"/>
             </p:column>
             <p:column headerText="#{msg['lesson.stream']}">
                 <h:outputText value="#{lesson.stream.name}"/>

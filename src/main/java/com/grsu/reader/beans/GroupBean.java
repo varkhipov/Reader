@@ -1,9 +1,10 @@
 package com.grsu.reader.beans;
 
+import com.grsu.reader.dao.EntityDAO;
 import com.grsu.reader.dao.GroupDAO;
 import com.grsu.reader.dao.StudentGroupDAO;
-import com.grsu.reader.models.Group;
-import com.grsu.reader.models.Student;
+import com.grsu.reader.entities.Group;
+import com.grsu.reader.entities.Student;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -49,11 +50,11 @@ public class GroupBean implements Serializable {
 	}
 
 	public void save() {
-		if (selectedGroup.getId() == 0) {
+		/*if (selectedGroup.getId() == 0) {
 			GroupDAO.create(databaseBean.getConnection(), selectedGroup);
 		} else {
 			GroupDAO.update(databaseBean.getConnection(), selectedGroup);
-		}
+		}*/
 		sessionBean.updateGroups();
 		update("views");
 	}
@@ -91,7 +92,7 @@ public class GroupBean implements Serializable {
 	}
 
 	public void deleteStudent(Student student) {
-		StudentGroupDAO.delete(databaseBean.getConnection(), student, selectedGroup);
+		new EntityDAO().delete(selectedGroup);
 		groupStudents.remove(student);
 		if (filteredGroupStudents != null) {
 			filteredGroupStudents.remove(student);
@@ -119,19 +120,11 @@ public class GroupBean implements Serializable {
 			} else {
 				if ("add".equals(dialogAction)) {
 					List<Student> allStudents = new ArrayList<>(sessionBean.getStudents());
-					List<Student> studentsFromGroup = new ArrayList<>(
-							StudentGroupDAO.getStudentsByGroupId(
-									databaseBean.getConnection(),
-									selectedGroup.getId()
-							)
-					);
+					List<Student> studentsFromGroup = new ArrayList<>(selectedGroup.getStudents());
 					allStudents.removeAll(studentsFromGroup);
 					groupStudents = allStudents;
 				} else if ("delete".equals(dialogAction)) {
-					groupStudents = StudentGroupDAO.getStudentsByGroupId(
-							databaseBean.getConnection(),
-							selectedGroup.getId()
-					);
+					groupStudents = selectedGroup.getStudents();
 				}
 			}
 		}

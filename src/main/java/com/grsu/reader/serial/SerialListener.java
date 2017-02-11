@@ -1,7 +1,7 @@
 package com.grsu.reader.serial;
 
 import com.grsu.reader.beans.LessonBean;
-import com.grsu.reader.models.Student;
+import com.grsu.reader.entities.Student;
 import com.grsu.reader.utils.EntityUtils;
 import com.grsu.reader.utils.SerialUtils;
 import jssc.SerialPort;

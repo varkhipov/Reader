@@ -1,7 +1,8 @@
 package com.grsu.reader.beans;
 
 import com.grsu.reader.dao.DepartmentDAO;
-import com.grsu.reader.models.Department;
+import com.grsu.reader.dao.EntityDAO;
+import com.grsu.reader.entities.Department;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -34,21 +35,17 @@ public class DepartmentBean implements Serializable {
 		return selectedDepartment != null && !selectedDepartment.equals(copyOfSelectedDepartment);
 	}
 
-	public List<Department> getDepartments() {
-		return sessionBean.getDepartments();
-	}
-
 	public void exit() {
 		setSelectedDepartment(null);
 		closeDialog("departmentDialog");
 	}
 
 	public void save() {
-		if (selectedDepartment.getId() == 0) {
+		/*if (selectedDepartment.getId() == 0) {
 			DepartmentDAO.create(databaseBean.getConnection(), selectedDepartment);
 		} else {
 			DepartmentDAO.update(databaseBean.getConnection(), selectedDepartment);
-		}
+		}*/
 		sessionBean.updateDepartments();
 		update("views");
 	}
@@ -59,7 +56,7 @@ public class DepartmentBean implements Serializable {
 	}
 
 	public void delete() {
-		DepartmentDAO.delete(databaseBean.getConnection(), selectedDepartment);
+		new EntityDAO().delete(selectedDepartment);
 		sessionBean.updateDepartments();
 		update("views");
 		exit();

@@ -5,6 +5,7 @@ import com.grsu.reader.converters.db.LocalDateTimeAttributeConverter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zaychick-pavel on 2/9/17.
@@ -13,7 +14,7 @@ import java.util.List;
 @Table(name = "CLASS")
 public class Class implements AssistantEntity {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 
@@ -40,11 +41,15 @@ public class Class implements AssistantEntity {
 	@JoinColumn(name = "schedule_id", referencedColumnName = "id")
 	private Schedule schedule;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "STUDENT_CLASS",
 			joinColumns = @JoinColumn(name = "class_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
 	private List<Student> students;
+
+	@MapKey(name = "studentId")
+	@OneToMany(mappedBy = "clazz", fetch = FetchType.EAGER)
+	private Map<Object, StudentClass> studentClasses;
 
 	public Integer getId() {
 		return id;
@@ -100,6 +105,14 @@ public class Class implements AssistantEntity {
 
 	public void setStudents(List<Student> students) {
 		this.students = students;
+	}
+
+	public Map<Object, StudentClass> getStudentClasses() {
+		return studentClasses;
+	}
+
+	public void setStudentClasses(Map<Object, StudentClass> studentClasses) {
+		this.studentClasses = studentClasses;
 	}
 
 	@Override

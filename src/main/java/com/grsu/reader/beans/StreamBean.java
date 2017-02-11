@@ -1,8 +1,9 @@
 package com.grsu.reader.beans;
 
+import com.grsu.reader.dao.EntityDAO;
 import com.grsu.reader.dao.StreamDAO;
-import com.grsu.reader.models.Group;
-import com.grsu.reader.models.Stream;
+import com.grsu.reader.entities.Group;
+import com.grsu.reader.entities.Stream;
 import org.primefaces.model.DualListModel;
 
 import javax.faces.bean.ManagedBean;
@@ -76,11 +77,11 @@ public class StreamBean implements Serializable {
 	}
 
 	public void save() {
-		if (selectedStream.getId() == 0) {
+	/*	if (selectedStream.getId() == 0) {
 			StreamDAO.create(databaseBean.getConnection(), selectedStream);
 		} else {
 			StreamDAO.update(databaseBean.getConnection(), selectedStream);
-		}
+		}*/
 		sessionBean.updateStreams();
 		update("views");
 	}
@@ -91,7 +92,7 @@ public class StreamBean implements Serializable {
 	}
 
 	public void delete() {
-		StreamDAO.delete(databaseBean.getConnection(), selectedStream);
+		new EntityDAO().delete(selectedStream);
 		sessionBean.updateStreams();
 		update("views");
 		exit();

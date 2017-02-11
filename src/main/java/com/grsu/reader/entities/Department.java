@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 public class Department implements AssistantEntity {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 
@@ -21,12 +21,21 @@ public class Department implements AssistantEntity {
 	@Column(name = "abbreviation")
 	private String abbreviation;
 
-	@OneToMany(mappedBy = "department")
+	@OneToMany(mappedBy = "department", fetch = FetchType.EAGER)
 	private List<Group> groups;
 
 	@OneToMany(mappedBy = "department")
 	private List<Stream> streams;
 
+	public Department() {
+	}
+
+	public Department(Department department) {
+		this.name = department.name;
+		this.abbreviation = department.abbreviation;
+		this.groups = department.groups;
+		this.streams = department.streams;
+	}
 
 	public Integer getId() {
 		return id;

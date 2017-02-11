@@ -10,7 +10,7 @@ import java.util.List;
 @Table(name = "LESSON_TYPE")
 public class LessonType implements AssistantEntity {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 
@@ -18,7 +18,7 @@ public class LessonType implements AssistantEntity {
 	@Column(name = "name")
 	private String name;
 
-	@OneToMany(mappedBy = "type")
+	@OneToMany(mappedBy = "type", fetch = FetchType.EAGER)
 	private List<Lesson> lessons;
 
 	public Integer getId() {

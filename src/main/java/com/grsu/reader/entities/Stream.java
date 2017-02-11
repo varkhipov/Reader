@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 public class Stream implements AssistantEntity {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 
@@ -46,19 +46,36 @@ public class Stream implements AssistantEntity {
 	@Column(name = "expiration_date")
 	private LocalDateTime expirationDate;
 
-	@ManyToMany(mappedBy = "streams")
+	@ManyToMany(mappedBy = "streams", fetch = FetchType.EAGER)
 	private List<Group> groups;
 
-	@OneToMany(mappedBy = "stream")
+	@OneToMany(mappedBy = "stream", fetch = FetchType.EAGER)
 	private List<Lesson> lessons;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "discipline_id", referencedColumnName = "id")
 	private Discipline discipline;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "department_id", referencedColumnName = "id")
 	private Department department;
+
+	public Stream() {
+	}
+
+	public Stream(Stream stream) {
+		this.name = stream.name;
+		this.image = stream.image;
+		this.description = stream.description;
+		this.createDate = stream.createDate;
+		this.course = stream.course;
+		this.active = stream.active;
+		this.expirationDate = stream.expirationDate;
+		this.groups = stream.groups;
+		this.lessons = stream.lessons;
+		this.discipline = stream.discipline;
+		this.department = stream.department;
+	}
 
 	public Integer getId() {
 		return id;
@@ -108,7 +125,7 @@ public class Stream implements AssistantEntity {
 		this.course = course;
 	}
 
-	public Boolean getActive() {
+	public Boolean isActive() {
 		return active;
 	}
 

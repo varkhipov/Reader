@@ -1,13 +1,21 @@
 package com.grsu.reader.entities;
 
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.List;
+import java.util.Map;
+
+import static com.grsu.reader.constants.Constants.GROUPS_DELIMITER;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Created by zaychick-pavel on 2/9/17.
  */
 @Entity
-public class Student implements AssistantEntity {
+public class Student implements AssistantEntity, Person {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -45,12 +53,57 @@ public class Student implements AssistantEntity {
 	@Column(name = "image")
 	private String image;
 
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany(mappedBy = "students")
 	private List<Class> classes;
 
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany(mappedBy = "students")
 	private List<Group> groups;
 
+	@MapKey(name = "classId")
+	@OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
+	private Map<Object, StudentClass> studentClasses;
+
+	public Student() {
+	}
+
+	public Student(Student student) {
+		this.cardUid = student.cardUid;
+		this.cardId = student.cardId;
+		this.firstName = student.firstName;
+		this.lastName = student.lastName;
+		this.patronymic = student.patronymic;
+		this.phone = student.phone;
+		this.email = student.email;
+		this.image = student.image;
+		this.classes = student.classes;
+		this.groups = student.groups;
+		this.studentClasses = student.studentClasses;
+	}
+
+	public String getFullName() {
+		return StringUtils.joinWith(" ", lastName, firstName, patronymic);
+	}
+
+	public String getGroupNames() {
+		return StringUtils.join(groups, GROUPS_DELIMITER);
+	}
+
+	public void setCardUidFromCardId(int cardId) {
+		cardUid = Integer.toHexString(cardId).toUpperCase();
+	}
+
+	//http://stackoverflow.com/a/7038867/7464024
+	public void setCardIdFromCardUid(String cardUid) {
+		try {
+			cardId = (int) Long.parseLong(cardUid, 16);
+		} catch (NumberFormatException ex) {
+			this.cardId = 0;
+		}
+	}
+
+	/* GETTERS & SETTERS */
 	public Integer getId() {
 		return id;
 	}
@@ -64,7 +117,12 @@ public class Student implements AssistantEntity {
 	}
 
 	public void setCardUid(String cardUid) {
-		this.cardUid = cardUid;
+		if (isEmpty(cardUid)) {
+			this.cardUid = null;
+		} else {
+			this.cardUid = cardUid.toUpperCase();
+			setCardIdFromCardUid(this.cardUid);
+		}
 	}
 
 	public Integer getCardId() {
@@ -73,6 +131,9 @@ public class Student implements AssistantEntity {
 
 	public void setCardId(Integer cardId) {
 		this.cardId = cardId;
+		if (this.cardId != 0) {
+			setCardUidFromCardId(this.cardId);
+		}
 	}
 
 	public String getFirstName() {
@@ -137,6 +198,15 @@ public class Student implements AssistantEntity {
 
 	public void setGroups(List<Group> groups) {
 		this.groups = groups;
+	}
+
+
+	public Map<Object, StudentClass> getStudentClasses() {
+		return studentClasses;
+	}
+
+	public void setStudentClasses(Map<Object, StudentClass> studentClasses) {
+		this.studentClasses = studentClasses;
 	}
 
 	@Override

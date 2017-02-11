@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 public class Schedule implements AssistantEntity {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 
@@ -30,13 +30,18 @@ public class Schedule implements AssistantEntity {
 	@Column(name = "number")
 	private Integer number;
 
-	@OneToMany(mappedBy = "schedule")
+	@OneToMany(mappedBy = "schedule", fetch = FetchType.EAGER)
 	private List<Class> classes;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "version_id", referencedColumnName = "id")
 	private ScheduleVersion version;
 
+	public String getCaption() {
+		return String.format("[%s] %s - %s", number, begin, end);
+	}
+
+	/* GETTERS & SETTERS */
 	public Integer getId() {
 		return id;
 	}

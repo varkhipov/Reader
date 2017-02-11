@@ -29,8 +29,8 @@ public class CSVUtils {
 	private static final char SEPARATOR = ';';
 
 	// TODO: analyze once again
-	public static void updateGroupsFromCSV(Connection connection) {
-		for(Group group : parseGroups()) {
+	public static void updateGroupsFromCSV() {
+		/*for(Group group : parseGroups()) {
 			if (group.getStudents().isEmpty()) {
 				System.out.println("Group [ " + group.getName() + " ] is empty and not added to database.");
 				continue;
@@ -64,7 +64,7 @@ public class CSVUtils {
 			}
 			processStudents(connection, group);
 			System.out.println("Group [ " + group.getName() + " ] processed.");
-		}
+		}*/
 	}
 
 	private static void processStudents(Connection connection, Group group) {

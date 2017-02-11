@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 public class Discipline implements AssistantEntity {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 
@@ -38,8 +38,20 @@ public class Discipline implements AssistantEntity {
 	@Column(name = "expiration_date")
 	private LocalDateTime expirationDate;
 
-	@OneToMany(mappedBy = "discipline")
+	@OneToMany(mappedBy = "discipline", fetch = FetchType.EAGER)
 	private List<Stream> streams;
+
+	public Discipline() {
+	}
+
+	public Discipline(Discipline discipline) {
+		this.name = discipline.name;
+		this.description = discipline.description;
+		this.createDate = discipline.createDate;
+		this.active = discipline.active;
+		this.expirationDate = discipline.expirationDate;
+		this.streams = discipline.streams;
+	}
 
 	public Integer getId() {
 		return id;
@@ -73,7 +85,7 @@ public class Discipline implements AssistantEntity {
 		this.createDate = createDate;
 	}
 
-	public Boolean getActive() {
+	public Boolean isActive() {
 		return active;
 	}
 
