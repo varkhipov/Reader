@@ -10,8 +10,13 @@
 
 
 	<properties>
+		<!--
+			Place script set_TOMCAT_DIR.sh to your Tomcat root dir and execute it
+			to add system variable TOMCAT_DIR that contains path to yor Tomcat root dir
+		-->
+		<tomcat.webapps.path>${env.TOMCAT_DIR}/webapps</tomcat.webapps.path>
+
 		<war.name>ROOT</war.name>
-		<tomcat.webapps.path>/home/zaychick-pavel/env/apache-tomcat-8.5.5/webapps</tomcat.webapps.path>
 
 		<maven.compiler.plugin.version>3.6.0</maven.compiler.plugin.version>
 		<maven.war.plugin.version>3.0.0</maven.war.plugin.version>
