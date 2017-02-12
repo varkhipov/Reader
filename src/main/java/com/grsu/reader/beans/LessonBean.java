@@ -87,11 +87,7 @@ public class LessonBean implements Serializable {
 	public void createLesson() {
 		if (selectedLesson != null) {
 			if (StringUtils.isEmpty(selectedLesson.getName())) {
-				selectedLesson.setName(String.format("%s [%s]",
-						selectedLesson.getStream().getName(),
-						DateUtils.formatDate(LocalDateTime.now())
-						)
-				);
+				selectedLesson.setName(selectedLesson.getStream().getName());
 			}
 
 			if (selectedLesson.getLessonType() == null || selectedLesson.getLessonType().getId() == 1) {
