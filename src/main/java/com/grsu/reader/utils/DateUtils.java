@@ -1,11 +1,13 @@
 package com.grsu.reader.utils;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class DateUtils {
 	private static final String FORMAT_DATE = "dd.MM.yyyy";
 	private static final String FORMAT_TIME = "HH:mm";
+	private static final String FORMAT_TIME_SECOND = "HH:mm:ss";
 	private static final String FORMAT_DATE_TIME = "dd.MM.yyyy HH:mm";
 
 	public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(FORMAT_DATE);
@@ -26,6 +28,13 @@ public class DateUtils {
 
 	public static String formatTime(LocalDateTime date) {
 		return formatDate(date, TIME_FORMATTER);
+	}
+
+	public static String formatTime(LocalTime time) {
+		if (time == null) {
+			return null;
+		}
+		return time.format(DateTimeFormatter.ofPattern(FORMAT_TIME_SECOND));
 	}
 
 	private static LocalDateTime parseDate(String date, DateTimeFormatter formatter) {

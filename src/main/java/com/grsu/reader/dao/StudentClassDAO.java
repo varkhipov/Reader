@@ -9,7 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.grsu.reader.dao.ClassDAO.getClassById;
 import static com.grsu.reader.dao.StudentDAO.getStudentById;
@@ -38,6 +40,31 @@ public class StudentClassDAO {
 			return students;
 		}
 		return students;
+	}
+
+	public static Map<Integer, LocalTime> getRegistrationTime(Connection connection, int id) {
+		Map<Integer, LocalTime> registrationTime = new HashMap<>();
+		try {
+			PreparedStatement preparedStatement = buildPreparedStatement(
+					connection,
+					"SELECT student_id, registration_time FROM STUDENT_CLASS WHERE class_id = ?;",
+					id
+			);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				if (resultSet.getString(2) != null) {
+					registrationTime.put(resultSet.getInt(1), LocalTime.parse(resultSet.getString(2)));
+				}
+			}
+
+			resultSet.close();
+			preparedStatement.close();
+		} catch (Exception e) {
+			System.out.println("Error In getRegistrationTime(id, registered) -->" + e.getMessage());
+			return registrationTime;
+		}
+		return registrationTime;
 	}
 
 	public static List<Student> getStudentsByClassId(Connection connection, int id) {

@@ -38,9 +38,8 @@
                              update=":addStudentsForm:studentDetail"/>
         </p:panelGrid>
 
-        <p:panelGrid id="lessonInfo" columns="2" styleClass="noBorder">
+        <p:panelGrid id="lessonInfo" columns="2" styleClass="noBorder lesson-info">
             <p:panel id="lastVisitInfo" styleClass="visitInfo">
-                <p:outputLabel styleClass="visitLabel" value="#{msg['lesson.visit.label']}"/>
                 <p:panel rendered="#{lessonBean.processedStudent eq null}">
                     <p:outputLabel value="#{msg['lesson.visit.noData']}"/>
                 </p:panel>
@@ -70,13 +69,18 @@
 
         <p:panelGrid id="lessonTables" columns="5" styleClass="noBorder v-align-top">
             <p:panel id="presentStudents"
-                     header="#{msg['lesson.students.present']} - #{lessonBean.presentStudents.size()}"
+                     header="#{msg['lesson.students.present']} - #{lessonBean.getPresentStudentsSize()}/#{lessonBean.lessonStudents.size()} #{msg['lesson.students.additional']}: #{lessonBean.getAdditionalStudentsSize()}"
                      toggleable="true" styleClass="noBorder lessonStudents">
                 <p:dataTable var="pStudent" widgetVar="pStudentsTable" value="#{lessonBean.presentStudents}"
-                             sortBy="#{pStudent.fullName}" filteredValue="#{lessonBean.filteredPresentStudents}">
+                             sortBy="#{lessonBean.getRegisteredTime(pStudent.id)}" sortOrder="descending"
+                             filteredValue="#{lessonBean.filteredPresentStudents}" scrollable="true" scrollHeight="200">
 
                     <p:column sortBy="#{pStudent.fullName}" filterBy="#{pStudent.fullName}" filterMatchMode="startsWith">
                         <h:outputText value="#{pStudent.fullName}"/>
+                    </p:column>
+                    <p:column sortBy="#{lessonBean.getRegisteredTime(pStudent.id)}"
+                              filterMatchMode="startsWith">
+                        <h:outputText value="#{lessonBean.getRegisteredTime(pStudent.id)}"/>
                     </p:column>
                     <p:column styleClass="groupOptions">
                         <p:commandButton update=":lessonForm:lessonTables"
@@ -87,16 +91,16 @@
                 </p:dataTable>
             </p:panel>
 
-            <p:panel id="absentStudents" header="#{msg['lesson.students.absent']} - #{lessonBean.absentStudents.size()}"
+            <p:panel id="absentStudents" header="#{msg['lesson.students.absent']} - #{lessonBean.absentStudents.size()}/#{lessonBean.lessonStudents.size()}"
                      toggleable="true" styleClass="noBorder lessonStudents">
                 <p:dataTable var="aStudent" widgetVar="aStudentsTable" value="#{lessonBean.absentStudents}"
-                             sortBy="#{aStudent.fullName}" filteredValue="#{lessonBean.filteredAbsentStudents}">
+                             sortBy="#{aStudent.fullName}" filteredValue="#{lessonBean.filteredAbsentStudents}" scrollable="true" scrollHeight="200">
 
                     <p:column sortBy="#{aStudent.fullName}" filterBy="#{aStudent.fullName}" filterMatchMode="startsWith">
                         <h:outputText value="#{aStudent.fullName}"/>
                     </p:column>
                     <p:column styleClass="groupOptions">
-                        <p:commandButton update=":lessonForm:lessonTables"
+                        <p:commandButton update=":lessonForm:lessonTables :lessonForm:lessonInfo"
                                          icon="fa fa-fw fa-plus" title="Add"
                                          styleClass="green"
                                          actionListener="#{lessonBean.addStudent(aStudent)}"/>

@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.faces.bean.ManagedBean;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.grsu.reader.constants.Constants.GROUPS_DELIMITER;
@@ -68,20 +69,14 @@ public class Student extends Person {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) return false;
-		if (this == obj) return true;
+		Student student = (Student) obj;
+		return super.equals(obj) && Objects.equals(getGroups(), student.getGroups());
+	}
 
-		if (obj.getClass() != null && obj instanceof Student) {
-			Student student = (Student) obj;
-			return StringUtils.equals(getCardUid(), student.getCardUid())
-					&& getCardId() == student.getCardId()
-					&& StringUtils.equals(getFirstName(), student.getFirstName())
-					&& StringUtils.equals(getLastName(), student.getLastName())
-					&& StringUtils.equals(getPatronymic(), student.getPatronymic())
-					&& StringUtils.equals(getPhone(), student.getPhone())
-					&& StringUtils.equals(getEmail(), student.getEmail())
-					&& Objects.equals(getGroups(), student.getGroups());
-		}
-		return false;
+	@Override
+	public int hashCode() {
+		int result = super.hashCode();
+		result = 31 * result + (groups != null ? groups.hashCode() : 0);
+		return result;
 	}
 }

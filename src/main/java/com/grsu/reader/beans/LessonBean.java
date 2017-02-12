@@ -25,9 +25,7 @@ import java.io.Serializable;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.grsu.reader.utils.EntityUtils.getEntityById;
@@ -53,8 +51,9 @@ public class LessonBean implements Serializable {
 	private List<Student> allStudents;
 	private List<Student> filteredAllStudents;
 
-	private List<Student> lessonStudents;
+	private Set<Student> lessonStudents;
 
+	private Map<Integer, LocalTime> registeredMap = new HashMap<>();
 	/* Filter */
 	private Department department;
 	private Discipline discipline;
@@ -120,7 +119,7 @@ public class LessonBean implements Serializable {
 				groups = Arrays.asList(selectedLesson.getGroup());
 			}
 
-			List<Student> students = new ArrayList<>();
+			Set<Student> students = new HashSet<>();
 			for (Group group : groups) {
 				students.addAll(StudentGroupDAO.getStudentsByGroupId(
 						databaseBean.getConnection(),
@@ -146,6 +145,7 @@ public class LessonBean implements Serializable {
 		if (selectedLesson == null || selectedLesson.getStream() == null) {
 			presentStudents = null;
 		} else {
+			registeredMap.clear();
 			List<Student> students = new ArrayList<>();
 			for (Class cls : selectedLesson.getClasses()) {
 				students.addAll(StudentClassDAO.getStudentsByClassId(
@@ -153,6 +153,7 @@ public class LessonBean implements Serializable {
 						cls.getId(),
 						true)
 				);
+				registeredMap.putAll(StudentClassDAO.getRegistrationTime(databaseBean.getConnection(), cls.getId()));
 			}
 			presentStudents = students;
 		}
@@ -188,9 +189,9 @@ public class LessonBean implements Serializable {
 	private void initLessonStudents() {
 		if (selectedLesson.getStream() != null) {
 			if (selectedLesson.getGroup() != null) {
-				lessonStudents = StudentGroupDAO.getStudentsByGroupId(databaseBean.getConnection(),selectedLesson.getGroup().getId());
+				lessonStudents = new HashSet<>(StudentGroupDAO.getStudentsByGroupId(databaseBean.getConnection(),selectedLesson.getGroup().getId()));
 			} else {
-				lessonStudents = new ArrayList<>();
+				lessonStudents = new HashSet<>();
 				for (Group group : selectedLesson.getStream().getGroups()) {
 					lessonStudents.addAll(StudentGroupDAO.getStudentsByGroupId(databaseBean.getConnection(), group.getId()));
 				}
@@ -204,6 +205,7 @@ public class LessonBean implements Serializable {
 		if (filteredAbsentStudents != null) {
 			filteredAbsentStudents.remove(student);
 		}
+		registeredMap.put(student.getId(), LocalTime.now());
 
 		try {
 			StudentClassDAO.updateStudentClassInfo(
@@ -232,6 +234,7 @@ public class LessonBean implements Serializable {
 		if (filteredAllStudents != null) {
 			filteredAllStudents.remove(student);
 		}
+		registeredMap.put(student.getId(), LocalTime.now());
 
 		try {
 			StudentClassDAO.updateStudentClassInfo(
@@ -247,6 +250,7 @@ public class LessonBean implements Serializable {
 			return false;
 		}
 
+		processedStudent = student;
 		FacesUtils.execute("PF('aStudentsTable').clearFilters()");
 		FacesUtils.execute("PF('pStudentsTable').clearFilters()");
 //		System.out.println("Student added");
@@ -269,6 +273,8 @@ public class LessonBean implements Serializable {
 				StudentClassDAO.deleteByStudentId(databaseBean.getConnection(), student.getId());
 				allStudents.add(student);
 			}
+
+			registeredMap.remove(student.getId());
 
 			presentStudents.remove(student);
 
@@ -449,6 +455,30 @@ public class LessonBean implements Serializable {
 
 	public void setCourse(Integer course) {
 		this.course = course;
+	}
+
+	public Set<Student> getLessonStudents() {
+		return lessonStudents;
+	}
+
+	public void setLessonStudents(Set<Student> lessonStudents) {
+		this.lessonStudents = lessonStudents;
+	}
+
+	public String getRegisteredTime(int id) {
+		return DateUtils.formatTime(registeredMap.get(id));
+	}
+
+	public int getAdditionalStudentsSize() {
+		List<Student> additionalStudents = new ArrayList<>(this.presentStudents);
+		additionalStudents.removeAll(this.lessonStudents);
+		return additionalStudents.size();
+	}
+
+	public int getPresentStudentsSize() {
+		List<Student> presentStudents = new ArrayList<>(this.lessonStudents);
+		presentStudents.removeAll(this.absentStudents);
+		return presentStudents.size();
 	}
 
 	public void exitStudents() {

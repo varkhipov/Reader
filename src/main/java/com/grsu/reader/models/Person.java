@@ -29,7 +29,7 @@ public class Person extends Entity {
 	}
 
 	public String getFullName() {
-		return StringUtils.joinWith(" ", lastName, firstName, patronymic);
+		return StringUtils.joinWith(" ", lastName, firstName);
 	}
 
 	public int getId() {
@@ -125,5 +125,37 @@ public class Person extends Entity {
 				", email='" + email + '\'' +
 				", image=" + image +
 				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Person person = (Person) o;
+
+		if (id != person.id) return false;
+		if (cardId != person.cardId) return false;
+		if (cardUid != null ? !cardUid.equals(person.cardUid) : person.cardUid != null) return false;
+		if (firstName != null ? !firstName.equals(person.firstName) : person.firstName != null) return false;
+		if (lastName != null ? !lastName.equals(person.lastName) : person.lastName != null) return false;
+		if (patronymic != null ? !patronymic.equals(person.patronymic) : person.patronymic != null) return false;
+		if (phone != null ? !phone.equals(person.phone) : person.phone != null) return false;
+		if (email != null ? !email.equals(person.email) : person.email != null) return false;
+		return image != null ? image.equals(person.image) : person.image == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id;
+		result = 31 * result + (cardUid != null ? cardUid.hashCode() : 0);
+		result = 31 * result + cardId;
+		result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+		result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+		result = 31 * result + (patronymic != null ? patronymic.hashCode() : 0);
+		result = 31 * result + (phone != null ? phone.hashCode() : 0);
+		result = 31 * result + (email != null ? email.hashCode() : 0);
+		result = 31 * result + (image != null ? image.hashCode() : 0);
+		return result;
 	}
 }
