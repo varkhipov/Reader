@@ -69,7 +69,7 @@
 
         <p:panelGrid id="lessonTables" columns="5" styleClass="noBorder v-align-top">
             <p:panel id="presentStudents"
-                     header="#{msg['lesson.students.present']} - #{lessonBean.getPresentStudentsSize()}/#{lessonBean.lessonStudents.size()} #{msg['lesson.students.additional']}: #{lessonBean.getAdditionalStudentsSize()}"
+                     header="#{msg['lesson.students.present']} - #{lessonBean.getPresentStudentsSize()}/#{lessonBean.lessonStudents.size()} #{lessonBean.getAdditionalStudentsSize()}"
                      toggleable="true" styleClass="noBorder lessonStudents">
                 <p:dataTable var="pStudent" widgetVar="pStudentsTable" value="#{lessonBean.presentStudents}"
                              sortBy="#{lessonBean.getRegisteredTime(pStudent.id)}" sortOrder="descending"
@@ -79,10 +79,10 @@
                         <h:outputText value="#{pStudent.fullName}"/>
                     </p:column>
                     <p:column sortBy="#{lessonBean.getRegisteredTime(pStudent.id)}"
-                              filterMatchMode="startsWith">
+                              filterMatchMode="startsWith" styleClass="groupOptions">
                         <h:outputText value="#{lessonBean.getRegisteredTime(pStudent.id)}"/>
                     </p:column>
-                    <p:column styleClass="groupOptions">
+                    <p:column styleClass="groupOptions transparent-button">
                         <p:commandButton update=":lessonForm:lessonTables"
                                          icon="fa fa-fw fa-minus" title="Remove"
                                          styleClass="red"
@@ -99,7 +99,7 @@
                     <p:column sortBy="#{aStudent.fullName}" filterBy="#{aStudent.fullName}" filterMatchMode="startsWith">
                         <h:outputText value="#{aStudent.fullName}"/>
                     </p:column>
-                    <p:column styleClass="groupOptions">
+                    <p:column styleClass="groupOptions transparent-button">
                         <p:commandButton update=":lessonForm:lessonTables :lessonForm:lessonInfo"
                                          icon="fa fa-fw fa-plus" title="Add"
                                          styleClass="green"

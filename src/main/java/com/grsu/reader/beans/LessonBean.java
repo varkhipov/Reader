@@ -15,6 +15,7 @@ import com.grsu.reader.models.Stream;
 import com.grsu.reader.models.Student;
 import com.grsu.reader.utils.DateUtils;
 import com.grsu.reader.utils.FacesUtils;
+import com.grsu.reader.utils.LocaleUtils;
 import com.grsu.reader.utils.SerialUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -469,10 +470,13 @@ public class LessonBean implements Serializable {
 		return DateUtils.formatTime(registeredMap.get(id));
 	}
 
-	public int getAdditionalStudentsSize() {
+	public String getAdditionalStudentsSize() {
 		List<Student> additionalStudents = new ArrayList<>(this.presentStudents);
 		additionalStudents.removeAll(this.lessonStudents);
-		return additionalStudents.size();
+		if (additionalStudents.size() != 0) {
+			return new LocaleUtils().getMessage("lesson.students.additional") + ": " + additionalStudents.size();
+		}
+		return "";
 	}
 
 	public int getPresentStudentsSize() {

@@ -126,3 +126,12 @@ body {
 .lesson-info .visitInfo {
     font-size: 16pt;
 }
+
+.lessonStudents .transparent-button button{
+    background-color: rgba(0, 0, 0, 0);
+    border: 0
+}
+
+.lessonStudents .transparent-button .ui-button-text {
+    padding: 0;
+}
