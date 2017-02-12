@@ -467,18 +467,23 @@ public class LessonBean implements Serializable {
 	}
 
 	public String getAdditionalStudentsSize() {
-		List<Student> additionalStudents = new ArrayList<>(this.presentStudents);
-		additionalStudents.removeAll(this.lessonStudents);
-		if (additionalStudents.size() != 0) {
-			return new LocaleUtils().getMessage("lesson.students.additional") + ": " + additionalStudents.size();
+		if (this.presentStudents != null) {
+			List<Student> additionalStudents = new ArrayList<>(this.presentStudents);
+			additionalStudents.removeAll(this.lessonStudents);
+			if (additionalStudents.size() != 0) {
+				return new LocaleUtils().getMessage("lesson.students.additional") + ": " + additionalStudents.size();
+			}
 		}
 		return "";
 	}
 
 	public int getPresentStudentsSize() {
-		List<Student> presentStudents = new ArrayList<>(this.lessonStudents);
-		presentStudents.removeAll(this.absentStudents);
-		return presentStudents.size();
+		if (this.lessonStudents != null) {
+			List<Student> presentStudents = new ArrayList<>(this.lessonStudents);
+			presentStudents.removeAll(this.absentStudents);
+			return presentStudents.size();
+		}
+		return 0;
 	}
 
 	public void exitStudents() {
