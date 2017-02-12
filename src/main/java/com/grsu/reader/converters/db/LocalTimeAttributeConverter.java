@@ -5,6 +5,7 @@ import com.grsu.reader.utils.DateUtils;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 
 /**
  * Created by pavel on 2/9/17.
@@ -24,6 +25,10 @@ public class LocalTimeAttributeConverter implements AttributeConverter<LocalTime
 	public LocalTime convertToEntityAttribute(String s) {
 		if (s == null) {
 			return null;
+		}
+		try {
+			return LocalTime.parse(s);
+		} catch (DateTimeParseException ex) {
 		}
 		return LocalTime.parse(s, DateUtils.TIME_FORMATTER);
 	}

@@ -20,9 +20,6 @@ public class DisciplineBean implements Serializable {
 	private Discipline selectedDiscipline;
 	private Discipline copyOfSelectedDiscipline;
 
-	@ManagedProperty(value = "#{databaseBean}")
-	private DatabaseBean databaseBean;
-
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
 
@@ -64,10 +61,6 @@ public class DisciplineBean implements Serializable {
 		sessionBean.updateDisciplines();
 		update("views");
 		exit();
-	}
-
-	public void setDatabaseBean(DatabaseBean databaseBean) {
-		this.databaseBean = databaseBean;
 	}
 
 	public void setSessionBean(SessionBean sessionBean) {

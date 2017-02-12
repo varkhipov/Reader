@@ -1,5 +1,6 @@
 package com.grsu.reader.beans;
 
+import com.grsu.reader.constants.Constants;
 import com.grsu.reader.dao.EntityDAO;
 import com.grsu.reader.entities.*;
 import com.grsu.reader.entities.Class;
@@ -12,6 +13,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -181,6 +183,26 @@ public class LessonBean implements Serializable {
 			filteredAbsentStudents.remove(student);
 		}
 
+		if (student.getStudentClasses() != null) {
+			StudentClass studentClass = student.getStudentClasses().get(selectedLesson.getClasses().get(0).getId());
+			if (studentClass == null) {
+				studentClass = new StudentClass();
+				studentClass.setStudent(student);
+				studentClass.setClazz(selectedLesson.getClasses().get(0));
+				studentClass.setRegistered(true);
+				studentClass.setRegistrationTime(LocalTime.now());
+				studentClass.setRegistrationType(Constants.REGISTRATION_TYPE_AUTOMATIC);
+				new EntityDAO().add(studentClass);
+				student.getStudentClasses().put(studentClass.getClazz().getId(), studentClass);
+				selectedLesson.getClasses().get(0).getStudentClasses().put(studentClass.getStudent().getId(), studentClass);
+			} else {
+				studentClass.setRegistered(true);
+				studentClass.setRegistrationTime(LocalTime.now());
+				studentClass.setRegistrationType(Constants.REGISTRATION_TYPE_AUTOMATIC);
+				new EntityDAO().update(studentClass);
+			}
+		}
+
 	/*	try {
 
 			StudentClassDAO.updateStudentClassInfo(
@@ -210,6 +232,25 @@ public class LessonBean implements Serializable {
 			filteredAllStudents.remove(student);
 		}
 
+		if (student.getStudentClasses() != null) {
+			StudentClass studentClass = student.getStudentClasses().get(selectedLesson.getClasses().get(0).getId());
+			if (studentClass == null) {
+				studentClass = new StudentClass();
+				studentClass.setStudent(student);
+				studentClass.setClazz(selectedLesson.getClasses().get(0));
+				studentClass.setRegistered(true);
+				studentClass.setRegistrationTime(LocalTime.now());
+				studentClass.setRegistrationType(Constants.REGISTRATION_TYPE_MANUAL);
+				new EntityDAO().add(studentClass);
+				student.getStudentClasses().put(studentClass.getClazz().getId(), studentClass);
+				selectedLesson.getClasses().get(0).getStudentClasses().put(studentClass.getStudent().getId(), studentClass);
+			} else {
+				studentClass.setRegistered(true);
+				studentClass.setRegistrationTime(LocalTime.now());
+				studentClass.setRegistrationType(Constants.REGISTRATION_TYPE_MANUAL);
+				new EntityDAO().update(studentClass);
+			}
+		}
 		/*try {
 			StudentClassDAO.updateStudentClassInfo(
 					databaseBean.getConnection(),
@@ -230,29 +271,37 @@ public class LessonBean implements Serializable {
 	}
 
 	public void removeStudent(Student student) {
-		/*try {
+	//	try {
+		StudentClass studentClass = student.getStudentClasses().get(selectedLesson.getClasses().get(0).getId());
 			if (lessonStudents.contains(student)) {
-				StudentClassDAO.updateStudentClassInfo(
+			/*	StudentClassDAO.updateStudentClassInfo(
 						databaseBean.getConnection(),
 						student.getId(),
 						selectedLesson.getClasses().get(0).getId(),
 						false,
 						null,
 						null
-				);
+				);*/
+
+				studentClass.setRegistrationType(null);
+				studentClass.setRegistrationTime(null);
+				studentClass.setRegistered(false);
+				new EntityDAO().update(studentClass);
 				absentStudents.add(student);
 			} else {
-				StudentClassDAO.deleteByStudentId(databaseBean.getConnection(), student.getId());
+//				StudentClassDAO.deleteByStudentId(databaseBean.getConnection(), student.getId());
+				student.getStudentClasses().remove(selectedLesson.getClasses().get(0).getId());
+				selectedLesson.getClasses().get(0).getStudentClasses().remove(student.getId());
+				new EntityDAO().delete(studentClass);
 				allStudents.add(student);
 			}
 
 			presentStudents.remove(student);
 
-		} catch (SQLException e) {
+		/*} catch (SQLException e) {
 			System.out.println("Student not removed. Uid[ " + student.getCardUid() + " ]. Reason: SQLException:\n" + e);
 			return false;
-		}
-*/
+		}*/
 		FacesUtils.execute("PF('aStudentsTable').clearFilters()");
 		FacesUtils.execute("PF('pStudentsTable').clearFilters()");
 //		System.out.println("Student removed");

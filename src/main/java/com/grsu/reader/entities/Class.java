@@ -49,7 +49,7 @@ public class Class implements AssistantEntity {
 
 	@MapKey(name = "studentId")
 	@OneToMany(mappedBy = "clazz", fetch = FetchType.EAGER)
-	private Map<Object, StudentClass> studentClasses;
+	private Map<Integer, StudentClass> studentClasses;
 
 	public Integer getId() {
 		return id;
@@ -107,11 +107,11 @@ public class Class implements AssistantEntity {
 		this.students = students;
 	}
 
-	public Map<Object, StudentClass> getStudentClasses() {
+	public Map<Integer, StudentClass> getStudentClasses() {
 		return studentClasses;
 	}
 
-	public void setStudentClasses(Map<Object, StudentClass> studentClasses) {
+	public void setStudentClasses(Map<Integer, StudentClass> studentClasses) {
 		this.studentClasses = studentClasses;
 	}
 

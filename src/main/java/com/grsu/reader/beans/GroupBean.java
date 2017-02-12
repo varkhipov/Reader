@@ -65,7 +65,8 @@ public class GroupBean implements Serializable {
 	}
 
 	public void deleteGroup() {
-		GroupDAO.delete(databaseBean.getConnection(), selectedGroup.getId());
+//		GroupDAO.delete(databaseBean.getConnection(), selectedGroup.getId());
+		new EntityDAO().delete(selectedGroup);
 		sessionBean.updateStudents();
 		sessionBean.updateGroups();
 		update("views");

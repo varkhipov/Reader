@@ -20,9 +20,6 @@ public class DepartmentBean implements Serializable {
 	private Department selectedDepartment;
 	private Department copyOfSelectedDepartment;
 
-	@ManagedProperty(value = "#{databaseBean}")
-	private DatabaseBean databaseBean;
-
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
 
@@ -60,10 +57,6 @@ public class DepartmentBean implements Serializable {
 		sessionBean.updateDepartments();
 		update("views");
 		exit();
-	}
-
-	public void setDatabaseBean(DatabaseBean databaseBean) {
-		this.databaseBean = databaseBean;
 	}
 
 	public void setSessionBean(SessionBean sessionBean) {

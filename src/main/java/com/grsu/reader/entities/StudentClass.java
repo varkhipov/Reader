@@ -1,9 +1,11 @@
 package com.grsu.reader.entities;
 
 import com.grsu.reader.converters.db.LocalDateTimeAttributeConverter;
+import com.grsu.reader.converters.db.LocalTimeAttributeConverter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * Created by pavel on 2/10/17.
@@ -21,9 +23,9 @@ public class StudentClass implements AssistantEntity {
 	private Boolean registered;
 
 	@Basic
-	@Convert(converter = LocalDateTimeAttributeConverter.class)
+	@Convert(converter = LocalTimeAttributeConverter.class)
 	@Column(name = "registration_time")
-	private LocalDateTime registrationTime;
+	private LocalTime registrationTime;
 
 	@Basic
 	@Column(name = "registration_type")
@@ -66,11 +68,11 @@ public class StudentClass implements AssistantEntity {
 		this.registered = registered;
 	}
 
-	public LocalDateTime getRegistrationTime() {
+	public LocalTime getRegistrationTime() {
 		return registrationTime;
 	}
 
-	public void setRegistrationTime(LocalDateTime registrationTime) {
+	public void setRegistrationTime(LocalTime registrationTime) {
 		this.registrationTime = registrationTime;
 	}
 
