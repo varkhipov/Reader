@@ -1,8 +1,5 @@
 package com.grsu.reader.models;
 
-import javax.faces.bean.ManagedBean;
-
-@ManagedBean(name = "newInstanceOfDepartment")
 public class Department extends Entity {
 	private int id;
 	private String name;

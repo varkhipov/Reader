@@ -1,5 +1,6 @@
 package com.grsu.reader.entities;
 
+import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import java.util.List;
  * Created by zaychick-pavel on 2/9/17.
  */
 @Entity
+@ManagedBean(name = "newInstanceOfDepartment")
 public class Department implements AssistantEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

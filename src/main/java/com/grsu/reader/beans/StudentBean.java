@@ -1,7 +1,6 @@
 package com.grsu.reader.beans;
 
 import com.grsu.reader.dao.EntityDAO;
-import com.grsu.reader.dao.StudentDAO;
 import com.grsu.reader.entities.Group;
 import com.grsu.reader.entities.Student;
 import org.primefaces.model.DualListModel;
@@ -27,9 +26,6 @@ public class StudentBean implements Serializable {
 
 	private DualListModel<Group> selectedGroups;
 	private List<Student> filteredStudents;
-
-	@ManagedProperty(value = "#{databaseBean}")
-	private DatabaseBean databaseBean;
 
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
@@ -79,11 +75,11 @@ public class StudentBean implements Serializable {
 	}
 
 	public void save() {
-		/*if (selectedStudent.getId() == 0) {
-			StudentDAO.create(databaseBean.getConnection(), selectedStudent);
+		if (selectedStudent.getId() == null) {
+			new EntityDAO().add(selectedStudent);
 		} else {
-			StudentDAO.update(databaseBean.getConnection(), selectedStudent);
-		}*/
+			new EntityDAO().update(selectedStudent);
+		}
 		sessionBean.updateStudents();
 		update("views");
 	}
@@ -101,10 +97,6 @@ public class StudentBean implements Serializable {
 		sessionBean.updateStudents();
 		execute("PF('studentsTable').clearFilters()");
 		exit();
-	}
-
-	public void setDatabaseBean(DatabaseBean databaseBean) {
-		this.databaseBean = databaseBean;
 	}
 
 	public void setSessionBean(SessionBean sessionBean) {

@@ -4,6 +4,7 @@ import com.grsu.reader.converters.db.LocalDateTimeAttributeConverter;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
+import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "[GROUP]")
+@ManagedBean(name = "newInstanceOfGroup")
 public class Group implements AssistantEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

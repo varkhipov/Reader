@@ -2,6 +2,7 @@ package com.grsu.reader.entities;
 
 import com.grsu.reader.converters.db.LocalDateTimeAttributeConverter;
 
+import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
  * Created by zaychick-pavel on 2/9/17.
  */
 @Entity
+@ManagedBean(name = "newInstanceOfDiscipline")
 public class Discipline implements AssistantEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,7 +1,6 @@
 package com.grsu.reader.beans;
 
 import com.grsu.reader.dao.EntityDAO;
-import com.grsu.reader.dao.DisciplineDAO;
 import com.grsu.reader.entities.Discipline;
 
 import javax.faces.bean.ManagedBean;
@@ -42,11 +41,11 @@ public class DisciplineBean implements Serializable {
 	}
 
 	public void save() {
-		/*if (selectedDiscipline.getId() == 0) {
-			DisciplineDAO.create(databaseBean.getConnection(), selectedDiscipline);
+		if (selectedDiscipline.getId() == null) {
+			new EntityDAO().add(selectedDiscipline);
 		} else {
-			DisciplineDAO.update(databaseBean.getConnection(), selectedDiscipline);
-		}*/
+			new EntityDAO().update(selectedDiscipline);
+		}
 		sessionBean.updateDisciplines();
 		update("views");
 	}

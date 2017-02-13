@@ -1,7 +1,6 @@
 package com.grsu.reader.beans;
 
 import com.grsu.reader.dao.EntityDAO;
-import com.grsu.reader.dao.StreamDAO;
 import com.grsu.reader.entities.Group;
 import com.grsu.reader.entities.Stream;
 import org.primefaces.model.DualListModel;
@@ -25,9 +24,6 @@ public class StreamBean implements Serializable {
 	private Stream copyOfSelectedStream;
 
 	private DualListModel<Group> selectedGroups;
-
-	@ManagedProperty(value = "#{databaseBean}")
-	private DatabaseBean databaseBean;
 
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
@@ -77,11 +73,11 @@ public class StreamBean implements Serializable {
 	}
 
 	public void save() {
-	/*	if (selectedStream.getId() == 0) {
-			StreamDAO.create(databaseBean.getConnection(), selectedStream);
+		if (selectedStream.getId() == null) {
+			new EntityDAO().add(selectedStream);
 		} else {
-			StreamDAO.update(databaseBean.getConnection(), selectedStream);
-		}*/
+			new EntityDAO().update(selectedStream);
+		}
 		sessionBean.updateStreams();
 		update("views");
 	}
@@ -96,10 +92,6 @@ public class StreamBean implements Serializable {
 		sessionBean.updateStreams();
 		update("views");
 		exit();
-	}
-
-	public void setDatabaseBean(DatabaseBean databaseBean) {
-		this.databaseBean = databaseBean;
 	}
 
 	public void setSessionBean(SessionBean sessionBean) {

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
+import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * Created by zaychick-pavel on 2/9/17.
  */
 @Entity
+@ManagedBean(name = "newInstanceOfStudent")
 public class Student implements AssistantEntity, Person {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

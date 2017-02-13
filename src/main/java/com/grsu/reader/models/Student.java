@@ -2,14 +2,13 @@ package com.grsu.reader.models;
 
 import org.apache.commons.lang3.StringUtils;
 
-import javax.faces.bean.ManagedBean;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 import static com.grsu.reader.constants.Constants.GROUPS_DELIMITER;
 
-@ManagedBean(name = "newInstanceOfStudent")
+
 public class Student extends Person {
 	public Student() {}
 
