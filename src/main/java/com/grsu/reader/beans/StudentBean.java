@@ -37,18 +37,16 @@ public class StudentBean implements Serializable {
 
 	public DualListModel<Group> getSelectedGroups() {
 		if (selectedStudent == null) {
-			setSelectedGroups(new DualListModel<>(
-					sessionBean.getGroups(),
-					Collections.emptyList()
-			));
+			setSelectedGroups(new DualListModel<>(sessionBean.getGroups(), Collections.emptyList()));
 		} else if (selectedGroups == null) {
 			List<Group> sourceGroups = new ArrayList<>(sessionBean.getGroups());
-			sourceGroups.removeAll(selectedStudent.getGroups());
+			if (selectedStudent.getGroups() != null) {
+				sourceGroups.removeAll(selectedStudent.getGroups());
+				setSelectedGroups(new DualListModel<>(sourceGroups, selectedStudent.getGroups()));
+			} else {
+				setSelectedGroups(new DualListModel<>(sourceGroups, Collections.emptyList()));
+			}
 
-			setSelectedGroups(new DualListModel<>(
-					sourceGroups,
-					selectedStudent.getGroups()
-			));
 		}
 		return selectedGroups;
 	}

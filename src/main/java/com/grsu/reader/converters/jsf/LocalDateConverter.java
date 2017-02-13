@@ -34,6 +34,6 @@ public class LocalDateConverter implements Converter {
 		if (o == null) {
 			return null;
 		}
-		return ((LocalDateTime)o).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+		return DateUtils.formatDate((LocalDateTime) o);
 	}
 }

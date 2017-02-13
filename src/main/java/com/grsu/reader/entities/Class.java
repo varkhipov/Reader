@@ -14,7 +14,7 @@ import java.util.Map;
 @Table(name = "CLASS")
 public class Class implements AssistantEntity {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 
@@ -51,6 +51,7 @@ public class Class implements AssistantEntity {
 	@OneToMany(mappedBy = "clazz", fetch = FetchType.EAGER)
 	private Map<Integer, StudentClass> studentClasses;
 
+	/* GETTERS & SETTERS */
 	public Integer getId() {
 		return id;
 	}

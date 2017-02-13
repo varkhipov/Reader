@@ -30,6 +30,7 @@ body {
 
 .groupOptions {
     width: 15%;
+    text-align: center;
 }
 
 .menu {
@@ -85,10 +86,6 @@ body {
     margin-left: 5%;
 }
 
-.visitLabel {
-    font-weight: bold;
-}
-
 .visitInfo,
 .visitInfo .ui-panel,
 .visitInfo .ui-panel-content,
@@ -123,4 +120,18 @@ body {
 }
 .edit-form .edit-panel .value {
     padding-right: 3rem;
+}
+
+/*Lesson Form */
+.lesson-info .visitInfo {
+    font-size: 16pt;
+}
+
+.lessonStudents .transparent-button button{
+    background-color: rgba(0, 0, 0, 0);
+    border: 0
+}
+
+.lessonStudents .transparent-button .ui-button-text {
+    padding: 0;
 }

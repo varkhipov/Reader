@@ -39,6 +39,7 @@ public class Department implements AssistantEntity {
 		this.streams = department.streams;
 	}
 
+	/* GETTERS & SETTERS */
 	public Integer getId() {
 		return id;
 	}

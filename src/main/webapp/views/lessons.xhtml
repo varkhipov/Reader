@@ -12,14 +12,20 @@
             <p:column headerText="#{msg['lesson.name']}">
                 <h:outputText value="#{lesson.name}"/>
             </p:column>
-            <p:column headerText="#{msg['lesson.createDate']}">
-                <h:outputText value="#{lesson.classes[0].date}"/>
+            <p:column headerText="#{msg['lesson.date']}">
+                <h:outputText value="#{lesson.classes[0] ne null ? lesson.classes[0].date : ''}" converter="localDateConverter"/>
+            </p:column>
+            <p:column headerText="#{msg['lesson.class']}">
+                <h:outputText value="#{lesson.classes[0] ne null and lesson.classes[0].schedule ne null ? lesson.classes[0].schedule.caption : ''}"/>
             </p:column>
             <p:column headerText="#{msg['lesson.type']}">
                 <h:outputText value="#{lesson.type ne null ? lesson.type.name : ''}"/>
             </p:column>
             <p:column headerText="#{msg['lesson.stream']}">
                 <h:outputText value="#{lesson.stream.name}"/>
+            </p:column>
+            <p:column headerText="#{msg['lesson.group']}">
+                <h:outputText value="#{lesson.group ne null ? lesson.group.name : ''}"/>
             </p:column>
             <p:column styleClass="groupOptions">
                 <p:commandButton actionListener="#{menuBean.changeView('lesson')}" update="@([id$=views])"

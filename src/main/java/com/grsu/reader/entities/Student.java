@@ -1,6 +1,5 @@
 package com.grsu.reader.entities;
 
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -8,6 +7,7 @@ import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.grsu.reader.constants.Constants.GROUPS_DELIMITER;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -19,7 +19,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 @ManagedBean(name = "newInstanceOfStudent")
 public class Student implements AssistantEntity, Person {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 
@@ -55,12 +55,15 @@ public class Student implements AssistantEntity, Person {
 	@Column(name = "image")
 	private String image;
 
-	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany(mappedBy = "students")
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Class> classes;
 
+	@ManyToMany
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@ManyToMany(mappedBy = "students")
+	@JoinTable(name = "STUDENT_GROUP",
+			joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"))
 	private List<Group> groups;
 
 	@MapKey(name = "classId")
@@ -85,11 +88,11 @@ public class Student implements AssistantEntity, Person {
 	}
 
 	public String getFullName() {
-		return StringUtils.joinWith(" ", lastName, firstName, patronymic);
+		return String.join(" ", lastName, firstName);
 	}
 
 	public String getGroupNames() {
-		return StringUtils.join(groups, GROUPS_DELIMITER);
+		return groups.stream().map(Group::getName).collect(Collectors.joining(GROUPS_DELIMITER));
 	}
 
 	public void setCardUidFromCardId(int cardId) {
@@ -201,7 +204,6 @@ public class Student implements AssistantEntity, Person {
 	public void setGroups(List<Group> groups) {
 		this.groups = groups;
 	}
-
 
 	public Map<Integer, StudentClass> getStudentClasses() {
 		return studentClasses;

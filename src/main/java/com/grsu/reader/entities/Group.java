@@ -39,6 +39,7 @@ public class Group implements AssistantEntity {
 	private LocalDateTime expirationDate;
 
 	@ManyToMany
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@JoinTable(name = "STREAM_GROUP",
 			joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
 			inverseJoinColumns = @JoinColumn(name = "stream_id", referencedColumnName = "id"))
@@ -77,6 +78,7 @@ public class Group implements AssistantEntity {
 		this.lessons = group.lessons;
 	}
 
+	/* GETTERS & SETTERS */
 	public Integer getId() {
 		return id;
 	}

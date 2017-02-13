@@ -1,17 +1,14 @@
 package com.grsu.reader.utils;
 
-import com.grsu.reader.dao.DepartmentDAO;
 import com.grsu.reader.dao.EntityDAO;
 import com.grsu.reader.dao.GroupDAO;
 import com.grsu.reader.dao.StudentDAO;
-import com.grsu.reader.dao.StudentGroupDAO;
 import com.grsu.reader.entities.Department;
 import com.grsu.reader.entities.Group;
 import com.grsu.reader.entities.Student;
 import com.opencsv.CSVReader;
 
 import java.io.*;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +29,7 @@ public class CSVUtils {
 	// TODO: analyze once again
 	public static void updateGroupsFromCSV() {
 		EntityDAO entityDAO = new EntityDAO();
-		for(Group group : parseGroups()) {
+		for (Group group : parseGroups()) {
 			if (group.getStudents().isEmpty()) {
 				System.out.println("Group [ " + group.getName() + " ] is empty and not added to database.");
 				continue;
@@ -55,33 +52,36 @@ public class CSVUtils {
 				group.setDepartment(department);
 			}
 
-			Group groupFromDB = GroupDAO.getGroupByName(connection, group.getName());
+			Group groupFromDB = new GroupDAO().getByName(group.getName());
 			if (groupFromDB == null) {
-				group.setId(GroupDAO.create(connection, group));
+				entityDAO.add(group);
 			} else {
 				System.out.println("Group [ " + group.getName() + " ] already exists. Updating...");
-				group.setId(groupFromDB.getId());
-				StudentGroupDAO.deleteByGroupId(connection, group.getId());
+				group = groupFromDB;
+				group.getStudents().clear();
+				entityDAO.update(group);
 			}
-			processStudents(connection, group);
+			processStudents(group);
 			System.out.println("Group [ " + group.getName() + " ] processed.");
 		}
 	}
 
-	private static void processStudents(Connection connection, Group group) {
+	private static void processStudents(Group group) {
+		StudentDAO studentDAO = new StudentDAO();
 		for (Student student : group.getStudents()) {
-			Student studentFromDB = StudentDAO.getStudentByUID(connection, student.getCardUid());
+			Student studentFromDB = studentDAO.getByCardUid(student.getCardUid());
 			if (studentFromDB == null) {
-				student.setId(StudentDAO.create(connection, student));
+				studentDAO.add(student);
 			} else {
 				studentFromDB.setLastName(student.getLastName());
 				studentFromDB.setFirstName(student.getFirstName());
 				studentFromDB.setPatronymic(student.getPatronymic());
 				studentFromDB.setCardId(student.getCardId());
 				student = studentFromDB;
-				StudentDAO.update(connection, student);
+				studentDAO.update(student);
 			}
-			StudentGroupDAO.create(connection, student.getId(), group.getId());
+			student.getGroups().add(group);
+			studentDAO.update(student);
 		}
 	}
 

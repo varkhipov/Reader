@@ -13,7 +13,6 @@ import static com.grsu.reader.utils.PropertyUtils.getProperty;
  */
 public class DBSessionFactory {
 	private static final String DATABASE_URL = "jdbc:" + getProperty("db.protocol") + ":" + FileUtils.DATABASE_PATH;
-//	private static final String DATABASE_URL = "jdbc:sqlite:/storage/storage/env/apache-tomcat-8.5.5/app_files/database/db.s3db";
 	private static final String HIBERNATE_CONNECTION_URL = "hibernate.connection.url";
 	private static final SessionFactory sessionFactory;
 
@@ -21,9 +20,6 @@ public class DBSessionFactory {
 		try {
 			Configuration configuration = new Configuration();
 			configuration.configure();
-			System.out.println();System.out.println();System.out.println();System.out.println();
-			System.out.println(DATABASE_URL);
-			System.out.println();System.out.println();System.out.println();System.out.println();
 			configuration.setProperty(HIBERNATE_CONNECTION_URL, DATABASE_URL);
 
 			sessionFactory = configuration.buildSessionFactory();

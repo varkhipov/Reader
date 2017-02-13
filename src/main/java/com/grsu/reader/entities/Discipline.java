@@ -55,6 +55,7 @@ public class Discipline implements AssistantEntity {
 		this.streams = discipline.streams;
 	}
 
+	/* GETTERS & SETTERS */
 	public Integer getId() {
 		return id;
 	}

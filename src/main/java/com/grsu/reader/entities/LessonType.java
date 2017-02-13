@@ -21,6 +21,7 @@ public class LessonType implements AssistantEntity {
 	@OneToMany(mappedBy = "type", fetch = FetchType.EAGER)
 	private List<Lesson> lessons;
 
+	/* GETTERS & SETTERS */
 	public Integer getId() {
 		return id;
 	}

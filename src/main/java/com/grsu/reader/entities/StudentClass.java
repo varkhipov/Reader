@@ -1,10 +1,8 @@
 package com.grsu.reader.entities;
 
-import com.grsu.reader.converters.db.LocalDateTimeAttributeConverter;
 import com.grsu.reader.converters.db.LocalTimeAttributeConverter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 /**
@@ -52,6 +50,7 @@ public class StudentClass implements AssistantEntity {
 	@Column(name = "class_id", insertable = false, updatable = false)
 	private Integer classId;
 
+	/* GETTERS & SETTERS */
 	public Integer getId() {
 		return id;
 	}

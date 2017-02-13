@@ -21,6 +21,7 @@ public class GroupType implements AssistantEntity {
 	@OneToMany(mappedBy = "type", fetch = FetchType.EAGER)
 	private List<Group> groups;
 
+	/* GETTERS & SETTERS */
 	public Integer getId() {
 		return id;
 	}

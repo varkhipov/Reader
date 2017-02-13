@@ -35,18 +35,16 @@ public class StreamBean implements Serializable {
 
 	public DualListModel<Group> getSelectedGroups() {
 		if (selectedStream == null) {
-			setSelectedGroups(new DualListModel<>(
-					sessionBean.getGroups(),
-					Collections.emptyList()
-			));
+			setSelectedGroups(new DualListModel<>(sessionBean.getGroups(), Collections.emptyList()));
 		} else if (selectedGroups == null) {
 			List<Group> sourceGroups = new ArrayList<>(sessionBean.getGroups());
-			sourceGroups.removeAll(selectedStream.getGroups());
+			if (selectedStream.getGroups() != null) {
+				sourceGroups.removeAll(selectedStream.getGroups());
+				setSelectedGroups(new DualListModel<>(sourceGroups, selectedStream.getGroups()));
+			} else {
+				setSelectedGroups(new DualListModel<>(sourceGroups, Collections.emptyList()));
+			}
 
-			setSelectedGroups(new DualListModel<>(
-					sourceGroups,
-					selectedStream.getGroups()
-			));
 		}
 		return selectedGroups;
 	}

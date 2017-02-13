@@ -65,6 +65,7 @@ public class Lesson implements AssistantEntity {
 		this.group = lesson.group;
 	}
 
+	/* GETTERS & SETTERS */
 	public Integer getId() {
 		return id;
 	}

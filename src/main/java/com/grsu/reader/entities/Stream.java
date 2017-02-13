@@ -1,15 +1,22 @@
 package com.grsu.reader.entities;
 
 import com.grsu.reader.converters.db.LocalDateTimeAttributeConverter;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
+import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.grsu.reader.constants.Constants.GROUPS_DELIMITER;
 
 /**
  * Created by zaychick-pavel on 2/9/17.
  */
 @Entity
+@ManagedBean(name = "newInstanceOfStream")
 public class Stream implements AssistantEntity {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -46,7 +53,11 @@ public class Stream implements AssistantEntity {
 	@Column(name = "expiration_date")
 	private LocalDateTime expirationDate;
 
-	@ManyToMany(mappedBy = "streams", fetch = FetchType.EAGER)
+	@ManyToMany
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@JoinTable(name = "STREAM_GROUP",
+			joinColumns = @JoinColumn(name = "stream_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"))
 	private List<Group> groups;
 
 	@OneToMany(mappedBy = "stream", fetch = FetchType.EAGER)
@@ -77,6 +88,11 @@ public class Stream implements AssistantEntity {
 		this.department = stream.department;
 	}
 
+	public String getGroupNames() {
+		return groups.stream().map(Group::getName).collect(Collectors.joining(GROUPS_DELIMITER));
+	}
+
+	/* GETTERS & SETTERS */
 	public Integer getId() {
 		return id;
 	}

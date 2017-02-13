@@ -35,6 +35,10 @@ public class LocaleUtils extends ResourceBundle {
 		return parent.getKeys();
 	}
 
+	public String getMessage(String key) {
+		return parent.getString(key);
+	}
+
 	protected static class UTF8Control extends Control {
 		public ResourceBundle newBundle
 				(String baseName, Locale locale, String format, ClassLoader loader, boolean reload)

@@ -30,6 +30,7 @@ public class ScheduleVersion implements AssistantEntity {
 	@OneToMany(mappedBy = "version", fetch = FetchType.EAGER)
 	private List<Schedule> schedules;
 
+	/* GETTERS & SETTERS */
 	public Integer getId() {
 		return id;
 	}

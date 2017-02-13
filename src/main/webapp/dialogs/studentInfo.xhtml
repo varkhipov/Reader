@@ -14,8 +14,8 @@
 
             <p:scrollPanel id="studentDetail" mode="native" styleClass="studentDetail">
                 <p:commandButton value="#{msg['btn.delete']}" icon="fa fa-fw fa-remove"
-                                 rendered="#{studentBean.selectedStudent != null
-                                             and studentBean.selectedStudent.id != 0}"
+                                 rendered="#{studentBean.selectedStudent ne null
+                                             and studentBean.selectedStudent.id ne null}"
                                  actionListener="#{studentBean.delete}"/>
 
 

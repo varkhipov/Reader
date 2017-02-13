@@ -36,7 +36,6 @@ public class DepartmentBean implements Serializable {
 	}
 
 	public void save() {
-
 		if (selectedDepartment.getId() == null) {
 			new EntityDAO().add(selectedDepartment);
 		} else {

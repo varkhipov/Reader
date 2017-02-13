@@ -5,6 +5,7 @@ import com.grsu.reader.dao.EntityDAO;
 import com.grsu.reader.entities.*;
 import com.grsu.reader.entities.Class;
 import com.grsu.reader.utils.FacesUtils;
+import com.grsu.reader.utils.LocaleUtils;
 import com.grsu.reader.utils.SerialUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -39,7 +40,7 @@ public class LessonBean implements Serializable {
 	private List<Student> allStudents;
 	private List<Student> filteredAllStudents;
 
-	private List<Student> lessonStudents;
+	private Set<Student> lessonStudents;
 
 	/* Filter */
 	private Department department;
@@ -70,11 +71,7 @@ public class LessonBean implements Serializable {
 	public void createLesson() {
 		if (selectedLesson != null) {
 			if (StringUtils.isEmpty(selectedLesson.getName())) {
-				selectedLesson.setName(String.format("%s [%s]",
-						selectedLesson.getStream().getName(),
-						LocalDateTime.now()
-						)
-				);
+				selectedLesson.setName(selectedLesson.getStream().getName());
 			}
 
 			if (selectedLesson.getType() == null || selectedLesson.getType().getId() == 1) {
@@ -101,7 +98,6 @@ public class LessonBean implements Serializable {
 
 			List<StudentClass> studentClasses = new ArrayList<>();
 			for (Student student : students) {
-//				student.getClasses().add(selectedLesson.getClasses().get(0));
 				StudentClass sc = new StudentClass();
 				sc.setStudent(student);
 				sc.setClazz(selectedLesson.getClasses().get(0));
@@ -135,22 +131,6 @@ public class LessonBean implements Serializable {
 				}
 		}
 	}
-/*
-	private void initAbsentStudents() {
-		if (selectedLesson == null || selectedLesson.getStream() == null) {
-			absentStudents = null;
-		} else {
-			List<Student> students = new ArrayList<>();
-			for (Class cls : selectedLesson.getClasses()) {
-				students.addAll(StudentClassDAO.getStudentsByClassId(
-						databaseBean.getConnection(),
-						cls.getId(),
-						false)
-				);
-			}
-			absentStudents = students;
-		}
-	}*/
 
 	public void initAllStudents() {
 		List<Student> allStudents = new ArrayList<>(sessionBean.getStudents());
@@ -166,9 +146,9 @@ public class LessonBean implements Serializable {
 	private void initLessonStudents() {
 		if (selectedLesson.getStream() != null) {
 			if (selectedLesson.getGroup() != null) {
-				lessonStudents = selectedLesson.getGroup().getStudents();
+				lessonStudents = new HashSet<>(selectedLesson.getGroup().getStudents());
 			} else {
-				lessonStudents = new ArrayList<>();
+				lessonStudents = new HashSet<>();
 				for (Group group : selectedLesson.getStream().getGroups()) {
 					lessonStudents.addAll(group.getStudents());
 				}
@@ -203,21 +183,6 @@ public class LessonBean implements Serializable {
 			}
 		}
 
-	/*	try {
-
-			StudentClassDAO.updateStudentClassInfo(
-					databaseBean.getConnection(),
-					student.getId(),
-					selectedLesson.getClasses().get(0).getId(),
-					true,
-					LocalTime.now(),
-					Constants.REGISTRATION_TYPE_AUTOMATIC
-			);
-		} catch (SQLException e) {
-			System.out.println("Student not added. Uid[ " + student.getCardUid() + " ]. Reason: SQLException:\n" + e);
-			return false;
-		}*/
-
 		processedStudent = student;
 		FacesUtils.push("/register", student);
 		System.out.println("Student added");
@@ -251,60 +216,32 @@ public class LessonBean implements Serializable {
 				new EntityDAO().update(studentClass);
 			}
 		}
-		/*try {
-			StudentClassDAO.updateStudentClassInfo(
-					databaseBean.getConnection(),
-					student.getId(),
-					selectedLesson.getClasses().get(0).getId(),
-					true,
-					LocalTime.now(),
-					Constants.REGISTRATION_TYPE_MANUAL
-			);
-		} catch (SQLException e) {
-			System.out.println("Student not added. Uid[ " + student.getCardUid() + " ]. Reason: SQLException:\n" + e);
-			return false;
-		}*/
 
+		processedStudent = student;
 		FacesUtils.execute("PF('aStudentsTable').clearFilters()");
 		FacesUtils.execute("PF('pStudentsTable').clearFilters()");
-//		System.out.println("Student added");
 	}
 
 	public void removeStudent(Student student) {
-	//	try {
 		StudentClass studentClass = student.getStudentClasses().get(selectedLesson.getClasses().get(0).getId());
-			if (lessonStudents.contains(student)) {
-			/*	StudentClassDAO.updateStudentClassInfo(
-						databaseBean.getConnection(),
-						student.getId(),
-						selectedLesson.getClasses().get(0).getId(),
-						false,
-						null,
-						null
-				);*/
+		if (lessonStudents.contains(student)) {
 
-				studentClass.setRegistrationType(null);
-				studentClass.setRegistrationTime(null);
-				studentClass.setRegistered(false);
-				new EntityDAO().update(studentClass);
-				absentStudents.add(student);
-			} else {
-//				StudentClassDAO.deleteByStudentId(databaseBean.getConnection(), student.getId());
-				student.getStudentClasses().remove(selectedLesson.getClasses().get(0).getId());
-				selectedLesson.getClasses().get(0).getStudentClasses().remove(student.getId());
-				new EntityDAO().delete(studentClass);
-				allStudents.add(student);
-			}
+			studentClass.setRegistrationType(null);
+			studentClass.setRegistrationTime(null);
+			studentClass.setRegistered(false);
+			new EntityDAO().update(studentClass);
+			absentStudents.add(student);
+		} else {
+			student.getStudentClasses().remove(selectedLesson.getClasses().get(0).getId());
+			selectedLesson.getClasses().get(0).getStudentClasses().remove(student.getId());
+			new EntityDAO().delete(studentClass);
+			allStudents.add(student);
+		}
 
-			presentStudents.remove(student);
+		presentStudents.remove(student);
 
-		/*} catch (SQLException e) {
-			System.out.println("Student not removed. Uid[ " + student.getCardUid() + " ]. Reason: SQLException:\n" + e);
-			return false;
-		}*/
 		FacesUtils.execute("PF('aStudentsTable').clearFilters()");
 		FacesUtils.execute("PF('pStudentsTable').clearFilters()");
-//		System.out.println("Student removed");
 	}
 
 	public void startRecord() {
@@ -463,6 +400,34 @@ public class LessonBean implements Serializable {
 
 	public void setCourse(Integer course) {
 		this.course = course;
+	}
+
+	public Set<Student> getLessonStudents() {
+		return lessonStudents;
+	}
+
+	public void setLessonStudents(Set<Student> lessonStudents) {
+		this.lessonStudents = lessonStudents;
+	}
+
+	public String getAdditionalStudentsSize() {
+		if (this.presentStudents != null) {
+			List<Student> additionalStudents = new ArrayList<>(this.presentStudents);
+			additionalStudents.removeAll(this.lessonStudents);
+			if (additionalStudents.size() != 0) {
+				return new LocaleUtils().getMessage("lesson.students.additional") + ": " + additionalStudents.size();
+			}
+		}
+		return "";
+	}
+
+	public int getPresentStudentsSize() {
+		if (this.lessonStudents != null) {
+			List<Student> presentStudents = new ArrayList<>(this.lessonStudents);
+			presentStudents.removeAll(this.absentStudents);
+			return presentStudents.size();
+		}
+		return 0;
 	}
 
 	public void exitStudents() {
