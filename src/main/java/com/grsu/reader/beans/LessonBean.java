@@ -1,19 +1,9 @@
 package com.grsu.reader.beans;
 
 import com.grsu.reader.constants.Constants;
-import com.grsu.reader.dao.ClassDAO;
-import com.grsu.reader.dao.LessonDAO;
-import com.grsu.reader.dao.StreamGroupDAO;
-import com.grsu.reader.dao.StudentClassDAO;
-import com.grsu.reader.dao.StudentGroupDAO;
-import com.grsu.reader.models.Class;
-import com.grsu.reader.models.Department;
-import com.grsu.reader.models.Discipline;
-import com.grsu.reader.models.Group;
-import com.grsu.reader.models.Lesson;
-import com.grsu.reader.models.Stream;
-import com.grsu.reader.models.Student;
-import com.grsu.reader.utils.DateUtils;
+import com.grsu.reader.dao.EntityDAO;
+import com.grsu.reader.entities.*;
+import com.grsu.reader.entities.Class;
 import com.grsu.reader.utils.FacesUtils;
 import com.grsu.reader.utils.LocaleUtils;
 import com.grsu.reader.utils.SerialUtils;
@@ -23,13 +13,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.grsu.reader.utils.EntityUtils.getEntityById;
 import static com.grsu.reader.utils.FacesUtils.closeDialog;
 import static com.grsu.reader.utils.FacesUtils.update;
 
@@ -54,14 +42,10 @@ public class LessonBean implements Serializable {
 
 	private Set<Student> lessonStudents;
 
-	private Map<Integer, LocalTime> registeredMap = new HashMap<>();
 	/* Filter */
 	private Department department;
 	private Discipline discipline;
 	private Integer course;
-
-	@ManagedProperty(value = "#{databaseBean}")
-	private DatabaseBean databaseBean;
 
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
@@ -90,47 +74,37 @@ public class LessonBean implements Serializable {
 				selectedLesson.setName(selectedLesson.getStream().getName());
 			}
 
-			if (selectedLesson.getLessonType() == null || selectedLesson.getLessonType().getId() == 1) {
+			if (selectedLesson.getType() == null || selectedLesson.getType().getId() == 1) {
 				selectedLesson.setGroup(null);
 			}
 
-			selectedLesson.setId(LessonDAO.create(
-					databaseBean.getConnection(),
-					selectedLesson
-			));
-
-			selectedLesson.getClasses().get(0).setId(ClassDAO.create(
-					databaseBean.getConnection(),
-					selectedLesson.getClasses().get(0)
-			));
+			EntityDAO entityDAO = new EntityDAO();
+			entityDAO.add(selectedLesson);
+			entityDAO.add(selectedLesson.getClasses().get(0));
 
 
 			List<Group> groups;
 
 			if (selectedLesson.getGroup() == null) {
-				groups = StreamGroupDAO.getGroupsByStreamId(
-						databaseBean.getConnection(),
-						selectedLesson.getStream().getId()
-				);
+				groups = selectedLesson.getStream().getGroups();
 			} else {
 				groups = Arrays.asList(selectedLesson.getGroup());
 			}
 
 			Set<Student> students = new HashSet<>();
 			for (Group group : groups) {
-				students.addAll(StudentGroupDAO.getStudentsByGroupId(
-						databaseBean.getConnection(),
-						group.getId()
-				));
+				students.addAll(group.getStudents());
 			}
 
+			List<StudentClass> studentClasses = new ArrayList<>();
 			for (Student student : students) {
-				StudentClassDAO.create(
-						databaseBean.getConnection(),
-						student,
-						selectedLesson.getClasses().get(0)
-				);
+				StudentClass sc = new StudentClass();
+				sc.setStudent(student);
+				sc.setClazz(selectedLesson.getClasses().get(0));
+				studentClasses.add(sc);
 			}
+			entityDAO.add(new ArrayList<>(studentClasses));
+
 			sessionBean.updateLessons();
 			sessionBean.setActiveView("lessons");
 			update("views");
@@ -138,37 +112,23 @@ public class LessonBean implements Serializable {
 		exit();
 	}
 
-	private void initPresentStudents() {
+	private void initStudents() {
 		if (selectedLesson == null || selectedLesson.getStream() == null) {
 			presentStudents = null;
-		} else {
-			registeredMap.clear();
-			List<Student> students = new ArrayList<>();
-			for (Class cls : selectedLesson.getClasses()) {
-				students.addAll(StudentClassDAO.getStudentsByClassId(
-						databaseBean.getConnection(),
-						cls.getId(),
-						true)
-				);
-				registeredMap.putAll(StudentClassDAO.getRegistrationTime(databaseBean.getConnection(), cls.getId()));
-			}
-			presentStudents = students;
-		}
-	}
-
-	private void initAbsentStudents() {
-		if (selectedLesson == null || selectedLesson.getStream() == null) {
 			absentStudents = null;
 		} else {
-			List<Student> students = new ArrayList<>();
+			List<StudentClass> studentClasses = new ArrayList<>();
 			for (Class cls : selectedLesson.getClasses()) {
-				students.addAll(StudentClassDAO.getStudentsByClassId(
-						databaseBean.getConnection(),
-						cls.getId(),
-						false)
-				);
+				studentClasses.addAll(cls.getStudentClasses().values());
 			}
-			absentStudents = students;
+			presentStudents = new ArrayList<>();
+			absentStudents = new ArrayList<>();
+			for (StudentClass studentClass : studentClasses)
+				if (studentClass.isRegistered()) {
+					presentStudents.add(studentClass.getStudent());
+				} else {
+					absentStudents.add(studentClass.getStudent());
+				}
 		}
 	}
 
@@ -186,11 +146,11 @@ public class LessonBean implements Serializable {
 	private void initLessonStudents() {
 		if (selectedLesson.getStream() != null) {
 			if (selectedLesson.getGroup() != null) {
-				lessonStudents = new HashSet<>(StudentGroupDAO.getStudentsByGroupId(databaseBean.getConnection(),selectedLesson.getGroup().getId()));
+				lessonStudents = new HashSet<>(selectedLesson.getGroup().getStudents());
 			} else {
 				lessonStudents = new HashSet<>();
 				for (Group group : selectedLesson.getStream().getGroups()) {
-					lessonStudents.addAll(StudentGroupDAO.getStudentsByGroupId(databaseBean.getConnection(), group.getId()));
+					lessonStudents.addAll(group.getStudents());
 				}
 			}
 		}
@@ -202,20 +162,25 @@ public class LessonBean implements Serializable {
 		if (filteredAbsentStudents != null) {
 			filteredAbsentStudents.remove(student);
 		}
-		registeredMap.put(student.getId(), LocalTime.now());
 
-		try {
-			StudentClassDAO.updateStudentClassInfo(
-					databaseBean.getConnection(),
-					student.getId(),
-					selectedLesson.getClasses().get(0).getId(),
-					true,
-					LocalTime.now(),
-					Constants.REGISTRATION_TYPE_AUTOMATIC
-			);
-		} catch (SQLException e) {
-			System.out.println("Student not added. Uid[ " + student.getCardUid() + " ]. Reason: SQLException:\n" + e);
-			return false;
+		if (student.getStudentClasses() != null) {
+			StudentClass studentClass = student.getStudentClasses().get(selectedLesson.getClasses().get(0).getId());
+			if (studentClass == null) {
+				studentClass = new StudentClass();
+				studentClass.setStudent(student);
+				studentClass.setClazz(selectedLesson.getClasses().get(0));
+				studentClass.setRegistered(true);
+				studentClass.setRegistrationTime(LocalTime.now());
+				studentClass.setRegistrationType(Constants.REGISTRATION_TYPE_AUTOMATIC);
+				new EntityDAO().add(studentClass);
+				student.getStudentClasses().put(studentClass.getClazz().getId(), studentClass);
+				selectedLesson.getClasses().get(0).getStudentClasses().put(studentClass.getStudent().getId(), studentClass);
+			} else {
+				studentClass.setRegistered(true);
+				studentClass.setRegistrationTime(LocalTime.now());
+				studentClass.setRegistrationType(Constants.REGISTRATION_TYPE_AUTOMATIC);
+				new EntityDAO().update(studentClass);
+			}
 		}
 
 		processedStudent = student;
@@ -224,66 +189,59 @@ public class LessonBean implements Serializable {
 		return true;
 	}
 
-	public boolean addStudent(Student student) {
+	public void addStudent(Student student) {
 		presentStudents.add(student);
 		absentStudents.remove(student);
 		allStudents.remove(student);
 		if (filteredAllStudents != null) {
 			filteredAllStudents.remove(student);
 		}
-		registeredMap.put(student.getId(), LocalTime.now());
 
-		try {
-			StudentClassDAO.updateStudentClassInfo(
-					databaseBean.getConnection(),
-					student.getId(),
-					selectedLesson.getClasses().get(0).getId(),
-					true,
-					LocalTime.now(),
-					Constants.REGISTRATION_TYPE_MANUAL
-			);
-		} catch (SQLException e) {
-			System.out.println("Student not added. Uid[ " + student.getCardUid() + " ]. Reason: SQLException:\n" + e);
-			return false;
+		if (student.getStudentClasses() != null) {
+			StudentClass studentClass = student.getStudentClasses().get(selectedLesson.getClasses().get(0).getId());
+			if (studentClass == null) {
+				studentClass = new StudentClass();
+				studentClass.setStudent(student);
+				studentClass.setClazz(selectedLesson.getClasses().get(0));
+				studentClass.setRegistered(true);
+				studentClass.setRegistrationTime(LocalTime.now());
+				studentClass.setRegistrationType(Constants.REGISTRATION_TYPE_MANUAL);
+				new EntityDAO().add(studentClass);
+				student.getStudentClasses().put(studentClass.getClazz().getId(), studentClass);
+				selectedLesson.getClasses().get(0).getStudentClasses().put(studentClass.getStudent().getId(), studentClass);
+			} else {
+				studentClass.setRegistered(true);
+				studentClass.setRegistrationTime(LocalTime.now());
+				studentClass.setRegistrationType(Constants.REGISTRATION_TYPE_MANUAL);
+				new EntityDAO().update(studentClass);
+			}
 		}
 
 		processedStudent = student;
 		FacesUtils.execute("PF('aStudentsTable').clearFilters()");
 		FacesUtils.execute("PF('pStudentsTable').clearFilters()");
-//		System.out.println("Student added");
-		return true;
 	}
 
-	public boolean removeStudent(Student student) {
-		try {
-			if (lessonStudents.contains(student)) {
-				StudentClassDAO.updateStudentClassInfo(
-						databaseBean.getConnection(),
-						student.getId(),
-						selectedLesson.getClasses().get(0).getId(),
-						false,
-						null,
-						null
-				);
-				absentStudents.add(student);
-			} else {
-				StudentClassDAO.deleteByStudentId(databaseBean.getConnection(), student.getId());
-				allStudents.add(student);
-			}
+	public void removeStudent(Student student) {
+		StudentClass studentClass = student.getStudentClasses().get(selectedLesson.getClasses().get(0).getId());
+		if (lessonStudents.contains(student)) {
 
-			registeredMap.remove(student.getId());
-
-			presentStudents.remove(student);
-
-		} catch (SQLException e) {
-			System.out.println("Student not removed. Uid[ " + student.getCardUid() + " ]. Reason: SQLException:\n" + e);
-			return false;
+			studentClass.setRegistrationType(null);
+			studentClass.setRegistrationTime(null);
+			studentClass.setRegistered(false);
+			new EntityDAO().update(studentClass);
+			absentStudents.add(student);
+		} else {
+			student.getStudentClasses().remove(selectedLesson.getClasses().get(0).getId());
+			selectedLesson.getClasses().get(0).getStudentClasses().remove(student.getId());
+			new EntityDAO().delete(studentClass);
+			allStudents.add(student);
 		}
+
+		presentStudents.remove(student);
 
 		FacesUtils.execute("PF('aStudentsTable').clearFilters()");
 		FacesUtils.execute("PF('pStudentsTable').clearFilters()");
-//		System.out.println("Student removed");
-		return true;
 	}
 
 	public void startRecord() {
@@ -303,7 +261,7 @@ public class LessonBean implements Serializable {
 	}
 
 	public void removeLesson(Lesson lesson) {
-		LessonDAO.delete(databaseBean.getConnection(), lesson);
+		new EntityDAO().delete(lesson);
 		getLessons().remove(lesson);
 	}
 
@@ -324,22 +282,16 @@ public class LessonBean implements Serializable {
 		this.selectedLesson = selectedLesson;
 		copyOfSelectedLesson = this.selectedLesson == null ? null : new Lesson(selectedLesson);
 		if (selectedLesson != null) {
-			initPresentStudents();
-			initAbsentStudents();
+			initStudents();
 			initAllStudents();
 			initLessonStudents();
+			if (selectedLesson.getClasses() == null) {
+				Class cl = new Class();
+				cl.setDate(LocalDateTime.now());
+				cl.setLesson(selectedLesson);
+				selectedLesson.setClasses(Arrays.asList(cl));
+			}
 		}
-	}
-
-	public int getSelectedStreamId() {
-		if (selectedLesson.getStream() == null) {
-			return 0;
-		}
-		return selectedLesson.getStream().getId();
-	}
-
-	public void setSelectedStreamId(int selectedStreamId) {
-		selectedLesson.setStream(getEntityById(sessionBean.getStreams(), selectedStreamId));
 	}
 
 	public Student getProcessedStudent() {
@@ -352,10 +304,6 @@ public class LessonBean implements Serializable {
 
 	public List<Lesson> getLessons() {
 		return sessionBean.getLessons();
-	}
-
-	public void setDatabaseBean(DatabaseBean databaseBean) {
-		this.databaseBean = databaseBean;
 	}
 
 	public void setSessionBean(SessionBean sessionBean) {
@@ -460,10 +408,6 @@ public class LessonBean implements Serializable {
 
 	public void setLessonStudents(Set<Student> lessonStudents) {
 		this.lessonStudents = lessonStudents;
-	}
-
-	public String getRegisteredTime(int id) {
-		return DateUtils.formatTime(registeredMap.get(id));
 	}
 
 	public String getAdditionalStudentsSize() {

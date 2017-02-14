@@ -13,8 +13,8 @@
 
             <p:outputPanel id="streamDetail" mode="native" styleClass="streamDetail edit-panel">
                 <p:commandButton value="#{msg['btn.delete']}" icon="fa fa-fw fa-remove"
-                                 rendered="#{streamBean.selectedStream != null
-                                             and streamBean.selectedStream.id != 0}"
+                                 rendered="#{streamBean.selectedStream ne null
+                                             and streamBean.selectedStream.id ne null}"
                                  actionListener="#{streamBean.delete}"/>
 
 

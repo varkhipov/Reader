@@ -1,7 +1,7 @@
 package com.grsu.reader.beans;
 
-import com.grsu.reader.dao.DisciplineDAO;
-import com.grsu.reader.models.Discipline;
+import com.grsu.reader.dao.EntityDAO;
+import com.grsu.reader.entities.Discipline;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -18,9 +18,6 @@ public class DisciplineBean implements Serializable {
 
 	private Discipline selectedDiscipline;
 	private Discipline copyOfSelectedDiscipline;
-
-	@ManagedProperty(value = "#{databaseBean}")
-	private DatabaseBean databaseBean;
 
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
@@ -44,11 +41,7 @@ public class DisciplineBean implements Serializable {
 	}
 
 	public void save() {
-		if (selectedDiscipline.getId() == 0) {
-			DisciplineDAO.create(databaseBean.getConnection(), selectedDiscipline);
-		} else {
-			DisciplineDAO.update(databaseBean.getConnection(), selectedDiscipline);
-		}
+		new EntityDAO().save(selectedDiscipline);
 		sessionBean.updateDisciplines();
 		update("views");
 	}
@@ -59,14 +52,10 @@ public class DisciplineBean implements Serializable {
 	}
 
 	public void delete() {
-		DisciplineDAO.delete(databaseBean.getConnection(), selectedDiscipline);
+		new EntityDAO().delete(selectedDiscipline);
 		sessionBean.updateDisciplines();
 		update("views");
 		exit();
-	}
-
-	public void setDatabaseBean(DatabaseBean databaseBean) {
-		this.databaseBean = databaseBean;
 	}
 
 	public void setSessionBean(SessionBean sessionBean) {

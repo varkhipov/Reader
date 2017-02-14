@@ -1,33 +1,23 @@
 package com.grsu.reader.beans;
 
-import com.grsu.reader.dao.ClassDAO;
-import com.grsu.reader.dao.DepartmentDAO;
-import com.grsu.reader.dao.DisciplineDAO;
-import com.grsu.reader.dao.GroupDAO;
-import com.grsu.reader.dao.LessonDAO;
-import com.grsu.reader.dao.LessonTypeDAO;
-import com.grsu.reader.dao.ScheduleDAO;
-import com.grsu.reader.dao.StreamDAO;
-import com.grsu.reader.dao.StudentDAO;
-import com.grsu.reader.models.Class;
-import com.grsu.reader.models.Department;
-import com.grsu.reader.models.Discipline;
-import com.grsu.reader.models.Group;
-import com.grsu.reader.models.Lesson;
-import com.grsu.reader.models.LessonType;
-import com.grsu.reader.models.Schedule;
-import com.grsu.reader.models.Stream;
-import com.grsu.reader.models.Student;
+import com.grsu.reader.dao.EntityDAO;
+import com.grsu.reader.entities.Class;
+import com.grsu.reader.entities.Department;
+import com.grsu.reader.entities.Discipline;
+import com.grsu.reader.entities.Group;
+import com.grsu.reader.entities.Lesson;
+import com.grsu.reader.entities.LessonType;
+import com.grsu.reader.entities.Schedule;
+import com.grsu.reader.entities.Stream;
+import com.grsu.reader.entities.Student;
 import com.grsu.reader.utils.CSVUtils;
 import com.grsu.reader.utils.SerialUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.List;
 
 @ManagedBean(name = "sessionBean")
@@ -47,37 +37,20 @@ public class SessionBean implements Serializable {
 	private List<Class> classes;
 	private List<LessonType> lessonTypes;
 
-	@ManagedProperty(value = "#{databaseBean}")
-	private DatabaseBean databaseBean;
-
 	@PostConstruct
 	public void connect() {
-		try {
-			databaseBean.connect();
-			if (!databaseBean.isConnected()) {
-				System.out.println("No connection to db.");
-			} else {
-				setConnected(true);
-				initData();
-			}
-		} catch (SQLException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+		setConnected(true);
+		initData();
 	}
 
 	@PreDestroy
 	public void disconnect() {
 		SerialUtils.disconnect();
-		databaseBean.disconnect();
-		if (databaseBean.isConnected()) {
-			System.out.println("Still not disconnected.");
-		} else {
-			setConnected(false);
-		}
+		setConnected(false);
 	}
 
 	public void initData() {
-		CSVUtils.updateGroupsFromCSV(databaseBean.getConnection());
+		CSVUtils.updateGroupsFromCSV();
 		updateSchedules();
 		updateDisciplines();
 		updateDepartments();
@@ -90,43 +63,39 @@ public class SessionBean implements Serializable {
 	}
 
 	public void updateSchedules() {
-		schedules = ScheduleDAO.getSchedules(databaseBean.getConnection());
+		schedules = new EntityDAO().getAll(Schedule.class);
 	}
 
 	public void updateDisciplines() {
-		disciplines = DisciplineDAO.getDisciplines(databaseBean.getConnection());
+		disciplines = new EntityDAO().getAll(Discipline.class);
 	}
 
 	public void updateDepartments() {
-		departments = DepartmentDAO.getDepartments(databaseBean.getConnection());
+		departments = new EntityDAO().getAll(Department.class);
 	}
 
 	public void updateStreams() {
-		streams = StreamDAO.getStreams(databaseBean.getConnection());
+		streams = new EntityDAO().getAll(Stream.class);
 	}
 
 	public void updateGroups() {
-		groups = GroupDAO.getGroups(databaseBean.getConnection());
+		groups = new EntityDAO().getAll(Group.class);
 	}
 
 	public void updateStudents() {
-		students = StudentDAO.getStudents(databaseBean.getConnection());
+		students = new EntityDAO().getAll(Student.class);
 	}
 
 	public void updateLessons() {
-		lessons = LessonDAO.getLessons(databaseBean.getConnection());
+		lessons = new EntityDAO().getAll(Lesson.class);
 	}
 
 	public void updateClasses() {
-		classes = ClassDAO.getClasses(databaseBean.getConnection());
+		classes = new EntityDAO().getAll(Class.class);
 	}
 
 	public void updateLessonTypes() {
-		lessonTypes = LessonTypeDAO.getLessonTypes(databaseBean.getConnection());
-	}
-
-	public void setDatabaseBean(DatabaseBean databaseBean) {
-		this.databaseBean = databaseBean;
+		lessonTypes = new EntityDAO().getAll(LessonType.class);
 	}
 
 	public boolean isConnected() {

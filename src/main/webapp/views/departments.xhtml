@@ -5,7 +5,7 @@
                 xmlns:p="http://primefaces.org/ui"
 >
     <h:form id="departmentsForm">
-        <p:dataTable var="department" value="#{departmentBean.departments}">
+        <p:dataTable var="department" value="#{sessionBean.departments}">
             <f:facet name="header">
                 #{msg['departments']}
             </f:facet>

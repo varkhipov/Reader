@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.grsu.reader.utils.PropertyUtils.getProperty;
+
 public class FileUtils {
 	private static final ClassLoader classLoader = FileUtils.class.getClassLoader();
 	public static final String separator = File.separator;
@@ -16,6 +18,8 @@ public class FileUtils {
 
 	public static final String CSV_FOLDER_PATH = buildPath(APP_FILES_PATH, "csv");
 	public static final String CSV_EXTENSION = ".csv";
+
+	public static final String DATABASE_PATH = buildPath(APP_FILES_PATH, "database", getProperty("db.name"));
 
 	/**
 	 * Builds system-dependent path with specific separators

@@ -1,13 +1,12 @@
 package com.grsu.reader.beans;
 
-import com.grsu.reader.dao.DepartmentDAO;
-import com.grsu.reader.models.Department;
+import com.grsu.reader.dao.EntityDAO;
+import com.grsu.reader.entities.Department;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
-import java.util.List;
 
 import static com.grsu.reader.utils.FacesUtils.closeDialog;
 import static com.grsu.reader.utils.FacesUtils.update;
@@ -18,9 +17,6 @@ public class DepartmentBean implements Serializable {
 
 	private Department selectedDepartment;
 	private Department copyOfSelectedDepartment;
-
-	@ManagedProperty(value = "#{databaseBean}")
-	private DatabaseBean databaseBean;
 
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
@@ -34,21 +30,13 @@ public class DepartmentBean implements Serializable {
 		return selectedDepartment != null && !selectedDepartment.equals(copyOfSelectedDepartment);
 	}
 
-	public List<Department> getDepartments() {
-		return sessionBean.getDepartments();
-	}
-
 	public void exit() {
 		setSelectedDepartment(null);
 		closeDialog("departmentDialog");
 	}
 
 	public void save() {
-		if (selectedDepartment.getId() == 0) {
-			DepartmentDAO.create(databaseBean.getConnection(), selectedDepartment);
-		} else {
-			DepartmentDAO.update(databaseBean.getConnection(), selectedDepartment);
-		}
+		new EntityDAO().save(selectedDepartment);
 		sessionBean.updateDepartments();
 		update("views");
 	}
@@ -59,14 +47,10 @@ public class DepartmentBean implements Serializable {
 	}
 
 	public void delete() {
-		DepartmentDAO.delete(databaseBean.getConnection(), selectedDepartment);
+		new EntityDAO().delete(selectedDepartment);
 		sessionBean.updateDepartments();
 		update("views");
 		exit();
-	}
-
-	public void setDatabaseBean(DatabaseBean databaseBean) {
-		this.databaseBean = databaseBean;
 	}
 
 	public void setSessionBean(SessionBean sessionBean) {

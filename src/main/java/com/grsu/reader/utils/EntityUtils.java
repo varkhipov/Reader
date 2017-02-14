@@ -1,14 +1,15 @@
 package com.grsu.reader.utils;
 
-import com.grsu.reader.models.Entity;
-import com.grsu.reader.models.Person;
+import com.grsu.reader.entities.AssistantEntity;
+import com.grsu.reader.entities.Person;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class EntityUtils {
-	public static <T extends Entity> boolean entityExists(List<T> entities, int id) {
-		for (Entity entity : entities) {
+	public static <T extends AssistantEntity> boolean entityExists(List<T> entities, int id) {
+		for (AssistantEntity entity : entities) {
 			if (id == entity.getId()) {
 				return true;
 			}
@@ -16,9 +17,9 @@ public class EntityUtils {
 		return false;
 	}
 
-	public static <T extends Entity> T getEntityById(List<T> entities, int id) {
+	public static <T extends AssistantEntity> T getEntityById(List<T> entities, int id) {
 		if (id == 0) return null;
-		for (Entity entity : entities) {
+		for (AssistantEntity entity : entities) {
 			if (id == entity.getId()) {
 				return (T) entity;
 			}
@@ -26,10 +27,10 @@ public class EntityUtils {
 		return null;
 	}
 
-	public static <T extends Entity> List<T> getEntitiesById(List<T> entities, int id) {
+	public static <T extends AssistantEntity> List<T> getEntitiesById(List<T> entities, int id) {
 		if (id == 0) return null;
 		List<T> entityList = new ArrayList<>();
-		for (Entity entity : entities) {
+		for (AssistantEntity entity : entities) {
 			if (id == entity.getId()) {
 				entities.add((T) entity);
 			}
@@ -37,10 +38,10 @@ public class EntityUtils {
 		return entityList;
 	}
 
-	public static <T extends Entity> List<T> getEntitiesExcludeId(List<T> entities, int id) {
+	public static <T extends AssistantEntity> List<T> getEntitiesExcludeId(List<T> entities, int id) {
 		if (id == 0) return null;
 		List<T> entityList = new ArrayList<>();
-		for (Entity entity : entities) {
+		for (AssistantEntity entity : entities) {
 			if (id != entity.getId()) {
 				entities.add((T) entity);
 			}
@@ -66,5 +67,32 @@ public class EntityUtils {
 			}
 		}
 		return null;
+	}
+
+	public static <T extends AssistantEntity> boolean compareEntityLists(List<T> first, List<T> second) {
+		if (first == null && second == null) {
+			return true;
+		}
+		if (first == null || second == null || first.size() != second.size()) {
+			return false;
+		}
+
+		for (int i = 0; i < first.size(); i++) {
+			if (!compareEntity(first.get(i), second.get(i))) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public static <T extends AssistantEntity> boolean compareEntity(T first, T second) {
+		if (first == null && second == null) {
+			return true;
+		}
+		if (first == null || second == null || !Objects.equals(first.getId(), second.getId())) {
+			return false;
+		}
+		return true;
 	}
 }

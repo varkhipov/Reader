@@ -1,9 +1,8 @@
 package com.grsu.reader.beans;
 
-import com.grsu.reader.dao.GroupDAO;
-import com.grsu.reader.dao.StudentGroupDAO;
-import com.grsu.reader.models.Group;
-import com.grsu.reader.models.Student;
+import com.grsu.reader.dao.EntityDAO;
+import com.grsu.reader.entities.Group;
+import com.grsu.reader.entities.Student;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.grsu.reader.utils.EntityUtils.getEntityById;
 import static com.grsu.reader.utils.FacesUtils.closeDialog;
 import static com.grsu.reader.utils.FacesUtils.update;
 
@@ -28,9 +26,6 @@ public class GroupBean implements Serializable {
 	private List<Student> filteredGroupStudents;
 
 	private String dialogAction;
-
-	@ManagedProperty(value = "#{databaseBean}")
-	private DatabaseBean databaseBean;
 
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
@@ -49,11 +44,7 @@ public class GroupBean implements Serializable {
 	}
 
 	public void save() {
-		if (selectedGroup.getId() == 0) {
-			GroupDAO.create(databaseBean.getConnection(), selectedGroup);
-		} else {
-			GroupDAO.update(databaseBean.getConnection(), selectedGroup);
-		}
+		new EntityDAO().save(selectedGroup);
 		sessionBean.updateGroups();
 		update("views");
 	}
@@ -64,7 +55,7 @@ public class GroupBean implements Serializable {
 	}
 
 	public void deleteGroup() {
-		GroupDAO.delete(databaseBean.getConnection(), selectedGroup.getId());
+		new EntityDAO().delete(selectedGroup);
 		sessionBean.updateStudents();
 		sessionBean.updateGroups();
 		update("views");
@@ -83,7 +74,8 @@ public class GroupBean implements Serializable {
 	}
 
 	public void addStudent(Student student) {
-		StudentGroupDAO.create(databaseBean.getConnection(), student.getId(), selectedGroup.getId());
+		selectedGroup.getStudents().add(student);
+		new EntityDAO().update(selectedGroup);
 		groupStudents.remove(student);
 		if (filteredGroupStudents != null) {
 			filteredGroupStudents.remove(student);
@@ -91,7 +83,8 @@ public class GroupBean implements Serializable {
 	}
 
 	public void deleteStudent(Student student) {
-		StudentGroupDAO.delete(databaseBean.getConnection(), student, selectedGroup);
+		selectedGroup.getStudents().remove(student);
+		new EntityDAO().update(selectedGroup);
 		groupStudents.remove(student);
 		if (filteredGroupStudents != null) {
 			filteredGroupStudents.remove(student);
@@ -114,38 +107,19 @@ public class GroupBean implements Serializable {
 		copyOfSelectedGroup = selectedGroup == null ? null : new Group(selectedGroup);
 
 		if (selectedGroup != null) {
-			if (selectedGroup.getId() == 0) {
+			if (selectedGroup.getId() == null) {
 				groupStudents = Collections.emptyList();
 			} else {
 				if ("add".equals(dialogAction)) {
 					List<Student> allStudents = new ArrayList<>(sessionBean.getStudents());
-					List<Student> studentsFromGroup = new ArrayList<>(
-							StudentGroupDAO.getStudentsByGroupId(
-									databaseBean.getConnection(),
-									selectedGroup.getId()
-							)
-					);
+					List<Student> studentsFromGroup = new ArrayList<>(selectedGroup.getStudents());
 					allStudents.removeAll(studentsFromGroup);
 					groupStudents = allStudents;
 				} else if ("delete".equals(dialogAction)) {
-					groupStudents = StudentGroupDAO.getStudentsByGroupId(
-							databaseBean.getConnection(),
-							selectedGroup.getId()
-					);
+					groupStudents = selectedGroup.getStudents();
 				}
 			}
 		}
-	}
-
-	public int getSelectedDepartmentId() {
-		if (selectedGroup.getDepartment() == null) {
-			return 0;
-		}
-		return selectedGroup.getDepartment().getId();
-	}
-
-	public void setSelectedDepartmentId(int selectedDepartmentId) {
-		selectedGroup.setDepartment(getEntityById(sessionBean.getDepartments(), selectedDepartmentId));
 	}
 
 	public List<Student> getGroupStudents() {
@@ -170,10 +144,6 @@ public class GroupBean implements Serializable {
 
 	public void setDialogAction(String dialogAction) {
 		this.dialogAction = dialogAction;
-	}
-
-	public void setDatabaseBean(DatabaseBean databaseBean) {
-		this.databaseBean = databaseBean;
 	}
 
 	public void setSessionBean(SessionBean sessionBean) {

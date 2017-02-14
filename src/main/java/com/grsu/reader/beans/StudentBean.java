@@ -1,8 +1,8 @@
 package com.grsu.reader.beans;
 
-import com.grsu.reader.dao.StudentDAO;
-import com.grsu.reader.models.Group;
-import com.grsu.reader.models.Student;
+import com.grsu.reader.dao.EntityDAO;
+import com.grsu.reader.entities.Group;
+import com.grsu.reader.entities.Student;
 import org.primefaces.model.DualListModel;
 
 import javax.faces.bean.ManagedBean;
@@ -27,9 +27,6 @@ public class StudentBean implements Serializable {
 	private DualListModel<Group> selectedGroups;
 	private List<Student> filteredStudents;
 
-	@ManagedProperty(value = "#{databaseBean}")
-	private DatabaseBean databaseBean;
-
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
 
@@ -40,18 +37,16 @@ public class StudentBean implements Serializable {
 
 	public DualListModel<Group> getSelectedGroups() {
 		if (selectedStudent == null) {
-			setSelectedGroups(new DualListModel<>(
-					sessionBean.getGroups(),
-					Collections.emptyList()
-			));
+			setSelectedGroups(new DualListModel<>(sessionBean.getGroups(), Collections.emptyList()));
 		} else if (selectedGroups == null) {
 			List<Group> sourceGroups = new ArrayList<>(sessionBean.getGroups());
-			sourceGroups.removeAll(selectedStudent.getGroups());
+			if (selectedStudent.getGroups() != null) {
+				sourceGroups.removeAll(selectedStudent.getGroups());
+				setSelectedGroups(new DualListModel<>(sourceGroups, selectedStudent.getGroups()));
+			} else {
+				setSelectedGroups(new DualListModel<>(sourceGroups, Collections.emptyList()));
+			}
 
-			setSelectedGroups(new DualListModel<>(
-					sourceGroups,
-					selectedStudent.getGroups()
-			));
 		}
 		return selectedGroups;
 	}
@@ -78,11 +73,7 @@ public class StudentBean implements Serializable {
 	}
 
 	public void save() {
-		if (selectedStudent.getId() == 0) {
-			StudentDAO.create(databaseBean.getConnection(), selectedStudent);
-		} else {
-			StudentDAO.update(databaseBean.getConnection(), selectedStudent);
-		}
+		new EntityDAO().save(selectedStudent);
 		sessionBean.updateStudents();
 		update("views");
 	}
@@ -93,17 +84,13 @@ public class StudentBean implements Serializable {
 	}
 
 	public void delete() {
-		StudentDAO.delete(databaseBean.getConnection(), selectedStudent);
+		new EntityDAO().delete(selectedStudent);
 		if (filteredStudents != null) {
 			filteredStudents.clear();
 		}
 		sessionBean.updateStudents();
 		execute("PF('studentsTable').clearFilters()");
 		exit();
-	}
-
-	public void setDatabaseBean(DatabaseBean databaseBean) {
-		this.databaseBean = databaseBean;
 	}
 
 	public void setSessionBean(SessionBean sessionBean) {

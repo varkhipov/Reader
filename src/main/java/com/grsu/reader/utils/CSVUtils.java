@@ -1,16 +1,14 @@
 package com.grsu.reader.utils;
 
-import com.grsu.reader.dao.DepartmentDAO;
+import com.grsu.reader.dao.EntityDAO;
 import com.grsu.reader.dao.GroupDAO;
 import com.grsu.reader.dao.StudentDAO;
-import com.grsu.reader.dao.StudentGroupDAO;
-import com.grsu.reader.models.Department;
-import com.grsu.reader.models.Group;
-import com.grsu.reader.models.Student;
+import com.grsu.reader.entities.Department;
+import com.grsu.reader.entities.Group;
+import com.grsu.reader.entities.Student;
 import com.opencsv.CSVReader;
 
 import java.io.*;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,58 +27,63 @@ public class CSVUtils {
 	private static final char SEPARATOR = ';';
 
 	// TODO: analyze once again
-	public static void updateGroupsFromCSV(Connection connection) {
-		for(Group group : parseGroups()) {
+	public static void updateGroupsFromCSV() {
+		EntityDAO entityDAO = new EntityDAO();
+		for (Group group : parseGroups()) {
 			if (group.getStudents().isEmpty()) {
 				System.out.println("Group [ " + group.getName() + " ] is empty and not added to database.");
 				continue;
 			}
 
 			if (group.getDepartment().getName() != null) {
-				Department department = DepartmentDAO.getDepartmentByName(
-						connection,
-						group.getDepartment().getName()
-				);
+				Department department = null;
+				List<Department> departments = entityDAO.getAll(Department.class);
+				for (Department d : departments) {
+					if (group.getDepartment().getName().equals(d.getName())) {
+						department = d;
+						break;
+					}
+				}
 
 				if (department == null) {
-					group.getDepartment().setId(
-							DepartmentDAO.create(
-									connection,
-									group.getDepartment()
-							)
-					);
-				} else {
-					group.setDepartment(department);
+					department = group.getDepartment();
+					entityDAO.add(department);
 				}
+
+				group.setDepartment(department);
 			}
 
-			Group groupFromDB = GroupDAO.getGroupByName(connection, group.getName());
+			List<Student> students = new ArrayList<>(group.getStudents());
+			group.getStudents().clear();
+			Group groupFromDB = new GroupDAO().getByName(group.getName());
 			if (groupFromDB == null) {
-				group.setId(GroupDAO.create(connection, group));
+				entityDAO.add(group);
 			} else {
 				System.out.println("Group [ " + group.getName() + " ] already exists. Updating...");
-				group.setId(groupFromDB.getId());
-				StudentGroupDAO.deleteByGroupId(connection, group.getId());
+				group = groupFromDB;
 			}
-			processStudents(connection, group);
+			processStudents(group, students);
 			System.out.println("Group [ " + group.getName() + " ] processed.");
 		}
 	}
 
-	private static void processStudents(Connection connection, Group group) {
-		for (Student student : group.getStudents()) {
-			Student studentFromDB = StudentDAO.getStudentByUID(connection, student.getCardUid());
+	private static void processStudents(Group group, List<Student> students) {
+		StudentDAO studentDAO = new StudentDAO();
+		for (Student student : students) {
+			Student studentFromDB = studentDAO.getByCardUid(student.getCardUid());
 			if (studentFromDB == null) {
-				student.setId(StudentDAO.create(connection, student));
+				studentDAO.add(student);
+				student.setGroups(new ArrayList<>());
 			} else {
 				studentFromDB.setLastName(student.getLastName());
 				studentFromDB.setFirstName(student.getFirstName());
 				studentFromDB.setPatronymic(student.getPatronymic());
 				studentFromDB.setCardId(student.getCardId());
 				student = studentFromDB;
-				StudentDAO.update(connection, student);
+				studentDAO.update(student);
 			}
-			StudentGroupDAO.create(connection, student.getId(), group.getId());
+			student.getGroups().add(group);
+			studentDAO.update(student);
 		}
 	}
 
@@ -149,9 +152,12 @@ public class CSVUtils {
 		}
 
 		if (!students.isEmpty()) {
-			group = new Group(groupName);
+			group = new Group();
+			group.setName(groupName);
 			group.setStudents(students);
-			group.setDepartment(new Department(departmentName));
+			Department department = new Department();
+			department.setName(departmentName);
+			group.setDepartment(department);
 		} else {
 			System.out.println("Group [ " + groupName + " ] is empty and not added to database.");
 		}

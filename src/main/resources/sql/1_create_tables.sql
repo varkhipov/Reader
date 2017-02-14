@@ -58,7 +58,7 @@ CREATE TABLE STREAM (
 
 -- GROUP_TYPE
 CREATE TABLE GROUP_TYPE (
-  id INTEGER,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT
 );
 
@@ -79,7 +79,7 @@ CREATE TABLE [GROUP] (
 CREATE TABLE STUDENT (
   id                INTEGER PRIMARY KEY AUTOINCREMENT,
   card_uid          TEXT,
-  card_id           TEXT,
+  card_id           INTEGER,
   first_name        TEXT,
   last_name         TEXT,
   patronymic        TEXT,

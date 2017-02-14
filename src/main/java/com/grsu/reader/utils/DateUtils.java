@@ -1,5 +1,6 @@
 package com.grsu.reader.utils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -38,7 +39,7 @@ public class DateUtils {
 	}
 
 	private static LocalDateTime parseDate(String date, DateTimeFormatter formatter) {
-		return LocalDateTime.parse(date, formatter);
+		return LocalDate.parse(date, formatter).atStartOfDay();
 	}
 
 	public static LocalDateTime parseDate(String date) {

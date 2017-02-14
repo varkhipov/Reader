@@ -58,7 +58,7 @@
 					</p:inputText>
 
 					<p:outputLabel for="lessonType" value="#{msg['lesson.type']}"/>
-					<p:selectOneMenu id="lessonType" value="#{lessonBean.selectedLesson.lessonType}"
+					<p:selectOneMenu id="lessonType" value="#{lessonBean.selectedLesson.type}"
 									 converter="entityConverter" required="true">
 						<f:selectItem itemValue="#{null}" itemLabel="#{msg['select.lessonType']}"/>
 						<f:selectItems value="#{sessionBean.lessonTypes}" var="type" itemLabel="#{type.name}"
@@ -67,10 +67,10 @@
 					</p:selectOneMenu>
 
 					<p:outputLabel for="group" value="#{msg['lesson.group']}"
-								   rendered="#{lessonBean.selectedLesson.lessonType ne null and lessonBean.selectedLesson.lessonType.id ne 1}"/>
+								   rendered="#{lessonBean.selectedLesson.type ne null and lessonBean.selectedLesson.type.id ne 1}"/>
 					<p:selectOneMenu id="group" value="#{lessonBean.selectedLesson.group}" converter="entityConverter"
 									 required="true"
-									 rendered="#{lessonBean.selectedLesson.lessonType ne null and lessonBean.selectedLesson.lessonType.id ne 1}">
+									 rendered="#{lessonBean.selectedLesson.type ne null and lessonBean.selectedLesson.type.id ne 1}">
 						<f:selectItem itemValue="#{null}" itemLabel="#{msg['select.group']}"/>
 						<f:selectItems value="#{lessonBean.selectedLesson.stream.groups}" var="group"
 									   itemLabel="#{group.name}" itemValue="#{group}"/>
