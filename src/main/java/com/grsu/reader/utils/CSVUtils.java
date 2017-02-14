@@ -54,14 +54,13 @@ public class CSVUtils {
 			}
 
 			List<Student> students = new ArrayList<>(group.getStudents());
-			group.getStudents().clear();
 			Group groupFromDB = new GroupDAO().getByName(group.getName());
-			if (groupFromDB == null) {
-				entityDAO.add(group);
-			} else {
+			if (groupFromDB != null) {
 				System.out.println("Group [ " + group.getName() + " ] already exists. Updating...");
 				group = groupFromDB;
 			}
+			group.getStudents().clear();
+			entityDAO.save(group);
 			processStudents(group, students);
 			System.out.println("Group [ " + group.getName() + " ] processed.");
 		}
