@@ -52,11 +52,6 @@
 						<p:ajax update=":lessonInfoForm:lessonDetail"/>
 					</p:selectOneMenu>
 
-					<p:outputLabel for="name" value="#{msg['lesson.name']}"/>
-					<p:inputText id="name" value="#{lessonBean.selectedLesson.name}">
-						<p:ajax update=":lessonInfoForm:lessonDetail"/>
-					</p:inputText>
-
 					<p:outputLabel for="lessonType" value="#{msg['lesson.type']}"/>
 					<p:selectOneMenu id="lessonType" value="#{lessonBean.selectedLesson.type}"
 									 converter="entityConverter" required="true">

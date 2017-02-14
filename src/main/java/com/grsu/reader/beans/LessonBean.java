@@ -70,10 +70,6 @@ public class LessonBean implements Serializable {
 
 	public void createLesson() {
 		if (selectedLesson != null) {
-			if (StringUtils.isEmpty(selectedLesson.getName())) {
-				selectedLesson.setName(selectedLesson.getStream().getName());
-			}
-
 			if (selectedLesson.getType() == null || selectedLesson.getType().getId() == 1) {
 				selectedLesson.setGroup(null);
 			}

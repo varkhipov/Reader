@@ -18,7 +18,7 @@ public class EntityDAO {
 		try {
 			transaction = session.beginTransaction();
 			session.save(entity);
-
+			transaction.commit();
 			System.out.println("[ " + entity + " ] successfully added to database.");
 		} catch (RuntimeException e) {
 			if (transaction != null) {
@@ -46,6 +46,7 @@ public class EntityDAO {
 				}
 			}
 			transaction.commit();
+			System.out.println("[ " + entities + " ] successfully added to database.");
 		} catch (RuntimeException e) {
 			if (transaction != null) {
 				transaction.rollback();
@@ -64,6 +65,7 @@ public class EntityDAO {
 			transaction = session.beginTransaction();
 			session.delete(entity);
 			transaction.commit();
+			System.out.println("[ " + entity + " ] successfully deleted from database.");
 		} catch (RuntimeException e) {
 			if (transaction != null) {
 				transaction.rollback();
@@ -82,6 +84,7 @@ public class EntityDAO {
 			transaction = session.beginTransaction();
 			session.update(entity);
 			transaction.commit();
+			System.out.println("[ " + entity + " ] successfully updated in database.");
 		} catch (RuntimeException e) {
 			if (transaction != null) {
 				transaction.rollback();
@@ -108,6 +111,7 @@ public class EntityDAO {
 				}
 			}
 			transaction.commit();
+			System.out.println("[ " + entities + " ] successfully updated in database.");
 		} catch (RuntimeException e) {
 			if (transaction != null) {
 				transaction.rollback();

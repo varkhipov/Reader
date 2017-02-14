@@ -123,8 +123,12 @@ body {
 }
 
 /*Lesson Form */
+.lesson-info {
+    width: 100%;
+}
+
 .lesson-info .visitInfo {
-    font-size: 16pt;
+    font-size: 20pt;
 }
 
 .lessonStudents .transparent-button button{

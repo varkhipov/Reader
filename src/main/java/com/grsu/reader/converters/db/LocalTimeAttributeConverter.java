@@ -5,6 +5,7 @@ import com.grsu.reader.utils.DateUtils;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 /**
@@ -18,7 +19,7 @@ public class LocalTimeAttributeConverter implements AttributeConverter<LocalTime
 		if (localTime == null) {
 			return null;
 		}
-		return localTime.format(DateUtils.TIME_FORMATTER);
+		return localTime.format(DateTimeFormatter.ISO_TIME);
 	}
 
 	@Override
