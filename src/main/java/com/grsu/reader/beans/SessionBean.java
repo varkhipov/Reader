@@ -1,6 +1,6 @@
 package com.grsu.reader.beans;
 
-import com.grsu.reader.dao.*;
+import com.grsu.reader.dao.EntityDAO;
 import com.grsu.reader.entities.Class;
 import com.grsu.reader.entities.Department;
 import com.grsu.reader.entities.Discipline;
@@ -12,7 +12,6 @@ import com.grsu.reader.entities.Stream;
 import com.grsu.reader.entities.Student;
 import com.grsu.reader.utils.CSVUtils;
 import com.grsu.reader.utils.SerialUtils;
-import com.grsu.reader.utils.db.DBSessionFactory;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -40,23 +39,14 @@ public class SessionBean implements Serializable {
 
 	@PostConstruct
 	public void connect() {
-		if (!DBSessionFactory.isConnected()) {
-			System.err.println("No connection to db.");
-		} else {
-			setConnected(true);
-			initData();
-		}
+		setConnected(true);
+		initData();
 	}
 
 	@PreDestroy
 	public void disconnect() {
 		SerialUtils.disconnect();
-		DBSessionFactory.close();
-		if (DBSessionFactory.isConnected()) {
-			System.err.println("Still not disconnected.");
-		} else {
-			setConnected(false);
-		}
+		setConnected(false);
 	}
 
 	public void initData() {

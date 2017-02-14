@@ -44,11 +44,7 @@ public class GroupBean implements Serializable {
 	}
 
 	public void save() {
-		if (selectedGroup.getId() == null) {
-			new EntityDAO().add(selectedGroup);
-		} else {
-			new EntityDAO().update(selectedGroup);
-		}
+		new EntityDAO().save(selectedGroup);
 		sessionBean.updateGroups();
 		update("views");
 	}

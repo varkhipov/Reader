@@ -5,7 +5,6 @@ import com.grsu.reader.utils.db.DBSessionFactory;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -19,7 +18,8 @@ public class EntityDAO {
 		try {
 			transaction = session.beginTransaction();
 			session.save(entity);
-			transaction.commit();
+
+			System.out.println("[ " + entity + " ] successfully added to database.");
 		} catch (RuntimeException e) {
 			if (transaction != null) {
 				transaction.rollback();
@@ -115,6 +115,14 @@ public class EntityDAO {
 			e.printStackTrace();
 		} finally {
 			session.close();
+		}
+	}
+
+	public void save(AssistantEntity entity) {
+		if (entity.getId() == null) {
+			new EntityDAO().add(entity);
+		} else {
+			new EntityDAO().update(entity);
 		}
 	}
 

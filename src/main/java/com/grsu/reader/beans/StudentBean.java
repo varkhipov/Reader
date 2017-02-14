@@ -73,11 +73,7 @@ public class StudentBean implements Serializable {
 	}
 
 	public void save() {
-		if (selectedStudent.getId() == null) {
-			new EntityDAO().add(selectedStudent);
-		} else {
-			new EntityDAO().update(selectedStudent);
-		}
+		new EntityDAO().save(selectedStudent);
 		sessionBean.updateStudents();
 		update("views");
 	}

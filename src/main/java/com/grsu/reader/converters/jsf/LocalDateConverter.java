@@ -10,9 +10,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @FacesConverter(value = "localDateConverter")
 public class LocalDateConverter implements Converter {
@@ -31,7 +29,7 @@ public class LocalDateConverter implements Converter {
 
 	@Override
 	public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object o) {
-		if (o == null) {
+		if (o == null || (o instanceof String && "".equals(o))) {
 			return null;
 		}
 		return DateUtils.formatDate((LocalDateTime) o);

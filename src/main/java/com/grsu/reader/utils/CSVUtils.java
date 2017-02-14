@@ -46,32 +46,34 @@ public class CSVUtils {
 				}
 
 				if (department == null) {
+					department = group.getDepartment();
 					entityDAO.add(department);
 				}
 
 				group.setDepartment(department);
 			}
 
+			List<Student> students = new ArrayList<>(group.getStudents());
+			group.getStudents().clear();
 			Group groupFromDB = new GroupDAO().getByName(group.getName());
 			if (groupFromDB == null) {
 				entityDAO.add(group);
 			} else {
 				System.out.println("Group [ " + group.getName() + " ] already exists. Updating...");
 				group = groupFromDB;
-				group.getStudents().clear();
-				entityDAO.update(group);
 			}
-			processStudents(group);
+			processStudents(group, students);
 			System.out.println("Group [ " + group.getName() + " ] processed.");
 		}
 	}
 
-	private static void processStudents(Group group) {
+	private static void processStudents(Group group, List<Student> students) {
 		StudentDAO studentDAO = new StudentDAO();
-		for (Student student : group.getStudents()) {
+		for (Student student : students) {
 			Student studentFromDB = studentDAO.getByCardUid(student.getCardUid());
 			if (studentFromDB == null) {
 				studentDAO.add(student);
+				student.setGroups(new ArrayList<>());
 			} else {
 				studentFromDB.setLastName(student.getLastName());
 				studentFromDB.setFirstName(student.getFirstName());

@@ -10,7 +10,7 @@ public class GroupDAO extends EntityDAO {
 	public Group getByName(String name) {
 		Session session = DBSessionFactory.getSession();
 		try {
-			Query query = session.createQuery("from [Group] where name = :name");
+			Query query = session.createQuery("from Group where name = :name");
 			query.setParameter("name", name);
 			query.setFirstResult(0);
 			query.setMaxResults(1);

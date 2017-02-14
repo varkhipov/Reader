@@ -41,11 +41,7 @@ public class DisciplineBean implements Serializable {
 	}
 
 	public void save() {
-		if (selectedDiscipline.getId() == null) {
-			new EntityDAO().add(selectedDiscipline);
-		} else {
-			new EntityDAO().update(selectedDiscipline);
-		}
+		new EntityDAO().save(selectedDiscipline);
 		sessionBean.updateDisciplines();
 		update("views");
 	}

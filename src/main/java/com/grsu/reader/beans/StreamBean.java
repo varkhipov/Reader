@@ -71,11 +71,7 @@ public class StreamBean implements Serializable {
 	}
 
 	public void save() {
-		if (selectedStream.getId() == null) {
-			new EntityDAO().add(selectedStream);
-		} else {
-			new EntityDAO().update(selectedStream);
-		}
+		new EntityDAO().save(selectedStream);
 		sessionBean.updateStreams();
 		update("views");
 	}

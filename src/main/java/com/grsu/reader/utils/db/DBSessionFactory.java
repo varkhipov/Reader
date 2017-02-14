@@ -32,10 +32,6 @@ public class DBSessionFactory {
 		return sessionFactory.openSession();
 	}
 
-	public static void close() {
-		sessionFactory.close();
-	}
-
 	public static boolean isConnected() {
 		return sessionFactory.isOpen();
 	}
