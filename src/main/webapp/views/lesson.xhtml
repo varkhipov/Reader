@@ -10,13 +10,13 @@
 		</p:socket>
 
 		<p:panelGrid id="lessonInfo" columns="2" styleClass="noBorder lesson-info">
-			<p:panel id="lastVisitInfo">
+			<p:panel id="lastVisitInfo" styleClass="visit-info">
 				<p:panelGrid columns="2">
 					<p:graphicImage name="images/noavatar.png" width="300" height="300"/>
 					<p:panel rendered="#{lessonBean.processedStudent eq null}">
 						<p:outputLabel value="#{msg['lesson.visit.noData']}"/>
 					</p:panel>
-					<p:panelGrid rendered="#{lessonBean.processedStudent ne null}" columns="1" styleClass="visit-label visit-info">
+					<p:panelGrid rendered="#{lessonBean.processedStudent ne null}" columns="1" styleClass="visit-label">
 						<p:outputLabel id="visitLastName" value="#{lessonBean.processedStudent.lastName}"/>
 						<p:outputLabel id="visitFirstName" value="#{lessonBean.processedStudent.firstName}"/>
 						<p:outputLabel id="visitGroup" disabled="#{true}" escape="false" value="#{lessonBean.processedStudent.groupNames}"/>
@@ -28,25 +28,25 @@
 				                 actionListener="#{lessonBean.returnToLessons}" update="@([id$=views])"
 				                 rendered="#{false}"/>
 
-				<p:commandButton value="#{msg['btn.startRecord']}" icon="fa fa-fw fa-play"
+				<p:commandButton title="#{msg['btn.startRecord']}" icon="fa fa-fw fa-play"
 				                 update=":lessonForm:lessonButtons"
 				                 actionListener="#{lessonBean.startRecord}"
 				                 rendered="#{not lessonBean.recordStarted}"/>
 
-				<p:commandButton value="#{msg['btn.stopRecord']}" icon="fa fa-fw fa-stop"
+				<p:commandButton title="#{msg['btn.stopRecord']}" icon="fa fa-fw fa-stop"
 				                 update=":lessonForm:lessonButtons"
 				                 actionListener="#{lessonBean.stopRecord}"
 				                 rendered="#{lessonBean.recordStarted}"/>
 
-				<p:commandButton value="#{msg['btn.enableSound']}" icon="fa fa-fw fa-volume-up"
+				<p:commandButton title="#{msg['btn.enableSound']}" icon="fa fa-fw fa-volume-up"
 				                 update=":lessonForm:lessonButtons"
 				                 actionListener="#{lessonBean.enableSound}"
 				                 rendered="#{lessonBean.recordStarted and not lessonBean.soundEnabled}"/>
-				<p:commandButton value="#{msg['btn.disableSound']}" icon="fa fa-fw fa-volume-off"
+				<p:commandButton title="#{msg['btn.disableSound']}" icon="fa fa-fw fa-volume-off"
 				                 update=":lessonForm:lessonButtons"
 				                 actionListener="#{lessonBean.disableSound}"
 				                 rendered="#{lessonBean.recordStarted and lessonBean.soundEnabled}"/>
-				<p:commandButton value="#{msg['btn.addVisit']}" icon="fa fa-fw fa-plus"
+				<p:commandButton title="#{msg['btn.addVisit']}" icon="fa fa-fw fa-plus"
 				                 actionListener="#{lessonBean.initAllStudents}"
 				                 oncomplete="PF('addStudentsDialog').show()"
 				                 update=":addStudentsForm:studentDetail"/>

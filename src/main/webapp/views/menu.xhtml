@@ -72,7 +72,9 @@
                     <p:menuitem value="#{msg['menu.show.streams']}" icon="fa fa-fw fa-code-fork"
                                 actionListener="#{menuBean.changeView('streams')}" update="@([id$=views])"/>
                     <p:menuitem value="#{msg['menu.show.lessons']}" icon="fa fa-fw fa-book"
-                                actionListener="#{menuBean.changeView('lessons')}" update="@([id$=views])"/>
+                                actionListener="#{menuBean.changeView('lessons')}" update="@([id$=views])">
+                        <f:actionListener binding="#{lessonBean.clear()}" />
+                    </p:menuitem>
                     <p:menuitem value="#{msg['menu.show.groups']}" icon="fa fa-fw fa-users"
                                 actionListener="#{menuBean.changeView('groups')}" update="@([id$=views])"/>
                     <p:menuitem value="#{msg['menu.show.students']}" icon="fa fa-fw fa-user"

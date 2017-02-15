@@ -131,10 +131,15 @@ body {
     vertical-align: top;
 }
 
-.lesson-info .visit-info {
+.lesson-info .visit-info .visit-label {
     font-size: 30pt;
     text-transform: uppercase;
     font-weight: bold;
+    margin-left: 2rem;
+}
+
+.visit-info td {
+    vertical-align: middle;
 }
 
 .lessonStudents .transparent-button button{

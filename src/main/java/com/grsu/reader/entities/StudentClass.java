@@ -60,7 +60,7 @@ public class StudentClass implements AssistantEntity {
 	}
 
 	public Boolean isRegistered() {
-		return Boolean.TRUE == registered;
+		return Boolean.TRUE.equals(registered);
 	}
 
 	public void setRegistered(Boolean registered) {

@@ -42,11 +42,6 @@ public class LessonBean implements Serializable {
 
 	private Set<Student> lessonStudents;
 
-	/* Filter */
-	private Department department;
-	private Discipline discipline;
-	private Integer course;
-
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
 
@@ -55,17 +50,27 @@ public class LessonBean implements Serializable {
 	}
 
 	public void exit() {
-		setSelectedLesson(null);
-		department = null;
-		discipline = null;
-		course = null;
+		sessionBean.setActiveView("lessons");
+		update("views");
+		clear();
 		closeDialog("lessonDialog");
 	}
 
 	public void returnToLessons() {
-		setSelectedLesson(null);
-		setProcessedStudent(null);
+		clear();
 		sessionBean.setActiveView("lessons");
+	}
+
+	public void clear() {
+		selectedLesson = null;
+		processedStudent = null;
+		presentStudents = null;
+		filteredPresentStudents = null;
+		absentStudents = null;
+		filteredAbsentStudents = null;
+		lessonStudents = null;
+		allStudents = null;
+		filteredAllStudents = null;
 	}
 
 	public void createLesson() {
@@ -102,8 +107,6 @@ public class LessonBean implements Serializable {
 			entityDAO.add(new ArrayList<>(studentClasses));
 
 			sessionBean.updateLessons();
-			sessionBean.setActiveView("lessons");
-			update("views");
 		}
 		exit();
 	}
@@ -140,11 +143,11 @@ public class LessonBean implements Serializable {
 	}
 
 	private void initLessonStudents() {
+		lessonStudents = new HashSet<>();
 		if (selectedLesson.getStream() != null) {
 			if (selectedLesson.getGroup() != null) {
 				lessonStudents = new HashSet<>(selectedLesson.getGroup().getStudents());
 			} else {
-				lessonStudents = new HashSet<>();
 				for (Group group : selectedLesson.getStream().getGroups()) {
 					lessonStudents.addAll(group.getStudents());
 				}
@@ -261,18 +264,6 @@ public class LessonBean implements Serializable {
 		getLessons().remove(lesson);
 	}
 
-	/* Filter */
-	public List<Stream> getFilteredStream() {
-		return sessionBean.getStreams().stream()
-				.filter(stream -> {
-					boolean discipline = (this.discipline == null) || (this.discipline.equals(stream.getDiscipline()));
-					boolean department = (this.department == null) || (this.department.equals(stream.getDepartment()));
-					boolean course = (this.course == null) || (this.course.equals(stream.getCourse()));
-					return discipline && department && course;
-				})
-				.collect(Collectors.toList());
-	}
-
 	/* GETTERS & SETTERS */
 	public void setSelectedLesson(Lesson selectedLesson) {
 		this.selectedLesson = selectedLesson;
@@ -372,30 +363,6 @@ public class LessonBean implements Serializable {
 
 	public void setFilteredAllStudents(List<Student> filteredAllStudents) {
 		this.filteredAllStudents = filteredAllStudents;
-	}
-
-	public Department getDepartment() {
-		return department;
-	}
-
-	public void setDepartment(Department department) {
-		this.department = department;
-	}
-
-	public Discipline getDiscipline() {
-		return discipline;
-	}
-
-	public void setDiscipline(Discipline discipline) {
-		this.discipline = discipline;
-	}
-
-	public Integer getCourse() {
-		return course;
-	}
-
-	public void setCourse(Integer course) {
-		this.course = course;
 	}
 
 	public Set<Student> getLessonStudents() {
