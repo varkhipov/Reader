@@ -3,6 +3,7 @@
 				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 				xmlns:f="http://xmlns.jcp.org/jsf/core"
 				xmlns:p="http://primefaces.org/ui"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
 >
 	<h:form id="lessonInfoForm" styleClass="edit-form">
 		<p:dialog header="#{msg['lesson.info']}" widgetVar="lessonDialog" position="center" draggable="false"
@@ -15,42 +16,29 @@
 				<p:panelGrid columns="2" rendered="#{not empty lessonBean.selectedLesson}"
 							 columnClasses="label,value">
 
-					<p:outputLabel for="department" value="#{msg['lesson.department']}"/>
-					<p:selectOneMenu id="department" value="#{lessonBean.department}" converter="entityConverter">
-						<f:selectItem itemValue="#{null}" itemLabel="#{msg['select.department']}"/>
-						<f:selectItems value="#{sessionBean.departments}" var="department"
-									   itemLabel="#{department.name}" itemValue="#{department}"/>
-						<p:ajax update=":lessonInfoForm:lessonDetail"/>
-					</p:selectOneMenu>
-
-					<p:outputLabel for="discipline" value="#{msg['lesson.discipline']}"/>
-					<p:selectOneMenu id="discipline" value="#{lessonBean.discipline}" converter="entityConverter">
-						<f:selectItem itemValue="#{null}" itemLabel="#{msg['select.discipline']}"/>
-						<f:selectItems value="#{sessionBean.disciplines}" var="discipline"
-									   itemLabel="#{discipline.name}" itemValue="#{discipline}"/>
-						<p:ajax update=":lessonInfoForm:lessonDetail"/>
-					</p:selectOneMenu>
-
-					<p:outputLabel for="course" value="#{msg['lesson.course']}"/>
-					<p:selectOneMenu id="course" value="#{lessonBean.course}">
-						<f:selectItem itemValue="#{null}" itemLabel="#{msg['select.course']}"/>
-						<f:selectItem itemValue="#{1}" itemLabel="1"/>
-						<f:selectItem itemValue="#{2}" itemLabel="2"/>
-						<f:selectItem itemValue="#{3}" itemLabel="3"/>
-						<f:selectItem itemValue="#{4}" itemLabel="4"/>
-						<f:selectItem itemValue="#{5}" itemLabel="5"/>
-						<f:selectItem itemValue="#{6}" itemLabel="6"/>
-						<p:ajax update=":lessonInfoForm:lessonDetail"/>
-					</p:selectOneMenu>
-
 					<p:outputLabel for="stream" value="#{msg['lesson.stream']}"/>
 					<p:selectOneMenu id="stream" value="#{lessonBean.selectedLesson.stream}" converter="entityConverter"
 									 required="true">
 						<f:selectItem itemValue="#{null}" itemLabel="#{msg['select.stream']}"/>
-						<f:selectItems value="#{lessonBean.filteredStream}" var="stream" itemLabel="#{stream.name}"
+						<f:selectItems value="#{sessionBean.streams}" var="stream" itemLabel="#{stream.name}"
 									   itemValue="#{stream}"/>
 						<p:ajax update=":lessonInfoForm:lessonDetail"/>
 					</p:selectOneMenu>
+
+					<p:outputLabel for="discipline" value="#{msg['lesson.discipline']}"
+								   rendered="#{lessonBean.selectedLesson.stream ne null and lessonBean.selectedLesson.stream.discipline ne null}"/>
+					<p:outputLabel id="discipline" value="#{lessonBean.selectedLesson.stream.discipline.name}"
+								   rendered="#{lessonBean.selectedLesson.stream ne null and lessonBean.selectedLesson.stream.discipline ne null}"/>
+
+					<p:outputLabel for="department" value="#{msg['lesson.department']}"
+								   rendered="#{lessonBean.selectedLesson.stream ne null and lessonBean.selectedLesson.stream.department ne null}"/>
+					<p:outputLabel id="department" value="#{lessonBean.selectedLesson.stream.department.name}"
+								   rendered="#{lessonBean.selectedLesson.stream ne null and lessonBean.selectedLesson.stream.department ne null}"/>
+
+					<p:outputLabel for="course" value="#{msg['lesson.course']}"
+								   rendered="#{lessonBean.selectedLesson.stream ne null and lessonBean.selectedLesson.stream.course ne null}"/>
+					<p:outputLabel id="course" value="#{lessonBean.selectedLesson.stream.course}"
+								   rendered="#{lessonBean.selectedLesson.stream ne null and lessonBean.selectedLesson.stream.course ne null}"/>
 
 					<p:outputLabel for="lessonType" value="#{msg['lesson.type']}"/>
 					<p:selectOneMenu id="lessonType" value="#{lessonBean.selectedLesson.type}"

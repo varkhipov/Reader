@@ -10,63 +10,50 @@
 		</p:socket>
 
 		<p:panelGrid id="lessonInfo" columns="2" styleClass="noBorder lesson-info">
-			<p:panel id="lastVisitInfo" styleClass="visitInfo">
+			<p:panel id="lastVisitInfo">
 				<p:panelGrid columns="2">
-					<p:graphicImage name="images/noavatar.png" width="100" height="100"/>
+					<p:graphicImage name="images/noavatar.png" width="300" height="300"/>
 					<p:panel rendered="#{lessonBean.processedStudent eq null}">
 						<p:outputLabel value="#{msg['lesson.visit.noData']}"/>
 					</p:panel>
-					<p:panel rendered="#{lessonBean.processedStudent ne null}">
-						<p:panelGrid columns="2">
-							<p:outputLabel for="visitLastName" styleClass="visitLabel"
-										   value="#{msg['lesson.visit.lastName']}"/>
-							<p:outputLabel id="visitLastName" disabled="#{true}"
-										   value="#{lessonBean.processedStudent.lastName}"/>
-
-							<p:outputLabel for="visitFirstName" styleClass="visitLabel"
-										   value="#{msg['lesson.visit.firstName']}"/>
-							<p:outputLabel id="visitFirstName" disabled="#{true}"
-										   value="#{lessonBean.processedStudent.firstName}"/>
-
-							<p:outputLabel for="visitGroup" styleClass="visitLabel"
-										   value="#{msg['lesson.visit.groups']}"/>
-							<p:outputLabel id="visitGroup" disabled="#{true}" escape="false"
-										   value="#{lessonBean.processedStudent.groupNames}"/>
-						</p:panelGrid>
-					</p:panel>
+					<p:panelGrid rendered="#{lessonBean.processedStudent ne null}" columns="1" styleClass="visit-label visit-info">
+						<p:outputLabel id="visitLastName" value="#{lessonBean.processedStudent.lastName}"/>
+						<p:outputLabel id="visitFirstName" value="#{lessonBean.processedStudent.firstName}"/>
+						<p:outputLabel id="visitGroup" disabled="#{true}" escape="false" value="#{lessonBean.processedStudent.groupNames}"/>
+					</p:panelGrid>
 				</p:panelGrid>
 			</p:panel>
 			<p:panelGrid id="lessonButtons" columns="5" styleClass="noBorder lessonButtons">
 				<p:commandButton value="#{msg['btn.backToLessons']}" icon="fa fa-fw fa-arrow-left"
-								 actionListener="#{lessonBean.returnToLessons}" update="@([id$=views])"
-								 rendered="#{false}"/>
+				                 actionListener="#{lessonBean.returnToLessons}" update="@([id$=views])"
+				                 rendered="#{false}"/>
 
 				<p:commandButton value="#{msg['btn.startRecord']}" icon="fa fa-fw fa-play"
-								 update=":lessonForm:lessonButtons"
-								 actionListener="#{lessonBean.startRecord}"
-								 rendered="#{not lessonBean.recordStarted}"/>
+				                 update=":lessonForm:lessonButtons"
+				                 actionListener="#{lessonBean.startRecord}"
+				                 rendered="#{not lessonBean.recordStarted}"/>
 
 				<p:commandButton value="#{msg['btn.stopRecord']}" icon="fa fa-fw fa-stop"
-								 update=":lessonForm:lessonButtons"
-								 actionListener="#{lessonBean.stopRecord}"
-								 rendered="#{lessonBean.recordStarted}"/>
+				                 update=":lessonForm:lessonButtons"
+				                 actionListener="#{lessonBean.stopRecord}"
+				                 rendered="#{lessonBean.recordStarted}"/>
 
 				<p:commandButton value="#{msg['btn.enableSound']}" icon="fa fa-fw fa-volume-up"
-								 update=":lessonForm:lessonButtons"
-								 actionListener="#{lessonBean.enableSound}"
-								 rendered="#{lessonBean.recordStarted and not lessonBean.soundEnabled}"/>
+				                 update=":lessonForm:lessonButtons"
+				                 actionListener="#{lessonBean.enableSound}"
+				                 rendered="#{lessonBean.recordStarted and not lessonBean.soundEnabled}"/>
 				<p:commandButton value="#{msg['btn.disableSound']}" icon="fa fa-fw fa-volume-off"
-								 update=":lessonForm:lessonButtons"
-								 actionListener="#{lessonBean.disableSound}"
-								 rendered="#{lessonBean.recordStarted and lessonBean.soundEnabled}"/>
+				                 update=":lessonForm:lessonButtons"
+				                 actionListener="#{lessonBean.disableSound}"
+				                 rendered="#{lessonBean.recordStarted and lessonBean.soundEnabled}"/>
 				<p:commandButton value="#{msg['btn.addVisit']}" icon="fa fa-fw fa-plus"
-								 actionListener="#{lessonBean.initAllStudents}"
-								 oncomplete="PF('addStudentsDialog').show()"
-								 update=":addStudentsForm:studentDetail"/>
+				                 actionListener="#{lessonBean.initAllStudents}"
+				                 oncomplete="PF('addStudentsDialog').show()"
+				                 update=":addStudentsForm:studentDetail"/>
 			</p:panelGrid>
 		</p:panelGrid>
 
-		<p:panelGrid id="lessonTables" columns="5" styleClass="noBorder v-align-top">
+		<p:panelGrid id="lessonTables" columns="5" styleClass="noBorder v-align-top lesson-tables">
 			<p:panel id="presentStudents"
 					 header="#{msg['lesson.students.present']} - #{lessonBean.getPresentStudentsSize()}/#{lessonBean.lessonStudents.size()} #{lessonBean.getAdditionalStudentsSize()}"
 					 toggleable="true" styleClass="noBorder lessonStudents">
@@ -80,7 +67,8 @@
 					</p:column>
 					<p:column sortBy="#{pStudent.studentClasses[lessonBean.selectedLesson.classes[0].id].registrationTime}"
 							  styleClass="groupOptions">
-						<h:outputText value="#{pStudent.studentClasses[lessonBean.selectedLesson.classes[0].id].registrationTime}" converter="localTimeConverter"/>
+						<h:outputText value="#{pStudent.studentClasses[lessonBean.selectedLesson.classes[0].id].registrationTime}"
+									  converter="localTimeConverter"/>
 					</p:column>
 					<p:column styleClass="groupOptions transparent-button">
 						<p:commandButton update=":lessonForm:lessonTables"

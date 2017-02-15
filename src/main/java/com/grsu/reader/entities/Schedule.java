@@ -41,6 +41,10 @@ public class Schedule implements AssistantEntity {
 		return String.format("[%s] %s - %s", number, begin, end);
 	}
 
+	public String getTime() {
+		return String.format("%s - %s", begin, end);
+	}
+
 	/* GETTERS & SETTERS */
 	public Integer getId() {
 		return id;

@@ -86,13 +86,13 @@ body {
     margin-left: 5%;
 }
 
-.visitInfo,
-.visitInfo .ui-panel,
-.visitInfo .ui-panel-content,
-.visitInfo .ui-panel-content .ui-widget-content,
-.visitInfo div.ui-panel-content{
-    padding-left: 0px;
-}
+/*.visitInfo,*/
+/*.visitInfo .ui-panel,*/
+/*.visitInfo .ui-panel-content,*/
+/*.visitInfo .ui-panel-content .ui-widget-content,*/
+/*.visitInfo div.ui-panel-content{*/
+    /*padding-left: 0px;*/
+/*}*/
 
 /* Sorry for that. I will fix it, I promise! :( */
 .lessonStudents {
@@ -127,8 +127,14 @@ body {
     width: 100%;
 }
 
-.lesson-info .visitInfo {
-    font-size: 20pt;
+.lesson-info td {
+    vertical-align: top;
+}
+
+.lesson-info .visit-info {
+    font-size: 30pt;
+    text-transform: uppercase;
+    font-weight: bold;
 }
 
 .lessonStudents .transparent-button button{
@@ -138,4 +144,11 @@ body {
 
 .lessonStudents .transparent-button .ui-button-text {
     padding: 0;
+}
+
+.lesson-tables .ui-datatable thead th,
+.lesson-tables .ui-datatable tbody td,
+.lesson-tables .ui-datatable tfoot td,
+.lesson-tables .ui-datatable tfoot th {
+    border-width: 0;
 }
