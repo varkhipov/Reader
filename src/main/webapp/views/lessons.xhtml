@@ -12,6 +12,9 @@
             <p:column headerText="#{msg['lesson.stream']}">
                 <h:outputText value="#{lesson.stream.name}"/>
             </p:column>
+            <p:column headerText="#{msg['lesson.discipline']}">
+                <h:outputText value="#{lesson.stream.discipline.name}"/>
+            </p:column>
             <p:column headerText="#{msg['lesson.date']}">
                 <h:outputText value="#{lesson.classes[0] ne null ? lesson.classes[0].date : ''}" converter="localDateConverter"/>
             </p:column>

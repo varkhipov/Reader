@@ -63,7 +63,7 @@
 					<p:outputLabel for="date" value="#{msg['lesson.date']}"/>
 					<p:calendar id="date" value="#{lessonBean.selectedLesson.classes[0].date}"
 								converter="localDateConverter" pattern="dd.MM.yyyy">
-						<p:ajax update=":lessonInfoForm:lessonDetail"/>
+						<p:ajax event="dateSelect" update=":lessonInfoForm:lessonDetail"/>
 					</p:calendar>
 
 					<p:outputLabel for="schedule" value="#{msg['lesson.schedule']}"/>
