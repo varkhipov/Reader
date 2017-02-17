@@ -10,6 +10,6 @@ public class RegisterStudentResource {
 
 	@OnMessage(encoders = {JSONEncoder.class})
 	public Student onMessage(Student student) {
-		return student;
+		return new Student();
 	}
 }
