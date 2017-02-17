@@ -6,7 +6,7 @@
 >
 	<h:form id="lessonForm">
 		<p:socket channel="/register">
-			<p:ajax event="message" update="lessonInfo lessonTables"/>
+			<p:ajax event="message" update="lessonInfo lessonTables presentStudents absentStudents"/>
 		</p:socket>
 
 		<p:panelGrid id="lessonInfo" columns="2" styleClass="noBorder lesson-info">
