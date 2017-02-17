@@ -1,6 +1,8 @@
 package com.grsu.reader.entities;
 
 import com.grsu.reader.converters.db.LocalDateTimeAttributeConverter;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -33,6 +35,7 @@ public class Class implements AssistantEntity {
 	@Column(name = "session_end")
 	private LocalDateTime sessionEnd;
 
+	@NotFound(action= NotFoundAction.IGNORE)
 	@ManyToOne
 	@JoinColumn(name = "lesson_id", referencedColumnName = "id")
 	private Lesson lesson;
