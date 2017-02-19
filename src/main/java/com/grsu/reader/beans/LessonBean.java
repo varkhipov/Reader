@@ -185,6 +185,8 @@ public class LessonBean implements Serializable {
 		processedStudent = student;
 		FacesUtils.push("/register", student);
 		System.out.println("Student added");
+		FacesUtils.execute("PF('aStudentsTable').clearFilters()");
+		FacesUtils.execute("PF('pStudentsTable').clearFilters()");
 		return true;
 	}
 
