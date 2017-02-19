@@ -8,7 +8,12 @@ import org.primefaces.model.DualListModel;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +31,8 @@ public class StudentBean implements Serializable {
 
 	private DualListModel<Group> selectedGroups;
 	private List<Student> filteredStudents;
+
+	private String url;
 
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
@@ -69,12 +76,14 @@ public class StudentBean implements Serializable {
 	public void exit() {
 		setSelectedStudent(null);
 		setSelectedGroups(null);
+		setUrl(null);
 		closeDialog("studentDialog");
 	}
 
 	public void save() {
 		new EntityDAO().save(selectedStudent);
 		sessionBean.updateStudents();
+		closeDialog("studentDialog");
 		update("views");
 	}
 
@@ -91,6 +100,19 @@ public class StudentBean implements Serializable {
 		sessionBean.updateStudents();
 		execute("PF('studentsTable').clearFilters()");
 		exit();
+	}
+
+	public void loadImage() {
+		try {
+			URL url = new URL(this.url);
+			BufferedImage originalImage = ImageIO.read(url);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(originalImage, "jpg", baos);
+
+			this.selectedStudent.setImage(baos.toByteArray());
+		} catch (IOException e) {
+			this.selectedStudent.setImage(null);
+		}
 	}
 
 	public void setSessionBean(SessionBean sessionBean) {
@@ -111,5 +133,13 @@ public class StudentBean implements Serializable {
 
 	public void setFilteredStudents(List<Student> filteredStudents) {
 		this.filteredStudents = filteredStudents;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 }

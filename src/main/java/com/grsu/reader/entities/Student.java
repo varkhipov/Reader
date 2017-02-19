@@ -51,9 +51,8 @@ public class Student implements AssistantEntity, Person {
 	@Column(name = "email")
 	private String email;
 
-	@Basic
 	@Column(name = "image")
-	private String image;
+	private byte[] image;
 
 	@ManyToMany(mappedBy = "students")
 	@LazyCollection(LazyCollectionOption.FALSE)
@@ -181,11 +180,11 @@ public class Student implements AssistantEntity, Person {
 		this.email = email;
 	}
 
-	public String getImage() {
+	public byte[] getImage() {
 		return image;
 	}
 
-	public void setImage(String image) {
+	public void setImage(byte[] image) {
 		this.image = image;
 	}
 

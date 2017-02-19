@@ -1,6 +1,8 @@
 package com.grsu.reader.entities;
 
 import com.grsu.reader.converters.db.LocalTimeAttributeConverter;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.time.LocalTime;
@@ -33,6 +35,7 @@ public class StudentClass implements AssistantEntity {
 	@Column(name = "mark")
 	private String mark;
 
+	@NotFound(action= NotFoundAction.IGNORE)
 	@ManyToOne
 	@JoinColumn(name = "student_id", referencedColumnName = "id")
 	private Student student;

@@ -135,7 +135,16 @@ body {
     font-size: 30pt;
     text-transform: uppercase;
     font-weight: bold;
-    margin-left: 2rem;
+}
+
+.lesson-info .visit-info label {
+	margin-left: 2rem;
+}
+
+.lesson-info .visit-info div,
+.lesson-info .visit-info td,
+.lesson-info .visit-info table {
+	padding: 0;
 }
 
 .visit-info td {
@@ -156,4 +165,28 @@ body {
 .lesson-tables .ui-datatable tfoot td,
 .lesson-tables .ui-datatable tfoot th {
     border-width: 0;
+}
+
+.lesson-info .visit-info .image,
+.studentDetail .image {
+	width: 300px;
+	display: block;
+	padding: 0;
+	border: 0;
+	text-align: center;
+}
+
+.studentDetail .image td {
+	width: 300px;
+}
+
+.lesson-info .visit-info .image div,
+.studentDetail .image div {
+	padding: 0;
+}
+
+.image img {
+	max-width: 300px;
+	height: auto;
+	border: 3px solid;
 }

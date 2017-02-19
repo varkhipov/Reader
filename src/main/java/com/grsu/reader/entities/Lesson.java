@@ -38,6 +38,7 @@ public class Lesson implements AssistantEntity {
 	@OneToMany(mappedBy = "lesson")
 	private List<Class> classes;
 
+	@NotFound(action= NotFoundAction.IGNORE)
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "stream_id", referencedColumnName = "id")
 	private Stream stream;
@@ -46,6 +47,7 @@ public class Lesson implements AssistantEntity {
 	@JoinColumn(name = "type_id", referencedColumnName = "id")
 	private LessonType type;
 
+	@NotFound(action= NotFoundAction.IGNORE)
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "group_id", referencedColumnName = "id")
 	private Group group;

@@ -3,6 +3,8 @@ package com.grsu.reader.entities;
 import com.grsu.reader.converters.db.LocalDateTimeAttributeConverter;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
@@ -67,6 +69,7 @@ public class Stream implements AssistantEntity {
 	@JoinColumn(name = "discipline_id", referencedColumnName = "id")
 	private Discipline discipline;
 
+	@NotFound(action= NotFoundAction.IGNORE)
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "department_id", referencedColumnName = "id")
 	private Department department;
