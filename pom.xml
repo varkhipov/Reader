@@ -4,7 +4,7 @@
 
 	<groupId>com.grsu.reader</groupId>
 	<artifactId>Reader</artifactId>
-	<version>1.3-SNAPSHOT</version>
+	<version>1.3</version>
 	<name>Reader</name>
 	<packaging>war</packaging>
 
@@ -169,6 +169,6 @@
 
 	<scm>
 		<connection>scm:git:https://github.com/varkhipov/Reader.git</connection>
-		<tag>HEAD</tag>
+		<tag>2017-02-19_1.3</tag>
 	</scm>
 </project>
