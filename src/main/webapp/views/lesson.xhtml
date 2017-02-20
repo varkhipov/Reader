@@ -30,6 +30,7 @@
 						<p:outputLabel id="visitFirstName" value="#{lessonBean.processedStudent.firstName}"/>
 						<p:outputLabel id="visitGroup" disabled="#{true}" escape="false"
 									   value="#{lessonBean.processedStudent.groupNames}"/>
+						<p:outputLabel value="#{lessonBean.getStudentPass(lessonBean.processedStudent)}" />
 					</p:panelGrid>
 				</p:panelGrid>
 			</p:panel>
@@ -76,6 +77,9 @@
 							  filterMatchMode="startsWith">
 						<h:outputText value="#{pStudent.fullName}"/>
 					</p:column>
+					<p:column>
+						<h:outputText value="#{lessonBean.getStudentPass(pStudent)}"/>
+					</p:column>
 					<p:column
 							sortBy="#{pStudent.studentClasses[lessonBean.selectedLesson.classes[0].id].registrationTime}"
 							styleClass="groupOptions">
@@ -102,6 +106,9 @@
 					<p:column sortBy="#{aStudent.fullName}" filterBy="#{aStudent.fullName}"
 							  filterMatchMode="startsWith">
 						<h:outputText value="#{aStudent.fullName}"/>
+					</p:column>
+					<p:column>
+						<h:outputText value="#{lessonBean.getStudentPass(aStudent)}"/>
 					</p:column>
 					<p:column styleClass="groupOptions transparent-button">
 						<p:commandButton update=":lessonForm:lessonTables :lessonForm:lessonInfo"

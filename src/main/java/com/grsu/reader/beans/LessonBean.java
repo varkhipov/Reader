@@ -401,4 +401,42 @@ public class LessonBean implements Serializable {
 		closeDialog("addStudentsDialog");
 	}
 
+	public Map<Integer, Integer> calculatePass(Student student) {
+		Map<Integer, Integer> passCount = new HashMap<>();
+		List<Lesson> lessons = this.selectedLesson.getStream().getLessons();
+		for (Lesson lesson : lessons) {
+			int type = lesson.getType().getId();
+			for (Class cl : lesson.getClasses()) {
+				if (cl.getDate() == null || cl.getDate().isAfter(LocalDateTime.now())) {
+					continue;
+				}
+				StudentClass sc = cl.getStudentClasses().get(student.getId());
+				if (sc != null) {
+					int count = sc.isRegistered() ? 0 : 1;
+					if (!passCount.containsKey(type)) {
+						passCount.put(type, count);
+					} else {
+						count += passCount.get(type);
+						passCount.put(type, count);
+					}
+				}
+			}
+		}
+		return passCount;
+	}
+
+	public String getStudentPass(Student student) {
+		Map<Integer, Integer> passCount = calculatePass(student);
+		List<String> passList = new ArrayList<>();
+
+		for (int type : passCount.keySet()) {
+			switch (type) {
+				case 1 : passList.add("лек: " + passCount.get(type)); break;
+				case 2 : passList.add("пр: " + passCount.get(type)); break;
+				case 3 : passList.add("лаб: " + passCount.get(type)); break;
+			}
+		}
+
+		return passList.stream().collect(Collectors.joining(" / "));
+	}
 }
