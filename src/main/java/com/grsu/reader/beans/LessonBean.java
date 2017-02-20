@@ -183,10 +183,8 @@ public class LessonBean implements Serializable {
 		}
 
 		processedStudent = student;
-		FacesUtils.push("/register", student);
-		System.out.println("Student added");
-		FacesUtils.execute("PF('aStudentsTable').clearFilters()");
-		FacesUtils.execute("PF('pStudentsTable').clearFilters()");
+		FacesUtils.push("/register", processedStudent);
+		System.out.println("Student registered");
 		return true;
 	}
 
@@ -247,6 +245,14 @@ public class LessonBean implements Serializable {
 
 	public void startRecord() {
 		recordStarted = SerialUtils.connect(this);
+		if (!recordStarted) {
+			LocaleUtils localeUtils = new LocaleUtils();
+			FacesUtils.addWarning(
+					localeUtils.getMessage("warning"),
+					localeUtils.getMessage("warning.device.not.connected.reconnect")
+			);
+			FacesUtils.update("menuForm:messages");
+		}
 	}
 
 	public void stopRecord() {

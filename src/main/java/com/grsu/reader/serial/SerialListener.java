@@ -35,7 +35,8 @@ public class SerialListener implements SerialPortEventListener {
 					Student student = EntityUtils.getPersonByUid(lessonBean.getAbsentStudents(), uid);
 					if (student == null) {
 						if (EntityUtils.getPersonByUid(lessonBean.getPresentStudents(), uid) != null) {
-							System.out.println("Student not added. Reason: Uid[ " + uid + " ] already exists.");
+							System.out.println("Student not registered. Reason: Uid[ " + uid + " ] already exists.");
+							return;
 						} else {
 							student = EntityUtils.getPersonByUid(lessonBean.getAllStudents(), uid);
 						}
@@ -47,7 +48,7 @@ public class SerialListener implements SerialPortEventListener {
 								lessonBean.isSoundEnabled()
 						);
 					} else {
-						System.out.println("Student not added. Reason: Uid[ " + uid + " ] is not from present groups.");
+						System.out.println("Student not registered. Reason: Uid[ " + uid + " ] not exist in database.");
 						SerialUtils.sendResponse(
 								serialPort,
 								false,

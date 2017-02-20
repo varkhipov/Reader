@@ -13,6 +13,8 @@ import static com.grsu.reader.constants.Constants.*;
 public class SerialUtils {
 	private static SerialPort serialPort;
 	private static Thread shutdownHook;
+	private static final String EXCEPTION_PORT_NOT_FOUND = "Port not found";
+	private static final String EXCEPTION_PORT_BUSY = "Port busy";
 
 	public static void sendResponse(SerialPort serialPort, boolean success, boolean soundEnabled) throws SerialPortException {
 		if (success && soundEnabled) {
@@ -56,6 +58,10 @@ public class SerialUtils {
 	}
 
 	private static boolean connect(String port, LessonBean lessonBean) {
+		return connect(port, lessonBean, true);
+	}
+
+	private static boolean connect(String port, LessonBean lessonBean, boolean retryIfPortBusy) {
 		if (port == null) return false;
 
 		serialPort = new SerialPort(port);
@@ -88,8 +94,16 @@ public class SerialUtils {
 			shutdownHook = getShutdownHook(serialPort);
 			Runtime.getRuntime().addShutdownHook(shutdownHook);
 		} catch (SerialPortException e) {
-			if ("Port not found".equals(e.getExceptionType())) {
+			if (EXCEPTION_PORT_NOT_FOUND.equals(e.getExceptionType())) {
 				System.out.println("Connection failed. Previously saved port not found.");
+			} else if (EXCEPTION_PORT_BUSY.equals(e.getExceptionType())) {
+				if (retryIfPortBusy) {
+					System.out.println("Port [ " + serialPort.getPortName() + " ] is busy. Trying to reconnect...");
+					disconnect();
+					connect(port, lessonBean, false);
+				} else {
+					System.out.println("Connection failed. Port [ " + serialPort.getPortName() + " ] is busy.");
+				}
 			} else {
 				e.printStackTrace();
 			}

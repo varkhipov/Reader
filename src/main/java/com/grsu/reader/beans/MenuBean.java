@@ -26,10 +26,11 @@ public class MenuBean implements Serializable {
 	public void delete() {
 		addMessage("Success", "Data deleted");
 	}
-*/
+
 	public void quit() {
-		FacesUtils.addMessage("Quit", "Some quit action");
+		FacesUtils.addInfo("Quit", "Some quit action");
 	}
+*/
 
 	public void connect() {
 		sessionBean.connect();

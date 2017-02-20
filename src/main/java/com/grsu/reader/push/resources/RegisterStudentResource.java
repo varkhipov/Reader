@@ -10,6 +10,11 @@ public class RegisterStudentResource {
 
 	@OnMessage(encoders = {JSONEncoder.class})
 	public Student onMessage(Student student) {
-		return new Student();
+		Student st = new Student();
+		st.setCardId(student.getCardId());
+		st.setCardUid(student.getCardUid());
+		st.setLastName(student.getLastName());
+		st.setFirstName(student.getFirstName());
+		return st;
 	}
 }
