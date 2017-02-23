@@ -167,6 +167,10 @@ body {
     border-width: 0;
 }
 
+.lesson-tables {
+	font-weight: bold;
+}
+
 .lesson-info .visit-info .image,
 .studentDetail .image {
 	width: 300px;

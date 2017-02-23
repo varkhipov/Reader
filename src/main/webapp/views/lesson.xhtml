@@ -65,15 +65,20 @@
 			</p:panelGrid>
 		</p:panelGrid>
 
-		<p:panelGrid id="lessonTables" columns="5" styleClass="noBorder v-align-top lesson-tables">
+		<p:panelGrid id="lessonTables" columns="4" styleClass="noBorder v-align-top lesson-tables">
 			<p:panel id="presentStudents"
 					 header="#{msg['lesson.students.present']} - #{lessonBean.getPresentStudentsSize()}/#{lessonBean.lessonStudents.size()} #{lessonBean.getAdditionalStudentsSize()}"
 					 toggleable="true" styleClass="noBorder lessonStudents">
 				<p:dataTable var="pStudent" widgetVar="pStudentsTable" value="#{lessonBean.presentStudents}"
 							 sortBy="#{pStudent.studentClasses[lessonBean.selectedLesson.classes[0].id].registrationTime}"
 							 sortOrder="descending"
-							 filteredValue="#{lessonBean.filteredPresentStudents}" scrollable="true">
+							 filteredValue="#{lessonBean.filteredPresentStudents}" scrollable="true"
+							 selection="#{lessonBean.selectedPresentStudents}" rowKey="#{pStudent.id}">
 
+					<p:ajax event="rowSelectCheckbox" update=":lessonForm:removePresentStudentsBtn" />
+					<p:ajax event="rowUnselectCheckbox" update=":lessonForm:removePresentStudentsBtn" />
+					<p:ajax event="toggleSelect" update=":lessonForm:removePresentStudentsBtn" />
+					<p:column selectionMode="multiple" style="width:16px;text-align:center"/>
 					<p:column sortBy="#{pStudent.fullName}" filterBy="#{pStudent.fullName}"
 							  filterMatchMode="startsWith">
 						<h:outputText value="#{pStudent.fullName}"/>
@@ -97,13 +102,28 @@
 				</p:dataTable>
 			</p:panel>
 
+			<p:commandButton id="removePresentStudentsBtn"
+					update=":lessonForm:lessonTables :lessonForm:lessonInfo"
+							 icon="fa fa-fw fa-angle-double-right" title="Remove"
+							 actionListener="#{lessonBean.removePresentStudents}"
+							 disabled="#{lessonBean.selectedPresentStudents eq null or lessonBean.selectedPresentStudents.size() eq 0}"/>
+			<p:commandButton  id="addAbsentStudentsBtn"
+							  update=":lessonForm:lessonTables :lessonForm:lessonInfo"
+							 icon="fa fa-fw fa-angle-double-left" title="Add"
+							 actionListener="#{lessonBean.addAbsentStudents}"
+							 disabled="#{lessonBean.selectedAbsentStudents eq null or lessonBean.selectedAbsentStudents.size() eq 0}"/>
+
 			<p:panel id="absentStudents"
 					 header="#{msg['lesson.students.absent']} - #{lessonBean.absentStudents.size()}/#{lessonBean.lessonStudents.size()}"
 					 toggleable="true" styleClass="noBorder lessonStudents">
 				<p:dataTable var="aStudent" widgetVar="aStudentsTable" value="#{lessonBean.absentStudents}"
 							 sortBy="#{aStudent.fullName}" filteredValue="#{lessonBean.filteredAbsentStudents}"
-							 scrollable="true">
-
+							 scrollable="true"
+							 selection="#{lessonBean.selectedAbsentStudents}" rowKey="#{aStudent.id}">
+					<p:ajax event="rowSelectCheckbox" update=":lessonForm:addAbsentStudentsBtn" />
+					<p:ajax event="rowUnselectCheckbox" update=":lessonForm:addAbsentStudentsBtn" />
+					<p:ajax event="toggleSelect" update=":lessonForm:addAbsentStudentsBtn" />
+					<p:column selectionMode="multiple" style="width:16px;text-align:center"/>
 					<p:column sortBy="#{aStudent.fullName}" filterBy="#{aStudent.fullName}"
 							  filterMatchMode="startsWith">
 						<h:outputText value="#{aStudent.fullName}"/>

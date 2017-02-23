@@ -76,6 +76,33 @@ public class EntityDAO {
 		}
 	}
 
+	public void delete(List<AssistantEntity> entities) {
+		Transaction transaction = null;
+		Session session = DBSessionFactory.getSession();
+
+		try {
+			transaction = session.beginTransaction();
+
+			int count=0;
+			for (AssistantEntity entity : entities) {
+				session.delete(entity);
+				if ( ++count % 20 == 0 ) {
+					session.flush();
+					session.clear();
+				}
+			}
+			transaction.commit();
+			System.out.println("[ " + entities + " ] successfully deleted from database.");
+		} catch (RuntimeException e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+	}
+
 	public void update(AssistantEntity entity) {
 		Transaction transaction = null;
 		Session session = DBSessionFactory.getSession();

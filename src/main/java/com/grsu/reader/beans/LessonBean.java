@@ -2,11 +2,8 @@ package com.grsu.reader.beans;
 
 import com.grsu.reader.constants.Constants;
 import com.grsu.reader.dao.EntityDAO;
+import com.grsu.reader.entities.*;
 import com.grsu.reader.entities.Class;
-import com.grsu.reader.entities.Group;
-import com.grsu.reader.entities.Lesson;
-import com.grsu.reader.entities.Student;
-import com.grsu.reader.entities.StudentClass;
 import com.grsu.reader.utils.FacesUtils;
 import com.grsu.reader.utils.LocaleUtils;
 import com.grsu.reader.utils.SerialUtils;
@@ -39,9 +36,11 @@ public class LessonBean implements Serializable {
 
 	private List<Student> presentStudents;
 	private List<Student> filteredPresentStudents;
+	private List<Student> selectedPresentStudents;
 
 	private List<Student> absentStudents;
 	private List<Student> filteredAbsentStudents;
+	private List<Student> selectedAbsentStudents;
 
 	private List<Student> allStudents;
 	private List<Student> filteredAllStudents;
@@ -278,6 +277,64 @@ public class LessonBean implements Serializable {
 		getLessons().remove(lesson);
 	}
 
+	public void addAbsentStudents() {
+		if (selectedAbsentStudents != null && selectedAbsentStudents.size() > 0) {
+
+			List<StudentClass> studentClassList = new ArrayList<>();
+			for (Student student : selectedAbsentStudents) {
+				StudentClass studentClass = student.getStudentClasses().get(selectedLesson.getClasses().get(0).getId());
+				studentClass.setRegistered(true);
+				studentClass.setRegistrationTime(LocalTime.now());
+				studentClass.setRegistrationType(Constants.REGISTRATION_TYPE_MANUAL);
+				studentClassList.add(studentClass);
+			}
+			new EntityDAO().update(new ArrayList<>(studentClassList));
+
+			presentStudents.addAll(selectedAbsentStudents);
+			absentStudents.removeAll(selectedAbsentStudents);
+			allStudents.removeAll(selectedAbsentStudents);
+			selectedAbsentStudents.clear();
+		}
+
+		processedStudent = null;
+		FacesUtils.execute("PF('aStudentsTable').clearFilters()");
+		FacesUtils.execute("PF('pStudentsTable').clearFilters()");
+	}
+
+	public void removePresentStudents() {
+		if (selectedPresentStudents != null && selectedPresentStudents.size() > 0) {
+
+			List<StudentClass> updateStudentClassList = new ArrayList<>();
+			List<StudentClass> removeStudentClassList = new ArrayList<>();
+
+			for (Student student : selectedPresentStudents) {
+				StudentClass studentClass = student.getStudentClasses().get(selectedLesson.getClasses().get(0).getId());
+
+				if (lessonStudents.contains(student)) {
+
+					studentClass.setRegistrationType(null);
+					studentClass.setRegistrationTime(null);
+					studentClass.setRegistered(false);
+					updateStudentClassList.add(studentClass);
+					absentStudents.add(student);
+				} else {
+					student.getStudentClasses().remove(selectedLesson.getClasses().get(0).getId());
+					selectedLesson.getClasses().get(0).getStudentClasses().remove(student.getId());
+					allStudents.add(student);
+					removeStudentClassList.add(studentClass);
+				}
+			}
+			new EntityDAO().update(new ArrayList<>(updateStudentClassList));
+			new EntityDAO().delete(new ArrayList<>(removeStudentClassList));
+
+			presentStudents.removeAll(selectedPresentStudents);
+			selectedPresentStudents.clear();
+		}
+
+		FacesUtils.execute("PF('aStudentsTable').clearFilters()");
+		FacesUtils.execute("PF('pStudentsTable').clearFilters()");
+	}
+
 	/* GETTERS & SETTERS */
 	public void setSelectedLesson(Lesson selectedLesson) {
 		this.selectedLesson = selectedLesson;
@@ -385,6 +442,22 @@ public class LessonBean implements Serializable {
 
 	public void setLessonStudents(Set<Student> lessonStudents) {
 		this.lessonStudents = lessonStudents;
+	}
+
+	public List<Student> getSelectedPresentStudents() {
+		return selectedPresentStudents;
+	}
+
+	public void setSelectedPresentStudents(List<Student> selectedPresentStudents) {
+		this.selectedPresentStudents = selectedPresentStudents;
+	}
+
+	public List<Student> getSelectedAbsentStudents() {
+		return selectedAbsentStudents;
+	}
+
+	public void setSelectedAbsentStudents(List<Student> selectedAbsentStudents) {
+		this.selectedAbsentStudents = selectedAbsentStudents;
 	}
 
 	public String getAdditionalStudentsSize() {
