@@ -2,12 +2,14 @@ package com.grsu.reader.beans;
 
 import com.grsu.reader.constants.Constants;
 import com.grsu.reader.dao.EntityDAO;
-import com.grsu.reader.entities.*;
 import com.grsu.reader.entities.Class;
+import com.grsu.reader.entities.Group;
+import com.grsu.reader.entities.Lesson;
+import com.grsu.reader.entities.Student;
+import com.grsu.reader.entities.StudentClass;
 import com.grsu.reader.utils.FacesUtils;
 import com.grsu.reader.utils.LocaleUtils;
 import com.grsu.reader.utils.SerialUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -15,7 +17,11 @@ import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.grsu.reader.utils.FacesUtils.closeDialog;
@@ -407,42 +413,10 @@ public class LessonBean implements Serializable {
 		closeDialog("addStudentsDialog");
 	}
 
-	public Map<Integer, Integer> calculatePass(Student student) {
-		Map<Integer, Integer> passCount = new HashMap<>();
-		List<Lesson> lessons = this.selectedLesson.getStream().getLessons();
-		for (Lesson lesson : lessons) {
-			int type = lesson.getType().getId();
-			for (Class cl : lesson.getClasses()) {
-				if (cl.getDate() == null || cl.getDate().isAfter(LocalDateTime.now())) {
-					continue;
-				}
-				StudentClass sc = cl.getStudentClasses().get(student.getId());
-				if (sc != null) {
-					int count = sc.isRegistered() ? 0 : 1;
-					if (!passCount.containsKey(type)) {
-						passCount.put(type, count);
-					} else {
-						count += passCount.get(type);
-						passCount.put(type, count);
-					}
-				}
-			}
-		}
-		return passCount;
-	}
-
 	public String getStudentPass(Student student) {
-		Map<Integer, Integer> passCount = calculatePass(student);
-		List<String> passList = new ArrayList<>();
-
-		for (int type : passCount.keySet()) {
-			switch (type) {
-				case 1 : passList.add("лек: " + passCount.get(type)); break;
-				case 2 : passList.add("пр: " + passCount.get(type)); break;
-				case 3 : passList.add("лаб: " + passCount.get(type)); break;
-			}
-		}
-
-		return passList.stream().collect(Collectors.joining(" / "));
+		return sessionBean.getPassInfoList().stream()
+				.filter(pi -> student.getId().equals(pi.getStudentId()) && selectedLesson.getStream().getId().equals(pi.getStreamId()))
+				.map(pi -> new LocaleUtils().getMessage(pi.getLessonType().getKey()) + ":" + pi.getCount())
+				.collect(Collectors.joining(" \\ "));
 	}
 }

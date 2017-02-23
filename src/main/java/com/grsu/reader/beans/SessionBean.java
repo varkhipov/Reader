@@ -1,6 +1,7 @@
 package com.grsu.reader.beans;
 
 import com.grsu.reader.dao.EntityDAO;
+import com.grsu.reader.dao.StudentDAO;
 import com.grsu.reader.entities.Class;
 import com.grsu.reader.entities.Department;
 import com.grsu.reader.entities.Discipline;
@@ -10,6 +11,7 @@ import com.grsu.reader.entities.LessonType;
 import com.grsu.reader.entities.Schedule;
 import com.grsu.reader.entities.Stream;
 import com.grsu.reader.entities.Student;
+import com.grsu.reader.models.PassInfo;
 import com.grsu.reader.utils.CSVUtils;
 import com.grsu.reader.utils.SerialUtils;
 
@@ -36,6 +38,7 @@ public class SessionBean implements Serializable {
 	private List<Lesson> lessons;
 	private List<Class> classes;
 	private List<LessonType> lessonTypes;
+	private List<PassInfo> passInfoList;
 
 	@PostConstruct
 	public void connect() {
@@ -60,6 +63,7 @@ public class SessionBean implements Serializable {
 		updateLessons();
 		updateClasses();
 		updateLessonTypes();
+		generatePassInfo();
 	}
 
 	public void updateGroupsFromCSV() {
@@ -100,6 +104,10 @@ public class SessionBean implements Serializable {
 
 	public void updateLessonTypes() {
 		lessonTypes = new EntityDAO().getAll(LessonType.class);
+	}
+
+	public void generatePassInfo() {
+		passInfoList = new StudentDAO().getPassInfo();
 	}
 
 	public boolean isConnected() {
@@ -188,5 +196,13 @@ public class SessionBean implements Serializable {
 
 	public void setLessonTypes(List<LessonType> lessonTypes) {
 		this.lessonTypes = lessonTypes;
+	}
+
+	public List<PassInfo> getPassInfoList() {
+		return passInfoList;
+	}
+
+	public void setPassInfoList(List<PassInfo> passInfoList) {
+		this.passInfoList = passInfoList;
 	}
 }

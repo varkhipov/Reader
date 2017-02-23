@@ -1,5 +1,6 @@
 package com.grsu.reader.entities;
 
+import com.grsu.reader.models.PassInfo;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -15,6 +16,31 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 /**
  * Created by zaychick-pavel on 2/9/17.
  */
+@SqlResultSetMapping(
+		name = "PassInfoMapping",
+		classes = {
+				@ConstructorResult(
+						targetClass = PassInfo.class,
+						columns = {
+								@ColumnResult(name = "student_id", type = Integer.class),
+								@ColumnResult(name = "stream_id", type = Integer.class),
+								@ColumnResult(name = "lesson_type", type = Integer.class),
+								@ColumnResult(name = "pass", type = int.class)
+						}
+				)
+		}
+)
+@NamedNativeQuery(
+		name = "PassInfoQuery",
+		query = "select st.id as student_id, str.id as stream_id, l.type_id as lesson_type, count(*) as pass\n" +
+				"from STUDENT st\n" +
+				"\tjoin STUDENT_CLASS sc on sc.student_id = st.id\n" +
+				"\tjoin CLASS cl on cl.id = sc.class_id\n" +
+				"\tjoin LESSON l on l.id = cl.lesson_id\n" +
+				"\tjoin STREAM str on str.id = l.stream_id\n" +
+				"where sc.registered is null or sc.registered = 0\n" +
+				"group by st.id, str.id, l.type_id\n",
+		resultSetMapping = "PassInfoMapping")
 @Entity
 @ManagedBean(name = "newInstanceOfStudent")
 public class Student implements AssistantEntity, Person {
