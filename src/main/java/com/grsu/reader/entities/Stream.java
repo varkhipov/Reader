@@ -30,10 +30,6 @@ public class Stream implements AssistantEntity {
 	private String name;
 
 	@Basic
-	@Column(name = "image")
-	private String image;
-
-	@Basic
 	@Column(name = "description")
 	private String description;
 
@@ -79,7 +75,6 @@ public class Stream implements AssistantEntity {
 
 	public Stream(Stream stream) {
 		this.name = stream.name;
-		this.image = stream.image;
 		this.description = stream.description;
 		this.createDate = stream.createDate;
 		this.course = stream.course;
@@ -110,14 +105,6 @@ public class Stream implements AssistantEntity {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
 	}
 
 	public String getDescription() {
@@ -201,7 +188,6 @@ public class Stream implements AssistantEntity {
 
 		if (id != null ? !id.equals(stream.id) : stream.id != null) return false;
 		if (name != null ? !name.equals(stream.name) : stream.name != null) return false;
-		if (image != null ? !image.equals(stream.image) : stream.image != null) return false;
 		if (description != null ? !description.equals(stream.description) : stream.description != null) return false;
 		if (createDate != null ? !createDate.equals(stream.createDate) : stream.createDate != null) return false;
 		if (course != null ? !course.equals(stream.course) : stream.course != null) return false;
@@ -216,7 +202,6 @@ public class Stream implements AssistantEntity {
 	public int hashCode() {
 		int result = id != null ? id.hashCode() : 0;
 		result = 31 * result + (name != null ? name.hashCode() : 0);
-		result = 31 * result + (image != null ? image.hashCode() : 0);
 		result = 31 * result + (description != null ? description.hashCode() : 0);
 		result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
 		result = 31 * result + (course != null ? course.hashCode() : 0);
@@ -230,7 +215,6 @@ public class Stream implements AssistantEntity {
 		return "Stream{" +
 				"id=" + id +
 				", name='" + name + '\'' +
-				", image='" + image + '\'' +
 				", description='" + description + '\'' +
 				", createDate='" + createDate + '\'' +
 				", course=" + course +

@@ -1,12 +1,11 @@
 package com.grsu.reader.servers;
 
+import com.grsu.reader.utils.FileUtils;
 import org.primefaces.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
 
@@ -16,6 +15,8 @@ import java.nio.charset.Charset;
 public class StudentServer {
 	private static final String PERSONNEL_NUMBER_URL = "http://api.grsu.by/1.x/app3/getStudentByCard?cardid=";
 	private static final String PERSONNEL_NUMBER_NAME = "TN";
+	private static final String STUDENT_PHOTO_URL = "https://intra.grsu.by/photos/";
+	private static final String STUDENT_PHOTO_EXTENSION = ".jpg";
 
 	public static String getPersonnelNumber(Integer cardId) {
 		JSONObject json = readJsonFromUrl(PERSONNEL_NUMBER_URL + Integer.toString(cardId));
@@ -25,9 +26,17 @@ public class StudentServer {
 		return null;
 	}
 
+	public static boolean storeImage(String personnelNumber, String cardUid) {
+		try {
+			URL url = new URL(STUDENT_PHOTO_URL + personnelNumber + STUDENT_PHOTO_EXTENSION);
+			BufferedImage image = ImageIO.read(url);
 
-	public static void main(String[] args) {
-		System.out.println(getPersonnelNumber(-1017756570));
+			ImageIO.write(image, "jpg", FileUtils.getFile(FileUtils.STUDENTS_PHOTO_FOLDER_PATH, cardUid, FileUtils.STUDENTS_PHOTO_EXTENSION));
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	private static JSONObject readJsonFromUrl(String url) {

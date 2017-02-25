@@ -1,11 +1,12 @@
 package com.grsu.reader.dao;
 
-import com.grsu.reader.models.PassInfo;
+import com.grsu.reader.models.SkipInfo;
 import com.grsu.reader.entities.Student;
 import com.grsu.reader.utils.db.DBSessionFactory;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
+import javax.persistence.PersistenceException;
 import java.util.List;
 
 public class StudentDAO extends EntityDAO {
@@ -26,10 +27,14 @@ public class StudentDAO extends EntityDAO {
 		return null;
 	}
 
-	public List<PassInfo> getPassInfo() {
+	public List<SkipInfo> getSkipInfo(int streamId) {
 		Session session = DBSessionFactory.getSession();
 		try {
-			return session.createNamedQuery("PassInfoQuery").getResultList();
+			Query query = session.createNamedQuery("SkipInfoQuery", SkipInfo.class);
+			query.setParameter("streamId", streamId);
+			return query.getResultList();
+		} catch (PersistenceException e) {
+			System.err.println(e.getLocalizedMessage());
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 		} finally {

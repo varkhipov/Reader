@@ -1,16 +1,15 @@
 package com.grsu.reader.beans;
 
-import com.grsu.reader.entities.Student;
-import com.grsu.reader.utils.EntityUtils;
+import com.grsu.reader.utils.FileUtils;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
-import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
@@ -19,8 +18,6 @@ import java.io.IOException;
 @ManagedBean
 @SessionScoped
 public class ImageBean {
-	@ManagedProperty(value = "#{sessionBean}")
-	private SessionBean sessionBean;
 
 	public StreamedContent getImage() throws IOException {
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -29,21 +26,14 @@ public class ImageBean {
 			return new DefaultStreamedContent(context.getExternalContext()
 					.getResourceAsStream("/resources/images/noavatar.png"), "image/png");
 		} else {
-			String studentId = context.getExternalContext().getRequestParameterMap().get("studentId");
-			Student student = EntityUtils.getEntityById(sessionBean.getStudents(), Integer.valueOf(studentId));
-			if (student == null || student.getImage() == null) {
+			String cardUid = context.getExternalContext().getRequestParameterMap().get("cardUid");
+			File photo = FileUtils.getFile(FileUtils.STUDENTS_PHOTO_FOLDER_PATH, cardUid, FileUtils.STUDENTS_PHOTO_EXTENSION);
+			if (!photo.exists()) {
 				return new DefaultStreamedContent(context.getExternalContext()
 						.getResourceAsStream("/resources/images/noavatar.png"), "image/png");
+			} else {
+				return new DefaultStreamedContent(new FileInputStream(photo));
 			}
-			return new DefaultStreamedContent(new ByteArrayInputStream(student.getImage()));
 		}
-	}
-
-	public SessionBean getSessionBean() {
-		return sessionBean;
-	}
-
-	public void setSessionBean(SessionBean sessionBean) {
-		this.sessionBean = sessionBean;
 	}
 }

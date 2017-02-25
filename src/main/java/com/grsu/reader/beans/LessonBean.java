@@ -2,8 +2,10 @@ package com.grsu.reader.beans;
 
 import com.grsu.reader.constants.Constants;
 import com.grsu.reader.dao.EntityDAO;
+import com.grsu.reader.dao.StudentDAO;
 import com.grsu.reader.entities.*;
 import com.grsu.reader.entities.Class;
+import com.grsu.reader.models.SkipInfo;
 import com.grsu.reader.utils.FacesUtils;
 import com.grsu.reader.utils.LocaleUtils;
 import com.grsu.reader.utils.SerialUtils;
@@ -14,11 +16,7 @@ import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.grsu.reader.utils.FacesUtils.closeDialog;
@@ -46,6 +44,8 @@ public class LessonBean implements Serializable {
 	private List<Student> filteredAllStudents;
 
 	private Set<Student> lessonStudents;
+
+	private Map<Integer, List<SkipInfo>> skipInfo;
 
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
@@ -76,6 +76,7 @@ public class LessonBean implements Serializable {
 		lessonStudents = null;
 		allStudents = null;
 		filteredAllStudents = null;
+		skipInfo = null;
 	}
 
 	public void createLesson() {
@@ -184,6 +185,7 @@ public class LessonBean implements Serializable {
 				studentClass.setRegistrationTime(LocalTime.now());
 				studentClass.setRegistrationType(Constants.REGISTRATION_TYPE_AUTOMATIC);
 				new EntityDAO().update(studentClass);
+				updateSkipInfo(student, false);
 			}
 		}
 
@@ -218,6 +220,7 @@ public class LessonBean implements Serializable {
 				studentClass.setRegistrationTime(LocalTime.now());
 				studentClass.setRegistrationType(Constants.REGISTRATION_TYPE_MANUAL);
 				new EntityDAO().update(studentClass);
+				updateSkipInfo(student, false);
 			}
 		}
 
@@ -235,6 +238,7 @@ public class LessonBean implements Serializable {
 			studentClass.setRegistered(false);
 			new EntityDAO().update(studentClass);
 			absentStudents.add(student);
+			updateSkipInfo(student, true);
 		} else {
 			student.getStudentClasses().remove(selectedLesson.getClasses().get(0).getId());
 			selectedLesson.getClasses().get(0).getStudentClasses().remove(student.getId());
@@ -287,6 +291,7 @@ public class LessonBean implements Serializable {
 				studentClass.setRegistrationTime(LocalTime.now());
 				studentClass.setRegistrationType(Constants.REGISTRATION_TYPE_MANUAL);
 				studentClassList.add(studentClass);
+				updateSkipInfo(student, false);
 			}
 			new EntityDAO().update(new ArrayList<>(studentClassList));
 
@@ -317,6 +322,7 @@ public class LessonBean implements Serializable {
 					studentClass.setRegistered(false);
 					updateStudentClassList.add(studentClass);
 					absentStudents.add(student);
+					updateSkipInfo(student, true);
 				} else {
 					student.getStudentClasses().remove(selectedLesson.getClasses().get(0).getId());
 					selectedLesson.getClasses().get(0).getStudentClasses().remove(student.getId());
@@ -335,6 +341,35 @@ public class LessonBean implements Serializable {
 		FacesUtils.execute("PF('pStudentsTable').clearFilters()");
 	}
 
+	private void updateSkipInfo(Student student, boolean addSkip) {
+		List<SkipInfo> skipInfoList = skipInfo.get(student.getId());
+		if (skipInfoList != null) {
+			boolean updated = false;
+			for (Iterator<SkipInfo> it = skipInfoList.iterator(); it.hasNext(); ) {
+				SkipInfo si = it.next();
+
+				if (si.getLessonType().getCode() == selectedLesson.getType().getId()) {
+					si.setCount(si.getCount() + (addSkip ? 1 : -1));
+					updated = true;
+					if (si.getCount() < 1) {
+						it.remove();
+					}
+					break;
+				}
+			}
+
+			if (!updated && addSkip) {
+				skipInfoList.add(new SkipInfo(student.getId(), selectedLesson.getType().getId(), 1));
+			}
+		} else {
+			if (addSkip) {
+				List<SkipInfo> skipInfos = new ArrayList<>();
+				skipInfos.add(new SkipInfo(student.getId(), selectedLesson.getType().getId(), 1));
+				skipInfo.put(student.getId(), skipInfos);
+			}
+		}
+	}
+
 	/* GETTERS & SETTERS */
 	public void setSelectedLesson(Lesson selectedLesson) {
 		this.selectedLesson = selectedLesson;
@@ -343,6 +378,20 @@ public class LessonBean implements Serializable {
 			initStudents();
 			initAllStudents();
 			initLessonStudents();
+
+			if (selectedLesson.getStream() != null) {
+				skipInfo = new HashMap<>();
+				List<SkipInfo> skipInfos = new StudentDAO().getSkipInfo(selectedLesson.getStream().getId());
+				if (skipInfos != null) {
+					for (SkipInfo si : skipInfos) {
+						if (!skipInfo.containsKey(si.getStudentId())) {
+							skipInfo.put(si.getStudentId(), new ArrayList<>());
+						}
+						skipInfo.get(si.getStudentId()).add(si);
+					}
+				}
+			}
+
 			if (selectedLesson.getClasses() == null) {
 				Class cl = new Class();
 				cl.setDate(LocalDateTime.now());
@@ -486,10 +535,13 @@ public class LessonBean implements Serializable {
 		closeDialog("addStudentsDialog");
 	}
 
-	public String getStudentPass(Student student) {
-		return sessionBean.getPassInfoList().stream()
-				.filter(pi -> student.getId().equals(pi.getStudentId()) && selectedLesson.getStream().getId().equals(pi.getStreamId()))
-				.map(pi -> new LocaleUtils().getMessage(pi.getLessonType().getKey()) + ":" + pi.getCount())
-				.collect(Collectors.joining(" \\ "));
+	public String getStudentSkip(Student student) {
+		List<SkipInfo> skipInfoList = skipInfo.get(student.getId());
+		if (skipInfoList != null) {
+			return skipInfoList.stream()
+					.map(pi -> new LocaleUtils().getMessage(pi.getLessonType().getKey()) + ":" + pi.getCount())
+					.collect(Collectors.joining(" \\ "));
+		}
+		return null;
 	}
 }

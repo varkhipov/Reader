@@ -21,6 +21,8 @@ public class FileUtils {
 
 	public static final String DATABASE_PATH = buildPath(APP_FILES_PATH, "database", getProperty("db.name"));
 
+	public static final String STUDENTS_PHOTO_FOLDER_PATH = buildPath(APP_FILES_PATH, "photo", "students");
+	public static final String STUDENTS_PHOTO_EXTENSION = ".jpg";
 	/**
 	 * Builds system-dependent path with specific separators
 	 *
@@ -78,6 +80,11 @@ public class FileUtils {
 		List<File> files = new ArrayList<>();
 		collectFilesFromFolder(new File(path), extension, files);
 		return files;
+	}
+
+	public static File getFile(String path, String fileName, String extension) {
+		String filePath = buildPath(path, fileName);
+		return new File(filePath + extension);
 	}
 
 	private static void collectFilesFromFolder(final File folder, String extension, List<File> files) {

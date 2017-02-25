@@ -89,6 +89,9 @@
                     <p:resetInput target=":lessonInfoForm:lessonDetail"/>
                 </p:menuitem>
 
+                <p:menuitem value="#{msg['menu.load.photo']}" icon="fa fa-fw fa-file-photo-o"
+                            actionListener="#{sessionBean.loadStudentsPhoto}"/>
+
                 <f:facet name="options">
                     <h:panelGrid columns="2" style="margin-right: 10px">
                         <p:outputLabel for="language" value="#{msg['menu.language']}"/>

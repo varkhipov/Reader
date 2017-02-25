@@ -76,7 +76,6 @@ public class StudentBean implements Serializable {
 	public void exit() {
 		setSelectedStudent(null);
 		setSelectedGroups(null);
-		setUrl(null);
 		closeDialog("studentDialog");
 	}
 
@@ -102,19 +101,6 @@ public class StudentBean implements Serializable {
 		exit();
 	}
 
-	public void loadImage() {
-		try {
-			URL url = new URL(this.url);
-			BufferedImage originalImage = ImageIO.read(url);
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(originalImage, "jpg", baos);
-
-			this.selectedStudent.setImage(baos.toByteArray());
-		} catch (IOException e) {
-			this.selectedStudent.setImage(null);
-		}
-	}
-
 	public void setSessionBean(SessionBean sessionBean) {
 		this.sessionBean = sessionBean;
 	}
@@ -133,13 +119,5 @@ public class StudentBean implements Serializable {
 
 	public void setFilteredStudents(List<Student> filteredStudents) {
 		this.filteredStudents = filteredStudents;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
 	}
 }

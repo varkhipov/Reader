@@ -1,6 +1,6 @@
 package com.grsu.reader.entities;
 
-import com.grsu.reader.models.PassInfo;
+import com.grsu.reader.models.SkipInfo;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -17,30 +17,29 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * Created by zaychick-pavel on 2/9/17.
  */
 @SqlResultSetMapping(
-		name = "PassInfoMapping",
+		name = "SkipInfoMapping",
 		classes = {
 				@ConstructorResult(
-						targetClass = PassInfo.class,
+						targetClass = SkipInfo.class,
 						columns = {
-								@ColumnResult(name = "student_id", type = Integer.class),
-								@ColumnResult(name = "stream_id", type = Integer.class),
-								@ColumnResult(name = "lesson_type", type = Integer.class),
-								@ColumnResult(name = "pass", type = int.class)
+								@ColumnResult(name = "studentId", type = Integer.class),
+								@ColumnResult(name = "lessonType", type = Integer.class),
+								@ColumnResult(name = "count", type = int.class)
 						}
 				)
 		}
 )
 @NamedNativeQuery(
-		name = "PassInfoQuery",
-		query = "select st.id as student_id, str.id as stream_id, l.type_id as lesson_type, count(*) as pass\n" +
+		name = "SkipInfoQuery",
+		query = "select st.id as studentId, l.type_id as lessonType, count(*) as count\n" +
 				"from STUDENT st\n" +
 				"\tjoin STUDENT_CLASS sc on sc.student_id = st.id\n" +
 				"\tjoin CLASS cl on cl.id = sc.class_id\n" +
 				"\tjoin LESSON l on l.id = cl.lesson_id\n" +
 				"\tjoin STREAM str on str.id = l.stream_id\n" +
-				"where sc.registered is null or sc.registered = 0\n" +
+				"where (sc.registered is null or sc.registered = 0) and str.id = :streamId\n" +
 				"group by st.id, str.id, l.type_id\n",
-		resultSetMapping = "PassInfoMapping")
+		resultSetMapping = "SkipInfoMapping")
 @Entity
 @ManagedBean(name = "newInstanceOfStudent")
 public class Student implements AssistantEntity, Person {
@@ -77,9 +76,6 @@ public class Student implements AssistantEntity, Person {
 	@Column(name = "email")
 	private String email;
 
-	@Column(name = "image")
-	private byte[] image;
-
 	@ManyToMany(mappedBy = "students")
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Class> classes;
@@ -106,7 +102,6 @@ public class Student implements AssistantEntity, Person {
 		this.patronymic = student.patronymic;
 		this.phone = student.phone;
 		this.email = student.email;
-		this.image = student.image;
 		this.classes = student.classes;
 		this.groups = student.groups;
 		this.studentClasses = student.studentClasses;
@@ -206,14 +201,6 @@ public class Student implements AssistantEntity, Person {
 		this.email = email;
 	}
 
-	public byte[] getImage() {
-		return image;
-	}
-
-	public void setImage(byte[] image) {
-		this.image = image;
-	}
-
 	public List<Class> getClasses() {
 		return classes;
 	}
@@ -253,7 +240,6 @@ public class Student implements AssistantEntity, Person {
 		if (patronymic != null ? !patronymic.equals(student.patronymic) : student.patronymic != null) return false;
 		if (phone != null ? !phone.equals(student.phone) : student.phone != null) return false;
 		if (email != null ? !email.equals(student.email) : student.email != null) return false;
-		if (image != null ? !image.equals(student.image) : student.image != null) return false;
 
 		return true;
 	}
@@ -268,7 +254,6 @@ public class Student implements AssistantEntity, Person {
 		result = 31 * result + (patronymic != null ? patronymic.hashCode() : 0);
 		result = 31 * result + (phone != null ? phone.hashCode() : 0);
 		result = 31 * result + (email != null ? email.hashCode() : 0);
-		result = 31 * result + (image != null ? image.hashCode() : 0);
 		return result;
 	}
 
@@ -283,7 +268,6 @@ public class Student implements AssistantEntity, Person {
 				", patronymic='" + patronymic + '\'' +
 				", phone='" + phone + '\'' +
 				", email='" + email + '\'' +
-				", image='" + image + '\'' +
 				'}';
 	}
 }

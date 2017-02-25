@@ -28,10 +28,6 @@ public class Group implements AssistantEntity {
 	private String name;
 
 	@Basic
-	@Column(name = "image")
-	private String image;
-
-	@Basic
 	@Column(name = "active")
 	private Boolean active;
 
@@ -71,7 +67,6 @@ public class Group implements AssistantEntity {
 
 	public Group(Group group){
 		this.name = group.name;
-		this.image = group.image;
 		this.active = group.active;
 		this.expirationDate = group.expirationDate;
 		this.streams = group.streams;
@@ -96,14 +91,6 @@ public class Group implements AssistantEntity {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
 	}
 
 	public Boolean isActive() {
@@ -171,7 +158,6 @@ public class Group implements AssistantEntity {
 
 		if (id != null ? !id.equals(group.id) : group.id != null) return false;
 		if (name != null ? !name.equals(group.name) : group.name != null) return false;
-		if (image != null ? !image.equals(group.image) : group.image != null) return false;
 		if (active != null ? !active.equals(group.active) : group.active != null) return false;
 		if (expirationDate != null ? !expirationDate.equals(group.expirationDate) : group.expirationDate != null)
 			return false;
@@ -183,7 +169,6 @@ public class Group implements AssistantEntity {
 	public int hashCode() {
 		int result = id != null ? id.hashCode() : 0;
 		result = 31 * result + (name != null ? name.hashCode() : 0);
-		result = 31 * result + (image != null ? image.hashCode() : 0);
 		result = 31 * result + (active != null ? active.hashCode() : 0);
 		result = 31 * result + (expirationDate != null ? expirationDate.hashCode() : 0);
 		return result;
@@ -194,7 +179,6 @@ public class Group implements AssistantEntity {
 		return "Group{" +
 				"id=" + id +
 				", name='" + name + '\'' +
-				", image='" + image + '\'' +
 				", active=" + active +
 				", expirationDate='" + expirationDate + '\'' +
 				'}';

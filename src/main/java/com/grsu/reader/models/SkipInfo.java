@@ -3,15 +3,13 @@ package com.grsu.reader.models;
 /**
  * Created by zaychick-pavel on 2/22/17.
  */
-public class PassInfo {
+public class SkipInfo {
 	private Integer studentId;
-	private Integer streamId;
 	private LessonType lessonType;
 	private int count;
 
-	public PassInfo(Integer studentId, Integer streamId, Integer lessonType, int count) {
+	public SkipInfo(Integer studentId, Integer lessonType, int count) {
 		this.studentId = studentId;
-		this.streamId = streamId;
 		this.lessonType = LessonType.getLessonTypeByCode(lessonType);
 		this.count = count;
 	}
@@ -22,14 +20,6 @@ public class PassInfo {
 
 	public void setStudentId(Integer studentId) {
 		this.studentId = studentId;
-	}
-
-	public Integer getStreamId() {
-		return streamId;
-	}
-
-	public void setStreamId(Integer streamId) {
-		this.streamId = streamId;
 	}
 
 	public LessonType getLessonType() {

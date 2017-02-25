@@ -20,16 +20,9 @@
 
 				<p:panelGrid columns="2" rendered="#{studentBean.selectedStudent ne null}" styleClass="v-align-top">
 					<p:panelGrid columns="1" styleClass="image noBorder">
-						<p:graphicImage rendered="#{studentBean.selectedStudent.image ne null}"
-										value="#{imageBean.image}">
-							<f:param name="studentId" value="#{studentBean.selectedStudent.id}"/>
+						<p:graphicImage value="#{imageBean.image}">
+							<f:param name="cardUid" value="#{studentBean.selectedStudent.cardUid}"/>
 						</p:graphicImage>
-						<p:graphicImage rendered="#{studentBean.selectedStudent.image eq null}"
-										name="images/noavatar.png"/>
-						<p:inputText id="url" value="#{studentBean.url}" placeholder="URL"/>
-						<p:commandButton value="#{msg['btn.load']}" icon="fa fa-fw fa-download"
-										 actionListener="#{studentBean.loadImage}"
-										 update=":studentInfoForm:studentDetail"/>
 					</p:panelGrid>
 
 					<p:panelGrid columns="2" columnClasses="label,value">
