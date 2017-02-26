@@ -14,6 +14,8 @@ public class MenuBean implements Serializable {
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
 
+	private boolean showMenu = true;
+
 /*
 	public void save() {
 		addMessage("Success", "Data saved");
@@ -44,12 +46,23 @@ public class MenuBean implements Serializable {
 		sessionBean.setActiveView(viewName);
 	}
 
-	public void addStudentVisit() {
-		//
+	public void showMenu() {
+		setShowMenu(true);
+	}
+
+	public void hideMenu() {
+		setShowMenu(false);
 	}
 
 	public void setSessionBean(SessionBean sessionBean) {
 		this.sessionBean = sessionBean;
 	}
 
+	public boolean isShowMenu() {
+		return showMenu;
+	}
+
+	public void setShowMenu(boolean showMenu) {
+		this.showMenu = showMenu;
+	}
 }

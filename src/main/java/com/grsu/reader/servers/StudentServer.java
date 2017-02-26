@@ -34,6 +34,7 @@ public class StudentServer {
 			ImageIO.write(image, "jpg", FileUtils.getFile(FileUtils.STUDENTS_PHOTO_FOLDER_PATH, cardUid, FileUtils.STUDENTS_PHOTO_EXTENSION));
 			return true;
 		} catch (IOException e) {
+			System.out.println(STUDENT_PHOTO_URL + personnelNumber + STUDENT_PHOTO_EXTENSION);
 			e.printStackTrace();
 		}
 		return false;

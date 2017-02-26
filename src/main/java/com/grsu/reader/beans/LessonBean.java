@@ -5,7 +5,7 @@ import com.grsu.reader.dao.EntityDAO;
 import com.grsu.reader.dao.StudentDAO;
 import com.grsu.reader.entities.*;
 import com.grsu.reader.entities.Class;
-import com.grsu.reader.models.SkipInfo;
+import com.grsu.reader.models.*;
 import com.grsu.reader.utils.FacesUtils;
 import com.grsu.reader.utils.LocaleUtils;
 import com.grsu.reader.utils.SerialUtils;
@@ -45,10 +45,13 @@ public class LessonBean implements Serializable {
 
 	private Set<Student> lessonStudents;
 
-	private Map<Integer, List<SkipInfo>> skipInfo;
+	private Map<Integer, Map<String, Integer>> skipInfo;
 
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
+
+	@ManagedProperty(value = "#{menuBean}")
+	private MenuBean menuBean;
 
 	public boolean isInfoChanged() {
 		return selectedLesson != null && !selectedLesson.equals(copyOfSelectedLesson);
@@ -63,6 +66,7 @@ public class LessonBean implements Serializable {
 
 	public void returnToLessons() {
 		clear();
+		menuBean.showMenu();
 		sessionBean.setActiveView("lessons");
 	}
 
@@ -342,31 +346,42 @@ public class LessonBean implements Serializable {
 	}
 
 	private void updateSkipInfo(Student student, boolean addSkip) {
-		List<SkipInfo> skipInfoList = skipInfo.get(student.getId());
-		if (skipInfoList != null) {
-			boolean updated = false;
-			for (Iterator<SkipInfo> it = skipInfoList.iterator(); it.hasNext(); ) {
-				SkipInfo si = it.next();
+		Map<String, Integer> studentSkipInfoMap = skipInfo.get(student.getId());
+		String lessonType = com.grsu.reader.models.LessonType.getLessonTypeByCode(selectedLesson.getType().getId()).getKey();
 
-				if (si.getLessonType().getCode() == selectedLesson.getType().getId()) {
-					si.setCount(si.getCount() + (addSkip ? 1 : -1));
-					updated = true;
-					if (si.getCount() < 1) {
-						it.remove();
-					}
-					break;
+		if (studentSkipInfoMap == null && addSkip) {
+			studentSkipInfoMap = new HashMap<>();
+			skipInfo.put(student.getId(), studentSkipInfoMap);
+		}
+
+		if (studentSkipInfoMap != null) {
+			if (studentSkipInfoMap.containsKey(lessonType)) {
+				int count = studentSkipInfoMap.get(lessonType) + (addSkip ? 1 : -1);
+				if (count > 0) {
+					studentSkipInfoMap.put(lessonType, count);
+				} else {
+					studentSkipInfoMap.remove(lessonType);
+				}
+			} else {
+				if (addSkip) {
+					studentSkipInfoMap.put(lessonType, 1);
 				}
 			}
 
-			if (!updated && addSkip) {
-				skipInfoList.add(new SkipInfo(student.getId(), selectedLesson.getType().getId(), 1));
+			if (studentSkipInfoMap.containsKey(Constants.TOTAL_SKIP)) {
+				int count = studentSkipInfoMap.get(Constants.TOTAL_SKIP) + (addSkip ? 1 : -1);
+				if (count > 0) {
+					studentSkipInfoMap.put(Constants.TOTAL_SKIP, count);
+				} else {
+					skipInfo.remove(student.getId());
+				}
+			} else {
+				if (addSkip) {
+					studentSkipInfoMap.put(Constants.TOTAL_SKIP, 1);
+				}
 			}
-		} else {
-			if (addSkip) {
-				List<SkipInfo> skipInfos = new ArrayList<>();
-				skipInfos.add(new SkipInfo(student.getId(), selectedLesson.getType().getId(), 1));
-				skipInfo.put(student.getId(), skipInfos);
-			}
+
+
 		}
 	}
 
@@ -385,9 +400,13 @@ public class LessonBean implements Serializable {
 				if (skipInfos != null) {
 					for (SkipInfo si : skipInfos) {
 						if (!skipInfo.containsKey(si.getStudentId())) {
-							skipInfo.put(si.getStudentId(), new ArrayList<>());
+							Map<String, Integer> studentSkipInfoMap = new HashMap<>();
+							studentSkipInfoMap.put(Constants.TOTAL_SKIP, 0);
+							skipInfo.put(si.getStudentId(), studentSkipInfoMap);
 						}
-						skipInfo.get(si.getStudentId()).add(si);
+						skipInfo.get(si.getStudentId()).put(si.getLessonType().getKey(), si.getCount());
+						int total = skipInfo.get(si.getStudentId()).get(Constants.TOTAL_SKIP);
+						skipInfo.get(si.getStudentId()).put(Constants.TOTAL_SKIP, total + si.getCount());
 					}
 				}
 			}
@@ -509,6 +528,10 @@ public class LessonBean implements Serializable {
 		this.selectedAbsentStudents = selectedAbsentStudents;
 	}
 
+	public void setMenuBean(MenuBean menuBean) {
+		this.menuBean = menuBean;
+	}
+
 	public String getAdditionalStudentsSize() {
 		if (this.presentStudents != null) {
 			List<Student> additionalStudents = new ArrayList<>(this.presentStudents);
@@ -536,11 +559,23 @@ public class LessonBean implements Serializable {
 	}
 
 	public String getStudentSkip(Student student) {
-		List<SkipInfo> skipInfoList = skipInfo.get(student.getId());
-		if (skipInfoList != null) {
-			return skipInfoList.stream()
-					.map(pi -> new LocaleUtils().getMessage(pi.getLessonType().getKey()) + ":" + pi.getCount())
-					.collect(Collectors.joining(" \\ "));
+		Map<String, Integer> studentSkipInfoMap = skipInfo.get(student.getId());
+		if (studentSkipInfoMap != null) {
+			List<String> skipInfoList = new ArrayList<>();
+			for (Map.Entry<String, Integer> skipInfo : studentSkipInfoMap.entrySet()) {
+				if (!Constants.TOTAL_SKIP.equals(skipInfo.getKey())) {
+					skipInfoList.add(new LocaleUtils().getMessage(skipInfo.getKey()) + ":" + skipInfo.getValue());
+				}
+			}
+			return skipInfoList.stream().collect(Collectors.joining(" \\ "));
+		}
+		return null;
+	}
+
+	public Integer getSkipCount(String type, Student student) {
+		Map<String, Integer> studentSkipInfoMap = skipInfo.get(student.getId());
+		if (studentSkipInfoMap != null) {
+			return studentSkipInfoMap.get(type);
 		}
 		return null;
 	}

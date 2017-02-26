@@ -18,4 +18,6 @@ public final class Constants {
 	public final static String REGISTRATION_TYPE_MANUAL = "MANUAL";
 	public final static String REGISTRATION_TYPE_AUTOMATIC = "AUTOMATIC";
 
+	//LESSON SKIP
+	public final static String TOTAL_SKIP = "total.skip";
 }

@@ -5,7 +5,9 @@
                 xmlns:p="http://primefaces.org/ui"
 >
     <h:form id="lessonsForm">
-        <p:dataTable var="lesson" value="#{lessonBean.lessons}">
+        <p:dataTable var="lesson" value="#{lessonBean.lessons}"
+                     sortBy="#{lesson.classes[0].date}"
+                     sortOrder="descending">
             <f:facet name="header">
                 #{msg['lessons']}
             </f:facet>

@@ -26,6 +26,7 @@ public class PhotoStudentUtils {
 					System.err.println("Personnel Number for " + student + " not load.");
 					continue;
 				}
+				System.out.println("Start load photo for " + student);
 				if (StudentServer.storeImage(personnelNumber, student.getCardUid())) {
 					System.out.println("Photo load for " + student);
 				} else {

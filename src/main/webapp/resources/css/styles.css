@@ -1,11 +1,72 @@
 /*
-body {
-    margin: 0;
-}
-*/
+	General styles
+ */
 
-.alignMenuItems > ul {
-    margin-top: 10px;
+/* Color */
+.green {
+	color: #008000 !important;
+}
+
+.red {
+	color: #ff0000 !important;
+}
+
+/* Width */
+.w16px {
+	width: 16px;
+}
+
+.w20px {
+	width: 20px;
+}
+
+.w25px {
+	width: 25px;
+}
+
+.w30px {
+	width: 30px;
+}
+
+.w40px {
+	width: 40px;
+}
+
+.w70px {
+	width: 70px;
+}
+
+/* Align */
+.center {
+	text-align: center;
+}
+
+.right {
+	text-align: right;
+}
+
+.left {
+	text-align: left;
+}
+
+
+/* Display */
+.inline {
+	display: inline;
+}
+
+/*
+	Custom styles
+ */
+/*
+	Menu
+ */
+.menu .ui-menu {
+	padding: 0;
+}
+
+body {
+    margin-top: 0;
 }
 
 .fa-small {
@@ -31,15 +92,6 @@ body {
 .groupOptions {
     width: 15%;
     text-align: center;
-}
-
-.menu {
-    /*margin-bottom: 25px;*/
-}
-
-.menu .ui-panel .ui-panel-content {
-    padding: 0;
-    border: none;
 }
 
 .ui-panel-collapsed-h {
@@ -103,15 +155,6 @@ body {
     padding: 0 !important;
 }
 
-/* Color */
-.green {
-    color: #008000 !important;
-}
-
-.red {
-    color: #ff0000 !important;
-}
-
 /* Edit form */
 .edit-form .edit-panel .value > div,
 .edit-form .edit-panel .value input,
@@ -147,37 +190,71 @@ body {
 	padding: 0;
 }
 
+.lesson-info .lesson-text {
+	font-size: 20pt;
+}
+
 .visit-info td {
     vertical-align: middle;
 }
 
-.lessonStudents .transparent-button button{
-    background-color: rgba(0, 0, 0, 0);
-    border: 0
+/*
+	transparent icon button
+ */
+.lesson-tables .transparent-button th,
+.lesson-tables .transparent-button td{
+	padding-left: 0;
 }
 
-.lessonStudents .transparent-button .ui-button-text {
+.lesson-tables .transparent-button button{
+    background-color: rgba(0, 0, 0, 0);
+    border: 0;
+	width: 20px;
+}
+
+.lesson-tables .transparent-button .ui-button-text {
     padding: 0;
 }
 
+.lesson-tables .transparent-button .ui-icon{
+	width: 15px;
+}
+
+/*
+	lesson-tables
+ */
 .lesson-tables .ui-datatable thead th,
 .lesson-tables .ui-datatable tbody td,
 .lesson-tables .ui-datatable tfoot td,
 .lesson-tables .ui-datatable tfoot th {
     border-width: 0;
+	padding: 2px 5px;
 }
 
 .lesson-tables {
 	font-weight: bold;
 }
 
+.lesson-tables .ui-datatable-scrollable-header-box .ui-column-filter.ui-inputfield {
+	width: 80%;
+	display: inline;
+}
+
+.lesson-tables .ui-datatable-odd {
+	background: none repeat scroll 0 0 #c3c7cc;
+}
+
+/*
+	Image
+ */
 .lesson-info .visit-info .image,
 .studentDetail .image {
-	width: 300px;
+	width: 200px;
+	height: 267px;
 	display: block;
 	padding: 0;
-	border: 0;
 	text-align: center;
+	border: 2px solid;
 }
 
 .studentDetail .image td {
@@ -192,5 +269,4 @@ body {
 .image img {
 	max-width: 200px;
 	height: auto;
-	border: 2px solid;
 }
