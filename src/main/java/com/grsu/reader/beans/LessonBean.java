@@ -572,11 +572,13 @@ public class LessonBean implements Serializable {
 		return null;
 	}
 
-	public Integer getSkipCount(String type, Student student) {
-		Map<String, Integer> studentSkipInfoMap = skipInfo.get(student.getId());
-		if (studentSkipInfoMap != null) {
-			return studentSkipInfoMap.get(type);
+	public String getSkipCount(String type, Student student) {
+		if (student != null) {
+			Map<String, Integer> studentSkipInfoMap = skipInfo.get(student.getId());
+			if (studentSkipInfoMap != null) {
+				return studentSkipInfoMap.containsKey(type) ? Integer.toString(studentSkipInfoMap.get(type)) : "";
+			}
 		}
-		return null;
+		return "";
 	}
 }

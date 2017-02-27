@@ -118,16 +118,13 @@
 						<h:outputText value="#{pStudent.fullName}"/>
 					</p:column>
 
-					<p:column headerText="#{msg['lecture']}" styleClass="center w30px"
-							  sortBy="#{lessonBean.getSkipCount('lecture', pStudent)}">
+					<p:column headerText="#{msg['lecture']}" styleClass="center w30px">
 						<h:outputText value="#{lessonBean.getSkipCount('lecture', pStudent)}"/>
 					</p:column>
-					<p:column headerText="#{msg['practical']}" styleClass="center w40px"
-							  sortBy="#{lessonBean.getSkipCount('practical', pStudent)}">
+					<p:column headerText="#{msg['practical']}" styleClass="center w40px">
 						<h:outputText value="#{lessonBean.getSkipCount('practical', pStudent)}"/>
 					</p:column>
-					<p:column headerText="#{msg['lab']}" styleClass="center w40px"
-							  sortBy="#{lessonBean.getSkipCount('lab', pStudent)}">
+					<p:column headerText="#{msg['lab']}" styleClass="center w40px">
 						<h:outputText value="#{lessonBean.getSkipCount('lab', pStudent)}"/>
 					</p:column>
 					<p:column headerText="#{msg['total.skip']}" styleClass="center w30px"
@@ -179,20 +176,17 @@
 						<h:outputText value="#{aStudent.fullName}"/>
 					</p:column>
 
-					<p:column headerText="#{msg['lecture']}" styleClass="center w30px"
-							  sortBy="#{lessonBean.getSkipCount('lecture', pStudent)}">
+					<p:column headerText="#{msg['lecture']}" styleClass="center w30px">
 						<h:outputText value="#{lessonBean.getSkipCount('lecture', aStudent)}"/>
 					</p:column>
-					<p:column headerText="#{msg['practical']}" styleClass="center w40px"
-							  sortBy="#{lessonBean.getSkipCount('practical', pStudent)}">
+					<p:column headerText="#{msg['practical']}" styleClass="center w40px">
 						<h:outputText value="#{lessonBean.getSkipCount('practical', aStudent)}"/>
 					</p:column>
-					<p:column headerText="#{msg['lab']}" styleClass="center w40px"
-							  sortBy="#{lessonBean.getSkipCount('lab', pStudent)}">
+					<p:column headerText="#{msg['lab']}" styleClass="center w40px">
 						<h:outputText value="#{lessonBean.getSkipCount('lab', aStudent)}"/>
 					</p:column>
 					<p:column headerText="#{msg['total.skip']}" styleClass="center w30px"
-							  sortBy="#{lessonBean.getSkipCount('total.skip', pStudent)}">
+							  sortBy="#{lessonBean.getSkipCount('total.skip', aStudent)}">
 						<h:outputText value="#{lessonBean.getSkipCount('total.skip', aStudent)}"/>
 					</p:column>
 
