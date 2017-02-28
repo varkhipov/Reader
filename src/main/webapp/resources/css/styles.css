@@ -6,7 +6,6 @@
 .green {
 	color: #008000 !important;
 }
-
 .red {
 	color: #ff0000 !important;
 }
@@ -15,23 +14,18 @@
 .w16px {
 	width: 16px;
 }
-
 .w20px {
 	width: 20px;
 }
-
 .w25px {
 	width: 25px;
 }
-
 .w30px {
 	width: 30px;
 }
-
 .w40px {
 	width: 40px;
 }
-
 .w70px {
 	width: 70px;
 }
@@ -40,20 +34,24 @@
 .center {
 	text-align: center;
 }
-
 .right {
 	text-align: right;
 }
-
 .left {
 	text-align: left;
 }
-
 
 /* Display */
 .inline {
 	display: inline;
 }
+
+/* Font Size */
+#wrapper .font-size-20pt {font-size: 20pt;}
+
+/* Margin */
+.margin-top-10px {margin-top: 10px;}
+.margin-bottom-10px {margin-bottom: 10px;}
 
 /*
 	Custom styles
@@ -184,6 +182,10 @@ body {
     vertical-align: top;
 }
 
+.lesson-info label {
+	display: block;
+}
+
 .lesson-info .visit-info .visit-label {
     font-size: 30pt;
     text-transform: uppercase;
@@ -202,10 +204,6 @@ body {
 
 .lesson-info .lesson-text {
 	font-size: 20pt;
-}
-
-.lesson-info .lesson-text label {
-    display: block;
 }
 
 .visit-info td {
@@ -250,7 +248,7 @@ body {
 }
 
 .lesson-tables .ui-datatable-scrollable-header-box .ui-column-filter.ui-inputfield {
-	width: 60%;
+	width: 40%;
 	display: inline;
 }
 

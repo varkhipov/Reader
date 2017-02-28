@@ -536,8 +536,9 @@ public class LessonBean implements Serializable {
 		if (this.presentStudents != null) {
 			List<Student> additionalStudents = new ArrayList<>(this.presentStudents);
 			additionalStudents.removeAll(this.lessonStudents);
+
 			if (additionalStudents.size() != 0) {
-				return new LocaleUtils().getMessage("lesson.students.additional") + ": " + additionalStudents.size();
+				return String.valueOf(additionalStudents.size());
 			}
 		}
 		return "";
@@ -569,7 +570,7 @@ public class LessonBean implements Serializable {
 			}
 			return skipInfoList.stream().collect(Collectors.joining(" \\ "));
 		}
-		return null;
+		return new LocaleUtils().getMessage("lesson.visit.noSkip");
 	}
 
 	public String getSkipCount(String type, Student student) {

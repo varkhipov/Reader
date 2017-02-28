@@ -82,7 +82,8 @@
 			</p:submenu>
 
 			<p:menuitem value="#{msg['menu.show.lessons']}" icon="fa fa-fw fa-book"
-						actionListener="#{menuBean.changeView('lessons')}" update="@([id$=views])">
+						actionListener="#{menuBean.changeView('lessons')}" update="@([id$=views])"
+						rendered="#{sessionBean.connected}">
 				<f:actionListener binding="#{lessonBean.clear()}"/>
 			</p:menuitem>
 

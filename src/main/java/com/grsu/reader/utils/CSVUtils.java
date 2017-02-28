@@ -70,7 +70,6 @@ public class CSVUtils {
 		return parsedGroups;
 	}
 
-	//TODO: discuss fix
 	private static void processStudents(Group group, List<Student> students) {
 		StudentDAO studentDAO = new StudentDAO();
 		for (Student student : students) {
