@@ -140,9 +140,6 @@ body {
     padding-left: 0;
 }
 
-.lessonStudents .ui-datatable {
-    margin: 0;
-}
 
 .lessonButtons {
     margin-left: 5%;
@@ -156,14 +153,6 @@ body {
     /*padding-left: 0px;*/
 /*}*/
 
-/* Sorry for that. I will fix it, I promise! :( */
-.lessonStudents {
-    padding: 0 !important;
-}
-
-.lessonStudents > .ui-panel-content {
-    padding: 0 !important;
-}
 
 /* Edit form */
 .edit-form .edit-panel .value > div,
@@ -202,6 +191,10 @@ body {
 
 .lesson-info .lesson-text {
 	font-size: 20pt;
+}
+
+.lesson-info .lesson-text label {
+    display: block;
 }
 
 .visit-info td {
@@ -246,7 +239,7 @@ body {
 }
 
 .lesson-tables .ui-datatable-scrollable-header-box .ui-column-filter.ui-inputfield {
-	width: 80%;
+	width: 60%;
 	display: inline;
 }
 
