@@ -1,11 +1,15 @@
 package com.grsu.reader.beans;
 
+import com.grsu.reader.entities.Group;
 import com.grsu.reader.utils.FacesUtils;
+import com.grsu.reader.utils.LocaleUtils;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @ManagedBean(name = "menuBean")
 @ViewScoped
@@ -34,6 +38,37 @@ public class MenuBean implements Serializable {
 	}
 */
 
+	public void loadCSV() {
+		List<Group> processedGroups = new ArrayList<>(sessionBean.updateGroupsFromCSV());
+		LocaleUtils localeUtils = new LocaleUtils();
+
+		if (processedGroups.isEmpty()) {
+			FacesUtils.addInfo(
+					localeUtils.getMessage("info"),
+					localeUtils.getMessage("info.groups.not.addedOrUpdated")
+			);
+			FacesUtils.update("menuForm:messages");
+		} else {
+			sessionBean.updateEntities();
+
+			StringBuilder sb = new StringBuilder(localeUtils.getMessage("info.groups.addedOrUpdated"));
+			for (Group group : processedGroups) {
+				sb.append("<br/>");
+				sb.append(localeUtils.getMessage("info.group.addedOrUpdated", group.getName(), group.getStudents().size()));
+			}
+
+			FacesUtils.addInfo(
+					localeUtils.getMessage("info"),
+					sb.toString()
+			);
+
+			FacesUtils.update("wrapper");
+			if ("students".equals(sessionBean.getActiveView())) {
+				FacesUtils.execute("PF('studentsTable').clearFilters()");
+			}
+		}
+	}
+
 	public void connect() {
 		sessionBean.connect();
 	}
@@ -44,6 +79,10 @@ public class MenuBean implements Serializable {
 
 	public void changeView(String viewName) {
 		sessionBean.setActiveView(viewName);
+	}
+
+	public void loadStudentsPhoto() {
+		sessionBean.loadStudentsPhoto();
 	}
 
 	public void showMenu() {

@@ -9,9 +9,7 @@ import com.grsu.reader.entities.Student;
 import com.opencsv.CSVReader;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static com.grsu.reader.utils.FileUtils.CSV_EXTENSION;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
@@ -26,9 +24,10 @@ import static org.apache.commons.lang3.StringUtils.capitalize;
 public class CSVUtils {
 	private static final char SEPARATOR = ';';
 
-	// TODO: analyze once again
-	public static void updateGroupsFromCSV() {
+	public static List<Group> updateGroupsFromCSV() {
 		EntityDAO entityDAO = new EntityDAO();
+		List<Group> parsedGroups = new ArrayList<>();
+
 		for (Group group : parseGroups()) {
 			if (group.getStudents().isEmpty()) {
 				System.out.println("Group [ " + group.getName() + " ] is empty and not added to database.");
@@ -63,26 +62,32 @@ public class CSVUtils {
 			entityDAO.save(group);
 			processStudents(group, students);
 			System.out.println("Group [ " + group.getName() + " ] processed.");
+
+			/* return processed groups with students */
+			group.setStudents(students);
+			parsedGroups.add(group);
 		}
+		return parsedGroups;
 	}
 
+	//TODO: discuss fix
 	private static void processStudents(Group group, List<Student> students) {
 		StudentDAO studentDAO = new StudentDAO();
 		for (Student student : students) {
 			Student studentFromDB = studentDAO.getByCardUid(student.getCardUid());
 			if (studentFromDB == null) {
-				studentDAO.add(student);
 				student.setGroups(new ArrayList<>());
+				student.getGroups().add(group);
+				studentDAO.add(student);
 			} else {
 				studentFromDB.setLastName(student.getLastName());
 				studentFromDB.setFirstName(student.getFirstName());
 				studentFromDB.setPatronymic(student.getPatronymic());
 				studentFromDB.setCardId(student.getCardId());
 				student = studentFromDB;
+				student.getGroups().add(group);
 				studentDAO.update(student);
 			}
-			student.getGroups().add(group);
-			studentDAO.update(student);
 		}
 	}
 
@@ -158,7 +163,7 @@ public class CSVUtils {
 			department.setName(departmentName);
 			group.setDepartment(department);
 		} else {
-			System.out.println("Group [ " + groupName + " ] is empty and not added to database.");
+			System.out.println("Group [ " + groupName + " ] is empty and will not be added to database.");
 		}
 
 		try {

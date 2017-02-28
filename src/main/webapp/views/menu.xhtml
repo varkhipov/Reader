@@ -5,7 +5,7 @@
 				xmlns:p="http://primefaces.org/ui"
 >
 	<h:form id="menuForm" styleClass="menu">
-		<p:growl id="messages" showDetail="true"/>
+		<p:growl id="messages" showDetail="true" escape="false"/>
 
 		<p:menubar id="menu" autoDisplay="#{false}" styleClass="alignMenuItems" rendered="#{menuBean.showMenu}">
 			<p:submenu label="#{msg['menu.file.new']}" icon="fa fa-fw fa-plus"
@@ -46,7 +46,10 @@
 				</p:menuitem>
 
 				<p:menuitem value="#{msg['menu.load.photo']}" icon="fa fa-fw fa-file-photo-o"
-							actionListener="#{sessionBean.loadStudentsPhoto}"/>
+							actionListener="#{menuBean.loadStudentsPhoto}"/>
+
+				<p:menuitem value="#{msg['menu.load.csv']}" icon="fa fa-fw fa-arrow-circle-o-down"
+							actionListener="#{menuBean.loadCSV}"/>
 			</p:submenu>
 
 			<p:submenu label="#{msg['menu.connection']}" icon="fa fa-fw fa-exchange">

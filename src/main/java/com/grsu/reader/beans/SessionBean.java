@@ -52,6 +52,14 @@ public class SessionBean implements Serializable {
 
 	public void initData() {
 		updateGroupsFromCSV();
+		updateEntities();
+	}
+
+	public List<Group> updateGroupsFromCSV() {
+		return CSVUtils.updateGroupsFromCSV();
+	}
+
+	public void updateEntities() {
 		updateSchedules();
 		updateDisciplines();
 		updateDepartments();
@@ -61,10 +69,6 @@ public class SessionBean implements Serializable {
 		updateLessons();
 		updateClasses();
 		updateLessonTypes();
-	}
-
-	public void updateGroupsFromCSV() {
-		CSVUtils.updateGroupsFromCSV();
 	}
 
 	public void updateSchedules() {

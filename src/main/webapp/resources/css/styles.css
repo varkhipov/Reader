@@ -75,6 +75,17 @@
 	padding: 0;
 }
 
+/*
+    Growl (Notifications)
+*/
+div.ui-growl {
+    width: 30%;
+}
+
+.ui-growl .ui-growl-message {
+    width: 85%;
+}
+
 body {
     margin-top: 0;
 }

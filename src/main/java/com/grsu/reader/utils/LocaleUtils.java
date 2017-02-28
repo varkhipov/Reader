@@ -6,10 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Enumeration;
-import java.util.Locale;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
+import java.text.MessageFormat;
+import java.util.*;
 
 /**
  * http://jdevelopment.nl/internationalization-jsf-utf8-encoded-properties-files/
@@ -37,6 +35,14 @@ public class LocaleUtils extends ResourceBundle {
 
 	public String getMessage(String key) {
 		return parent.getString(key);
+	}
+
+	public String getMessage(String key, Object... params) {
+		try {
+			return MessageFormat.format(parent.getString(key), params);
+		} catch (MissingResourceException e) {
+			return '!' + key + '!';
+		}
 	}
 
 	protected static class UTF8Control extends Control {
