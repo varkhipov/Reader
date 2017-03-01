@@ -3,12 +3,16 @@ package com.grsu.reader.beans;
 import com.grsu.reader.constants.Constants;
 import com.grsu.reader.dao.EntityDAO;
 import com.grsu.reader.dao.StudentDAO;
-import com.grsu.reader.entities.*;
 import com.grsu.reader.entities.Class;
-import com.grsu.reader.models.*;
+import com.grsu.reader.entities.Group;
+import com.grsu.reader.entities.Lesson;
+import com.grsu.reader.entities.Student;
+import com.grsu.reader.entities.StudentClass;
+import com.grsu.reader.models.SkipInfo;
 import com.grsu.reader.utils.FacesUtils;
 import com.grsu.reader.utils.LocaleUtils;
 import com.grsu.reader.utils.SerialUtils;
+import org.primefaces.event.SelectEvent;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -16,7 +20,13 @@ import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.grsu.reader.utils.FacesUtils.closeDialog;
@@ -581,5 +591,9 @@ public class LessonBean implements Serializable {
 			}
 		}
 		return "";
+	}
+
+	public void onStudentRowSelect(SelectEvent event) {
+		processedStudent = (Student) event.getObject();
 	}
 }

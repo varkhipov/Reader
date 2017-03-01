@@ -106,6 +106,9 @@
 				<p:ajax event="rowSelectCheckbox" update="removePresentStudentsBtn"/>
 				<p:ajax event="rowUnselectCheckbox" update="removePresentStudentsBtn"/>
 				<p:ajax event="toggleSelect" update="removePresentStudentsBtn"/>
+
+				<p:ajax event="rowSelect" listener="#{lessonBean.onStudentRowSelect}" update=":lessonForm:lastVisitInfo" />
+
 				<p:column selectionMode="multiple" styleClass="w16px center"/>
 
 				<p:column styleClass="transparent-button w20px center">
@@ -160,6 +163,8 @@
 				<p:ajax event="rowSelectCheckbox" update="addAbsentStudentsBtn"/>
 				<p:ajax event="rowUnselectCheckbox" update="addAbsentStudentsBtn"/>
 				<p:ajax event="toggleSelect" update="addAbsentStudentsBtn"/>
+
+				<p:ajax event="rowSelect" listener="#{lessonBean.onStudentRowSelect}" update=":lessonForm:lastVisitInfo" />
 
 				<p:column selectionMode="multiple" styleClass="w16px center"/>
 
