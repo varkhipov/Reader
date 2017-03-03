@@ -80,6 +80,10 @@ public class LessonBean implements Serializable {
 		sessionBean.setActiveView("lessons");
 	}
 
+	public void lessonMode() {
+		sessionBean.setActiveView("lessonMode");
+	}
+
 	public void clear() {
 		selectedLesson = null;
 		processedStudent = null;

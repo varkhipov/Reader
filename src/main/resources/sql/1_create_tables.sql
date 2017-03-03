@@ -56,6 +56,20 @@ CREATE TABLE STREAM (
   FOREIGN KEY (department_id)  REFERENCES DEPARTMENT(id)
 );
 
+-- STUDENT
+CREATE TABLE STUDENT (
+  id                INTEGER PRIMARY KEY AUTOINCREMENT,
+  card_uid          TEXT,
+  card_id           INTEGER,
+  first_name        TEXT,
+  last_name         TEXT,
+  patronymic        TEXT,
+  phone             TEXT,
+  email             TEXT,
+  gender            TEXT,
+  image             BLOB
+);
+
 -- GROUP_TYPE
 CREATE TABLE GROUP_TYPE (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -71,21 +85,10 @@ CREATE TABLE [GROUP] (
   image             BLOB,
   active            INTEGER,
   expiration_date   TEXT,
+  praepostor_id        INTEGER,
+  FOREIGN KEY (praepostor)  REFERENCES STUDENT(id),
   FOREIGN KEY (department_id)  REFERENCES DEPARTMENT(id),
   FOREIGN KEY (type_id)        REFERENCES GROUP_TYPE(id)
-);
-
--- STUDENT
-CREATE TABLE STUDENT (
-  id                INTEGER PRIMARY KEY AUTOINCREMENT,
-  card_uid          TEXT,
-  card_id           INTEGER,
-  first_name        TEXT,
-  last_name         TEXT,
-  patronymic        TEXT,
-  phone             TEXT,
-  email             TEXT,
-  image             BLOB
 );
 
 -- DISCIPLINE
@@ -107,7 +110,6 @@ CREATE TABLE LESSON_TYPE (
 -- LESSON
 CREATE TABLE LESSON (
   id                INTEGER PRIMARY KEY AUTOINCREMENT,
-  name              TEXT,
   description       TEXT,
   stream_id         INTEGER,
   create_date       TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%S','now', 'localtime')),
@@ -130,22 +132,15 @@ CREATE TABLE CLASS (
   FOREIGN KEY (lesson_id)      REFERENCES LESSON(id)
 );
 
--- NOTE_TYPE
-CREATE TABLE NOTE_TYPE (
-  id                INTEGER PRIMARY KEY AUTOINCREMENT,
-  name              TEXT
-);
-
 -- NOTE
 CREATE TABLE NOTE (
   id                INTEGER PRIMARY KEY AUTOINCREMENT,
   lecturer_id       INTEGER,
-  type_id           INTEGER,
+  type              TEXT,
   entity_id         INTEGER,
   description       TEXT,
   create_date       TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%S','now', 'localtime')),
   FOREIGN KEY (lecturer_id)    REFERENCES LECTURER(id),
-  FOREIGN KEY (type_id)        REFERENCES NOTE_TYPE(id)
 );
 
 --
@@ -157,7 +152,6 @@ CREATE TABLE STUDENT_GROUP (
   id                INTEGER PRIMARY KEY AUTOINCREMENT,
   student_id        INTEGER,
   group_id          INTEGER,
-  praepostor        INTEGER,
   FOREIGN KEY (student_id)     REFERENCES STUDENT(id),
   FOREIGN KEY (group_id)       REFERENCES [GROUP](id)
 );

@@ -11,13 +11,14 @@ import javax.faces.event.PhaseId;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Created by pavel on 2/19/17.
  */
 @ManagedBean
 @SessionScoped
-public class ImageBean {
+public class ImageBean implements Serializable {
 
 	public StreamedContent getImage() throws IOException {
 		FacesContext context = FacesContext.getCurrentInstance();

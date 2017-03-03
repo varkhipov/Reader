@@ -37,6 +37,11 @@
 
 
 						<p:commandButton title="#{msg['btn.startRecord']}" icon="fa fa-fw fa-play"
+										 update="@([id$=views])"
+										 actionListener="#{menuBean.changeView('lessonMode')}">
+							<f:setPropertyActionListener value="#{lessonBean.selectedLesson.stream}" target="#{lessonModeBean.stream}"/>
+						</p:commandButton>
+						<p:commandButton title="#{msg['btn.startRecord']}" icon="fa fa-fw fa-play"
 										 update=":lessonForm:lessonButtons"
 										 actionListener="#{lessonBean.startRecord}"
 										 rendered="#{not lessonBean.recordStarted}"/>
@@ -107,7 +112,7 @@
 				<p:ajax event="rowUnselectCheckbox" update="removePresentStudentsBtn"/>
 				<p:ajax event="toggleSelect" update="removePresentStudentsBtn"/>
 
-				<p:ajax event="rowSelect" listener="#{lessonBean.onStudentRowSelect}" update=":lessonForm:lastVisitInfo" />
+				<p:ajax event="rowSelect" listener="#{lessonBean.onStudentRowSelect}" update=":lessonForm:lastVisitInfo"/>
 
 				<p:column selectionMode="multiple" styleClass="w16px center"/>
 
@@ -164,7 +169,7 @@
 				<p:ajax event="rowUnselectCheckbox" update="addAbsentStudentsBtn"/>
 				<p:ajax event="toggleSelect" update="addAbsentStudentsBtn"/>
 
-				<p:ajax event="rowSelect" listener="#{lessonBean.onStudentRowSelect}" update=":lessonForm:lastVisitInfo" />
+				<p:ajax event="rowSelect" listener="#{lessonBean.onStudentRowSelect}" update=":lessonForm:lastVisitInfo"/>
 
 				<p:column selectionMode="multiple" styleClass="w16px center"/>
 
