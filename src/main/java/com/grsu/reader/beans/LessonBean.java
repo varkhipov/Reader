@@ -402,12 +402,13 @@ public class LessonBean implements Serializable {
 		List<Integer> studentIds = students.stream().map(Student::getId).collect(Collectors.toList());
 
 		List<SkipInfo> studentSkipInfo = new StudentDAO().getStudentSkipInfo(studentIds, selectedLesson.getStream().getId());
-		Set<Integer> skipStudentIds = new HashSet<>();
+
+		for (Integer id : studentIds) {
+			skipInfo.remove(id);
+		}
 
 		if (studentSkipInfo != null && studentSkipInfo.size() > 0) {
-
 			for (SkipInfo si : studentSkipInfo) {
-				skipStudentIds.add(si.getStudentId());
 
 				Map<String, Integer> studentSkipInfoMap = skipInfo.get(si.getStudentId());
 				if (studentSkipInfoMap == null) {
@@ -422,10 +423,7 @@ public class LessonBean implements Serializable {
 			}
 		}
 
-		studentIds.removeAll(skipStudentIds);
-		for (Integer id : studentIds) {
-			skipInfo.remove(id);
-		}
+
 	}
 
 	/* LESSON STUDENTS TABLES */
