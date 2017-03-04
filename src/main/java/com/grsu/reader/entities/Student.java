@@ -29,17 +29,32 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 				)
 		}
 )
-@NamedNativeQuery(
-		name = "SkipInfoQuery",
-		query = "select st.id as studentId, l.type_id as lessonType, count(*) as count\n" +
-				"from STUDENT st\n" +
-				"\tjoin STUDENT_CLASS sc on sc.student_id = st.id\n" +
-				"\tjoin CLASS cl on cl.id = sc.class_id\n" +
-				"\tjoin LESSON l on l.id = cl.lesson_id\n" +
-				"\tjoin STREAM str on str.id = l.stream_id\n" +
-				"where (sc.registered is null or sc.registered = 0) and str.id = :streamId\n" +
-				"group by st.id, str.id, l.type_id\n",
-		resultSetMapping = "SkipInfoMapping")
+@NamedNativeQueries({
+		@NamedNativeQuery(
+				name = "SkipInfoQuery",
+				query = "select st.id as studentId, l.type_id as lessonType, count(*) as count\n" +
+						"from STUDENT st\n" +
+						"join STUDENT_CLASS sc on sc.student_id = st.id\n" +
+						"join CLASS cl on cl.id = sc.class_id and date(date) <= current_date\n" +
+						"join SCHEDULE sch on sch.id = cl.schedule_id and time(end) <= current_time\n" +
+						"join LESSON l on l.id = cl.lesson_id\n" +
+						"join STREAM str on str.id = l.stream_id\n" +
+						"where (sc.registered is null or sc.registered = 0) and str.id = :streamId\n" +
+						"group by st.id, str.id, l.type_id",
+				resultSetMapping = "SkipInfoMapping"),
+		@NamedNativeQuery(
+				name = "StudentSkipInfoQuery",
+				query = "select st.id as studentId, l.type_id as lessonType, count(*) as count\n" +
+						"from STUDENT st\n" +
+						"join STUDENT_CLASS sc on sc.student_id = st.id\n" +
+						"join CLASS cl on cl.id = sc.class_id and date(date) <= current_date\n" +
+						"join SCHEDULE sch on sch.id = cl.schedule_id and time(end) <= current_time\n" +
+						"join LESSON l on l.id = cl.lesson_id\n" +
+						"join STREAM str on str.id = l.stream_id\n" +
+						"where st.id in (:studentId) and (sc.registered is null or sc.registered = 0) and str.id = :streamId\n" +
+						"group by st.id, str.id, l.type_id",
+				resultSetMapping = "SkipInfoMapping")
+})
 @Entity
 @ManagedBean(name = "newInstanceOfStudent")
 public class Student implements AssistantEntity, Person {

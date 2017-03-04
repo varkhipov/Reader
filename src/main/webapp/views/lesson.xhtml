@@ -25,9 +25,10 @@
 						<p:outputLabel id="visitLastName" value="#{lessonBean.processedStudent.lastName}"/>
 						<p:outputLabel id="visitFirstName" value="#{lessonBean.processedStudent.firstName}"/>
 						<p:outputLabel id="visitGroup" escape="false"
-									   styleClass="font-size-20pt margin-top-10px margin-bottom-10px"
+									   styleClass="font-size-20pt margin-top-20px margin-bottom-20px"
 									   value="#{lessonBean.processedStudent.groupNames}"/>
-						<p:outputLabel value="#{lessonBean.getStudentSkip(lessonBean.processedStudent)}"/>
+						<p:outputLabel styleClass="lowercase"
+									   value="#{lessonBean.getStudentSkip(lessonBean.processedStudent)}"/>
 					</p:panel>
 				</p:panelGrid>
 			</p:panel>
@@ -39,7 +40,8 @@
 						<p:commandButton title="#{msg['btn.startRecord']}" icon="fa fa-fw fa-play"
 										 update="@([id$=views])"
 										 actionListener="#{menuBean.changeView('lessonMode')}">
-							<f:setPropertyActionListener value="#{lessonBean.selectedLesson.stream}" target="#{lessonModeBean.stream}"/>
+							<f:setPropertyActionListener value="#{lessonBean.selectedLesson.stream}"
+														 target="#{lessonModeBean.stream}"/>
 						</p:commandButton>
 						<p:commandButton title="#{msg['btn.startRecord']}" icon="fa fa-fw fa-play"
 										 update=":lessonForm:lessonButtons"
@@ -101,18 +103,29 @@
 		</p:panelGrid>
 
 		<p:panelGrid id="lessonTables" columns="2" styleClass="noBorder v-align-top lesson-tables">
-			<p:dataTable id="presentStudents" var="pStudent" widgetVar="pStudentsTable"
-						 value="#{lessonBean.presentStudents}"
-						 sortBy="#{pStudent.studentClasses[lessonBean.selectedLesson.classes[0].id].registrationTime}"
-						 sortOrder="descending" resizableColumns="true" liveResize="true"
-						 filteredValue="#{lessonBean.filteredPresentStudents}" scrollable="true"
-						 selection="#{lessonBean.selectedPresentStudents}" rowKey="#{pStudent.id}">
+			<p:dataTable id="presentStudents"
+						 var="pStudent"
+						 widgetVar="pStudentsTable"
+						 value="#{lessonBean.presentStudentsLazyModel}"
+						 sortBy="#{pStudent.registrationTime}"
+						 sortOrder="descending"
+						 resizableColumns="true"
+						 selection="#{lessonBean.selectedPresentStudents}"
+						 rowKey="#{pStudent.id}"
+						 paginator="true"
+						 rows="10"
+						 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						 rowsPerPageTemplate="5,10,15"
+						 paginatorPosition="bottom"
+						 lazy="true">
 
 				<p:ajax event="rowSelectCheckbox" update="removePresentStudentsBtn"/>
 				<p:ajax event="rowUnselectCheckbox" update="removePresentStudentsBtn"/>
-				<p:ajax event="toggleSelect" update="removePresentStudentsBtn"/>
+				<p:ajax event="toggleSelect" update="removePresentStudentsBtn"
+						listener="#{lessonBean.onPresentStudentsSelect}"/>
 
-				<p:ajax event="rowSelect" listener="#{lessonBean.onStudentRowSelect}" update=":lessonForm:lastVisitInfo"/>
+				<p:ajax event="rowSelect" listener="#{lessonBean.onStudentRowSelect}"
+						update=":lessonForm:lastVisitInfo"/>
 
 				<p:column selectionMode="multiple" styleClass="w16px center"/>
 
@@ -128,48 +141,57 @@
 					<p:commandButton update=":lessonForm:lessonTables :lessonForm:attendanceInfo"
 									 icon="fa fa-fw fa-angle-right" title="Remove"
 									 styleClass="w25px"
-									 actionListener="#{lessonBean.removeStudent(pStudent)}"/>
+									 actionListener="#{lessonBean.removeLessonStudent(pStudent)}"/>
 				</p:column>
 
-				<p:column sortBy="#{pStudent.fullName}" filterBy="#{pStudent.fullName}"
-						  filterMatchMode="startsWith">
-					<h:outputText value="#{pStudent.fullName}"/>
+				<p:column sortBy="#{pStudent.name}"
+						  filterBy="#{pStudent.name}"
+						  filterMatchMode="startsWith"
+						  styleClass="bold">
+					<h:outputText value="#{pStudent.name}"/>
 				</p:column>
 
-				<p:column headerText="#{msg['lecture']}" styleClass="center w30px">
-					<h:outputText value="#{lessonBean.getSkipCount('lecture', pStudent)}"/>
+				<p:column headerText="#{msg['total.skip']}"
+						  styleClass="center w30px bold"
+						  sortBy="#{pStudent.totalSkip}">
+					<h:outputText value="#{pStudent.totalSkip}"/>
 				</p:column>
-				<p:column headerText="#{msg['practical']}" styleClass="center w40px">
-					<h:outputText value="#{lessonBean.getSkipCount('practical', pStudent)}"/>
-				</p:column>
-				<p:column headerText="#{msg['lab']}" styleClass="center w40px">
-					<h:outputText value="#{lessonBean.getSkipCount('lab', pStudent)}"/>
-				</p:column>
-				<p:column headerText="#{msg['total.skip']}" styleClass="center w30px"
-						  sortBy="#{lessonBean.getSkipCount('total.skip', pStudent)}">
-					<h:outputText value="#{lessonBean.getSkipCount('total.skip', pStudent)}"/>
+				<p:column headerText="#{msg['lecture']}/#{msg['practical']}/#{msg['lab']}"
+						  styleClass="center w70px">
+					<h:outputText value="#{pStudent.skips}"/>
 				</p:column>
 
 
 				<p:column
-						sortBy="#{pStudent.studentClasses[lessonBean.selectedLesson.classes[0].id].registrationTime}"
+						sortBy="#{pStudent.registrationTime}"
 						styleClass="center w70px">
 					<h:outputText
-							value="#{pStudent.studentClasses[lessonBean.selectedLesson.classes[0].id].registrationTime}"
+							value="#{pStudent.registrationTime}"
 							converter="localTimeConverter"/>
 				</p:column>
 			</p:dataTable>
 
-			<p:dataTable id="absentStudents" var="aStudent" widgetVar="aStudentsTable"
-						 value="#{lessonBean.absentStudents}"
-						 sortBy="#{aStudent.fullName}" filteredValue="#{lessonBean.filteredAbsentStudents}"
-						 scrollable="true" resizableColumns="true" liveResize="true"
-						 selection="#{lessonBean.selectedAbsentStudents}" rowKey="#{aStudent.id}">
+			<p:dataTable id="absentStudents"
+						 var="aStudent"
+						 widgetVar="aStudentsTable"
+						 value="#{lessonBean.absentStudentsLazyModel}"
+						 sortBy="#{aStudent.name}"
+						 resizableColumns="true"
+						 selection="#{lessonBean.selectedAbsentStudents}"
+						 rowKey="#{aStudent.id}"
+						 paginator="true"
+						 rows="10"
+						 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						 rowsPerPageTemplate="5,10,15"
+						 paginatorPosition="bottom"
+						 lazy="true">
 				<p:ajax event="rowSelectCheckbox" update="addAbsentStudentsBtn"/>
 				<p:ajax event="rowUnselectCheckbox" update="addAbsentStudentsBtn"/>
-				<p:ajax event="toggleSelect" update="addAbsentStudentsBtn"/>
+				<p:ajax event="toggleSelect" update="addAbsentStudentsBtn"
+						listener="#{lessonBean.onAbsentStudentsSelect}"/>
 
-				<p:ajax event="rowSelect" listener="#{lessonBean.onStudentRowSelect}" update=":lessonForm:lastVisitInfo"/>
+				<p:ajax event="rowSelect" listener="#{lessonBean.onStudentRowSelect}"
+						update=":lessonForm:lastVisitInfo"/>
 
 				<p:column selectionMode="multiple" styleClass="w16px center"/>
 
@@ -186,26 +208,24 @@
 							update=":lessonForm:lessonTables :lessonForm:lastVisitInfo :lessonForm:attendanceInfo"
 							icon="fa fa-fw fa-angle-left" title="Add"
 							styleClass="w25px"
-							actionListener="#{lessonBean.addStudent(aStudent)}"/>
+							actionListener="#{lessonBean.addLessonStudent(aStudent)}"/>
 				</p:column>
 
-				<p:column sortBy="#{aStudent.fullName}" filterBy="#{aStudent.fullName}"
-						  filterMatchMode="startsWith">
-					<h:outputText value="#{aStudent.fullName}"/>
+				<p:column sortBy="#{aStudent.name}"
+						  filterBy="#{aStudent.name}"
+						  filterMatchMode="startsWith"
+						  styleClass="bold">
+					<h:outputText value="#{aStudent.name}"/>
 				</p:column>
 
-				<p:column headerText="#{msg['lecture']}" styleClass="center w30px">
-					<h:outputText value="#{lessonBean.getSkipCount('lecture', aStudent)}"/>
+				<p:column headerText="#{msg['total.skip']}"
+						  styleClass="center w30px bold"
+						  sortBy="#{aStudent.totalSkip}">
+					<h:outputText value="#{aStudent.totalSkip}"/>
 				</p:column>
-				<p:column headerText="#{msg['practical']}" styleClass="center w40px">
-					<h:outputText value="#{lessonBean.getSkipCount('practical', aStudent)}"/>
-				</p:column>
-				<p:column headerText="#{msg['lab']}" styleClass="center w40px">
-					<h:outputText value="#{lessonBean.getSkipCount('lab', aStudent)}"/>
-				</p:column>
-				<p:column headerText="#{msg['total.skip']}" styleClass="center w30px"
-						  sortBy="#{lessonBean.getSkipCount('total.skip', aStudent)}">
-					<h:outputText value="#{lessonBean.getSkipCount('total.skip', aStudent)}"/>
+				<p:column headerText="#{msg['lecture']}/#{msg['practical']}/#{msg['lab']}"
+						  styleClass="center w70px">
+					<h:outputText value="#{aStudent.skips}"/>
 				</p:column>
 
 			</p:dataTable>

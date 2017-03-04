@@ -174,10 +174,12 @@ public class EntityDAO {
 		Session session = DBSessionFactory.getSession();
 
 		try {
+			System.out.println("Start loading [ " + entityType + " ] from database.");
 			return session.createQuery("from " + entityType.getSimpleName()).list();
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 		} finally {
+			System.out.println("End loading [ " + entityType + " ] from database.");
 			session.close();
 		}
 		return null;

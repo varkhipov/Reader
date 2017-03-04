@@ -43,4 +43,21 @@ public class StudentDAO extends EntityDAO {
 		return null;
 	}
 
+	public List<SkipInfo> getStudentSkipInfo(List<Integer> studentId, int streamId) {
+		Session session = DBSessionFactory.getSession();
+		try {
+			Query query = session.createNamedQuery("StudentSkipInfoQuery", SkipInfo.class);
+			query.setParameterList("studentId", studentId);
+			query.setParameter("streamId", streamId);
+			return query.getResultList();
+		} catch (PersistenceException e) {
+			System.err.println(e.getLocalizedMessage());
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return null;
+	}
+
 }
