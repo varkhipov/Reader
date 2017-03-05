@@ -34,9 +34,7 @@
 			</p:panel>
 			<p:panel styleClass="right">
 				<p:panelGrid columns="1" styleClass="inline">
-					<p:panelGrid id="lessonButtons" columns="5" styleClass="noBorder lessonButtons inline">
-
-
+					<p:panel id="lessonButtons" styleClass="lesson-buttons">
 						<p:commandButton title="#{msg['btn.startRecord']}" icon="fa fa-fw fa-play"
 										 update=":lessonForm:lessonButtons"
 										 actionListener="#{lessonBean.startRecord}"
@@ -82,7 +80,7 @@
 										 update=":menuForm :lessonForm:lessonButtons"
 										 actionListener="#{menuBean.showMenu}"
 										 rendered="#{not menuBean.showMenu}"/>
-					</p:panelGrid>
+					</p:panel>
 					<p:panelGrid columns="2" styleClass="lesson-text left">
 						<p:panel id="attendanceInfo">
 							<p:outputLabel value="#{msg['lesson.students.all']} - #{lessonBean.lessonStudents.size()}"/>

@@ -163,10 +163,6 @@ body {
 	padding-left: 0;
 }
 
-.lessonButtons {
-	margin-left: 5%;
-}
-
 /*.visitInfo,*/
 /*.visitInfo .ui-panel,*/
 /*.visitInfo .ui-panel-content,*/
@@ -221,6 +217,10 @@ body {
 
 .visit-info td {
 	vertical-align: middle;
+}
+
+.lesson-buttons button {
+	margin-right: 10px;
 }
 
 /*
