@@ -11,6 +11,7 @@
 }
 
 /* Width */
+.w5px {width: 5px;}
 .w16px {
 	width: 16px;
 }
@@ -30,6 +31,9 @@
 	width: 70px;
 }
 
+.w90px {width: 90px;}
+.w300px {width: 300px;}
+
 /* Align */
 .center {
 	text-align: center;
@@ -45,8 +49,10 @@
 .inline {
 	display: inline;
 }
+.block {display: block;}
 
 /* Font Size */
+#wrapper .font-size-10pt {font-size: 10pt;}
 #wrapper .font-size-20pt {font-size: 20pt;}
 
 /* Font Weight */
@@ -85,81 +91,80 @@
     Growl (Notifications)
 */
 div.ui-growl {
-    width: 30%;
+	width: 30%;
 }
 
 .ui-growl .ui-growl-message {
-    width: 85%;
+	width: 85%;
 }
 
 body {
-    margin-top: 0;
+	margin-top: 0;
 }
 
 .fa-small {
-    font-size: 75%;
-    padding: 2px;
+	font-size: 75%;
+	padding: 2px;
 }
 
 .connected span {
-    color: green;
-    font-weight: bold;
+	color: green;
+	font-weight: bold;
 }
 
 .disconnected span {
-    color: red;
-    font-weight: bold;
+	color: red;
+	font-weight: bold;
 }
 
 .options {
-    width:32px;
-    text-align: center;
+	width: 32px;
+	text-align: center;
 }
 
 .groupOptions {
-    width: 15%;
-    text-align: center;
+	width: 15%;
+	text-align: center;
 }
 
 .ui-panel-collapsed-h {
-    position: absolute;
-    z-index: 5000;
+	position: absolute;
+	z-index: 5000;
 }
 
 .studentDetail {
-    max-height: 90%;
+	max-height: 90%;
 }
 
 .groupStudentsDialog {
-    width: 90%;
-    height: 90%;
+	width: 90%;
+	height: 90%;
 }
 
 .v-align-top .ui-panelgrid-cell {
-    vertical-align: top;
+	vertical-align: top;
 }
 
 .noBorder {
-    border: none;
+	border: none;
 }
 
 .noBorder > .ui-datatable {
-    margin-top: 0;
-    margin-bottom: 5%;
+	margin-top: 0;
+	margin-bottom: 5%;
 }
 
 .noBorder .ui-widget-content {
-    border: none;
+	border: none;
 }
 
 .noBorder .ui-widget-content .ui-panelgrid-cell {
-    border: none;
-    padding-left: 0;
+	border: none;
+	padding-left: 0;
 }
 
-
 .lessonButtons {
-    margin-left: 5%;
+	margin-left: 5%;
 }
 
 /*.visitInfo,*/
@@ -167,27 +172,27 @@ body {
 /*.visitInfo .ui-panel-content,*/
 /*.visitInfo .ui-panel-content .ui-widget-content,*/
 /*.visitInfo div.ui-panel-content{*/
-    /*padding-left: 0px;*/
+/*padding-left: 0px;*/
 /*}*/
-
 
 /* Edit form */
 .edit-form .edit-panel .value > div,
 .edit-form .edit-panel .value input,
 .edit-form .edit-panel .value textarea {
-    width: 100%
+	width: 100%
 }
+
 .edit-form .edit-panel .value {
-    padding-right: 3rem;
+	padding-right: 3rem;
 }
 
 /*Lesson Form */
 .lesson-info {
-    width: 100%;
+	width: 100%;
 }
 
 .lesson-info td {
-    vertical-align: top;
+	vertical-align: top;
 }
 
 .lesson-info label {
@@ -195,9 +200,9 @@ body {
 }
 
 .lesson-info .visit-info .visit-label {
-    font-size: 30pt;
-    text-transform: uppercase;
-    font-weight: bold;
+	font-size: 30pt;
+	text-transform: uppercase;
+	font-weight: bold;
 }
 
 .lesson-info .visit-info label {
@@ -215,28 +220,28 @@ body {
 }
 
 .visit-info td {
-    vertical-align: middle;
+	vertical-align: middle;
 }
 
 /*
 	transparent icon button
  */
 .lesson-tables .transparent-button th,
-.lesson-tables .transparent-button td{
+.lesson-tables .transparent-button td {
 	padding-left: 0;
 }
 
-.lesson-tables .transparent-button button{
-    background-color: rgba(0, 0, 0, 0);
-    border: 0;
+.lesson-tables .transparent-button button {
+	background-color: rgba(0, 0, 0, 0);
+	border: 0;
 	width: 20px;
 }
 
 .lesson-tables .transparent-button .ui-button-text {
-    padding: 0;
+	padding: 0;
 }
 
-.lesson-tables .transparent-button .ui-icon{
+.lesson-tables .transparent-button .ui-icon {
 	width: 15px;
 }
 
@@ -247,7 +252,7 @@ body {
 .lesson-tables .ui-datatable tbody td,
 .lesson-tables .ui-datatable tfoot td,
 .lesson-tables .ui-datatable tfoot th {
-    border-width: 0;
+	border-width: 0;
 	padding: 2px 5px;
 }
 
@@ -285,4 +290,30 @@ body {
 .image img {
 	max-width: 200px;
 	height: auto;
+}
+
+/* Lesson Mode table */
+.skip {
+	background-color: rgba(255, 0, 0, 0.5);
+}
+
+.ui-datatable-scrollable-body {
+	height: 80vh;
+}
+
+.ui-datatable-scrollable-container .ui-datatable-scrollable-body,
+.ui-datatable-scrollable-container .ui-datatable-scrollable-header {
+	width: 70vw;
+}
+
+.lesson-mode-table tbody > tr {
+	height: 35px;
+}
+
+.ui-datatable-scrollable-container .ui-datatable-scrollable-header thead tr th:last-child {
+	border-right-width: 16px;
+ }
+
+.ui-datatable-frozen-container .ui-datatable-scrollable-body tbody tr:last-child {
+	border-bottom-width: 20px;
 }

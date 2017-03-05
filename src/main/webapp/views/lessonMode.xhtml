@@ -5,41 +5,43 @@
 				xmlns:p="http://primefaces.org/ui"
 >
 	<h:form id="lessonsForm">
-		<p:dataTable var="student" value="#{lessonModeBean.lessonStudents}"
+		<p:dataTable var="student"
+					 value="#{lessonModeBean.lessonStudents}"
 					 sortBy="#{student.fullName}"
 					 filteredValue="#{lessonModeBean.filteredLessonStudents}"
-					 scrollable="true" frozenColumns="1"
-
+					 styleClass="lesson-mode-table"
+					 scrollable="true"
+					 frozenColumns="1"
 		>
 			<f:facet name="header">
+				<p:commandButton title="#{msg['btn.backToLessons']}"
+								 icon="fa fa-fw fa-arrow-left"
+								 actionListener="#{lessonModeBean.backToLesson}"
+								 update="@([id$=views])"/>
 				#{msg['lessons']}
 			</f:facet>
-			<p:columnGroup type="header">
-				<p:row>
-					<p:column rowspan="3" headerText="Students" />
-					<p:column colspan="#{lessonModeBean.stream.lessons.size}" headerText="Lessons" />
-				</p:row>
-				<p:row>
-					<ui:repeat value="#{lessonModeBean.stream.lessons}" var="lesson">
-						<p:column headerText="#{lesson.classes[0].date}" />
-					</ui:repeat>
-				</p:row>
-				<p:row>
-					<ui:repeat value="#{lessonModeBean.stream.lessons}" var="lesson">
-						<p:column headerText="#{lesson.type.name}" />
-					</ui:repeat>
-				</p:row>
-			</p:columnGroup>
 
-			<p:column>
+			<p:column sortBy="#{student.fullName}"
+					  filterBy="#{student.fullName}"
+					  filterMatchMode="startsWith"
+					  styleClass="w300px">
 				<h:outputText value="#{student.fullName}"/>
 			</p:column>
 
-			<p:columns value="#{lessonModeBean.stream.lessons}" var="lesson" columnIndexVar="colIndex"
-					   >
-				<h:outputText value="#{student.studentClasses[lesson.id].id}"/>
+			<p:columns value="#{lessonModeBean.stream.lessons}"
+					   var="lesson"
+					   columnIndexVar="colIndex"
+					   styleClass="w90px
+					   #{student.studentClasses[lesson.id].registered eq false ? 'skip' : ''}"
+			>
+				<f:facet name="header">
+					<p:outputLabel value="#{lesson.classes[0] ne null ? lesson.classes[0].date : ''}"
+								   converter="localDateConverter"/>
+					<p:outputLabel styleClass="block font-size-10pt"
+								   value="#{lesson.type ne null ? lesson.type.name : ''}"/>
+				</f:facet>
+				<h:outputText value="#{student.studentClasses[lesson.id].mark}"/>
 			</p:columns>
-
 
 		</p:dataTable>
 

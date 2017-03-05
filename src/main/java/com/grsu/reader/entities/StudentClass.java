@@ -62,7 +62,7 @@ public class StudentClass implements AssistantEntity {
 		this.id = id;
 	}
 
-	public Boolean isRegistered() {
+	public Boolean getRegistered() {
 		return Boolean.TRUE.equals(registered);
 	}
 

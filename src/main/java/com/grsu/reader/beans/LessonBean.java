@@ -163,7 +163,7 @@ public class LessonBean implements Serializable {
 			presentStudents = new ArrayList<>();
 			absentStudents = new ArrayList<>();
 			for (StudentClass studentClass : studentClasses) {
-				if (studentClass.isRegistered()) {
+				if (studentClass.getRegistered()) {
 					presentStudents.add(studentClass.getStudent());
 				} else {
 					absentStudents.add(studentClass.getStudent());

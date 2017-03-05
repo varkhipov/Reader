@@ -38,12 +38,6 @@
 
 
 						<p:commandButton title="#{msg['btn.startRecord']}" icon="fa fa-fw fa-play"
-										 update="@([id$=views])"
-										 actionListener="#{menuBean.changeView('lessonMode')}">
-							<f:setPropertyActionListener value="#{lessonBean.selectedLesson.stream}"
-														 target="#{lessonModeBean.stream}"/>
-						</p:commandButton>
-						<p:commandButton title="#{msg['btn.startRecord']}" icon="fa fa-fw fa-play"
 										 update=":lessonForm:lessonButtons"
 										 actionListener="#{lessonBean.startRecord}"
 										 rendered="#{not lessonBean.recordStarted}"/>
@@ -65,6 +59,17 @@
 										 actionListener="#{lessonBean.initAllStudents}"
 										 oncomplete="PF('addStudentsDialog').show()"
 										 update=":addStudentsForm:studentDetail"/>
+
+						<p:commandButton title="#{msg['btn.openLessonMode']}"
+										 icon="fa fa-fw fa-list"
+										 update="@([id$=wrapper])"
+										 actionListener="#{menuBean.changeView('lessonMode')}">
+							<f:setPropertyActionListener value="#{lessonBean.selectedLesson.stream}"
+														 target="#{lessonModeBean.stream}"/>
+							<f:setPropertyActionListener value="#{lessonBean.selectedLesson}"
+														 target="#{lessonModeBean.lesson}"/>
+							<f:setPropertyActionListener value="#{false}" target="#{menuBean.showMenu}"/>
+						</p:commandButton>
 
 						<p:commandButton title="#{msg['btn.backToLessons']}" icon="fa fa-fw fa-arrow-left"
 										 actionListener="#{lessonBean.returnToLessons}" update="@([id$=wrapper])"/>
