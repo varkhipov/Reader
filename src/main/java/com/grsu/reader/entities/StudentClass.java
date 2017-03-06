@@ -6,6 +6,7 @@ import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.time.LocalTime;
+import java.util.List;
 
 /**
  * Created by pavel on 2/10/17.
@@ -52,6 +53,9 @@ public class StudentClass implements AssistantEntity {
 	@Basic
 	@Column(name = "class_id", insertable = false, updatable = false)
 	private Integer classId;
+
+	@OneToMany(mappedBy = "studentClass", fetch = FetchType.EAGER)
+	private List<Note> notes;
 
 	/* GETTERS & SETTERS */
 	public Integer getId() {
@@ -126,6 +130,14 @@ public class StudentClass implements AssistantEntity {
 
 	public void setClassId(Integer classId) {
 		this.classId = classId;
+	}
+
+	public List<Note> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(List<Note> notes) {
+		this.notes = notes;
 	}
 
 	@Override
