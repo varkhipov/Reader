@@ -41,6 +41,7 @@
 								   value="#{lesson.type ne null ? lesson.type.name : ''}"/>
 				</f:facet>
 				<h:outputText value="#{student.studentClasses[lesson.id].mark}"/>
+				<h:outputText value="#{student.studentClasses[lesson.id].notes[0].description}"/>
 			</p:columns>
 
 		</p:dataTable>

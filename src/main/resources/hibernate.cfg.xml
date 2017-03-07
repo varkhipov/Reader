@@ -18,6 +18,7 @@
 		<mapping class="com.grsu.reader.entities.Stream"/>
 		<mapping class="com.grsu.reader.entities.Student"/>
 		<mapping class="com.grsu.reader.entities.StudentClass"/>
+		<mapping class="com.grsu.reader.entities.Note"/>
 		<!-- <property name="connection.username"/> -->
 		<!-- <property name="connection.password"/> -->
 
