@@ -108,6 +108,9 @@ public class Student implements AssistantEntity, Person {
 	@OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
 	private Map<Integer, StudentClass> studentClasses;
 
+	@OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
+	private List<Note> notes;
+
 	public Student() {
 	}
 
@@ -240,6 +243,14 @@ public class Student implements AssistantEntity, Person {
 
 	public void setStudentClasses(Map<Integer, StudentClass> studentClasses) {
 		this.studentClasses = studentClasses;
+	}
+
+	public List<Note> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(List<Note> notes) {
+		this.notes = notes;
 	}
 
 	@Override

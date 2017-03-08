@@ -49,7 +49,7 @@
 .inline {
 	display: inline;
 }
-.block {display: block;}
+#wrapper .block {display: block;}
 
 /* Font Size */
 #wrapper .font-size-10pt {font-size: 10pt;}
@@ -66,6 +66,9 @@
 
 /* Text Transform */
 .lowercase {text-transform: lowercase;}
+
+/* Float */
+.float-right {float: right;}
 
 /*
 	Custom styles
@@ -295,6 +298,39 @@ body {
 /* Lesson Mode table */
 .skip {
 	background-color: rgba(255, 0, 0, 0.5);
+}
+
+.no-class {
+	background-color: rgba(211, 211, 211, 0.5);
+}
+.lesson-mode-table a {
+	text-decoration: none;
+}
+
+.lesson-mode-table .class-info,
+.lesson-mode-table .student-info {
+	display: list-item;
+	height: 34px;
+}
+
+.lesson-mode-table tbody.ui-datatable-data td{
+	padding: 0;
+}
+
+.lesson-mode-table .student-info  {
+	padding-left: 10px;
+}
+
+.lesson-mode-table .lesson-info {
+	display: block;
+	position: relative;
+	height: 54px;
+}
+
+.lesson-mode-table .notes-info {
+	position: absolute;
+	top: 0;
+	right: 0;
 }
 
 .ui-datatable-scrollable-body {

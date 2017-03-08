@@ -1,6 +1,8 @@
 package com.grsu.reader.entities;
 
 import com.grsu.reader.converters.db.LocalDateTimeAttributeConverter;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.WhereJoinTable;
 
 import javax.persistence.*;
@@ -10,7 +12,7 @@ import java.time.LocalDateTime;
  * Created by pavel on 3/6/17.
  */
 @Entity
-public class Note {
+public class Note implements AssistantEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -29,11 +31,26 @@ public class Note {
 	@Column(name = "create_date")
 	private LocalDateTime createDate;
 
+	@Column(name = "entity_id")
+	private Integer entityId;
+
+	@NotFound(action= NotFoundAction.IGNORE)
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "entity_id", referencedColumnName = "id")
+	@JoinColumn(name = "entity_id", referencedColumnName = "id", updatable = false, insertable = false)
 	@WhereJoinTable(clause = "type = 'STUDENT_CLASS'")
 	private StudentClass studentClass;
 
+	@NotFound(action= NotFoundAction.IGNORE)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "entity_id", referencedColumnName = "id", updatable = false, insertable = false)
+	@WhereJoinTable(clause = "type = 'STUDENT'")
+	private Student student;
+
+	@NotFound(action= NotFoundAction.IGNORE)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "entity_id", referencedColumnName = "id", updatable = false, insertable = false)
+	@WhereJoinTable(clause = "type = 'LESSON'")
+	private Lesson lesson;
 
 	/* GETTERS & SETTERS */
 	public Integer getId() {
@@ -68,12 +85,36 @@ public class Note {
 		this.createDate = createDate;
 	}
 
+	public Integer getEntityId() {
+		return entityId;
+	}
+
+	public void setEntityId(Integer entityId) {
+		this.entityId = entityId;
+	}
+
 	public StudentClass getStudentClass() {
 		return studentClass;
 	}
 
 	public void setStudentClass(StudentClass studentClass) {
 		this.studentClass = studentClass;
+	}
+
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+	public Lesson getLesson() {
+		return lesson;
+	}
+
+	public void setLesson(Lesson lesson) {
+		this.lesson = lesson;
 	}
 
 	@Override
@@ -98,5 +139,16 @@ public class Note {
 		result = 31 * result + (description != null ? description.hashCode() : 0);
 		result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "Note{" +
+				"id=" + id +
+				", type='" + type + '\'' +
+				", description='" + description + '\'' +
+				", createDate=" + createDate +
+				", entityId=" + entityId +
+				'}';
 	}
 }

@@ -35,7 +35,6 @@ public class SessionBean implements Serializable {
 	private List<Group> groups;
 	private List<Student> students;
 	private List<Lesson> lessons;
-	private List<Class> classes;
 	private List<LessonType> lessonTypes;
 
 	@PostConstruct
@@ -52,7 +51,6 @@ public class SessionBean implements Serializable {
 
 	public void initData() {
 		updateGroupsFromCSV();
-		updateEntities();
 	}
 
 	public List<Group> updateGroupsFromCSV() {
@@ -60,15 +58,14 @@ public class SessionBean implements Serializable {
 	}
 
 	public void updateEntities() {
-		updateSchedules();
-		updateDisciplines();
-		updateDepartments();
-		updateStreams();
-		updateGroups();
-		updateStudents();
-		updateLessons();
-		updateClasses();
-		updateLessonTypes();
+		schedules = null;
+		disciplines = null;
+		departments = null;
+		streams = null;
+		groups = null;
+		students = null;
+		lessons = null;
+		lessonTypes = null;
 	}
 
 	public void updateSchedules() {
@@ -99,10 +96,6 @@ public class SessionBean implements Serializable {
 		lessons = new EntityDAO().getAll(Lesson.class);
 	}
 
-	public void updateClasses() {
-		classes = new EntityDAO().getAll(Class.class);
-	}
-
 	public void updateLessonTypes() {
 		lessonTypes = new EntityDAO().getAll(LessonType.class);
 	}
@@ -129,6 +122,9 @@ public class SessionBean implements Serializable {
 	}
 
 	public List<Schedule> getSchedules() {
+		if (schedules == null) {
+			updateSchedules();
+		}
 		return schedules;
 	}
 
@@ -137,6 +133,9 @@ public class SessionBean implements Serializable {
 	}
 
 	public List<Discipline> getDisciplines() {
+		if (disciplines == null) {
+			updateDisciplines();
+		}
 		return disciplines;
 	}
 
@@ -145,6 +144,9 @@ public class SessionBean implements Serializable {
 	}
 
 	public List<Department> getDepartments() {
+		if (departments == null) {
+			updateDepartments();
+		}
 		return departments;
 	}
 
@@ -153,6 +155,9 @@ public class SessionBean implements Serializable {
 	}
 
 	public List<Stream> getStreams() {
+		if (streams == null) {
+			updateStreams();
+		}
 		return streams;
 	}
 
@@ -161,6 +166,9 @@ public class SessionBean implements Serializable {
 	}
 
 	public List<Group> getGroups() {
+		if (groups == null) {
+			updateGroups();
+		}
 		return groups;
 	}
 
@@ -169,6 +177,9 @@ public class SessionBean implements Serializable {
 	}
 
 	public List<Student> getStudents() {
+		if (students == null) {
+			updateStudents();
+		}
 		return students;
 	}
 
@@ -177,6 +188,9 @@ public class SessionBean implements Serializable {
 	}
 
 	public List<Lesson> getLessons() {
+		if (lessons == null) {
+			updateLessons();
+		}
 		return lessons;
 	}
 
@@ -184,15 +198,10 @@ public class SessionBean implements Serializable {
 		this.lessons = lessons;
 	}
 
-	public List<Class> getClasses() {
-		return classes;
-	}
-
-	public void setClasses(List<Class> classes) {
-		this.classes = classes;
-	}
-
 	public List<LessonType> getLessonTypes() {
+		if (lessonTypes == null) {
+			updateLessonTypes();
+		}
 		return lessonTypes;
 	}
 

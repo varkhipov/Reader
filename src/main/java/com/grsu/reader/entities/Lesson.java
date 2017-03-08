@@ -52,6 +52,8 @@ public class Lesson implements AssistantEntity {
 	@JoinColumn(name = "group_id", referencedColumnName = "id")
 	private Group group;
 
+	@OneToMany(mappedBy = "lesson", fetch = FetchType.EAGER)
+	private List<Note> notes;
 
 	public Lesson() {
 	}
@@ -130,6 +132,14 @@ public class Lesson implements AssistantEntity {
 
 	public void setGroup(Group group) {
 		this.group = group;
+	}
+
+	public List<Note> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(List<Note> notes) {
+		this.notes = notes;
 	}
 
 	@Override
