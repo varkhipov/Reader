@@ -30,9 +30,10 @@
                 <h:outputText value="#{lesson.group ne null ? lesson.group.name : lesson.stream.groupNames}" escape="false"/>
             </p:column>
             <p:column styleClass="groupOptions">
-                <p:commandButton actionListener="#{menuBean.changeView('lesson')}" update="@([id$=views])"
+                <p:commandButton actionListener="#{menuBean.changeView('lesson')}" update="@([id$=wrapper])"
                                  icon="fa fa-fw fa-search" title="#{msg['option.view']}">
                     <f:setPropertyActionListener value="#{lesson}" target="#{lessonBean.selectedLesson}"/>
+                    <f:setPropertyActionListener value="#{false}" target="#{menuBean.showMenu}"/>
                 </p:commandButton>
                 <p:commandButton actionListener="#{lessonBean.removeLesson(lesson)}" update=":lessonsForm"
                                  icon="fa fa-fw fa-minus" title="#{msg['option.remove']}"

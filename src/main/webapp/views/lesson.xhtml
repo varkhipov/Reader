@@ -82,7 +82,7 @@
 										 rendered="#{not menuBean.showMenu}"/>
 					</p:panel>
 					<p:panelGrid columns="2" styleClass="lesson-text left">
-						<p:panel id="attendanceInfo">
+						<p:panel id="attendanceInfo" styleClass="bold">
 							<p:outputLabel value="#{msg['lesson.students.all']} - #{lessonBean.lessonStudents.size()}"/>
 							<p:outputLabel
 									value="#{msg['lesson.students.present']} - #{lessonBean.getPresentStudentsSize()}"/>
@@ -105,7 +105,7 @@
 			</p:panel>
 		</p:panelGrid>
 
-		<p:panelGrid id="lessonTables" columns="2" styleClass="noBorder v-align-top lesson-tables">
+		<p:panelGrid id="lessonTables" columns="3" styleClass="noBorder v-align-top lesson-tables" columnClasses=",,w100pc">
 			<p:dataTable id="presentStudents"
 						 var="pStudent"
 						 widgetVar="pStudentsTable"
@@ -116,9 +116,9 @@
 						 selection="#{lessonBean.selectedPresentStudents}"
 						 rowKey="#{pStudent.id}"
 						 paginator="true"
-						 rows="10"
+						 rows="15"
 						 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-						 rowsPerPageTemplate="5,10,15"
+						 rowsPerPageTemplate="10,11,12,13,14,15,16,17,18,19,20"
 						 paginatorPosition="bottom"
 						 lazy="true">
 
@@ -150,7 +150,7 @@
 				<p:column sortBy="#{pStudent.name}"
 						  filterBy="#{pStudent.name}"
 						  filterMatchMode="startsWith"
-						  styleClass="bold">
+						  styleClass="bold w300px">
 					<h:outputText value="#{pStudent.name}"/>
 				</p:column>
 
@@ -183,9 +183,9 @@
 						 selection="#{lessonBean.selectedAbsentStudents}"
 						 rowKey="#{aStudent.id}"
 						 paginator="true"
-						 rows="10"
+						 rows="15"
 						 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-						 rowsPerPageTemplate="5,10,15"
+						 rowsPerPageTemplate="10,11,12,13,14,15,16,17,18,19,20"
 						 paginatorPosition="bottom"
 						 lazy="true">
 				<p:ajax event="rowSelectCheckbox" update="addAbsentStudentsBtn"/>
@@ -217,7 +217,7 @@
 				<p:column sortBy="#{aStudent.name}"
 						  filterBy="#{aStudent.name}"
 						  filterMatchMode="startsWith"
-						  styleClass="bold">
+						  styleClass="bold  w300px">
 					<h:outputText value="#{aStudent.name}"/>
 				</p:column>
 
@@ -232,6 +232,10 @@
 				</p:column>
 
 			</p:dataTable>
+
+			<p:panel styleClass="">
+
+			</p:panel>
 		</p:panelGrid>
 	</h:form>
 </ui:composition>
