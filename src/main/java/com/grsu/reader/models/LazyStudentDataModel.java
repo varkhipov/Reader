@@ -46,7 +46,7 @@ public class LazyStudentDataModel extends LazyDataModel<LessonStudentModel> {
 						Object filterValue = filters.get(filterProperty);
 						String fieldValue = String.valueOf(student.getClass().getField(filterProperty).get(student));
 
-						if (filterValue == null || fieldValue.startsWith(filterValue.toString())) {
+						if (filterValue == null || fieldValue.toLowerCase().startsWith(filterValue.toString().toLowerCase())) {
 							match = true;
 						} else {
 							match = false;

@@ -27,11 +27,13 @@
 .w40px {
 	width: 40px;
 }
+.w55px {width: 55px;}
 .w70px {
 	width: 70px;
 }
 
 .w90px {width: 90px;}
+.w200px {width: 200px;}
 .w300px {width: 300px;}
 
 .w100pc {width: 100%;}

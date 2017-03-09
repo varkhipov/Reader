@@ -34,6 +34,7 @@
                                  icon="fa fa-fw fa-search" title="#{msg['option.view']}">
                     <f:setPropertyActionListener value="#{lesson}" target="#{lessonBean.selectedLesson}"/>
                     <f:setPropertyActionListener value="#{false}" target="#{menuBean.showMenu}"/>
+                    <f:actionListener binding="#{lessonBean.startRecord()}" />
                 </p:commandButton>
                 <p:commandButton actionListener="#{lessonBean.removeLesson(lesson)}" update=":lessonsForm"
                                  icon="fa fa-fw fa-minus" title="#{msg['option.remove']}"
