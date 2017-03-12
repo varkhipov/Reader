@@ -3,11 +3,11 @@
 				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 				xmlns:f="http://xmlns.jcp.org/jsf/core"
 				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
 >
 	<h:form id="lessonForm">
 		<p:socket channel="/register">
-			<p:ajax event="message" update="lessonInfo lessonTables"
-					oncomplete="PF('pStudentsTable').clearFilters(); PF('aStudentsTable').clearFilters();"/>
+			<p:ajax event="message" update="lastVisitInfo attendanceInfo presentStudents absentStudents"/>
 		</p:socket>
 
 		<p:panelGrid id="lessonInfo" columns="2" styleClass="noBorder lesson-info">
@@ -27,7 +27,7 @@
 						<p:outputLabel id="visitGroup" escape="false"
 									   styleClass="font-size-20pt margin-top-20px margin-bottom-20px"
 									   value="#{lessonBean.processedStudent.groupNames}"/>
-						<p:outputLabel styleClass="lowercase"
+						<p:outputLabel styleClass="lowercase" escape="false"
 									   value="#{lessonBean.getStudentSkip(lessonBean.processedStudent)}"/>
 					</p:panel>
 				</p:panelGrid>
@@ -53,6 +53,13 @@
 										 actionListener="#{lessonBean.disableSound}"
 										 rendered="#{lessonBean.recordStarted and lessonBean.soundEnabled}"/>
 
+						<p:commandButton title="#{msg[lessonBean.camera ? 'btn.camera.turnOff' : 'btn.camera.turnOn']}"
+										 styleClass="#{lessonBean.camera ? 'red' : ''}"
+										 icon="fa fa-fw fa-video-camera"
+										 update=":lessonForm:lessonButtons :lessonForm:additions"
+										 actionListener="#{lessonBean.setCamera(!lessonBean.camera)}"
+						/>
+
 						<p:commandButton title="#{msg['btn.addVisit']}" icon="fa fa-fw fa-plus"
 										 actionListener="#{lessonBean.initAllStudents}"
 										 oncomplete="PF('addStudentsDialog').show()"
@@ -69,8 +76,12 @@
 							<f:setPropertyActionListener value="#{false}" target="#{menuBean.showMenu}"/>
 						</p:commandButton>
 
-						<p:commandButton title="#{msg['btn.backToLessons']}" icon="fa fa-fw fa-arrow-left"
-										 actionListener="#{lessonBean.returnToLessons}" update="@([id$=wrapper])"/>
+						<p:commandButton title="#{msg['btn.backToLessons']}"
+										 icon="fa fa-fw fa-arrow-left"
+										 actionListener="#{lessonBean.returnToLessons}"
+										 update="@([id$=wrapper])">
+							<f:setPropertyActionListener value="#{true}" target="#{menuBean.showMenu}"/>
+						</p:commandButton>
 
 						<p:commandButton title="#{msg['btn.hide.menu']}" icon="fa fa-fw fa-align-center"
 										 update=":menuForm :lessonForm:lessonButtons"
@@ -82,15 +93,22 @@
 										 rendered="#{not menuBean.showMenu}"/>
 					</p:panel>
 					<p:panelGrid columns="2" styleClass="lesson-text left">
-						<p:panel id="attendanceInfo" styleClass="bold">
-							<p:outputLabel value="#{msg['lesson.students.all']} - #{lessonBean.lessonStudents.size()}"/>
-							<p:outputLabel
-									value="#{msg['lesson.students.present']} - #{lessonBean.getPresentStudentsSize()}"/>
-							<p:outputLabel
-									value="#{msg['lesson.students.absent']} - #{lessonBean.absentStudents.size()}"/>
-							<p:outputLabel rendered="#{lessonBean.getAdditionalStudentsSize() ne ''}"
-										   value="#{msg['lesson.students.additional']} - #{lessonBean.getAdditionalStudentsSize()}"/>
-						</p:panel>
+						<p:panelGrid columns="2" id="attendanceInfo" styleClass="bold">
+							<h:outputText value="#{msg['lesson.students.all']}"/>
+							<h:outputText value="#{lessonBean.lessonStudents.size()}"/>
+
+							<h:outputText value="#{msg['lesson.students.present']}"/>
+							<h:outputText
+									value="#{lessonBean.presentStudents.size() - lessonBean.additionalStudents.size()}"/>
+
+							<h:outputText value="#{msg['lesson.students.absent']}"/>
+							<h:outputText value="#{lessonBean.absentStudents.size()}"/>
+
+							<h:outputText rendered="#{lessonBean.additionalStudents.size() gt 0}"
+										  value="#{msg['lesson.students.additional']}"/>
+							<h:outputText rendered="#{lessonBean.additionalStudents.size() gt 0}"
+										  value="#{lessonBean.additionalStudents.size()}"/>
+						</p:panelGrid>
 						<p:panel>
 							<p:outputLabel value="#{lessonBean.selectedLesson.stream.name}"/>
 							<p:outputLabel rendered="#{lessonBean.selectedLesson.group ne null}"
@@ -105,7 +123,8 @@
 			</p:panel>
 		</p:panelGrid>
 
-		<p:panelGrid id="lessonTables" columns="3" styleClass="noBorder v-align-top lesson-tables" columnClasses=",,w100pc">
+		<p:panelGrid id="lessonTables" columns="3" styleClass="noBorder v-align-top lesson-tables"
+					 columnClasses=",,w100pc">
 			<p:dataTable id="presentStudents"
 						 var="pStudent"
 						 widgetVar="pStudentsTable"
@@ -135,22 +154,23 @@
 				<p:column styleClass="transparent-button w20px center">
 					<f:facet name="header">
 						<p:commandButton id="removePresentStudentsBtn"
-										 update=":lessonForm:lessonTables :lessonForm:attendanceInfo"
+										 update=":lessonForm:presentStudents :lessonForm:absentStudents :lessonForm:attendanceInfo"
 										 styleClass="w25px"
 										 icon="fa fa-fw fa-angle-double-right" title="Remove"
 										 actionListener="#{lessonBean.removePresentStudents}"
 										 disabled="#{lessonBean.selectedPresentStudents eq null or lessonBean.selectedPresentStudents.size() eq 0}"/>
 					</f:facet>
-					<p:commandButton update=":lessonForm:lessonTables :lessonForm:attendanceInfo"
-									 icon="fa fa-fw fa-angle-right" title="Remove"
-									 styleClass="w25px"
-									 actionListener="#{lessonBean.removeLessonStudent(pStudent)}"/>
+					<p:commandButton
+							update=":lessonForm:presentStudents :lessonForm:absentStudents :lessonForm:attendanceInfo"
+							icon="fa fa-fw fa-angle-right" title="Remove"
+							styleClass="w25px"
+							actionListener="#{lessonBean.removeLessonStudent(pStudent)}"/>
 				</p:column>
 
 				<p:column sortBy="#{pStudent.name}"
 						  filterBy="#{pStudent.name}"
 						  filterMatchMode="startsWith"
-						  styleClass="bold w200px">
+						  styleClass="bold w210px">
 					<h:outputText value="#{pStudent.name}"/>
 				</p:column>
 
@@ -159,7 +179,7 @@
 						  sortBy="#{pStudent.totalSkip}">
 					<h:outputText value="#{pStudent.totalSkip}"/>
 				</p:column>
-				<p:column headerText="#{msg['lecture']}/#{msg['practical']}/#{msg['lab']}"
+				<p:column headerText="#{msg['skip.header']}"
 						  styleClass="center w55px">
 					<h:outputText value="#{pStudent.skips}"/>
 				</p:column>
@@ -178,7 +198,8 @@
 						 var="aStudent"
 						 widgetVar="aStudentsTable"
 						 value="#{lessonBean.absentStudentsLazyModel}"
-						 sortBy="#{aStudent.name}"
+						 sortBy="#{aStudent.totalSkip}"
+						 sortOrder="descending"
 						 resizableColumns="true"
 						 selection="#{lessonBean.selectedAbsentStudents}"
 						 rowKey="#{aStudent.id}"
@@ -201,14 +222,14 @@
 				<p:column styleClass="transparent-button w20px center">
 					<f:facet name="header">
 						<p:commandButton id="addAbsentStudentsBtn"
-										 update=":lessonForm:lessonTables :lessonForm:lastVisitInfo :lessonForm:attendanceInfo"
+										 update=":lessonForm:presentStudents :lessonForm:absentStudents :lessonForm:lastVisitInfo :lessonForm:attendanceInfo"
 										 icon="fa fa-angle-double-left" title="Add"
 										 styleClass="w25px"
 										 actionListener="#{lessonBean.addAbsentStudents}"
 										 disabled="#{lessonBean.selectedAbsentStudents eq null or lessonBean.selectedAbsentStudents.size() eq 0}"/>
 					</f:facet>
 					<p:commandButton
-							update=":lessonForm:lessonTables :lessonForm:lastVisitInfo :lessonForm:attendanceInfo"
+							update=":lessonForm:presentStudents :lessonForm:absentStudents :lessonForm:lastVisitInfo :lessonForm:attendanceInfo"
 							icon="fa fa-fw fa-angle-left" title="Add"
 							styleClass="w25px"
 							actionListener="#{lessonBean.addLessonStudent(aStudent)}"/>
@@ -217,7 +238,7 @@
 				<p:column sortBy="#{aStudent.name}"
 						  filterBy="#{aStudent.name}"
 						  filterMatchMode="startsWith"
-						  styleClass="bold  w200px">
+						  styleClass="bold  w210px">
 					<h:outputText value="#{aStudent.name}"/>
 				</p:column>
 
@@ -226,15 +247,25 @@
 						  sortBy="#{aStudent.totalSkip}">
 					<h:outputText value="#{aStudent.totalSkip}"/>
 				</p:column>
-				<p:column headerText="#{msg['lecture']}/#{msg['practical']}/#{msg['lab']}"
+				<p:column headerText="#{msg['skip.header']}"
 						  styleClass="center w55px">
 					<h:outputText value="#{aStudent.skips}"/>
 				</p:column>
 
 			</p:dataTable>
 
-			<p:panel styleClass="">
-
+			<p:panel id="additions" styleClass="additions">
+				<pe:timer id="timer"
+						  widgetVar="timer"
+						  format="HH:mm:ss"
+						  timeout="#{lessonBean.timer}"
+						  listener="#{lessonBean.calculateTimer}"
+						  singleRun="false"
+						  update="@this"/>
+				<p:photoCam id="camera"
+							widgetVar="camera"
+							styleClass="camera"
+							rendered="#{lessonBean.camera}"/>
 			</p:panel>
 		</p:panelGrid>
 	</h:form>

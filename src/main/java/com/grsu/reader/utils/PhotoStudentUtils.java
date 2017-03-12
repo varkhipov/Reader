@@ -1,7 +1,7 @@
 package com.grsu.reader.utils;
 
 import com.grsu.reader.entities.Student;
-import com.grsu.reader.servers.StudentServer;
+import com.grsu.reader.services.StudentService;
 
 import java.io.File;
 import java.util.List;
@@ -21,13 +21,13 @@ public class PhotoStudentUtils {
 					System.err.println("Card uid or card id for " + student + " not set.");
 					continue;
 				}
-				String personnelNumber = StudentServer.getPersonnelNumber(student.getCardId());
+				String personnelNumber = StudentService.getPersonnelNumber(student.getCardId());
 				if (personnelNumber == null) {
 					System.err.println("Personnel Number for " + student + " not load.");
 					continue;
 				}
 				System.out.println("Start load photo for " + student);
-				if (StudentServer.storeImage(personnelNumber, student.getCardUid())) {
+				if (StudentService.storeImage(personnelNumber, student.getCardUid())) {
 					System.out.println("Photo load for " + student);
 				} else {
 					System.err.println("Photo not load for " + student);

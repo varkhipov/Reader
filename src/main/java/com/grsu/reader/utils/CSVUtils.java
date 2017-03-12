@@ -25,7 +25,6 @@ public class CSVUtils {
 	private static final char SEPARATOR = ';';
 
 	public static List<Group> updateGroupsFromCSV() {
-		EntityDAO entityDAO = new EntityDAO();
 		List<Group> parsedGroups = new ArrayList<>();
 
 		for (Group group : parseGroups()) {
@@ -36,7 +35,7 @@ public class CSVUtils {
 
 			if (group.getDepartment().getName() != null) {
 				Department department = null;
-				List<Department> departments = entityDAO.getAll(Department.class);
+				List<Department> departments = EntityDAO.getAll(Department.class);
 				for (Department d : departments) {
 					if (group.getDepartment().getName().equals(d.getName())) {
 						department = d;
@@ -46,7 +45,7 @@ public class CSVUtils {
 
 				if (department == null) {
 					department = group.getDepartment();
-					entityDAO.add(department);
+					EntityDAO.add(department);
 				}
 
 				group.setDepartment(department);
@@ -59,7 +58,7 @@ public class CSVUtils {
 				group = groupFromDB;
 			}
 			group.getStudents().clear();
-			entityDAO.save(group);
+			EntityDAO.save(group);
 			processStudents(group, students);
 			System.out.println("Group [ " + group.getName() + " ] processed.");
 
@@ -77,7 +76,7 @@ public class CSVUtils {
 			if (studentFromDB == null) {
 				student.setGroups(new ArrayList<>());
 				student.getGroups().add(group);
-				studentDAO.add(student);
+				EntityDAO.add(student);
 			} else {
 				studentFromDB.setLastName(student.getLastName());
 				studentFromDB.setFirstName(student.getFirstName());
@@ -85,7 +84,7 @@ public class CSVUtils {
 				studentFromDB.setCardId(student.getCardId());
 				student = studentFromDB;
 				student.getGroups().add(group);
-				studentDAO.update(student);
+				EntityDAO.update(student);
 			}
 		}
 	}

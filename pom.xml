@@ -24,6 +24,7 @@
 		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
 
 		<primefaces.version>6.0</primefaces.version>
+		<primefaces.extensions.version>6.0.0</primefaces.extensions.version>
 		<atmosphere.runtime.version>2.4.9</atmosphere.runtime.version>
 		<jsf.version>2.2.14</jsf.version>
 		<servlet.api.version>3.0-alpha-1</servlet.api.version>
@@ -44,6 +45,12 @@
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
 			<version>${primefaces.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.primefaces.extensions</groupId>
+			<artifactId>primefaces-extensions</artifactId>
+			<version>${primefaces.extensions.version}</version>
 		</dependency>
 
 		<dependency>

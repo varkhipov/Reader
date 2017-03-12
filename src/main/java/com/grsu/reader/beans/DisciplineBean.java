@@ -41,7 +41,7 @@ public class DisciplineBean implements Serializable {
 	}
 
 	public void save() {
-		new EntityDAO().save(selectedDiscipline);
+		EntityDAO.save(selectedDiscipline);
 		sessionBean.updateDisciplines();
 		update("views");
 	}
@@ -52,7 +52,7 @@ public class DisciplineBean implements Serializable {
 	}
 
 	public void delete() {
-		new EntityDAO().delete(selectedDiscipline);
+		EntityDAO.delete(selectedDiscipline);
 		sessionBean.updateDisciplines();
 		update("views");
 		exit();

@@ -1,4 +1,4 @@
-package com.grsu.reader.servers;
+package com.grsu.reader.services;
 
 import com.grsu.reader.utils.FileUtils;
 import org.primefaces.json.JSONObject;
@@ -12,7 +12,7 @@ import java.nio.charset.Charset;
 /**
  * Created by zaychick-pavel on 2/21/17.
  */
-public class StudentServer {
+public class StudentService {
 	private static final String PERSONNEL_NUMBER_URL = "http://api.grsu.by/1.x/app3/getStudentByCard?cardid=";
 	private static final String PERSONNEL_NUMBER_NAME = "TN";
 	private static final String STUDENT_PHOTO_URL = "https://intra.grsu.by/photos/";

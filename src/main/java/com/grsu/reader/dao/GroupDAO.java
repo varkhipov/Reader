@@ -5,7 +5,7 @@ import com.grsu.reader.utils.db.DBSessionFactory;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
-public class GroupDAO extends EntityDAO {
+public class GroupDAO {
 
 	public Group getByName(String name) {
 		Session session = DBSessionFactory.getSession();

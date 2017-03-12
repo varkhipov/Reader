@@ -115,7 +115,7 @@ public class LessonModeBean implements Serializable {
 			note.setType(noteType);
 			note.setEntityId(entityId);
 			notes.add(note);
-			new EntityDAO().save(note);
+			EntityDAO.save(note);
 			newNote = null;
 		}
 
@@ -132,7 +132,7 @@ public class LessonModeBean implements Serializable {
 	}
 
 	public void removeNote(Note note) {
-		new EntityDAO().delete(note);
+		EntityDAO.delete(note);
 		notes.remove(note);
 	}
 

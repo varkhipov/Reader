@@ -36,7 +36,7 @@ public class DepartmentBean implements Serializable {
 	}
 
 	public void save() {
-		new EntityDAO().save(selectedDepartment);
+		EntityDAO.save(selectedDepartment);
 		sessionBean.updateDepartments();
 		update("views");
 	}
@@ -47,7 +47,7 @@ public class DepartmentBean implements Serializable {
 	}
 
 	public void delete() {
-		new EntityDAO().delete(selectedDepartment);
+		EntityDAO.delete(selectedDepartment);
 		sessionBean.updateDepartments();
 		update("views");
 		exit();

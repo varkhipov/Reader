@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * Created by zaychick-pavel on 2/10/17.
  */
-public class EntityDAO {
-	public void add(AssistantEntity entity) {
+public abstract class EntityDAO {
+	public static void add(AssistantEntity entity) {
 		Transaction transaction = null;
 		Session session = DBSessionFactory.getSession();
 
@@ -30,17 +30,17 @@ public class EntityDAO {
 		}
 	}
 
-	public void add(List<AssistantEntity> entities) {
+	public static void add(List<AssistantEntity> entities) {
 		Transaction transaction = null;
 		Session session = DBSessionFactory.getSession();
 
 		try {
 			transaction = session.beginTransaction();
 
-			int count=0;
+			int count = 0;
 			for (AssistantEntity entity : entities) {
 				session.save(entity);
-				if ( ++count % 20 == 0 ) {
+				if (++count % 20 == 0) {
 					session.flush();
 					session.clear();
 				}
@@ -57,7 +57,7 @@ public class EntityDAO {
 		}
 	}
 
-	public void delete(AssistantEntity entity) {
+	public static void delete(AssistantEntity entity) {
 		Transaction transaction = null;
 		Session session = DBSessionFactory.getSession();
 
@@ -76,17 +76,17 @@ public class EntityDAO {
 		}
 	}
 
-	public void delete(List<AssistantEntity> entities) {
+	public static void delete(List<AssistantEntity> entities) {
 		Transaction transaction = null;
 		Session session = DBSessionFactory.getSession();
 
 		try {
 			transaction = session.beginTransaction();
 
-			int count=0;
+			int count = 0;
 			for (AssistantEntity entity : entities) {
 				session.delete(entity);
-				if ( ++count % 20 == 0 ) {
+				if (++count % 20 == 0) {
 					session.flush();
 					session.clear();
 				}
@@ -103,7 +103,7 @@ public class EntityDAO {
 		}
 	}
 
-	public void update(AssistantEntity entity) {
+	public static void update(AssistantEntity entity) {
 		Transaction transaction = null;
 		Session session = DBSessionFactory.getSession();
 
@@ -122,17 +122,17 @@ public class EntityDAO {
 		}
 	}
 
-	public void update(List<AssistantEntity> entities) {
+	public static void update(List<AssistantEntity> entities) {
 		Transaction transaction = null;
 		Session session = DBSessionFactory.getSession();
 
 		try {
 			transaction = session.beginTransaction();
 
-			int count=0;
+			int count = 0;
 			for (AssistantEntity entity : entities) {
 				session.update(entity);
-				if ( ++count % 20 == 0 ) {
+				if (++count % 20 == 0) {
 					session.flush();
 					session.clear();
 				}
@@ -149,15 +149,15 @@ public class EntityDAO {
 		}
 	}
 
-	public void save(AssistantEntity entity) {
+	public static void save(AssistantEntity entity) {
 		if (entity.getId() == null) {
-			new EntityDAO().add(entity);
+			add(entity);
 		} else {
-			new EntityDAO().update(entity);
+			update(entity);
 		}
 	}
 
-	public <T extends AssistantEntity> T get(Class<T> entityType, int id) {
+	public static <T extends AssistantEntity> T get(Class<T> entityType, int id) {
 		Session session = DBSessionFactory.getSession();
 
 		try {
@@ -170,7 +170,7 @@ public class EntityDAO {
 		return null;
 	}
 
-	public <T extends AssistantEntity> List<T> getAll(Class<T> entityType) {
+	public static <T extends AssistantEntity> List<T> getAll(Class<T> entityType) {
 		Session session = DBSessionFactory.getSession();
 
 		try {

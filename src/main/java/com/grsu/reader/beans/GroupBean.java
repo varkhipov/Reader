@@ -44,7 +44,7 @@ public class GroupBean implements Serializable {
 	}
 
 	public void save() {
-		new EntityDAO().save(selectedGroup);
+		EntityDAO.save(selectedGroup);
 		sessionBean.updateGroups();
 		update("views");
 	}
@@ -55,7 +55,7 @@ public class GroupBean implements Serializable {
 	}
 
 	public void deleteGroup() {
-		new EntityDAO().delete(selectedGroup);
+		EntityDAO.delete(selectedGroup);
 		sessionBean.updateStudents();
 		sessionBean.updateGroups();
 		update("views");
@@ -75,7 +75,7 @@ public class GroupBean implements Serializable {
 
 	public void addStudent(Student student) {
 		selectedGroup.getStudents().add(student);
-		new EntityDAO().update(selectedGroup);
+		EntityDAO.update(selectedGroup);
 		groupStudents.remove(student);
 		if (filteredGroupStudents != null) {
 			filteredGroupStudents.remove(student);
@@ -84,7 +84,7 @@ public class GroupBean implements Serializable {
 
 	public void deleteStudent(Student student) {
 		selectedGroup.getStudents().remove(student);
-		new EntityDAO().update(selectedGroup);
+		EntityDAO.update(selectedGroup);
 		groupStudents.remove(student);
 		if (filteredGroupStudents != null) {
 			filteredGroupStudents.remove(student);

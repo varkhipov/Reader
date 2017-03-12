@@ -80,7 +80,7 @@ public class StudentBean implements Serializable {
 	}
 
 	public void save() {
-		new EntityDAO().save(selectedStudent);
+		EntityDAO.save(selectedStudent);
 		sessionBean.updateStudents();
 		closeDialog("studentDialog");
 		update("views");
@@ -92,7 +92,7 @@ public class StudentBean implements Serializable {
 	}
 
 	public void delete() {
-		new EntityDAO().delete(selectedStudent);
+		EntityDAO.delete(selectedStudent);
 		if (filteredStudents != null) {
 			filteredStudents.clear();
 		}

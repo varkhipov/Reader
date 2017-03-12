@@ -91,7 +91,7 @@
 						update=":lessonInfoForm" oncomplete="PF('lessonDialog').show()"
 						rendered="#{sessionBean.connected}">
 				<f:setPropertyActionListener value="#{newInstanceOfLesson}"
-											 target="#{lessonBean.selectedLesson}"/>
+											 target="#{newLessonBean.lesson}"/>
 				<p:resetInput target=":lessonInfoForm:lessonDetail"/>
 			</p:menuitem>
 

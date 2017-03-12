@@ -59,46 +59,46 @@ public class SessionBean implements Serializable {
 	}
 
 	public void updateEntities() {
-		schedules = null;
-		disciplines = null;
-		departments = null;
-		streams = null;
-		groups = null;
-		students = null;
-		lessons = null;
-		lessonTypes = null;
+		updateSchedules();
+		updateDisciplines();
+		updateDepartments();
+		updateStreams();
+		updateGroups();
+		updateStudents();
+		updateLessons();
+		updateLessonTypes();
 	}
 
 	public void updateSchedules() {
-		schedules = new EntityDAO().getAll(Schedule.class);
+		schedules = null;
 	}
 
 	public void updateDisciplines() {
-		disciplines = new EntityDAO().getAll(Discipline.class);
+		disciplines = null;
 	}
 
 	public void updateDepartments() {
-		departments = new EntityDAO().getAll(Department.class);
+		departments = null;
 	}
 
 	public void updateStreams() {
-		streams = new EntityDAO().getAll(Stream.class);
+		streams = null;
 	}
 
 	public void updateGroups() {
-		groups = new EntityDAO().getAll(Group.class);
+		groups = null;
 	}
 
 	public void updateStudents() {
-		students = new EntityDAO().getAll(Student.class);
+		students = null;
 	}
 
 	public void updateLessons() {
-		lessons = new EntityDAO().getAll(Lesson.class);
+		lessons = null;
 	}
 
 	public void updateLessonTypes() {
-		lessonTypes = new EntityDAO().getAll(LessonType.class);
+		lessonTypes = null;
 	}
 
 	public void loadStudentsPhoto() {
@@ -124,7 +124,7 @@ public class SessionBean implements Serializable {
 
 	public List<Schedule> getSchedules() {
 		if (schedules == null) {
-			updateSchedules();
+			schedules = EntityDAO.getAll(Schedule.class);
 		}
 		return schedules;
 	}
@@ -135,7 +135,7 @@ public class SessionBean implements Serializable {
 
 	public List<Discipline> getDisciplines() {
 		if (disciplines == null) {
-			updateDisciplines();
+			disciplines = EntityDAO.getAll(Discipline.class);
 		}
 		return disciplines;
 	}
@@ -146,7 +146,7 @@ public class SessionBean implements Serializable {
 
 	public List<Department> getDepartments() {
 		if (departments == null) {
-			updateDepartments();
+			departments = EntityDAO.getAll(Department.class);
 		}
 		return departments;
 	}
@@ -157,7 +157,7 @@ public class SessionBean implements Serializable {
 
 	public List<Stream> getStreams() {
 		if (streams == null) {
-			updateStreams();
+			streams = EntityDAO.getAll(Stream.class);
 		}
 		return streams;
 	}
@@ -168,7 +168,7 @@ public class SessionBean implements Serializable {
 
 	public List<Group> getGroups() {
 		if (groups == null) {
-			updateGroups();
+			groups = EntityDAO.getAll(Group.class);
 		}
 		return groups;
 	}
@@ -179,7 +179,7 @@ public class SessionBean implements Serializable {
 
 	public List<Student> getStudents() {
 		if (students == null) {
-			updateStudents();
+			students = EntityDAO.getAll(Student.class);
 		}
 		return students;
 	}
@@ -190,7 +190,7 @@ public class SessionBean implements Serializable {
 
 	public List<Lesson> getLessons() {
 		if (lessons == null) {
-			updateLessons();
+			lessons = EntityDAO.getAll(Lesson.class);
 		}
 		return lessons;
 	}
@@ -201,7 +201,7 @@ public class SessionBean implements Serializable {
 
 	public List<LessonType> getLessonTypes() {
 		if (lessonTypes == null) {
-			updateLessonTypes();
+			lessonTypes = EntityDAO.getAll(LessonType.class);
 		}
 		return lessonTypes;
 	}

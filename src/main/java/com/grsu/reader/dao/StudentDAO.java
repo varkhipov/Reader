@@ -9,7 +9,7 @@ import org.hibernate.query.Query;
 import javax.persistence.PersistenceException;
 import java.util.List;
 
-public class StudentDAO extends EntityDAO {
+public class StudentDAO {
 
 	public Student getByCardUid(String cardUid) {
 		Session session = DBSessionFactory.getSession();

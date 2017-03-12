@@ -71,7 +71,7 @@ public class StreamBean implements Serializable {
 	}
 
 	public void save() {
-		new EntityDAO().save(selectedStream);
+		EntityDAO.save(selectedStream);
 		sessionBean.updateStreams();
 		update("views");
 	}
@@ -82,7 +82,7 @@ public class StreamBean implements Serializable {
 	}
 
 	public void delete() {
-		new EntityDAO().delete(selectedStream);
+		EntityDAO.delete(selectedStream);
 		sessionBean.updateStreams();
 		update("views");
 		exit();
