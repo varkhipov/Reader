@@ -95,6 +95,8 @@ public class LessonBean implements Serializable {
 		filteredAllStudents = null;
 		skipInfo = null;
 		additionalStudents = null;
+		timer = 0;
+		camera = false;
 	}
 
 	private void initStudents() {
@@ -460,16 +462,13 @@ public class LessonBean implements Serializable {
 		LocalDateTime now = LocalDateTime.now();
 		if (beginDate.isAfter(now)) {
 			timer = now.until(beginDate, ChronoUnit.SECONDS);
-		} else {
+		}
+		if (timer == 0) {
 			LocalTime end = selectedLesson.getClasses().get(0).getSchedule().getEnd();
 			LocalDateTime endDate = date.plus(end.toNanoOfDay(), ChronoUnit.NANOS);
 			if (endDate.isAfter(now)) {
 				timer = now.until(endDate, ChronoUnit.SECONDS);
 			}
-		}
-		System.out.println(timer);
-		if (timer == 0) {
-			FacesUtils.execute("PF('timer').stop(true);");
 		}
 	}
 

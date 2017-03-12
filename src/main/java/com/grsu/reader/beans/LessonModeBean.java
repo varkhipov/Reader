@@ -27,6 +27,9 @@ public class LessonModeBean implements Serializable {
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
 
+	@ManagedProperty(value = "#{lessonBean}")
+	private LessonBean lessonBean;
+
 	private Stream stream;
 	private Lesson lesson;
 	private List<Student> lessonStudents;
@@ -93,6 +96,7 @@ public class LessonModeBean implements Serializable {
 
 	public void backToLesson() {
 		clear();
+		lessonBean.calculateTimer();
 		sessionBean.setActiveView("lesson");
 	}
 
@@ -226,5 +230,9 @@ public class LessonModeBean implements Serializable {
 
 	public void setLessons(List<Lesson> lessons) {
 		this.lessons = lessons;
+	}
+
+	public void setLessonBean(LessonBean lessonBean) {
+		this.lessonBean = lessonBean;
 	}
 }

@@ -255,13 +255,16 @@
 			</p:dataTable>
 
 			<p:panel id="additions" styleClass="additions">
-				<pe:timer id="timer"
-						  widgetVar="timer"
-						  format="HH:mm:ss"
-						  timeout="#{lessonBean.timer}"
-						  listener="#{lessonBean.calculateTimer}"
-						  singleRun="false"
-						  update="@this"/>
+				<p:panel id="timer">
+					<pe:timer
+							widgetVar="timer"
+							rendered="#{lessonBean.timer ne 0}"
+							format="HH:mm:ss"
+							timeout="#{lessonBean.timer}"
+							listener="#{lessonBean.calculateTimer}"
+							singleRun="false"
+							update="timer"/>
+				</p:panel>
 				<p:photoCam id="camera"
 							widgetVar="camera"
 							styleClass="camera"
