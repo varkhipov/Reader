@@ -112,9 +112,9 @@
 							<p:outputLabel rendered="#{lessonBean.selectedLesson.group ne null}"
 										   value="#{lessonBean.selectedLesson.group.name}"/>
 							<p:outputLabel value="#{lessonBean.selectedLesson.type.name}"/>
-							<p:outputLabel value="#{lessonBean.selectedLesson.classes[0].date}"
+							<p:outputLabel value="#{lessonBean.selectedLesson.clazz.date}"
 										   converter="localDateConverter"/>
-							<p:outputLabel value="#{lessonBean.selectedLesson.classes[0].schedule.caption}"/>
+							<p:outputLabel value="#{lessonBean.selectedLesson.clazz.schedule.caption}"/>
 						</p:panel>
 					</p:panelGrid>
 				</p:panelGrid>

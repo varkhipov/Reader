@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by zaychick-pavel on 2/9/17.
@@ -34,9 +35,8 @@ public class Lesson implements AssistantEntity {
 	@Column(name = "create_date")
 	private LocalDateTime createDate;
 
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy = "lesson")
-	private List<Class> classes;
+	@OneToMany(mappedBy = "lesson", fetch = FetchType.EAGER)
+	private Set<Class> classes;
 
 	@NotFound(action= NotFoundAction.IGNORE)
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -52,7 +52,9 @@ public class Lesson implements AssistantEntity {
 	@JoinColumn(name = "group_id", referencedColumnName = "id")
 	private Group group;
 
-	@OneToMany(mappedBy = "lesson", fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "entity_id", referencedColumnName = "id")
+	@Where(clause = "type = 'LESSON'")
 	private List<Note> notes;
 
 	public Lesson() {
@@ -70,6 +72,13 @@ public class Lesson implements AssistantEntity {
 	}
 
 	/* GETTERS & SETTERS */
+	public Class getClazz() {
+		if (classes != null && classes.size() > 0) {
+			return (Class) classes.toArray()[0];
+		}
+		return null;
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -102,11 +111,11 @@ public class Lesson implements AssistantEntity {
 		this.createDate = createDate;
 	}
 
-	public List<Class> getClasses() {
+	public Set<Class> getClasses() {
 		return classes;
 	}
 
-	public void setClasses(List<Class> classes) {
+	public void setClasses(Set<Class> classes) {
 		this.classes = classes;
 	}
 

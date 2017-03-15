@@ -3,9 +3,7 @@ package com.grsu.reader.utils;
 import com.grsu.reader.entities.AssistantEntity;
 import com.grsu.reader.entities.Person;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class EntityUtils {
 	public static <T extends AssistantEntity> boolean entityExists(List<T> entities, int id) {
@@ -69,7 +67,7 @@ public class EntityUtils {
 		return null;
 	}
 
-	public static <T extends AssistantEntity> boolean compareEntityLists(List<T> first, List<T> second) {
+	public static <T extends AssistantEntity> boolean compareEntityLists(Collection<T> first, Collection<T> second) {
 		if (first == null && second == null) {
 			return true;
 		}
@@ -78,7 +76,7 @@ public class EntityUtils {
 		}
 
 		for (int i = 0; i < first.size(); i++) {
-			if (!compareEntity(first.get(i), second.get(i))) {
+			if (!compareEntity((AssistantEntity) first.toArray()[i], (AssistantEntity) second.toArray()[i])) {
 				return false;
 			}
 		}

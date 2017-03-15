@@ -3,6 +3,7 @@ package com.grsu.reader.entities;
 import com.grsu.reader.converters.db.LocalTimeAttributeConverter;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalTime;
@@ -54,7 +55,9 @@ public class StudentClass implements AssistantEntity {
 	@Column(name = "class_id", insertable = false, updatable = false)
 	private Integer classId;
 
-	@OneToMany(mappedBy = "studentClass", fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "entity_id", referencedColumnName = "id")
+	@Where(clause = "type = 'STUDENT_CLASS'")
 	private List<Note> notes;
 
 	/* GETTERS & SETTERS */

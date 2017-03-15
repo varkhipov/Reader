@@ -44,12 +44,6 @@ public class Class implements AssistantEntity {
 	@JoinColumn(name = "schedule_id", referencedColumnName = "id")
 	private Schedule schedule;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "STUDENT_CLASS",
-			joinColumns = @JoinColumn(name = "class_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
-	private List<Student> students;
-
 	@MapKey(name = "studentId")
 	@OneToMany(mappedBy = "clazz", fetch = FetchType.EAGER)
 	private Map<Integer, StudentClass> studentClasses;
@@ -101,14 +95,6 @@ public class Class implements AssistantEntity {
 
 	public void setSchedule(Schedule schedule) {
 		this.schedule = schedule;
-	}
-
-	public List<Student> getStudents() {
-		return students;
-	}
-
-	public void setStudents(List<Student> students) {
-		this.students = students;
 	}
 
 	public Map<Integer, StudentClass> getStudentClasses() {

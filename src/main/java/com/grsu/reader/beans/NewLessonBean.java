@@ -30,7 +30,8 @@ public class NewLessonBean implements Serializable {
 			Class cl = new Class();
 			cl.setDate(LocalDateTime.now());
 			cl.setLesson(lesson);
-			lesson.setClasses(Arrays.asList(cl));
+			lesson.setClasses(new HashSet<>());
+			lesson.getClasses().add(cl);
 		}
 	}
 
@@ -52,7 +53,7 @@ public class NewLessonBean implements Serializable {
 			}
 
 			EntityDAO.add(lesson);
-			EntityDAO.add(lesson.getClasses().get(0));
+			EntityDAO.add(lesson.getClazz());
 
 
 			List<Group> groups;
@@ -72,7 +73,7 @@ public class NewLessonBean implements Serializable {
 			for (Student student : students) {
 				StudentClass sc = new StudentClass();
 				sc.setStudent(student);
-				sc.setClazz(lesson.getClasses().get(0));
+				sc.setClazz(lesson.getClazz());
 				studentClasses.add(sc);
 			}
 			EntityDAO.add(new ArrayList<>(studentClasses));

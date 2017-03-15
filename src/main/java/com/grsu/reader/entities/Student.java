@@ -3,6 +3,7 @@ package com.grsu.reader.entities;
 import com.grsu.reader.models.SkipInfo;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.Where;
 
 import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
@@ -93,10 +94,6 @@ public class Student implements AssistantEntity, Person {
 	@Column(name = "email")
 	private String email;
 
-	@ManyToMany(mappedBy = "students")
-	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<Class> classes;
-
 	@ManyToMany
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@JoinTable(name = "STUDENT_GROUP",
@@ -108,7 +105,9 @@ public class Student implements AssistantEntity, Person {
 	@OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
 	private Map<Integer, StudentClass> studentClasses;
 
-	@OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name = "entity_id", referencedColumnName = "id")
+	@Where(clause = "type = 'STUDENT'")
 	private List<Note> notes;
 
 	public Student() {
@@ -122,7 +121,6 @@ public class Student implements AssistantEntity, Person {
 		this.patronymic = student.patronymic;
 		this.phone = student.phone;
 		this.email = student.email;
-		this.classes = student.classes;
 		this.groups = student.groups;
 		this.studentClasses = student.studentClasses;
 	}
@@ -219,14 +217,6 @@ public class Student implements AssistantEntity, Person {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public List<Class> getClasses() {
-		return classes;
-	}
-
-	public void setClasses(List<Class> classes) {
-		this.classes = classes;
 	}
 
 	public List<Group> getGroups() {

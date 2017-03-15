@@ -105,17 +105,6 @@ public class LessonModeBean implements Serializable {
 			Note note = new Note();
 			note.setCreateDate(LocalDateTime.now());
 			note.setDescription(newNote);
-			switch (noteType) {
-				case Constants.STUDENT_CLASS:
-					note.setStudentClass(selectedStudent.getStudentClasses().get(selectedLesson.getId()));
-					break;
-				case Constants.STUDENT:
-					note.setStudent(selectedStudent);
-					break;
-				case Constants.LESSON:
-					note.setLesson(selectedLesson);
-					break;
-			}
 			note.setType(noteType);
 			note.setEntityId(entityId);
 			notes.add(note);

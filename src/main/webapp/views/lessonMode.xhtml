@@ -59,7 +59,7 @@
 						<f:ajax event="click" listener="#{lessonModeBean.saveClientId}"/>
 						<f:setPropertyActionListener value="LESSON" target="#{lessonModeBean.noteType}"/>
 
-						<p:outputLabel value="#{lesson.classes[0] ne null ? lesson.classes[0].date : ''}"
+						<p:outputLabel value="#{lesson.clazz ne null ? lesson.clazz.date : ''}"
 									   converter="localDateConverter"/>
 						<p:outputLabel styleClass="block font-size-10pt"
 									   value="#{lesson.type ne null ? lesson.type.name : ''}"/>

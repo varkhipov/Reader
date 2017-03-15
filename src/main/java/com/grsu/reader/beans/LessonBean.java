@@ -161,17 +161,17 @@ public class LessonBean implements Serializable {
 		}
 
 		if (student.getStudentClasses() != null) {
-			StudentClass studentClass = student.getStudentClasses().get(selectedLesson.getClasses().get(0).getId());
+			StudentClass studentClass = student.getStudentClasses().get(selectedLesson.getClazz().getId());
 			if (studentClass == null) {
 				studentClass = new StudentClass();
 				studentClass.setStudent(student);
-				studentClass.setClazz(selectedLesson.getClasses().get(0));
+				studentClass.setClazz(selectedLesson.getClazz());
 				studentClass.setRegistered(true);
 				studentClass.setRegistrationTime(LocalTime.now());
 				studentClass.setRegistrationType(Constants.REGISTRATION_TYPE_AUTOMATIC);
 				EntityDAO.add(studentClass);
 				student.getStudentClasses().put(studentClass.getClazz().getId(), studentClass);
-				selectedLesson.getClasses().get(0).getStudentClasses().put(studentClass.getStudent().getId(), studentClass);
+				selectedLesson.getClazz().getStudentClasses().put(studentClass.getStudent().getId(), studentClass);
 			} else {
 				studentClass.setRegistered(true);
 				studentClass.setRegistrationTime(LocalTime.now());
@@ -201,17 +201,17 @@ public class LessonBean implements Serializable {
 		}
 
 		if (student.getStudentClasses() != null) {
-			StudentClass studentClass = student.getStudentClasses().get(selectedLesson.getClasses().get(0).getId());
+			StudentClass studentClass = student.getStudentClasses().get(selectedLesson.getClazz().getId());
 			if (studentClass == null) {
 				studentClass = new StudentClass();
 				studentClass.setStudent(student);
-				studentClass.setClazz(selectedLesson.getClasses().get(0));
+				studentClass.setClazz(selectedLesson.getClazz());
 				studentClass.setRegistered(true);
 				studentClass.setRegistrationTime(LocalTime.now());
 				studentClass.setRegistrationType(Constants.REGISTRATION_TYPE_MANUAL);
 				EntityDAO.add(studentClass);
 				student.getStudentClasses().put(studentClass.getClazz().getId(), studentClass);
-				selectedLesson.getClasses().get(0).getStudentClasses().put(studentClass.getStudent().getId(), studentClass);
+				selectedLesson.getClazz().getStudentClasses().put(studentClass.getStudent().getId(), studentClass);
 			} else {
 				studentClass.setRegistered(true);
 				studentClass.setRegistrationTime(LocalTime.now());
@@ -229,7 +229,7 @@ public class LessonBean implements Serializable {
 	}
 
 	public void removeStudent(Student student) {
-		StudentClass studentClass = student.getStudentClasses().get(selectedLesson.getClasses().get(0).getId());
+		StudentClass studentClass = student.getStudentClasses().get(selectedLesson.getClazz().getId());
 		if (lessonStudents.contains(student)) {
 
 			studentClass.setRegistrationType(null);
@@ -239,8 +239,8 @@ public class LessonBean implements Serializable {
 			absentStudents.add(student);
 			updateSkipInfo(Arrays.asList(student));
 		} else {
-			student.getStudentClasses().remove(selectedLesson.getClasses().get(0).getId());
-			selectedLesson.getClasses().get(0).getStudentClasses().remove(student.getId());
+			student.getStudentClasses().remove(selectedLesson.getClazz().getId());
+			selectedLesson.getClazz().getStudentClasses().remove(student.getId());
 			EntityDAO.delete(studentClass);
 			allStudents.add(student);
 		}
@@ -295,7 +295,7 @@ public class LessonBean implements Serializable {
 
 			List<StudentClass> studentClassList = new ArrayList<>();
 			for (Student student : selectedStudents) {
-				StudentClass studentClass = student.getStudentClasses().get(selectedLesson.getClasses().get(0).getId());
+				StudentClass studentClass = student.getStudentClasses().get(selectedLesson.getClazz().getId());
 				studentClass.setRegistered(true);
 				studentClass.setRegistrationTime(LocalTime.now());
 				studentClass.setRegistrationType(Constants.REGISTRATION_TYPE_MANUAL);
@@ -332,7 +332,7 @@ public class LessonBean implements Serializable {
 			List<StudentClass> removeStudentClassList = new ArrayList<>();
 
 			for (Student student : selectedStudents) {
-				StudentClass studentClass = student.getStudentClasses().get(selectedLesson.getClasses().get(0).getId());
+				StudentClass studentClass = student.getStudentClasses().get(selectedLesson.getClazz().getId());
 
 				if (lessonStudents.contains(student)) {
 
@@ -342,8 +342,8 @@ public class LessonBean implements Serializable {
 					updateStudentClassList.add(studentClass);
 					absentStudents.add(student);
 				} else {
-					student.getStudentClasses().remove(selectedLesson.getClasses().get(0).getId());
-					selectedLesson.getClasses().get(0).getStudentClasses().remove(student.getId());
+					student.getStudentClasses().remove(selectedLesson.getClazz().getId());
+					selectedLesson.getClazz().getStudentClasses().remove(student.getId());
 					allStudents.add(student);
 					removeStudentClassList.add(studentClass);
 				}
@@ -398,7 +398,7 @@ public class LessonBean implements Serializable {
 		for (Student st : students) {
 			LessonStudentModel lessonStudentModel = new LessonStudentModel(st);
 			lessonStudentModel.setRegistrationTime(
-					st.getStudentClasses().get(selectedLesson.getClasses().get(0).getId()).getRegistrationTime());
+					st.getStudentClasses().get(selectedLesson.getClazz().getId()).getRegistrationTime());
 			Map<String, Integer> stSkipInfo = skipInfo.get(st.getId());
 			if (stSkipInfo != null) {
 				lessonStudentModel.setTotalSkip(stSkipInfo.get(Constants.TOTAL_SKIP));
@@ -458,15 +458,15 @@ public class LessonBean implements Serializable {
 	public void calculateTimer() {
 		timer = 0;
 
-		LocalDateTime date = selectedLesson.getClasses().get(0).getDate();
-		LocalTime begin = selectedLesson.getClasses().get(0).getSchedule().getBegin();
+		LocalDateTime date = selectedLesson.getClazz().getDate();
+		LocalTime begin = selectedLesson.getClazz().getSchedule().getBegin();
 		LocalDateTime beginDate = date.plus(begin.toNanoOfDay(), ChronoUnit.NANOS);
 		LocalDateTime now = LocalDateTime.now();
 		if (beginDate.isAfter(now)) {
 			timer = now.until(beginDate, ChronoUnit.SECONDS);
 		}
 		if (timer == 0) {
-			LocalTime end = selectedLesson.getClasses().get(0).getSchedule().getEnd();
+			LocalTime end = selectedLesson.getClazz().getSchedule().getEnd();
 			LocalDateTime endDate = date.plus(end.toNanoOfDay(), ChronoUnit.NANOS);
 			if (endDate.isAfter(now)) {
 				timer = now.until(endDate, ChronoUnit.SECONDS);

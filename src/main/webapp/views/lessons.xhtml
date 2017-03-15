@@ -6,7 +6,7 @@
 >
     <h:form id="lessonsForm">
         <p:dataTable var="lesson" value="#{lessonBean.lessons}"
-                     sortBy="#{lesson.classes[0].date}"
+                     sortBy="#{lesson.clazz.date}"
                      sortOrder="descending">
             <f:facet name="header">
                 #{msg['lessons']}
@@ -18,10 +18,10 @@
                 <h:outputText value="#{lesson.stream.discipline.name}"/>
             </p:column>
             <p:column headerText="#{msg['lesson.date']}">
-                <h:outputText value="#{lesson.classes[0] ne null ? lesson.classes[0].date : ''}" converter="localDateConverter"/>
+                <h:outputText value="#{lesson.clazz ne null ? lesson.clazz.date : ''}" converter="localDateConverter"/>
             </p:column>
             <p:column headerText="#{msg['lesson.time']}">
-                <h:outputText value="#{lesson.classes[0] ne null and lesson.classes[0].schedule ne null ? lesson.classes[0].schedule.caption : ''}"/>
+                <h:outputText value="#{lesson.clazz ne null and lesson.clazz.schedule ne null ? lesson.clazz.schedule.caption : ''}"/>
             </p:column>
             <p:column headerText="#{msg['lesson.type']}">
                 <h:outputText value="#{lesson.type ne null ? lesson.type.name : ''}"/>
