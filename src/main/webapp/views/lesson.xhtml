@@ -14,9 +14,7 @@
 			<p:panel id="lastVisitInfo" styleClass="visit-info">
 				<p:panelGrid columns="2">
 					<p:panel styleClass="image">
-						<p:graphicImage value="#{imageBean.image}">
-							<f:param name="cardUid" value="#{lessonBean.processedStudent.cardUid}"/>
-						</p:graphicImage>
+						<p:graphicImage value="#{imageBean.getImagePath(lessonBean.processedStudent.cardUid)}" />
 					</p:panel>
 					<p:panel rendered="#{lessonBean.processedStudent eq null}">
 						<p:outputLabel value="#{msg['lesson.visit.noData']}"/>
@@ -255,7 +253,7 @@
 			</p:dataTable>
 
 			<p:panel id="additions" styleClass="additions">
-				<p:panel id="timer">
+				<p:panel id="timer" styleClass="time ui-widget-header">
 					<pe:timer
 							widgetVar="timer"
 							rendered="#{lessonBean.timer ne 0}"
@@ -264,11 +262,22 @@
 							listener="#{lessonBean.calculateTimer}"
 							singleRun="false"
 							update="timer"/>
+					<h:outputText value="00:00:00" rendered="#{lessonBean.timer eq 0}"/>
+					/
+					<p:clock pattern="HH:mm:ss"/>
 				</p:panel>
+
+				<p:panel styleClass="ui-widget-header margin-bottom-10px margin-top-10px h30px"></p:panel>
+
 				<p:photoCam id="camera"
 							widgetVar="camera"
 							styleClass="camera"
 							rendered="#{lessonBean.camera}"/>
+				<p:panel rendered="#{not lessonBean.camera}"
+						 header="#{msg['label.additional.info']}"
+						styleClass="additional-info h200px">
+
+				</p:panel>
 			</p:panel>
 		</p:panelGrid>
 	</h:form>

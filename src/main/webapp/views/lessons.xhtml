@@ -27,7 +27,7 @@
                 <h:outputText value="#{lesson.type ne null ? lesson.type.name : ''}"/>
             </p:column>
             <p:column headerText="#{msg['lesson.group']}">
-                <h:outputText value="#{lesson.group ne null ? lesson.group.name : lesson.stream.groupNames}" escape="false"/>
+                <h:outputText value="#{lesson.group ne null ? lesson.group.name : msg['label.all.groups']}"/>
             </p:column>
             <p:column styleClass="groupOptions">
                 <p:commandButton actionListener="#{menuBean.changeView('lesson')}" update="@([id$=wrapper])"

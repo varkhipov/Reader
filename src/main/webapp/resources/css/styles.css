@@ -12,32 +12,24 @@
 
 /* Width */
 .w5px {width: 5px;}
-.w16px {
-	width: 16px;
-}
-.w20px {
-	width: 20px;
-}
-.w25px {
-	width: 25px;
-}
-.w30px {
-	width: 30px;
-}
-.w40px {
-	width: 40px;
-}
+.w16px {width: 16px;}
+.w20px {width: 20px;}
+.w25px {width: 25px;}
+.w30px {width: 30px;}
+.w40px {width: 40px;}
 .w55px {width: 55px;}
-.w70px {
-	width: 70px;
-}
-
+.w70px {width: 70px;}
 .w90px {width: 90px;}
 .w200px {width: 200px;}
 .w210px {width: 210px;}
 .w300px {width: 300px;}
 
 .w100pc {width: 100%;}
+
+/* Height */
+.h30px {height: 30px;}
+.h200px {height: 200px;}
+
 /* Align */
 .center {
 	text-align: center;
@@ -317,10 +309,18 @@ body {
 	padding: 0;
 }
 
-.lesson-tables .additions span {
+.lesson-tables .additions .time {
 	font-size: 30pt;
 	text-align: center;
-	display: block;
+}
+
+.lesson-tables .additions .time span {
+	border: 0;
+	padding: 0;
+}
+
+.lesson-tables .additions .ui-widget-header {
+	border: 1px solid #a8a8a8;
 }
 
 /* Lesson Mode table */

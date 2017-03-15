@@ -40,7 +40,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 						"join LESSON l on l.id = cl.lesson_id\n" +
 						"join STREAM str on str.id = l.stream_id\n" +
 						"where (sc.registered is null or sc.registered = 0) and str.id = :streamId " +
-						"and ((date(cl.date) < date('now', 'localtime')) or (date(cl.date) = date('now', 'localtime') and time(sch.end) <= time('now', 'localtime')))\n" +
+						"and ((date(cl.date) < date('now', 'localtime')) or (date(cl.date) = date('now', 'localtime') and time(sch.begin) <= time('now', 'localtime')))\n" +
 						"group by st.id, str.id, l.type_id",
 				resultSetMapping = "SkipInfoMapping"),
 		@NamedNativeQuery(
@@ -53,7 +53,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 						"join LESSON l on l.id = cl.lesson_id\n" +
 						"join STREAM str on str.id = l.stream_id\n" +
 						"where st.id in (:studentId) and (sc.registered is null or sc.registered = 0) and str.id = :streamId " +
-						"and ((date(cl.date) < date('now', 'localtime')) or (date(cl.date) = date('now', 'localtime') and time(sch.end) <= time('now', 'localtime')))\n" +
+						"and ((date(cl.date) < date('now', 'localtime')) or (date(cl.date) = date('now', 'localtime') and time(sch.begin) <= time('now', 'localtime')))\n" +
 						"group by st.id, str.id, l.type_id",
 				resultSetMapping = "SkipInfoMapping")
 })

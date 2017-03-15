@@ -12,8 +12,10 @@ public class FileUtils {
 
 	private static final String TOMCAT_PATH = System.getProperty("catalina.base");
 	private static final String APP_FILES_DIR_NAME = "app_files";
+	private static final String WEBAPPS_DIR_NAME = "webapps";
 
 	public static final String APP_FILES_PATH = buildPath(TOMCAT_PATH, APP_FILES_DIR_NAME);
+	public static final String WEBAPPS_FILES_PATH = buildPath(TOMCAT_PATH, WEBAPPS_DIR_NAME);
 	public static final String CONFIG_FILE_PATH = buildPath(APP_FILES_PATH, "config", "config.properties");
 
 	public static final String CSV_FOLDER_PATH = buildPath(APP_FILES_PATH, "csv");
@@ -21,7 +23,7 @@ public class FileUtils {
 
 	public static final String DATABASE_PATH = buildPath(APP_FILES_PATH, "database", getProperty("db.name"));
 
-	public static final String STUDENTS_PHOTO_FOLDER_PATH = buildPath(APP_FILES_PATH, "photo", "students");
+	public static final String STUDENTS_PHOTO_FOLDER_PATH = buildPath(WEBAPPS_FILES_PATH, "photo", "students");
 	public static final String STUDENTS_PHOTO_EXTENSION = ".jpg";
 	/**
 	 * Builds system-dependent path with specific separators

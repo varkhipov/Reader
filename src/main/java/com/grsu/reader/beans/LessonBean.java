@@ -254,7 +254,9 @@ public class LessonBean implements Serializable {
 	}
 
 	public void startRecord() {
-		recordStarted = SerialUtils.connect(this);
+		if (!recordStarted) {
+			recordStarted = SerialUtils.connect(this);
+		}
 		if (!recordStarted) {
 			LocaleUtils localeUtils = new LocaleUtils();
 			FacesUtils.addWarning(
