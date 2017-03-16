@@ -5,6 +5,9 @@
 				xmlns:p="http://primefaces.org/ui"
 >
 	<h:form id="lessonModeForm">
+
+		<p:remoteCommand name="editOn" actionListener="#{lessonModeBean.editModeOn}" />
+		<p:remoteCommand name="editOff" actionListener="#{lessonModeBean.editModeOff}" />
 		<p:dataTable id="lessonModeTable"
 					 var="student"
 					 value="#{lessonModeBean.lessonStudents}"
@@ -83,9 +86,9 @@
 
 				<p:commandLink
 						styleClass="class-info #{student.studentClasses[lesson.id].registered eq false ? 'skip' : ''}"
-						onmousedown="if (event.button == 2) {$(this).click();}"
+						onmousedown="$(this).click();  console.log(event.button); if (event.button == 0) editOn();"
 						actionListener="#{lessonModeBean.setSelectedLesson(lesson)}"
-						rendered="#{student.studentClasses[lesson.id] ne null}"
+						rendered="#{student.studentClasses[lesson.id] ne null and lessonModeBean.editMode ne student.studentClasses[lesson.id].id}"
 				>
 					<f:ajax event="click" listener="#{lessonModeBean.saveClientId}"/>
 					<f:setPropertyActionListener value="STUDENT_CLASS" target="#{lessonModeBean.noteType}"/>
@@ -98,13 +101,15 @@
 					</p:outputLabel>
 				</p:commandLink>
 				<p:commandLink styleClass="class-info no-class"
-							   onmousedown="if (event.button == 2) {$(this).click();}"
+							   onmousedown="$(this).click();"
 							   actionListener="#{lessonModeBean.setSelectedLesson(null)}"
 							   rendered="#{student.studentClasses[lesson.id] eq null}"
 				>
 					<f:setPropertyActionListener value="#{null}" target="#{lessonModeBean.noteType}"/>
 				</p:commandLink>
 
+				<p:inputText rendered="#{student.studentClasses[lesson.id] ne null and lessonModeBean.editMode eq student.studentClasses[lesson.id].id}"
+							 value="#{student.studentClasses[lesson.id].mark}" style="width:96%" label="Mark" onchange="editOff();"/>
 			</p:columns>
 
 		</p:dataTable>

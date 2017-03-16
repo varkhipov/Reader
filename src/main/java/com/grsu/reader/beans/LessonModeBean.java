@@ -2,7 +2,12 @@ package com.grsu.reader.beans;
 
 import com.grsu.reader.constants.Constants;
 import com.grsu.reader.dao.EntityDAO;
-import com.grsu.reader.entities.*;
+import com.grsu.reader.entities.Group;
+import com.grsu.reader.entities.Lesson;
+import com.grsu.reader.entities.Note;
+import com.grsu.reader.entities.Stream;
+import com.grsu.reader.entities.Student;
+import com.grsu.reader.entities.StudentClass;
 import com.grsu.reader.utils.FacesUtils;
 
 import javax.faces.bean.ManagedBean;
@@ -44,6 +49,9 @@ public class LessonModeBean implements Serializable {
 	private String cellClientId;
 	private String noteType;
 	private Integer entityId;
+
+	private String editMode;
+	private String parentClientId;
 
 	private void clear() {
 		stream = null;
@@ -122,6 +130,7 @@ public class LessonModeBean implements Serializable {
 			FacesUtils.update(cellClientId);
 		}
 		cellClientId = null;
+		parentClientId = null;
 	}
 
 	public void removeNote(Note note) {
@@ -132,6 +141,24 @@ public class LessonModeBean implements Serializable {
 	public void saveClientId(AjaxBehaviorEvent event) {
 		UIComponent component = event.getComponent();
 		cellClientId = component.getClientId();
+		parentClientId = component.getParent().getClientId();
+	}
+
+	public void editModeOn() {
+		System.out.println("!!!!!!!!");
+		System.out.println("editModeOn");
+		if (selectedLesson != null && selectedStudent != null && parentClientId != null) {
+			editMode = selectedStudent.getStudentClasses().get(selectedLesson.getId()).getId().toString();
+			FacesUtils.update(parentClientId);
+		}
+	}
+
+	public void editModeOff() {
+		System.out.println("!!!!!!!!");
+		System.out.println("editModeOff");
+		editMode = null;
+		FacesUtils.update(parentClientId);
+		parentClientId = null;
 	}
 
 	/*GETTERS AND SETTERS*/
@@ -223,5 +250,9 @@ public class LessonModeBean implements Serializable {
 
 	public void setLessonBean(LessonBean lessonBean) {
 		this.lessonBean = lessonBean;
+	}
+
+	public String getEditMode() {
+		return editMode;
 	}
 }
