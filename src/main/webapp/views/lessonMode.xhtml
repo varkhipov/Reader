@@ -84,16 +84,24 @@
 				</f:facet>
 
 
-				<p:commandLink
+				<p:commandLink id="editCell"
 						styleClass="class-info #{student.studentClasses[lesson.id].registered eq false ? 'skip' : ''}"
-						onmousedown="$(this).click();  console.log(event.button); if (event.button == 0) editOn();"
-						actionListener="#{lessonModeBean.setSelectedLesson(lesson)}"
-						rendered="#{student.studentClasses[lesson.id] ne null and lessonModeBean.editMode ne student.studentClasses[lesson.id].id}"
+						onmousedown=" $(this).click();   #{lessonModeBean.editMode ne student.studentClasses[lesson.id].id ? 'editOff(); if (event.button == 0) editOn();' : ''}"
+						rendered="#{student.studentClasses[lesson.id] ne null}"
 				>
 					<f:ajax event="click" listener="#{lessonModeBean.saveClientId}"/>
+					<f:setPropertyActionListener value="#{lesson}" target="#{lessonModeBean.selectedLesson}"/>
 					<f:setPropertyActionListener value="STUDENT_CLASS" target="#{lessonModeBean.noteType}"/>
+					<f:setPropertyActionListener value="#{student.studentClasses[lesson.id]}" target="#{lessonModeBean.selectedStudentClass}"/>
 
-					<h:outputText value="#{student.studentClasses[lesson.id].mark}"/>
+					<h:outputText value="#{student.studentClasses[lesson.id].mark}"
+								  rendered="#{lessonModeBean.editMode ne student.studentClasses[lesson.id].id}"/>
+
+					<p:inputText rendered="#{lessonModeBean.editMode eq student.studentClasses[lesson.id].id}"
+								 value="#{student.studentClasses[lesson.id].mark}" style="width:60%" label="Mark"
+					onblur=""/>
+
+					<p:focus context="editCell" />
 
 					<p:outputLabel styleClass="float-right"
 								   rendered="#{student.studentClasses[lesson.id].notes.size() gt 0}">
@@ -108,8 +116,6 @@
 					<f:setPropertyActionListener value="#{null}" target="#{lessonModeBean.noteType}"/>
 				</p:commandLink>
 
-				<p:inputText rendered="#{student.studentClasses[lesson.id] ne null and lessonModeBean.editMode eq student.studentClasses[lesson.id].id}"
-							 value="#{student.studentClasses[lesson.id].mark}" style="width:96%" label="Mark" onchange="editOff();"/>
 			</p:columns>
 
 		</p:dataTable>

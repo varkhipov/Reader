@@ -43,6 +43,7 @@ public class LessonModeBean implements Serializable {
 
 	private Lesson selectedLesson;
 	private Student selectedStudent;
+	private StudentClass selectedStudentClass;
 	private List<Note> notes;
 
 	private String newNote;
@@ -50,8 +51,9 @@ public class LessonModeBean implements Serializable {
 	private String noteType;
 	private Integer entityId;
 
-	private String editMode;
-	private String parentClientId;
+	private Integer editMode;
+	private String editClientId;
+	private StudentClass editStudentClass;
 
 	private void clear() {
 		stream = null;
@@ -59,6 +61,8 @@ public class LessonModeBean implements Serializable {
 		selectedLesson = null;
 		selectedStudent = null;
 		notes = null;
+		editMode = null;
+		cellClientId = null;
 	}
 
 	private void initLessonStudents() {
@@ -130,7 +134,6 @@ public class LessonModeBean implements Serializable {
 			FacesUtils.update(cellClientId);
 		}
 		cellClientId = null;
-		parentClientId = null;
 	}
 
 	public void removeNote(Note note) {
@@ -141,24 +144,26 @@ public class LessonModeBean implements Serializable {
 	public void saveClientId(AjaxBehaviorEvent event) {
 		UIComponent component = event.getComponent();
 		cellClientId = component.getClientId();
-		parentClientId = component.getParent().getClientId();
 	}
 
 	public void editModeOn() {
-		System.out.println("!!!!!!!!");
-		System.out.println("editModeOn");
-		if (selectedLesson != null && selectedStudent != null && parentClientId != null) {
-			editMode = selectedStudent.getStudentClasses().get(selectedLesson.getId()).getId().toString();
-			FacesUtils.update(parentClientId);
+		if (selectedStudentClass != null && cellClientId != null) {
+			editMode = selectedStudentClass.getId();
+			FacesUtils.update(cellClientId);
+			editClientId = cellClientId;
+			editStudentClass = selectedStudentClass;
+			selectedStudentClass = null;
 		}
 	}
 
 	public void editModeOff() {
-		System.out.println("!!!!!!!!");
-		System.out.println("editModeOff");
+		if (editClientId != null && editMode != null && editStudentClass != null) {
+			FacesUtils.update(editClientId);
+			EntityDAO.save(editStudentClass);
+			editClientId = null;
+			editStudentClass = null;
+		}
 		editMode = null;
-		FacesUtils.update(parentClientId);
-		parentClientId = null;
 	}
 
 	/*GETTERS AND SETTERS*/
@@ -252,7 +257,16 @@ public class LessonModeBean implements Serializable {
 		this.lessonBean = lessonBean;
 	}
 
-	public String getEditMode() {
+	public Integer getEditMode() {
 		return editMode;
+	}
+
+	public StudentClass getSelectedStudentClass() {
+		return selectedStudentClass;
+	}
+
+	public void setSelectedStudentClass(StudentClass selectedStudentClass) {
+		System.out.println("set selectedStudentClass " + selectedStudentClass);
+		this.selectedStudentClass = selectedStudentClass;
 	}
 }
