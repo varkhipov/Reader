@@ -36,9 +36,11 @@
                     <f:setPropertyActionListener value="#{false}" target="#{menuBean.showMenu}"/>
                     <f:actionListener binding="#{lessonBean.startRecord()}" />
                 </p:commandButton>
-                <p:commandButton actionListener="#{lessonBean.removeLesson(lesson)}" update=":lessonsForm"
-                                 icon="fa fa-fw fa-minus" title="#{msg['option.remove']}"
-                                 styleClass="red"/>
+                <ui:remove>
+                    <p:commandButton actionListener="#{lessonBean.removeLesson(lesson)}" update=":lessonsForm"
+                                     icon="fa fa-fw fa-minus" title="#{msg['option.remove']}"
+                                     styleClass="red"/>
+                </ui:remove>
             </p:column>
         </p:dataTable>
 

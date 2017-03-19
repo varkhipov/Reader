@@ -325,22 +325,46 @@ body {
 
 /* Lesson Mode table */
 .skip {
-	background-color: rgba(255, 0, 0, 0.5);
+	background-color: rgba(255, 0, 0, 0.3);
 }
 
 .no-class {
-	background-color: rgba(211, 211, 211, 0.5);
+	background-color: rgba(211, 211, 211, 0.7);
 }
+
+.lesson-mode-table .ui-column-filter.ui-inputfield {
+	width: 40%;
+	display: inline;
+}
+
+.lesson-mode-table th {
+	height: 54px;
+}
+
+/*
 .lesson-mode-table a {
 	text-decoration: none;
+}*/
+
+.lesson-mode-table td.student-info {
+	height: 22px;
 }
 
-.lesson-mode-table .class-info,
-.lesson-mode-table .student-info {
-	display: list-item;
-	height: 34px;
+.lesson-mode-table tbody.ui-datatable-data td.class-info {
+	padding: 0;
 }
 
+.lesson-mode-table td.class-info span {
+	display: block;
+	height: 22px;
+	padding: 4px 10px;
+}
+
+.lesson-mode-table td.class-info input {
+	width: 90%;
+	height: 20px;
+}
+/*
 .lesson-mode-table tbody.ui-datatable-data td{
 	padding: 0;
 }
@@ -348,7 +372,7 @@ body {
 .lesson-mode-table .student-info  {
 	padding-left: 10px;
 }
-
+*/
 .lesson-mode-table .lesson-info {
 	display: block;
 	position: relative;
@@ -369,15 +393,15 @@ body {
 .ui-datatable-scrollable-container .ui-datatable-scrollable-header {
 	width: 70vw;
 }
-
+/*
 .lesson-mode-table tbody > tr {
 	height: 35px;
 }
+*/
+/*.ui-datatable-scrollable-container .ui-datatable-scrollable-header thead tr th:last-child {*/
+	/*border-right-width: 16px;*/
+ /*}*/
 
-.ui-datatable-scrollable-container .ui-datatable-scrollable-header thead tr th:last-child {
-	border-right-width: 16px;
- }
-
-.ui-datatable-frozen-container .ui-datatable-scrollable-body tbody tr:last-child {
-	border-bottom-width: 20px;
-}
+/*.ui-datatable-frozen-container .ui-datatable-scrollable-body tbody tr:last-child {*/
+	/*border-bottom-width: 20px;*/
+/*}*/

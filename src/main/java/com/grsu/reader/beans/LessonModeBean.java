@@ -8,16 +8,18 @@ import com.grsu.reader.entities.Note;
 import com.grsu.reader.entities.Stream;
 import com.grsu.reader.entities.Student;
 import com.grsu.reader.entities.StudentClass;
+import com.grsu.reader.models.LazyStudentDataModel;
+import com.grsu.reader.models.LessonStudentModel;
 import com.grsu.reader.utils.FacesUtils;
+import org.primefaces.component.api.DynamicColumn;
+import org.primefaces.event.CellEditEvent;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.event.AjaxBehaviorEvent;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,37 +34,48 @@ public class LessonModeBean implements Serializable {
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
 
-	@ManagedProperty(value = "#{lessonBean}")
-	private LessonBean lessonBean;
-
 	private Stream stream;
 	private Lesson lesson;
-	private List<Student> lessonStudents;
-	private List<Student> filteredLessonStudents;
 	private List<Lesson> lessons;
 
-	private Lesson selectedLesson;
-	private Student selectedStudent;
-	private StudentClass selectedStudentClass;
 	private List<Note> notes;
-
 	private String newNote;
-	private String cellClientId;
-	private String noteType;
 	private Integer entityId;
 
-	private Integer editMode;
-	private String editClientId;
-	private StudentClass editStudentClass;
+	private List<LessonStudentModel> students;
+	private LessonStudentModel selectedStudent;
+	private LazyStudentDataModel studentsLazyModel;
 
-	private void clear() {
+	private Lesson selectedLesson;
+
+	private Integer selectedCell;
+	private String selectedClientId;
+	private String selectedType;
+
+	private boolean registered;
+
+	public void initLessonMode() {
+		initLessonStudents();
+	}
+
+	public void clear() {
 		stream = null;
 		lesson = null;
-		selectedLesson = null;
-		selectedStudent = null;
+		lessons = null;
+
 		notes = null;
-		editMode = null;
-		cellClientId = null;
+		newNote = null;
+		entityId = null;
+
+		students  = null;
+		selectedStudent = null;
+		studentsLazyModel = null;
+
+		selectedType = null;
+		selectedCell = null;
+		selectedClientId = null;
+
+		selectedLesson = null;
 	}
 
 	private void initLessonStudents() {
@@ -78,37 +91,50 @@ public class LessonModeBean implements Serializable {
 				lessons = stream.getLessons();
 			}
 
-
 		}
-		lessonStudents = new ArrayList<>(studentSet);
+		students = studentSet.stream().map(LessonStudentModel::new).collect(Collectors.toList());
+		studentsLazyModel = new LazyStudentDataModel(students);
+	}
+
+	public void initRegisteredDialog() {
+		if (Constants.STUDENT_CLASS.equals(selectedType)) {
+			selectedLesson = lessons.get(selectedCell);
+			registered = selectedStudent.getStudent().getStudentClasses().get(selectedLesson.getId()).getRegistered();
+		} else {
+			selectedLesson = null;
+		}
 	}
 
 	public void initNotes() {
 		notes = null;
-		if (noteType != null && ((selectedStudent != null && (selectedLesson != null || Constants.STUDENT.equals(noteType))) || Constants.LESSON.equals(noteType))) {
-			switch (noteType) {
-				case Constants.STUDENT_CLASS:
-					StudentClass sc = selectedStudent.getStudentClasses().get(selectedLesson.getId());
-					if (sc != null) {
-						notes = sc.getNotes();
-						entityId = sc.getId();
-					}
-					break;
-				case Constants.STUDENT:
-					notes = selectedStudent.getNotes();
-					entityId = selectedStudent.getId();
-					break;
-				case Constants.LESSON:
-					notes = selectedLesson.getNotes();
-					entityId = selectedLesson.getId();
-					break;
-			}
+		switch (selectedType) {
+			case Constants.STUDENT_CLASS:
+				StudentClass sc = selectedStudent.getStudent().getStudentClasses().get(lessons.get(selectedCell).getId());
+				if (sc != null) {
+					notes = sc.getNotes();
+					entityId = sc.getId();
+				}
+				break;
+			case Constants.STUDENT:
+				notes = selectedStudent.getStudent().getNotes();
+				entityId = selectedStudent.getStudent().getId();
+				break;
+			case Constants.LESSON:
+				Lesson selectedLesson = lessons.get(selectedCell);
+				notes = selectedLesson.getNotes();
+				entityId = selectedLesson.getId();
+				break;
 		}
+	}
+
+
+	public void onCellEdit(CellEditEvent event) {
+		EntityDAO.update(studentsLazyModel.getRowData().getStudent().getStudentClasses().get(lessons.get(((DynamicColumn) event.getColumn()).getIndex()).getId()));
 	}
 
 	public void backToLesson() {
 		clear();
-		lessonBean.calculateTimer();
+//		lessonBean.calculateTimer();
 		sessionBean.setActiveView("lesson");
 	}
 
@@ -117,7 +143,7 @@ public class LessonModeBean implements Serializable {
 			Note note = new Note();
 			note.setCreateDate(LocalDateTime.now());
 			note.setDescription(newNote);
-			note.setType(noteType);
+			note.setType(selectedType);
 			note.setEntityId(entityId);
 			notes.add(note);
 			EntityDAO.save(note);
@@ -126,14 +152,34 @@ public class LessonModeBean implements Serializable {
 
 	}
 
+	public void saveRegisteredInfo() {
+		boolean oldValue = selectedStudent.getStudent().getStudentClasses().get(selectedLesson.getId()).getRegistered();
+		if (oldValue != registered) {
+			StudentClass studentClass = selectedStudent.getStudent().getStudentClasses().get(selectedLesson.getId());
+			studentClass.setRegistered(registered);
+			if (!registered) {
+				studentClass.setRegistrationTime(null);
+				studentClass.setRegistrationType(null);
+			} else {
+				studentClass.setRegistrationTime(LocalTime.now());
+				studentClass.setRegistrationType(Constants.REGISTRATION_TYPE_MANUAL);
+			}
+			EntityDAO.save(studentClass);
+		}
+		FacesUtils.closeDialog("registeredDialog");
+		selectedLesson = null;
+	}
+
 	public void closeDialog() {
 		newNote = null;
-		selectedLesson = null;
-		noteType = null;
-		if (cellClientId != null) {
-			FacesUtils.update(cellClientId);
+		notes = null;
+		selectedType = null;
+		selectedCell = null;
+		System.out.println("selectedClientId " + selectedClientId);
+		if (selectedClientId != null) {
+			FacesUtils.update(selectedClientId);
 		}
-		cellClientId = null;
+		selectedClientId = null;
 	}
 
 	public void removeNote(Note note) {
@@ -141,39 +187,18 @@ public class LessonModeBean implements Serializable {
 		notes.remove(note);
 	}
 
-	public void saveClientId(AjaxBehaviorEvent event) {
-		UIComponent component = event.getComponent();
-		cellClientId = component.getClientId();
-	}
-
-	public void editModeOn() {
-		if (selectedStudentClass != null && cellClientId != null) {
-			editMode = selectedStudentClass.getId();
-			FacesUtils.update(cellClientId);
-			editClientId = cellClientId;
-			editStudentClass = selectedStudentClass;
-			selectedStudentClass = null;
-		}
-	}
-
-	public void editModeOff() {
-		if (editClientId != null && editMode != null && editStudentClass != null) {
-			FacesUtils.update(editClientId);
-			EntityDAO.save(editStudentClass);
-			editClientId = null;
-			editStudentClass = null;
-		}
-		editMode = null;
-	}
 
 	/*GETTERS AND SETTERS*/
+	public void setSessionBean(SessionBean sessionBean) {
+		this.sessionBean = sessionBean;
+	}
+
 	public Stream getStream() {
 		return stream;
 	}
 
 	public void setStream(Stream stream) {
 		this.stream = stream;
-		initLessonStudents();
 	}
 
 	public Lesson getLesson() {
@@ -182,43 +207,6 @@ public class LessonModeBean implements Serializable {
 
 	public void setLesson(Lesson lesson) {
 		this.lesson = lesson;
-		initLessonStudents();
-	}
-
-	public List<Student> getLessonStudents() {
-		return lessonStudents;
-	}
-
-	public void setLessonStudents(List<Student> lessonStudents) {
-		this.lessonStudents = lessonStudents;
-	}
-
-	public List<Student> getFilteredLessonStudents() {
-		return filteredLessonStudents;
-	}
-
-	public void setFilteredLessonStudents(List<Student> filteredLessonStudents) {
-		this.filteredLessonStudents = filteredLessonStudents;
-	}
-
-	public void setSessionBean(SessionBean sessionBean) {
-		this.sessionBean = sessionBean;
-	}
-
-	public Lesson getSelectedLesson() {
-		return selectedLesson;
-	}
-
-	public void setSelectedLesson(Lesson selectedLesson) {
-		this.selectedLesson = selectedLesson;
-	}
-
-	public Student getSelectedStudent() {
-		return selectedStudent;
-	}
-
-	public void setSelectedStudent(Student selectedStudent) {
-		this.selectedStudent = selectedStudent;
 	}
 
 	public List<Note> getNotes() {
@@ -237,36 +225,68 @@ public class LessonModeBean implements Serializable {
 		this.newNote = newNote;
 	}
 
-	public String getNoteType() {
-		return noteType;
-	}
-
-	public void setNoteType(String noteType) {
-		this.noteType = noteType;
-	}
 
 	public List<Lesson> getLessons() {
 		return lessons;
 	}
 
-	public void setLessons(List<Lesson> lessons) {
-		this.lessons = lessons;
+	public LazyStudentDataModel getStudentsLazyModel() {
+		return studentsLazyModel;
 	}
 
-	public void setLessonBean(LessonBean lessonBean) {
-		this.lessonBean = lessonBean;
+	public void setStudentsLazyModel(LazyStudentDataModel studentsLazyModel) {
+		this.studentsLazyModel = studentsLazyModel;
 	}
 
-	public Integer getEditMode() {
-		return editMode;
+	public List<LessonStudentModel> getStudents() {
+		return students;
 	}
 
-	public StudentClass getSelectedStudentClass() {
-		return selectedStudentClass;
+	public void setStudents(List<LessonStudentModel> students) {
+		this.students = students;
 	}
 
-	public void setSelectedStudentClass(StudentClass selectedStudentClass) {
-		System.out.println("set selectedStudentClass " + selectedStudentClass);
-		this.selectedStudentClass = selectedStudentClass;
+	public LessonStudentModel getSelectedStudent() {
+		return selectedStudent;
+	}
+
+	public void setSelectedStudent(LessonStudentModel selectedStudent) {
+		this.selectedStudent = selectedStudent;
+	}
+
+	public Integer getSelectedCell() {
+		return selectedCell;
+	}
+
+	public void setSelectedCell(Integer selectedCell) {
+		this.selectedCell = selectedCell;
+	}
+
+	public String getSelectedClientId() {
+		return selectedClientId;
+	}
+
+	public void setSelectedClientId(String selectedClientId) {
+		this.selectedClientId = selectedClientId;
+	}
+
+	public String getSelectedType() {
+		return selectedType;
+	}
+
+	public void setSelectedType(String selectedType) {
+		this.selectedType = selectedType;
+	}
+
+	public Lesson getSelectedLesson() {
+		return selectedLesson;
+	}
+
+	public boolean isRegistered() {
+		return registered;
+	}
+
+	public void setRegistered(boolean registered) {
+		this.registered = registered;
 	}
 }

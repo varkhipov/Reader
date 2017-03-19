@@ -97,4 +97,17 @@ public class LessonStudentModel {
 	public void setStudent(Student student) {
 		this.student = student;
 	}
+
+	@Override
+	public String toString() {
+		return "LessonStudentModel{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", totalSkip=" + totalSkip +
+				", lectureSkip=" + lectureSkip +
+				", practicalSkip=" + practicalSkip +
+				", labSkip=" + labSkip +
+				", registrationTime=" + registrationTime +
+				'}';
+	}
 }

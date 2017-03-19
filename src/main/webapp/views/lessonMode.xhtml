@@ -4,64 +4,65 @@
 				xmlns:f="http://xmlns.jcp.org/jsf/core"
 				xmlns:p="http://primefaces.org/ui"
 >
-	<h:form id="lessonModeForm">
+	<h:form id="lessonModeForm" prependId="false">
+		<h:inputHidden id="selectedCell" value="#{lessonModeBean.selectedCell}"/>
+		<h:inputHidden id="selectedClientId" value="#{lessonModeBean.selectedClientId}"/>
+		<h:inputHidden id="selectedType" value="#{lessonModeBean.selectedType}"/>
 
-		<p:remoteCommand name="editOn" actionListener="#{lessonModeBean.editModeOn}" />
-		<p:remoteCommand name="editOff" actionListener="#{lessonModeBean.editModeOff}" />
 		<p:dataTable id="lessonModeTable"
 					 var="student"
-					 value="#{lessonModeBean.lessonStudents}"
-					 sortBy="#{student.fullName}"
-					 filteredValue="#{lessonModeBean.filteredLessonStudents}"
-					 styleClass="lesson-mode-table"
-					 scrollable="true"
-					 frozenColumns="1"
+					 value="#{lessonModeBean.studentsLazyModel}"
+					 editable="true" editMode="cell"
+					 sortBy="#{student.name}"
+
 					 rowKey="#{student.id}"
+					 paginator="true"
+					 rows="15"
+					 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+					 rowsPerPageTemplate="10,11,12,13,14,15,16,17,18,19,20"
+					 paginatorPosition="bottom"
+					 lazy="true"
+
+					 frozenColumns="1"
+					 scrollable="true"
+
 					 selection="#{lessonModeBean.selectedStudent}"
 					 selectionMode="single"
+
+					 styleClass="lesson-mode-table"
 		>
-			<f:facet name="header">
-				<p:commandButton title="#{msg['btn.backToLessons']}"
-								 icon="fa fa-fw fa-arrow-left"
-								 actionListener="#{lessonModeBean.backToLesson}"
-								 update="@([id$=views])"/>
-				#{msg['lessons']}
-			</f:facet>
 
-			<p:column sortBy="#{student.fullName}"
-					  filterBy="#{student.fullName}"
-					  filterMatchMode="startsWith"
-					  styleClass="w300px">
-				<p:commandLink styleClass="student-info"
-							   onmousedown="if (event.button == 2) {$(this).click();}"
-							   actionListener="#{lessonModeBean.setSelectedLesson(null)}"
-				>
-					<f:ajax event="click" listener="#{lessonModeBean.saveClientId}"/>
-					<f:setPropertyActionListener value="STUDENT" target="#{lessonModeBean.noteType}"/>
+			<p:ajax event="cellEdit" listener="#{lessonModeBean.onCellEdit}"/>
 
-					<h:outputText value="#{student.fullName}"/>
+			<p:column sortBy="#{student.name}"
+					  filterBy="#{student.name}"
+					  styleClass="w300px student-info">
+				<f:facet name="header">
+					<p:commandButton title="#{msg['btn.backToLessons']}"
+									 icon="fa fa-fw fa-arrow-left"
+									 actionListener="#{lessonBean.calculateTimer}"
+									 update="@([id$=views])">
+						<f:setPropertyActionListener value="lesson" target="#{sessionBean.activeView}"/>
+						<f:ajax event="click" listener="#{lessonModeBean.clear}"/>
+					</p:commandButton>
+				</f:facet>
 
+				<h:panelGroup id="STUDENT_#{student.student.id}" styleClass="">
+					<h:outputText value="#{student.name}"/>
 					<p:outputLabel styleClass="float-right"
-								   rendered="#{student.notes.size() gt 0}">
+								   rendered="#{student.student.notes.size() gt 0}">
 						<i class="fa fa-info-circle"></i>
 					</p:outputLabel>
-				</p:commandLink>
+				</h:panelGroup>
 			</p:column>
+
 
 			<p:columns value="#{lessonModeBean.lessons}"
 					   var="lesson"
-					   columnIndexVar="colIndex"
-					   styleClass=" w90px"
+					   styleClass="w90px class-info #{student.student.studentClasses[lesson.id] eq null ? 'no-class' : ''}"
 			>
 				<f:facet name="header">
-					<p:commandLink id="lessonInfo"
-								   onmousedown="if (event.button == 2) {$(this).click();}"
-								   actionListener="#{lessonModeBean.setSelectedLesson(lesson)}"
-								   styleClass="lesson-info"
-					>
-						<f:ajax event="click" listener="#{lessonModeBean.saveClientId}"/>
-						<f:setPropertyActionListener value="LESSON" target="#{lessonModeBean.noteType}"/>
-
+					<h:panelGroup id="lessonInfo" styleClass="lesson-info">
 						<p:outputLabel value="#{lesson.clazz ne null ? lesson.clazz.date : ''}"
 									   converter="localDateConverter"/>
 						<p:outputLabel styleClass="block font-size-10pt"
@@ -70,59 +71,54 @@
 									   rendered="#{lesson.notes.size() gt 0}">
 							<i class="fa fa-info-circle"></i>
 						</p:outputLabel>
-					</p:commandLink>
+					</h:panelGroup>
+
 					<p:contextMenu id="tableHeaderContextMenu"
 								   for="lessonInfo"
-								   widgetVar="tableHeaderContextMenu">
+								   widgetVar="tableHeaderContextMenu"
+								   beforeShow="applySelectedCell(event);">
 						<p:menuitem value="#{msg['label.notes']}" update=":lessonModeForm:notes"
 									icon="ui-icon-search"
 									oncomplete="PF('notesDialog').show()"
 									actionListener="#{lessonModeBean.initNotes}">
-							target="#{lessonModeBean.selectedLesson}"/>
 						</p:menuitem>
 					</p:contextMenu>
+
 				</f:facet>
 
+				<p:cellEditor rendered="#{student.student.studentClasses[lesson.id] ne null}">
+					<f:facet name="output">
+						<h:panelGroup styleClass="#{student.student.studentClasses[lesson.id].registered eq false ? 'skip' : ''}">
+							<h:outputText value="#{student.student.studentClasses[lesson.id].mark}"/>
+							<p:outputLabel styleClass="float-right"
+										   rendered="#{student.student.studentClasses[lesson.id].notes.size() gt 0}">
+								<i class="fa fa-info-circle"></i>
+							</p:outputLabel>
+						</h:panelGroup>
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText id="modelInput" value="#{student.student.studentClasses[lesson.id].mark}"/>
+					</f:facet>
+				</p:cellEditor>
 
-				<p:commandLink id="editCell"
-						styleClass="class-info #{student.studentClasses[lesson.id].registered eq false ? 'skip' : ''}"
-						onmousedown=" $(this).click();   #{lessonModeBean.editMode ne student.studentClasses[lesson.id].id ? 'editOff(); if (event.button == 0) editOn();' : ''}"
-						rendered="#{student.studentClasses[lesson.id] ne null}"
-				>
-					<f:ajax event="click" listener="#{lessonModeBean.saveClientId}"/>
-					<f:setPropertyActionListener value="#{lesson}" target="#{lessonModeBean.selectedLesson}"/>
-					<f:setPropertyActionListener value="STUDENT_CLASS" target="#{lessonModeBean.noteType}"/>
-					<f:setPropertyActionListener value="#{student.studentClasses[lesson.id]}" target="#{lessonModeBean.selectedStudentClass}"/>
-
-					<h:outputText value="#{student.studentClasses[lesson.id].mark}"
-								  rendered="#{lessonModeBean.editMode ne student.studentClasses[lesson.id].id}"/>
-
-					<p:inputText rendered="#{lessonModeBean.editMode eq student.studentClasses[lesson.id].id}"
-								 value="#{student.studentClasses[lesson.id].mark}" style="width:60%" label="Mark"
-					onblur=""/>
-
-					<p:focus context="editCell" />
-
-					<p:outputLabel styleClass="float-right"
-								   rendered="#{student.studentClasses[lesson.id].notes.size() gt 0}">
-						<i class="fa fa-info-circle"></i>
-					</p:outputLabel>
-				</p:commandLink>
-				<p:commandLink styleClass="class-info no-class"
-							   onmousedown="$(this).click();"
-							   actionListener="#{lessonModeBean.setSelectedLesson(null)}"
-							   rendered="#{student.studentClasses[lesson.id] eq null}"
-				>
-					<f:setPropertyActionListener value="#{null}" target="#{lessonModeBean.noteType}"/>
-				</p:commandLink>
 
 			</p:columns>
-
 		</p:dataTable>
 
-		<p:contextMenu id="tableContextMenu" for="lessonModeTable" widgetVar="tableContextMenu">
-			<p:menuitem value="#{msg['label.notes']}" update=":lessonModeForm:notes" icon="ui-icon-search"
-						oncomplete="PF('notesDialog').show()" actionListener="#{lessonModeBean.initNotes}"/>
+		<p:contextMenu id="tableContextMenu"
+					   for="lessonModeTable"
+					   widgetVar="tableContextMenu"
+					   beforeShow="applySelectedCell(event);">
+			<p:menuitem value="#{msg['label.notes']}"
+						update=":lessonModeForm:notes"
+						icon="ui-icon-search"
+						oncomplete="PF('notesDialog').show()"
+						actionListener="#{lessonModeBean.initNotes}"/>
+			<p:menuitem value="#{msg['label.skips']}"
+						update=":lessonModeForm:skips"
+						icon="ui-icon-arrowrefresh-1-w"
+						oncomplete="PF('registeredDialog').show()"
+						actionListener="#{lessonModeBean.initRegisteredDialog}"/>
 		</p:contextMenu>
 
 		<p:dialog header="#{msg['label.notes']}"
@@ -151,10 +147,40 @@
 								 rendered="#{lessonModeBean.notes ne null}"
 								 update=":lessonModeForm:notes"
 								 styleClass="block"/>
-				<p:outputLabel value="#{msg['warning.cannot.add.notes']}" rendered="#{lessonModeBean.notes eq null}"/>
+				<p:outputLabel value="#{msg['warning.operation.not.available']}"
+							   rendered="#{lessonModeBean.notes eq null}"/>
+			</p:outputPanel>
+		</p:dialog>
+
+		<p:dialog header="#{msg['label.skips']}"
+				  widgetVar="registeredDialog"
+				  modal="true"
+				  showEffect="fade"
+				  hideEffect="fade"
+				  resizable="false">
+			<p:ajax event="close" listener="#{lessonModeBean.closeDialog}"/>
+			<p:outputPanel id="skips">
+				<h:panelGroup
+						rendered="#{lessonModeBean.selectedStudent.student.studentClasses[lessonModeBean.selectedLesson.id] ne null}">
+					<p:outputLabel styleClass="block" value="#{lessonModeBean.selectedLesson.clazz.date}"
+								   converter="localDateConverter"/>
+					<p:outputLabel styleClass="block" value="#{lessonModeBean.selectedLesson.type.name}"/>
+					<p:outputLabel styleClass="block" value="#{lessonModeBean.selectedStudent.name}"/>
+					<p:selectOneRadio id="registered"
+									  value="#{lessonModeBean.registered}">
+						<f:selectItem itemLabel="#{msg['label.attend']}" itemValue="#{true}"/>
+						<f:selectItem itemLabel="#{msg['label.absent']}" itemValue="#{false}"/>
+					</p:selectOneRadio>
+					<p:commandButton value="#{msg['btn.save.exit']}" icon="fa fa-fw fa-save"
+									 actionListener="#{lessonModeBean.saveRegisteredInfo}"
+					/>
+				</h:panelGroup>
+				<p:outputLabel value="#{msg['warning.operation.not.available']}"
+							   rendered="#{lessonModeBean.selectedStudent.student.studentClasses[lessonModeBean.selectedLesson.id] eq null}"/>
 			</p:outputPanel>
 		</p:dialog>
 
 	</h:form>
+
 
 </ui:composition>

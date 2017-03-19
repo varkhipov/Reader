@@ -66,11 +66,7 @@
 						<p:commandButton title="#{msg['btn.openLessonMode']}"
 										 icon="fa fa-fw fa-list"
 										 update="@([id$=wrapper])"
-										 actionListener="#{menuBean.changeView('lessonMode')}">
-							<f:setPropertyActionListener value="#{lessonBean.selectedLesson.stream}"
-														 target="#{lessonModeBean.stream}"/>
-							<f:setPropertyActionListener value="#{lessonBean.selectedLesson}"
-														 target="#{lessonModeBean.lesson}"/>
+										 actionListener="#{lessonBean.openLessonMode}">
 							<f:setPropertyActionListener value="#{false}" target="#{menuBean.showMenu}"/>
 						</p:commandButton>
 

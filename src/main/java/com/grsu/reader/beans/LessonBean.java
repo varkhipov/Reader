@@ -43,6 +43,9 @@ public class LessonBean implements Serializable {
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
 
+	@ManagedProperty(value = "#{lessonModeBean}")
+	private LessonModeBean lessonModeBean;
+
 	private Lesson selectedLesson;
 	private Student processedStudent;
 	private boolean recordStarted = false;
@@ -83,6 +86,13 @@ public class LessonBean implements Serializable {
 	public void returnToLessons() {
 		clear();
 		sessionBean.setActiveView("lessons");
+	}
+
+	public void openLessonMode() {
+		lessonModeBean.setStream(selectedLesson.getStream());
+		lessonModeBean.setLesson(selectedLesson);
+		sessionBean.setActiveView("lessonMode");
+		lessonModeBean.initLessonMode();
 	}
 
 	public void clear() {
@@ -475,6 +485,11 @@ public class LessonBean implements Serializable {
 	}
 
 	/* GETTERS & SETTERS */
+
+	public void setLessonModeBean(LessonModeBean lessonModeBean) {
+		this.lessonModeBean = lessonModeBean;
+	}
+
 	public void setSelectedLesson(Lesson selectedLesson) {
 		this.selectedLesson = selectedLesson;
 		initLesson();
