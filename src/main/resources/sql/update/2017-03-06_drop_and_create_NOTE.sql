@@ -13,7 +13,7 @@ CREATE TABLE NOTE (
 	entity_id   INTEGER,
 	description TEXT,
 	create_date TEXT                DEFAULT (strftime('%Y-%m-%dT%H:%M:%S', 'now', 'localtime')),
-	FOREIGN KEY (lecturer_id) REFERENCES LECTURER (id),
+	FOREIGN KEY (lecturer_id) REFERENCES LECTURER (id)
 );
 
 COMMIT;
