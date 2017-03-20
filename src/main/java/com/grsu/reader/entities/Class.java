@@ -1,12 +1,24 @@
 package com.grsu.reader.entities;
 
 import com.grsu.reader.converters.db.LocalDateTimeAttributeConverter;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapKey;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,6 +58,7 @@ public class Class implements AssistantEntity {
 
 	@MapKey(name = "studentId")
 	@OneToMany(mappedBy = "clazz", fetch = FetchType.EAGER)
+	@Cascade(org.hibernate.annotations.CascadeType.DELETE)
 	private Map<Integer, StudentClass> studentClasses;
 
 	/* GETTERS & SETTERS */

@@ -3,6 +3,7 @@ package com.grsu.reader.entities;
 import com.grsu.reader.converters.db.LocalDateTimeAttributeConverter;
 import com.grsu.reader.utils.EntityUtils;
 import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
 
 import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
@@ -36,6 +37,7 @@ public class Lesson implements AssistantEntity {
 	private LocalDateTime createDate;
 
 	@OneToMany(mappedBy = "lesson", fetch = FetchType.EAGER)
+	@Cascade(CascadeType.DELETE)
 	private Set<Class> classes;
 
 	@NotFound(action= NotFoundAction.IGNORE)
@@ -52,6 +54,7 @@ public class Lesson implements AssistantEntity {
 	@JoinColumn(name = "group_id", referencedColumnName = "id")
 	private Group group;
 
+	@Cascade(CascadeType.DELETE)
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "entity_id", referencedColumnName = "id")
 	@Where(clause = "type = 'LESSON'")

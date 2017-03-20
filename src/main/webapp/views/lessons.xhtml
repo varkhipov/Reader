@@ -1,48 +1,46 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
+				xmlns:h="http://xmlns.jcp.org/jsf/html"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:f="http://xmlns.jcp.org/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
 >
-    <h:form id="lessonsForm">
-        <p:dataTable var="lesson" value="#{lessonBean.lessons}"
-                     sortBy="#{lesson.clazz.date}"
-                     sortOrder="descending">
-            <f:facet name="header">
-                #{msg['lessons']}
-            </f:facet>
-            <p:column headerText="#{msg['lesson.stream']}">
-                <h:outputText value="#{lesson.stream.name}"/>
-            </p:column>
-            <p:column headerText="#{msg['lesson.discipline']}">
-                <h:outputText value="#{lesson.stream.discipline.name}"/>
-            </p:column>
-            <p:column headerText="#{msg['lesson.date']}">
-                <h:outputText value="#{lesson.clazz ne null ? lesson.clazz.date : ''}" converter="localDateConverter"/>
-            </p:column>
-            <p:column headerText="#{msg['lesson.time']}">
-                <h:outputText value="#{lesson.clazz ne null and lesson.clazz.schedule ne null ? lesson.clazz.schedule.caption : ''}"/>
-            </p:column>
-            <p:column headerText="#{msg['lesson.type']}">
-                <h:outputText value="#{lesson.type ne null ? lesson.type.name : ''}"/>
-            </p:column>
-            <p:column headerText="#{msg['lesson.group']}">
-                <h:outputText value="#{lesson.group ne null ? lesson.group.name : msg['label.all.groups']}"/>
-            </p:column>
-            <p:column styleClass="groupOptions">
-                <p:commandButton actionListener="#{menuBean.changeView('lesson')}" update="@([id$=wrapper])"
-                                 icon="fa fa-fw fa-search" title="#{msg['option.view']}">
-                    <f:setPropertyActionListener value="#{lesson}" target="#{lessonBean.selectedLesson}"/>
-                    <f:setPropertyActionListener value="#{false}" target="#{menuBean.showMenu}"/>
-                    <f:actionListener binding="#{lessonBean.startRecord()}" />
-                </p:commandButton>
-                <ui:remove>
-                    <p:commandButton actionListener="#{lessonBean.removeLesson(lesson)}" update=":lessonsForm"
-                                     icon="fa fa-fw fa-minus" title="#{msg['option.remove']}"
-                                     styleClass="red"/>
-                </ui:remove>
-            </p:column>
-        </p:dataTable>
+	<h:form id="lessonsForm">
+		<p:dataTable var="lesson" value="#{lessonBean.lessons}"
+					 sortBy="#{lesson.clazz.date}"
+					 sortOrder="descending">
+			<f:facet name="header">
+				#{msg['lessons']}
+			</f:facet>
+			<p:column headerText="#{msg['lesson.stream']}">
+				<h:outputText value="#{lesson.stream.name}"/>
+			</p:column>
+			<p:column headerText="#{msg['lesson.discipline']}">
+				<h:outputText value="#{lesson.stream.discipline.name}"/>
+			</p:column>
+			<p:column headerText="#{msg['lesson.date']}">
+				<h:outputText value="#{lesson.clazz ne null ? lesson.clazz.date : ''}" converter="localDateConverter"/>
+			</p:column>
+			<p:column headerText="#{msg['lesson.time']}">
+				<h:outputText value="#{lesson.clazz ne null and lesson.clazz.schedule ne null ? lesson.clazz.schedule.caption : ''}"/>
+			</p:column>
+			<p:column headerText="#{msg['lesson.type']}">
+				<h:outputText value="#{lesson.type ne null ? lesson.type.name : ''}"/>
+			</p:column>
+			<p:column headerText="#{msg['lesson.group']}">
+				<h:outputText value="#{lesson.group ne null ? lesson.group.name : msg['label.all.groups']}"/>
+			</p:column>
+			<p:column styleClass="groupOptions">
+				<p:commandButton actionListener="#{menuBean.changeView('lesson')}" update="@([id$=wrapper])"
+								 icon="fa fa-fw fa-search" title="#{msg['option.view']}">
+					<f:setPropertyActionListener value="#{lesson}" target="#{lessonBean.selectedLesson}"/>
+					<f:setPropertyActionListener value="#{false}" target="#{menuBean.showMenu}"/>
+					<f:actionListener binding="#{lessonBean.startRecord()}"/>
+				</p:commandButton>
+				<p:commandButton actionListener="#{lessonBean.removeLesson(lesson)}" update=":lessonsForm"
+								 icon="fa fa-fw fa-minus" title="#{msg['option.remove']}"
+								 styleClass="red"/>
+			</p:column>
+		</p:dataTable>
 
-    </h:form>
+	</h:form>
 </ui:composition>
