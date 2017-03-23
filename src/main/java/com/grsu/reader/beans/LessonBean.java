@@ -79,8 +79,39 @@ public class LessonBean implements Serializable {
 	private long timer;
 	private boolean camera = false;
 
-	private void initLesson() {
+	public void initLesson() {
 		calculateTimer();
+		if (selectedLesson != null) {
+			initStudents();
+			initAllStudents();
+			initLessonStudents();
+			initAdditionalStudents();
+
+			if (selectedLesson.getStream() != null) {
+				skipInfo = new HashMap<>();
+				List<SkipInfo> skipInfos = new StudentDAO().getSkipInfo(selectedLesson.getStream().getId(), selectedLesson.getId());
+				if (skipInfos != null) {
+					for (SkipInfo si : skipInfos) {
+						if (!skipInfo.containsKey(si.getStudentId())) {
+							Map<String, Integer> studentSkipInfoMap = new HashMap<>();
+							studentSkipInfoMap.put(Constants.TOTAL_SKIP, 0);
+							skipInfo.put(si.getStudentId(), studentSkipInfoMap);
+						}
+						skipInfo.get(si.getStudentId()).put(si.getLessonType().getKey(), si.getCount());
+						int total = skipInfo.get(si.getStudentId()).get(Constants.TOTAL_SKIP);
+						skipInfo.get(si.getStudentId()).put(Constants.TOTAL_SKIP, total + si.getCount());
+					}
+				}
+
+				lessonAbsentStudents = new ArrayList<>();
+				lessonPresentStudents = new ArrayList<>();
+
+				updateLessonStudents();
+
+				absentStudentsLazyModel = new LazyStudentDataModel(lessonAbsentStudents);
+				presentStudentsLazyModel = new LazyStudentDataModel(lessonPresentStudents);
+			}
+		}
 	}
 
 	public void returnToLessons() {
@@ -376,7 +407,7 @@ public class LessonBean implements Serializable {
 	private void updateSkipInfo(List<Student> students) {
 		List<Integer> studentIds = students.stream().map(Student::getId).collect(Collectors.toList());
 
-		List<SkipInfo> studentSkipInfo = new StudentDAO().getStudentSkipInfo(studentIds, selectedLesson.getStream().getId());
+		List<SkipInfo> studentSkipInfo = new StudentDAO().getStudentSkipInfo(studentIds, selectedLesson.getStream().getId(), selectedLesson.getId());
 
 		for (Integer id : studentIds) {
 			skipInfo.remove(id);
@@ -484,6 +515,14 @@ public class LessonBean implements Serializable {
 		}
 	}
 
+
+	public void exitStudents() {
+		setFilteredAllStudents(null);
+		update("views");
+		closeDialog("addStudentsDialog");
+	}
+
+
 	/* GETTERS & SETTERS */
 
 	public void setLessonModeBean(LessonModeBean lessonModeBean) {
@@ -493,37 +532,6 @@ public class LessonBean implements Serializable {
 	public void setSelectedLesson(Lesson selectedLesson) {
 		this.selectedLesson = selectedLesson;
 		initLesson();
-		if (selectedLesson != null) {
-			initStudents();
-			initAllStudents();
-			initLessonStudents();
-			initAdditionalStudents();
-
-			if (selectedLesson.getStream() != null) {
-				skipInfo = new HashMap<>();
-				List<SkipInfo> skipInfos = new StudentDAO().getSkipInfo(selectedLesson.getStream().getId());
-				if (skipInfos != null) {
-					for (SkipInfo si : skipInfos) {
-						if (!skipInfo.containsKey(si.getStudentId())) {
-							Map<String, Integer> studentSkipInfoMap = new HashMap<>();
-							studentSkipInfoMap.put(Constants.TOTAL_SKIP, 0);
-							skipInfo.put(si.getStudentId(), studentSkipInfoMap);
-						}
-						skipInfo.get(si.getStudentId()).put(si.getLessonType().getKey(), si.getCount());
-						int total = skipInfo.get(si.getStudentId()).get(Constants.TOTAL_SKIP);
-						skipInfo.get(si.getStudentId()).put(Constants.TOTAL_SKIP, total + si.getCount());
-					}
-				}
-
-				lessonAbsentStudents = new ArrayList<>();
-				lessonPresentStudents = new ArrayList<>();
-
-				updateLessonStudents();
-
-				absentStudentsLazyModel = new LazyStudentDataModel(lessonAbsentStudents);
-				presentStudentsLazyModel = new LazyStudentDataModel(lessonPresentStudents);
-			}
-		}
 	}
 
 	public Student getProcessedStudent() {
@@ -605,13 +613,6 @@ public class LessonBean implements Serializable {
 	public List<Student> getAdditionalStudents() {
 		return additionalStudents;
 	}
-
-	public void exitStudents() {
-		setFilteredAllStudents(null);
-		update("views");
-		closeDialog("addStudentsDialog");
-	}
-
 
 	public LazyStudentDataModel getPresentStudentsLazyModel() {
 		return presentStudentsLazyModel;

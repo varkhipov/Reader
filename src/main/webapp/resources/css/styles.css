@@ -354,11 +354,24 @@ body {
 	padding: 0;
 }
 
-.lesson-mode-table td.class-info span {
-	display: block;
-	height: 22px;
-	padding: 4px 10px;
+.lesson-mode-table td.class-info,
+.lesson-mode-table td.class-info .ui-cell-editor-output{
+	height: 30px;
 }
+
+.lesson-mode-table td.class-info {
+	text-align: center;
+}
+
+.lesson-mode-table td.class-info .ui-cell-editor-output{
+	display: list-item;
+}
+
+/*.lesson-mode-table td.class-info span {*/
+	/*display: block;*/
+	/*height: 22px;*/
+	/*padding: 4px 10px;*/
+/*}*/
 
 .lesson-mode-table td.class-info input {
 	width: 90%;
@@ -382,7 +395,7 @@ body {
 .lesson-mode-table .notes-info {
 	position: absolute;
 	top: 0;
-	right: 0;
+	right: -10px;
 }
 
 .ui-datatable-scrollable-body {

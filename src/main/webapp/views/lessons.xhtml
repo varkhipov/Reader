@@ -21,7 +21,8 @@
 				<h:outputText value="#{lesson.clazz ne null ? lesson.clazz.date : ''}" converter="localDateConverter"/>
 			</p:column>
 			<p:column headerText="#{msg['lesson.time']}">
-				<h:outputText value="#{lesson.clazz ne null and lesson.clazz.schedule ne null ? lesson.clazz.schedule.caption : ''}"/>
+				<h:outputText
+						value="#{lesson.clazz ne null and lesson.clazz.schedule ne null ? lesson.clazz.schedule.caption : ''}"/>
 			</p:column>
 			<p:column headerText="#{msg['lesson.type']}">
 				<h:outputText value="#{lesson.type ne null ? lesson.type.name : ''}"/>
@@ -38,9 +39,17 @@
 				</p:commandButton>
 				<p:commandButton actionListener="#{lessonBean.removeLesson(lesson)}" update=":lessonsForm"
 								 icon="fa fa-fw fa-minus" title="#{msg['option.remove']}"
-								 styleClass="red"/>
+								 styleClass="red">
+					<p:confirm header="#{msg['warning']}" message="#{msg['warning.sure.delete']}" icon="ui-icon-alert"/>
+				</p:commandButton>
 			</p:column>
 		</p:dataTable>
+
+
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton value="#{msg['label.yes']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			<p:commandButton value="#{msg['label.no']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		</p:confirmDialog>
 
 	</h:form>
 </ui:composition>

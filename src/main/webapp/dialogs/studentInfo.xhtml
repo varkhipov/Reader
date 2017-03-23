@@ -13,10 +13,12 @@
 			<p:ajax event="close" listener="#{studentBean.exit}"/>
 
 			<p:scrollPanel id="studentDetail" mode="native" styleClass="studentDetail">
-				<p:commandButton value="#{msg['btn.delete']}" icon="fa fa-fw fa-remove"
-								 rendered="#{studentBean.selectedStudent ne null
+				<ui:remove>
+					<p:commandButton value="#{msg['btn.delete']}" icon="fa fa-fw fa-remove"
+									 rendered="#{studentBean.selectedStudent ne null
                                              and studentBean.selectedStudent.id ne null}"
-								 actionListener="#{studentBean.delete}"/>
+									 actionListener="#{studentBean.delete}"/>
+				</ui:remove>
 
 				<p:panelGrid columns="2" rendered="#{studentBean.selectedStudent ne null}" styleClass="v-align-top">
 					<p:panelGrid columns="1" styleClass="image noBorder">

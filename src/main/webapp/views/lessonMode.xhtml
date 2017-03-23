@@ -17,9 +17,9 @@
 
 					 rowKey="#{student.id}"
 					 paginator="true"
-					 rows="15"
+					 rows="21"
 					 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-					 rowsPerPageTemplate="10,11,12,13,14,15,16,17,18,19,20"
+					 rowsPerPageTemplate="15,16,17,18,19,20,21,22,23,24,25"
 					 paginatorPosition="bottom"
 					 lazy="true"
 
@@ -40,7 +40,7 @@
 				<f:facet name="header">
 					<p:commandButton title="#{msg['btn.backToLessons']}"
 									 icon="fa fa-fw fa-arrow-left"
-									 actionListener="#{lessonBean.calculateTimer}"
+									 actionListener="#{lessonBean.initLesson}"
 									 update="@([id$=views])">
 						<f:setPropertyActionListener value="lesson" target="#{sessionBean.activeView}"/>
 						<f:ajax event="click" listener="#{lessonModeBean.clear}"/>
@@ -48,7 +48,7 @@
 				</f:facet>
 
 				<h:panelGroup id="STUDENT_#{student.student.id}" styleClass="">
-					<h:outputText value="#{student.name}"/>
+					<h:outputText styleClass="bold" value="#{student.name}"/>
 					<p:outputLabel styleClass="float-right"
 								   rendered="#{student.student.notes.size() gt 0}">
 						<i class="fa fa-info-circle"></i>
@@ -59,16 +59,15 @@
 
 			<p:columns value="#{lessonModeBean.lessons}"
 					   var="lesson"
-					   styleClass="w90px class-info #{student.student.studentClasses[lesson.id] eq null ? 'no-class' : ''}"
+					   styleClass="w90px class-info #{student.student.studentClasses[lesson.id] eq null ? 'no-class' : (student.student.studentClasses[lesson.id].registered eq false ? 'skip' : '')}"
 			>
 				<f:facet name="header">
 					<h:panelGroup id="lessonInfo" styleClass="lesson-info">
-						<p:outputLabel value="#{lesson.clazz ne null ? lesson.clazz.date : ''}"
-									   converter="localDateConverter"/>
+						<p:outputLabel value="#{lesson.date}"/>
 						<p:outputLabel styleClass="block font-size-10pt"
-									   value="#{lesson.type ne null ? lesson.type.name : ''}"/>
+									   value="#{msg['label.'.concat(lesson.type.key)]}"/>
 						<p:outputLabel styleClass="notes-info"
-									   rendered="#{lesson.notes.size() gt 0}">
+									   rendered="#{lesson.lesson.notes.size() gt 0}">
 							<i class="fa fa-info-circle"></i>
 						</p:outputLabel>
 					</h:panelGroup>
@@ -88,13 +87,11 @@
 
 				<p:cellEditor rendered="#{student.student.studentClasses[lesson.id] ne null}">
 					<f:facet name="output">
-						<h:panelGroup styleClass="#{student.student.studentClasses[lesson.id].registered eq false ? 'skip' : ''}">
 							<h:outputText value="#{student.student.studentClasses[lesson.id].mark}"/>
 							<p:outputLabel styleClass="float-right"
 										   rendered="#{student.student.studentClasses[lesson.id].notes.size() gt 0}">
 								<i class="fa fa-info-circle"></i>
 							</p:outputLabel>
-						</h:panelGroup>
 					</f:facet>
 					<f:facet name="input">
 						<p:inputText id="modelInput" value="#{student.student.studentClasses[lesson.id].mark}"/>
@@ -103,6 +100,8 @@
 
 
 			</p:columns>
+
+			<p:column></p:column>
 		</p:dataTable>
 
 		<p:contextMenu id="tableContextMenu"
@@ -142,10 +141,9 @@
 				<p:inputTextarea id="description" value="#{lessonModeBean.newNote}"
 								 rendered="#{lessonModeBean.notes ne null}"/>
 
-				<p:commandButton value="#{msg['btn.add']}" icon="fa fa-fw fa-save"
+				<p:commandButton value="#{msg['btn.save.exit']}" icon="fa fa-fw fa-save"
 								 actionListener="#{lessonModeBean.saveNote}"
 								 rendered="#{lessonModeBean.notes ne null}"
-								 update=":lessonModeForm:notes"
 								 styleClass="block"/>
 				<p:outputLabel value="#{msg['warning.operation.not.available']}"
 							   rendered="#{lessonModeBean.notes eq null}"/>
@@ -158,13 +156,11 @@
 				  showEffect="fade"
 				  hideEffect="fade"
 				  resizable="false">
-			<p:ajax event="close" listener="#{lessonModeBean.closeDialog}"/>
 			<p:outputPanel id="skips">
 				<h:panelGroup
 						rendered="#{lessonModeBean.selectedStudent.student.studentClasses[lessonModeBean.selectedLesson.id] ne null}">
-					<p:outputLabel styleClass="block" value="#{lessonModeBean.selectedLesson.clazz.date}"
-								   converter="localDateConverter"/>
-					<p:outputLabel styleClass="block" value="#{lessonModeBean.selectedLesson.type.name}"/>
+					<p:outputLabel styleClass="block" value="#{lessonModeBean.selectedLesson.date}" />
+					<p:outputLabel styleClass="block" value="#{lessonModeBean.selectedLesson.lesson.type.name}"/>
 					<p:outputLabel styleClass="block" value="#{lessonModeBean.selectedStudent.name}"/>
 					<p:selectOneRadio id="registered"
 									  value="#{lessonModeBean.registered}">

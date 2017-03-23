@@ -27,11 +27,12 @@ public class StudentDAO {
 		return null;
 	}
 
-	public List<SkipInfo> getSkipInfo(int streamId) {
+	public List<SkipInfo> getSkipInfo(int streamId, int lessonId) {
 		Session session = DBSessionFactory.getSession();
 		try {
 			Query query = session.createNamedQuery("SkipInfoQuery", SkipInfo.class);
 			query.setParameter("streamId", streamId);
+			query.setParameter("lessonId", lessonId);
 			return query.getResultList();
 		} catch (PersistenceException e) {
 			System.err.println(e.getLocalizedMessage());
@@ -43,12 +44,13 @@ public class StudentDAO {
 		return null;
 	}
 
-	public List<SkipInfo> getStudentSkipInfo(List<Integer> studentId, int streamId) {
+	public List<SkipInfo> getStudentSkipInfo(List<Integer> studentId, int streamId, int lessonId) {
 		Session session = DBSessionFactory.getSession();
 		try {
 			Query query = session.createNamedQuery("StudentSkipInfoQuery", SkipInfo.class);
 			query.setParameterList("studentId", studentId);
 			query.setParameter("streamId", streamId);
+			query.setParameter("lessonId", lessonId);
 			return query.getResultList();
 		} catch (PersistenceException e) {
 			System.err.println(e.getLocalizedMessage());

@@ -9,6 +9,7 @@ import com.grsu.reader.entities.Stream;
 import com.grsu.reader.entities.Student;
 import com.grsu.reader.entities.StudentClass;
 import com.grsu.reader.models.LazyStudentDataModel;
+import com.grsu.reader.models.LessonModel;
 import com.grsu.reader.models.LessonStudentModel;
 import com.grsu.reader.utils.FacesUtils;
 import org.primefaces.component.api.DynamicColumn;
@@ -20,9 +21,7 @@ import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -36,7 +35,7 @@ public class LessonModeBean implements Serializable {
 
 	private Stream stream;
 	private Lesson lesson;
-	private List<Lesson> lessons;
+	private List<LessonModel> lessons;
 
 	private List<Note> notes;
 	private String newNote;
@@ -46,7 +45,7 @@ public class LessonModeBean implements Serializable {
 	private LessonStudentModel selectedStudent;
 	private LazyStudentDataModel studentsLazyModel;
 
-	private Lesson selectedLesson;
+	private LessonModel selectedLesson;
 
 	private Integer selectedCell;
 	private String selectedClientId;
@@ -79,6 +78,7 @@ public class LessonModeBean implements Serializable {
 	}
 
 	private void initLessonStudents() {
+		List<Lesson> lessons = new ArrayList<>();
 		Set<Student> studentSet = new HashSet<>();
 		if (stream != null && lesson != null) {
 			if (lesson.getGroup() != null) {
@@ -92,6 +92,13 @@ public class LessonModeBean implements Serializable {
 			}
 
 		}
+		this.lessons = lessons.stream()
+				.sorted((l1, l2) -> {
+					if (l1.getClazz().getDate().isAfter(l2.getClazz().getDate())) return -1;
+					if (l1.getClazz().getDate().isBefore(l2.getClazz().getDate())) return 1;
+					return 0;
+				})
+				.map(LessonModel::new).collect(Collectors.toList());
 		students = studentSet.stream().map(LessonStudentModel::new).collect(Collectors.toList());
 		studentsLazyModel = new LazyStudentDataModel(students);
 	}
@@ -120,8 +127,8 @@ public class LessonModeBean implements Serializable {
 				entityId = selectedStudent.getStudent().getId();
 				break;
 			case Constants.LESSON:
-				Lesson selectedLesson = lessons.get(selectedCell);
-				notes = selectedLesson.getNotes();
+				LessonModel selectedLesson = lessons.get(selectedCell);
+				notes = selectedLesson.getLesson().getNotes();
 				entityId = selectedLesson.getId();
 				break;
 		}
@@ -149,6 +156,7 @@ public class LessonModeBean implements Serializable {
 			EntityDAO.save(note);
 			newNote = null;
 		}
+		FacesUtils.closeDialog("notesDialog");
 
 	}
 
@@ -160,9 +168,12 @@ public class LessonModeBean implements Serializable {
 			if (!registered) {
 				studentClass.setRegistrationTime(null);
 				studentClass.setRegistrationType(null);
+
+				FacesUtils.execute("$('#"+ selectedClientId.replaceAll("\\:", "\\\\\\\\:")+ "').closest('td').addClass('skip');");
 			} else {
 				studentClass.setRegistrationTime(LocalTime.now());
 				studentClass.setRegistrationType(Constants.REGISTRATION_TYPE_MANUAL);
+				FacesUtils.execute("$('#"+ selectedClientId.replaceAll("\\:", "\\\\\\\\:")+ "').closest('td').removeClass('skip')");
 			}
 			EntityDAO.save(studentClass);
 		}
@@ -226,7 +237,7 @@ public class LessonModeBean implements Serializable {
 	}
 
 
-	public List<Lesson> getLessons() {
+	public List<LessonModel> getLessons() {
 		return lessons;
 	}
 
@@ -278,7 +289,7 @@ public class LessonModeBean implements Serializable {
 		this.selectedType = selectedType;
 	}
 
-	public Lesson getSelectedLesson() {
+	public LessonModel getSelectedLesson() {
 		return selectedLesson;
 	}
 
