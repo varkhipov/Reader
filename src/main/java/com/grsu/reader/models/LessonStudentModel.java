@@ -16,6 +16,7 @@ public class LessonStudentModel {
 	private Integer labSkip;
 	public LocalTime registrationTime;
 	private Student student;
+	private boolean additional;
 
 	public LessonStudentModel(Student student) {
 		this.student = student;
@@ -98,6 +99,14 @@ public class LessonStudentModel {
 		this.student = student;
 	}
 
+	public boolean isAdditional() {
+		return additional;
+	}
+
+	public void setAdditional(boolean additional) {
+		this.additional = additional;
+	}
+
 	@Override
 	public String toString() {
 		return "LessonStudentModel{" +
@@ -108,6 +117,7 @@ public class LessonStudentModel {
 				", practicalSkip=" + practicalSkip +
 				", labSkip=" + labSkip +
 				", registrationTime=" + registrationTime +
+				", additional=" + additional +
 				'}';
 	}
 }

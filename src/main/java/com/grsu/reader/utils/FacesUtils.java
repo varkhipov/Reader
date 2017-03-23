@@ -58,4 +58,8 @@ public class FacesUtils {
 		EventBus eventBus = EventBusFactory.getDefault().eventBus();
 		eventBus.publish(channel, data);
 	}
+
+	public static Object getBean(String beanName) {
+		return FacesContext.getCurrentInstance().getViewRoot().getViewMap().get(beanName);
+	}
 }
