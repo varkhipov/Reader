@@ -12,7 +12,6 @@
 		<mapping class="com.grsu.reader.entities.Group"/>
 		<mapping class="com.grsu.reader.entities.GroupType"/>
 		<mapping class="com.grsu.reader.entities.Lesson"/>
-		<mapping class="com.grsu.reader.entities.LessonType"/>
 		<mapping class="com.grsu.reader.entities.Schedule"/>
 		<mapping class="com.grsu.reader.entities.ScheduleVersion"/>
 		<mapping class="com.grsu.reader.entities.Stream"/>

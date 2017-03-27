@@ -160,7 +160,7 @@
 				<h:panelGroup
 						rendered="#{lessonModeBean.selectedStudent.student.studentClasses[lessonModeBean.selectedLesson.id] ne null}">
 					<p:outputLabel styleClass="block" value="#{lessonModeBean.selectedLesson.date}" />
-					<p:outputLabel styleClass="block" value="#{lessonModeBean.selectedLesson.lesson.type.name}"/>
+					<p:outputLabel styleClass="block" value="#{msg[lessonModeBean.selectedLesson.lesson.type.key]}"/>
 					<p:outputLabel styleClass="block" value="#{lessonModeBean.selectedStudent.name}"/>
 					<p:selectOneRadio id="registered"
 									  value="#{lessonModeBean.registered}">

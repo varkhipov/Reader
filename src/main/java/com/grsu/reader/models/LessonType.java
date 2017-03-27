@@ -6,7 +6,8 @@ package com.grsu.reader.models;
 public enum LessonType {
 	LECTURE(1, "lecture"),
 	PRACTICAL(2, "practical"),
-	LAB(3, "lab");
+	LAB(3, "lab"),
+	ATTESTATION(4, "attestation");
 
 	private final int code;
 	private final String key;

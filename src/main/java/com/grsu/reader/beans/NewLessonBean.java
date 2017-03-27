@@ -3,6 +3,7 @@ package com.grsu.reader.beans;
 import com.grsu.reader.dao.EntityDAO;
 import com.grsu.reader.entities.*;
 import com.grsu.reader.entities.Class;
+import com.grsu.reader.models.LessonType;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -24,6 +25,8 @@ public class NewLessonBean implements Serializable {
 	private SessionBean sessionBean;
 
 	private Lesson lesson;
+
+	private List<LessonType> lessonTypes = new ArrayList<>(Arrays.asList(LessonType.LECTURE, LessonType.PRACTICAL, LessonType.LAB));
 
 	private void initLesson() {
 		if (lesson.getClasses() == null) {
@@ -48,7 +51,7 @@ public class NewLessonBean implements Serializable {
 
 	public void createLesson() {
 		if (lesson != null) {
-			if (lesson.getType() == null || lesson.getType().getId() == 1) {
+			if (lesson.getType() == null || lesson.getType() == LessonType.LECTURE) {
 				lesson.setGroup(null);
 			}
 
@@ -97,4 +100,7 @@ public class NewLessonBean implements Serializable {
 		this.sessionBean = sessionBean;
 	}
 
+	public List<LessonType> getLessonTypes() {
+		return lessonTypes;
+	}
 }

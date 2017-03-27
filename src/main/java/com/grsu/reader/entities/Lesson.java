@@ -1,6 +1,8 @@
 package com.grsu.reader.entities;
 
+import com.grsu.reader.converters.db.LessonTypeAttributeConverter;
 import com.grsu.reader.converters.db.LocalDateTimeAttributeConverter;
+import com.grsu.reader.models.LessonType;
 import com.grsu.reader.utils.EntityUtils;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.CascadeType;
@@ -45,8 +47,8 @@ public class Lesson implements AssistantEntity {
 	@JoinColumn(name = "stream_id", referencedColumnName = "id")
 	private Stream stream;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "type_id", referencedColumnName = "id")
+	@Convert(converter = LessonTypeAttributeConverter.class)
+	@Column(name = "type_id")
 	private LessonType type;
 
 	@NotFound(action= NotFoundAction.IGNORE)
@@ -167,7 +169,6 @@ public class Lesson implements AssistantEntity {
 		if (createDate != null ? !createDate.equals(lesson.createDate) : lesson.createDate != null) return false;
 		if (!EntityUtils.compareEntityLists(classes, lesson.classes)) return false;
 		if (!EntityUtils.compareEntity(stream, lesson.stream)) return false;
-		if (!EntityUtils.compareEntity(type, lesson.type)) return false;
 		if (!EntityUtils.compareEntity(group, lesson.group)) return false;
 
 		return true;

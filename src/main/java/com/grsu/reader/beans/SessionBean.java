@@ -1,12 +1,11 @@
 package com.grsu.reader.beans;
 
 import com.grsu.reader.dao.EntityDAO;
-import com.grsu.reader.entities.Class;
+import com.grsu.reader.dao.LessonDAO;
 import com.grsu.reader.entities.Department;
 import com.grsu.reader.entities.Discipline;
 import com.grsu.reader.entities.Group;
 import com.grsu.reader.entities.Lesson;
-import com.grsu.reader.entities.LessonType;
 import com.grsu.reader.entities.Schedule;
 import com.grsu.reader.entities.Stream;
 import com.grsu.reader.entities.Student;
@@ -35,7 +34,6 @@ public class SessionBean implements Serializable {
 	private List<Group> groups;
 	private List<Student> students;
 	private List<Lesson> lessons;
-	private List<LessonType> lessonTypes;
 
 	@PostConstruct
 	public void connect() {
@@ -66,7 +64,6 @@ public class SessionBean implements Serializable {
 		updateGroups();
 		updateStudents();
 		updateLessons();
-		updateLessonTypes();
 	}
 
 	public void updateSchedules() {
@@ -95,10 +92,6 @@ public class SessionBean implements Serializable {
 
 	public void updateLessons() {
 		lessons = null;
-	}
-
-	public void updateLessonTypes() {
-		lessonTypes = null;
 	}
 
 	public void loadStudentsPhoto() {
@@ -190,24 +183,13 @@ public class SessionBean implements Serializable {
 
 	public List<Lesson> getLessons() {
 		if (lessons == null) {
-			lessons = EntityDAO.getAll(Lesson.class);
+			lessons = (new LessonDAO()).getAll();
 		}
 		return lessons;
 	}
 
 	public void setLessons(List<Lesson> lessons) {
 		this.lessons = lessons;
-	}
-
-	public List<LessonType> getLessonTypes() {
-		if (lessonTypes == null) {
-			lessonTypes = EntityDAO.getAll(LessonType.class);
-		}
-		return lessonTypes;
-	}
-
-	public void setLessonTypes(List<LessonType> lessonTypes) {
-		this.lessonTypes = lessonTypes;
 	}
 
 }

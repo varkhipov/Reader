@@ -25,7 +25,7 @@
 						value="#{lesson.clazz ne null and lesson.clazz.schedule ne null ? lesson.clazz.schedule.caption : ''}"/>
 			</p:column>
 			<p:column headerText="#{msg['lesson.type']}">
-				<h:outputText value="#{lesson.type ne null ? lesson.type.name : ''}"/>
+				<h:outputText value="#{msg[lesson.type.key]}"/>
 			</p:column>
 			<p:column headerText="#{msg['lesson.group']}">
 				<h:outputText value="#{lesson.group ne null ? lesson.group.name : msg['label.all.groups']}"/>

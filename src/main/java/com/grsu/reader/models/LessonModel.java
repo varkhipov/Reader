@@ -16,7 +16,7 @@ public class LessonModel {
 	public LessonModel(Lesson lesson, Integer number) {
 		id = lesson.getId();
 		this.lesson = lesson;
-		type = LessonType.getLessonTypeByCode(lesson.getType().getId());
+		type = lesson.getType();
 		date = DateUtils.formatDate(lesson.getClazz().getDate(), DateUtils.FORMAT_DATE_SHORT_YEAR);
 		this.number = number;
 	}
