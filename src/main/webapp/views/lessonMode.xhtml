@@ -45,6 +45,13 @@
 						<f:setPropertyActionListener value="lesson" target="#{sessionBean.activeView}"/>
 						<f:ajax event="click" listener="#{lessonModeBean.clear}"/>
 					</p:commandButton>
+					<p:commandButton
+							title="Show Attestations"
+							actionListener="#{lessonModeBean.setShowAttestations(!lessonModeBean.showAttestations)}"
+							update=":lessonModeTable"
+							icon="fa fa-fw fa-buysellads"
+							rendered="#{lessonModeBean.attestations.size() gt 0}"
+					/>
 				</f:facet>
 
 				<h:panelGroup id="STUDENT_#{student.student.id}" styleClass="">
@@ -56,7 +63,53 @@
 				</h:panelGroup>
 			</p:column>
 
+			<!-- attestations -->
+			<p:columns value="#{lessonModeBean.attestations}"
+					   var="attestation"
+					   styleClass="w90px class-info #{student.student.studentClasses[attestation.id] eq null ? 'no-class' : ''}"
+					   rendered="#{lessonModeBean.showAttestations}"
+			>
+				<f:facet name="header">
+					<h:panelGroup id="attestationInfo" styleClass="lesson-info">
+						<p:outputLabel value="#{attestation.date}"/>
+						<p:outputLabel styleClass="block font-size-10pt"
+									   value="#{msg['label.attestation']}"/>
+						<p:outputLabel styleClass="notes-info"
+									   rendered="#{attestation.lesson.notes.size() gt 0}">
+							<i class="fa fa-info-circle"></i>
+						</p:outputLabel>
+					</h:panelGroup>
 
+					<p:contextMenu id="attestationHeaderContextMenu"
+								   for="attestationInfo"
+								   beforeShow="applySelectedCell(event);">
+						<p:menuitem value="#{msg['label.notes']}" update=":lessonModeForm:notes"
+									icon="ui-icon-search"
+									oncomplete="PF('notesDialog').show()"
+									actionListener="#{lessonModeBean.initNotes}">
+						</p:menuitem>
+					</p:contextMenu>
+
+				</f:facet>
+
+				<p:cellEditor rendered="#{student.student.studentClasses[attestation.id] ne null}">
+					<f:facet name="output">
+						<h:outputText value="#{student.student.studentClasses[attestation.id].mark}"/>
+						<p:outputLabel styleClass="float-right"
+									   rendered="#{student.student.studentClasses[attestation.id].notes.size() gt 0}">
+							<i class="fa fa-info-circle"></i>
+						</p:outputLabel>
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{student.student.studentClasses[attestation.id].mark}"/>
+					</f:facet>
+				</p:cellEditor>
+
+
+			</p:columns>
+
+
+			<!-- lessons -->
 			<p:columns value="#{lessonModeBean.lessons}"
 					   var="lesson"
 					   styleClass="w90px class-info #{student.student.studentClasses[lesson.id] eq null ? 'no-class' : (student.student.studentClasses[lesson.id].registered eq false ? 'skip' : '')}"
@@ -87,11 +140,11 @@
 
 				<p:cellEditor rendered="#{student.student.studentClasses[lesson.id] ne null}">
 					<f:facet name="output">
-							<h:outputText value="#{student.student.studentClasses[lesson.id].mark}"/>
-							<p:outputLabel styleClass="float-right"
-										   rendered="#{student.student.studentClasses[lesson.id].notes.size() gt 0}">
-								<i class="fa fa-info-circle"></i>
-							</p:outputLabel>
+						<h:outputText value="#{student.student.studentClasses[lesson.id].mark}"/>
+						<p:outputLabel styleClass="float-right"
+									   rendered="#{student.student.studentClasses[lesson.id].notes.size() gt 0}">
+							<i class="fa fa-info-circle"></i>
+						</p:outputLabel>
 					</f:facet>
 					<f:facet name="input">
 						<p:inputText id="modelInput" value="#{student.student.studentClasses[lesson.id].mark}"/>
@@ -118,6 +171,11 @@
 						icon="ui-icon-arrowrefresh-1-w"
 						oncomplete="PF('registeredDialog').show()"
 						actionListener="#{lessonModeBean.initRegisteredDialog}"/>
+			<p:menuitem value="Create attestation"
+						update=":lessonModeTable"
+						actionListener="#{lessonModeBean.createAttestation}"
+						icon="fa fa-fw fa-plus">
+			</p:menuitem>
 		</p:contextMenu>
 
 		<p:dialog header="#{msg['label.notes']}"
@@ -159,7 +217,7 @@
 			<p:outputPanel id="skips">
 				<h:panelGroup
 						rendered="#{lessonModeBean.selectedStudent.student.studentClasses[lessonModeBean.selectedLesson.id] ne null}">
-					<p:outputLabel styleClass="block" value="#{lessonModeBean.selectedLesson.date}" />
+					<p:outputLabel styleClass="block" value="#{lessonModeBean.selectedLesson.date}"/>
 					<p:outputLabel styleClass="block" value="#{msg[lessonModeBean.selectedLesson.lesson.type.key]}"/>
 					<p:outputLabel styleClass="block" value="#{lessonModeBean.selectedStudent.name}"/>
 					<p:selectOneRadio id="registered"

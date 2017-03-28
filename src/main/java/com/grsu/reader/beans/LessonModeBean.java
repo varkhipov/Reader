@@ -2,7 +2,7 @@ package com.grsu.reader.beans;
 
 import com.grsu.reader.constants.Constants;
 import com.grsu.reader.dao.EntityDAO;
-import com.grsu.reader.entities.Group;
+import com.grsu.reader.entities.Class;
 import com.grsu.reader.entities.Lesson;
 import com.grsu.reader.entities.Note;
 import com.grsu.reader.entities.Stream;
@@ -11,6 +11,7 @@ import com.grsu.reader.entities.StudentClass;
 import com.grsu.reader.models.LazyStudentDataModel;
 import com.grsu.reader.models.LessonModel;
 import com.grsu.reader.models.LessonStudentModel;
+import com.grsu.reader.models.LessonType;
 import com.grsu.reader.utils.FacesUtils;
 import org.primefaces.component.api.DynamicColumn;
 import org.primefaces.event.CellEditEvent;
@@ -21,7 +22,12 @@ import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -36,6 +42,7 @@ public class LessonModeBean implements Serializable {
 	private Stream stream;
 	private Lesson lesson;
 	private List<LessonModel> lessons;
+	private List<LessonModel> attestations;
 
 	private List<Note> notes;
 	private String newNote;
@@ -52,6 +59,7 @@ public class LessonModeBean implements Serializable {
 	private String selectedType;
 
 	private boolean registered;
+	private boolean showAttestations = false;
 
 	public void initLessonMode() {
 		initLessonStudents();
@@ -85,20 +93,24 @@ public class LessonModeBean implements Serializable {
 				studentSet.addAll(lesson.getGroup().getStudents());
 				lessons = stream.getLessons().stream().filter(l -> l.getGroup() == null || (lesson.getGroup().equals(l.getGroup()))).collect(Collectors.toList());
 			} else {
-				for (Group group : stream.getGroups()) {
-					studentSet.addAll(group.getStudents());
-				}
+				stream.getGroups().stream().forEach(g -> studentSet.addAll(g.getStudents()));
 				lessons = stream.getLessons();
 			}
-
 		}
+
 		this.lessons = lessons.stream()
+				.filter(l -> Arrays.asList(LessonType.LECTURE, LessonType.PRACTICAL, LessonType.LAB).contains(l.getType()))
 				.sorted((l1, l2) -> {
 					if (l1.getClazz().getDate().isAfter(l2.getClazz().getDate())) return -1;
 					if (l1.getClazz().getDate().isBefore(l2.getClazz().getDate())) return 1;
 					return 0;
 				})
 				.map(LessonModel::new).collect(Collectors.toList());
+
+		this.attestations = lessons.stream()
+				.filter(l -> LessonType.ATTESTATION.equals(l.getType()))
+				.map(LessonModel::new).collect(Collectors.toList());
+
 		students = studentSet.stream().map(LessonStudentModel::new).collect(Collectors.toList());
 		studentsLazyModel = new LazyStudentDataModel(students);
 	}
@@ -196,6 +208,35 @@ public class LessonModeBean implements Serializable {
 	public void removeNote(Note note) {
 		EntityDAO.delete(note);
 		notes.remove(note);
+	}
+
+	public void createAttestation() {
+		Lesson lesson = new Lesson();
+		Class cl = new Class();
+		cl.setDate(LocalDateTime.now());
+		cl.setLesson(lesson);
+		lesson.setClasses(new HashSet<>());
+		lesson.getClasses().add(cl);
+		lesson.setType(LessonType.ATTESTATION);
+		lesson.setStream(this.stream);
+		lesson.setGroup(this.lesson.getGroup());
+
+		EntityDAO.add(lesson);
+		EntityDAO.add(lesson.getClazz());
+		stream.getLessons().add(lesson);
+
+		List<StudentClass> studentClasses = new ArrayList<>();
+		for (LessonStudentModel student : students) {
+			StudentClass sc = new StudentClass();
+			sc.setStudent(student.getStudent());
+			sc.setClazz(lesson.getClazz());
+			studentClasses.add(sc);
+			student.getStudent().getStudentClasses().put(lesson.getClazz().getId(), sc);
+		}
+		EntityDAO.add(new ArrayList<>(studentClasses));
+		lesson.getClazz().setStudentClasses(new HashMap<>());
+		studentClasses.stream().forEach(sc -> lesson.getClazz().getStudentClasses().put(sc.getStudentId(), sc));
+		attestations.add(new LessonModel(lesson));
 	}
 
 
@@ -299,5 +340,17 @@ public class LessonModeBean implements Serializable {
 
 	public void setRegistered(boolean registered) {
 		this.registered = registered;
+	}
+
+	public List<LessonModel> getAttestations() {
+		return attestations;
+	}
+
+	public boolean isShowAttestations() {
+		return showAttestations;
+	}
+
+	public void setShowAttestations(boolean showAttestations) {
+		this.showAttestations = showAttestations;
 	}
 }
