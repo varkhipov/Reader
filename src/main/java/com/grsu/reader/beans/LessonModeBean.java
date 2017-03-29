@@ -111,7 +111,7 @@ public class LessonModeBean implements Serializable {
 				.filter(l -> LessonType.ATTESTATION.equals(l.getType()))
 				.map(LessonModel::new).collect(Collectors.toList());
 
-		students = studentSet.stream().map(LessonStudentModel::new).collect(Collectors.toList());
+		students = studentSet.stream().map(LessonStudentModel::new).sorted((s1, s2) -> s1.name.compareTo(s2.name)).collect(Collectors.toList());
 		studentsLazyModel = new LazyStudentDataModel(students);
 	}
 

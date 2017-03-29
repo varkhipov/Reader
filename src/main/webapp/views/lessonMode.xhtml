@@ -52,6 +52,11 @@
 							icon="fa fa-fw fa-buysellads"
 							rendered="#{lessonModeBean.attestations.size() gt 0}"
 					/>
+					<p:commandButton title="#{msg['btn.photoMode']}"
+									 icon="fa fa-fw fa-photo"
+									 actionListener="#{menuBean.changeView('photoMode')}"
+									 update="@([id$=views])">
+					</p:commandButton>
 				</f:facet>
 
 				<h:panelGroup id="STUDENT_#{student.student.id}" styleClass="">

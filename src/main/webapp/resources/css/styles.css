@@ -418,3 +418,23 @@ body {
 /*.ui-datatable-frozen-container .ui-datatable-scrollable-body tbody tr:last-child {*/
 	/*border-bottom-width: 20px;*/
 /*}*/
+
+/* Photo Mode */
+.photo-mode img {
+	max-width: 150px;
+	height: auto;
+}
+
+.photo-mode .student {
+	display: block;
+	width: 170px;
+}
+
+.photo-mode .student .name {
+	display: block;
+}
+
+.photo-mode .lesson-info label {
+	margin-left: 10px;
+	display: inline;
+}
