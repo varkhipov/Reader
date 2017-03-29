@@ -117,7 +117,7 @@ public class LessonModeBean implements Serializable {
 
 	public void initRegisteredDialog() {
 		if (Constants.STUDENT_CLASS.equals(selectedType)) {
-			selectedLesson = lessons.get(selectedCell);
+			selectedLesson = calculateSelectedLesson();
 			registered = selectedStudent.getStudent().getStudentClasses().get(selectedLesson.getId()).getRegistered();
 		} else {
 			selectedLesson = null;
@@ -126,9 +126,11 @@ public class LessonModeBean implements Serializable {
 
 	public void initNotes() {
 		notes = null;
+		selectedLesson = calculateSelectedLesson();
+
 		switch (selectedType) {
 			case Constants.STUDENT_CLASS:
-				StudentClass sc = selectedStudent.getStudent().getStudentClasses().get(lessons.get(selectedCell).getId());
+				StudentClass sc = selectedStudent.getStudent().getStudentClasses().get(selectedLesson.getId());
 				if (sc != null) {
 					notes = sc.getNotes();
 					entityId = sc.getId();
@@ -139,16 +141,35 @@ public class LessonModeBean implements Serializable {
 				entityId = selectedStudent.getStudent().getId();
 				break;
 			case Constants.LESSON:
-				LessonModel selectedLesson = lessons.get(selectedCell);
 				notes = selectedLesson.getLesson().getNotes();
 				entityId = selectedLesson.getId();
 				break;
 		}
 	}
 
+	private LessonModel calculateSelectedLesson() {
+		if (selectedCell != null) {
+			if (showAttestations) {
+				if (selectedCell < attestations.size()) {
+					return attestations.get(selectedCell);
+				} else {
+					return lessons.get(selectedCell - attestations.size());
+				}
+			} else {
+				return lessons.get(selectedCell);
+			}
+		}
+		return null;
+	}
 
 	public void onCellEdit(CellEditEvent event) {
-		EntityDAO.update(studentsLazyModel.getRowData().getStudent().getStudentClasses().get(lessons.get(((DynamicColumn) event.getColumn()).getIndex()).getId()));
+		Integer id;
+		if (event.getColumn().getColumnKey().contains("attestation")) {
+			id = attestations.get(((DynamicColumn) event.getColumn()).getIndex()).getId();
+		} else {
+			id = lessons.get(((DynamicColumn) event.getColumn()).getIndex()).getId();
+		}
+		EntityDAO.update(studentsLazyModel.getRowData().getStudent().getStudentClasses().get(id));
 	}
 
 	public void backToLesson() {
@@ -198,6 +219,7 @@ public class LessonModeBean implements Serializable {
 		notes = null;
 		selectedType = null;
 		selectedCell = null;
+		selectedLesson = null;
 		System.out.println("selectedClientId " + selectedClientId);
 		if (selectedClientId != null) {
 			FacesUtils.update(selectedClientId);
