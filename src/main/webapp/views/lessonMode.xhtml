@@ -46,11 +46,12 @@
 						<f:ajax event="click" listener="#{lessonModeBean.clear}"/>
 					</p:commandButton>
 					<p:commandButton
-							title="Show Attestations"
+							title="#{msg[lessonModeBean.showAttestations ? 'btn.show.attestation' : 'btn.hide.attestation']}"
 							actionListener="#{lessonModeBean.setShowAttestations(!lessonModeBean.showAttestations)}"
 							update=":lessonModeTable"
 							icon="fa fa-fw fa-buysellads"
 							rendered="#{lessonModeBean.attestations.size() gt 0}"
+					        styleClass="#{lessonModeBean.showAttestations ? 'green' : ''}"
 					/>
 					<p:commandButton title="#{msg['btn.photoMode']}"
 									 icon="fa fa-fw fa-photo"
@@ -222,7 +223,7 @@
 				  resizable="false">
 			<p:outputPanel id="skips">
 				<h:panelGroup
-						rendered="#{lessonModeBean.selectedStudent.student.studentClasses[lessonModeBean.selectedLesson.id] ne null}">
+						rendered="#{lessonModeBean.selectedStudent.student.studentClasses[lessonModeBean.selectedLesson.id] ne null and lessonModeBean.selectedLesson.type.key ne 'attestation'}">
 					<p:outputLabel styleClass="block" value="#{lessonModeBean.selectedLesson.date}"/>
 					<p:outputLabel styleClass="block" value="#{msg[lessonModeBean.selectedLesson.lesson.type.key]}"/>
 					<p:outputLabel styleClass="block" value="#{lessonModeBean.selectedStudent.name}"/>
@@ -236,7 +237,7 @@
 					/>
 				</h:panelGroup>
 				<p:outputLabel value="#{msg['warning.operation.not.available']}"
-							   rendered="#{lessonModeBean.selectedStudent.student.studentClasses[lessonModeBean.selectedLesson.id] eq null}"/>
+							   rendered="#{lessonModeBean.selectedStudent.student.studentClasses[lessonModeBean.selectedLesson.id] eq null or lessonModeBean.selectedLesson.type.key eq 'attestation'}"/>
 			</p:outputPanel>
 		</p:dialog>
 

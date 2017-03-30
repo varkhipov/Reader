@@ -420,6 +420,10 @@ body {
 /*}*/
 
 /* Photo Mode */
+.photo-mode .ui-datagrid-column {
+	width: 14%;
+}
+
 .photo-mode img {
 	max-width: 150px;
 	height: auto;
@@ -427,7 +431,6 @@ body {
 
 .photo-mode .student {
 	display: block;
-	width: 170px;
 }
 
 .photo-mode .student .name {

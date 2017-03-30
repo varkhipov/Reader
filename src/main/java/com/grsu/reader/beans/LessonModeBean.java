@@ -242,19 +242,21 @@ public class LessonModeBean implements Serializable {
 		lesson.setType(LessonType.ATTESTATION);
 		lesson.setStream(this.stream);
 		lesson.setGroup(this.lesson.getGroup());
+		lesson.setNotes(new ArrayList<>());
 
 		EntityDAO.add(lesson);
 		EntityDAO.add(lesson.getClazz());
 		stream.getLessons().add(lesson);
 
 		List<StudentClass> studentClasses = new ArrayList<>();
-		for (LessonStudentModel student : students) {
+		students.stream().forEach(s -> {
 			StudentClass sc = new StudentClass();
-			sc.setStudent(student.getStudent());
+			sc.setStudent(s.getStudent());
 			sc.setClazz(lesson.getClazz());
+			sc.setNotes(new ArrayList<>());
 			studentClasses.add(sc);
-			student.getStudent().getStudentClasses().put(lesson.getClazz().getId(), sc);
-		}
+			s.getStudent().getStudentClasses().put(lesson.getClazz().getId(), sc);
+		});
 		EntityDAO.add(new ArrayList<>(studentClasses));
 		lesson.getClazz().setStudentClasses(new HashMap<>());
 		studentClasses.stream().forEach(sc -> lesson.getClazz().getStudentClasses().put(sc.getStudentId(), sc));
