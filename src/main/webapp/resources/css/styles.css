@@ -328,8 +328,12 @@ body {
 	background-color: rgba(255, 0, 0, 0.3);
 }
 
-.no-class {
+.lesson-mode-table .ui-datatable-data .no-class {
 	background-color: rgba(211, 211, 211, 0.7);
+}
+
+.lesson-mode-table .attestation {
+	background-color: rgba(249, 233, 2, 0.3);
 }
 
 .lesson-mode-table .ui-column-filter.ui-inputfield {
@@ -361,6 +365,7 @@ body {
 
 .lesson-mode-table td.class-info {
 	text-align: center;
+	font-weight: bold;
 }
 
 /*.lesson-mode-table td.class-info .ui-cell-editor-output{*/
@@ -398,9 +403,13 @@ body {
 	right: -10px;
 }
 
-.ui-datatable-scrollable-body {
+.ui-datatable .ui-datatable-scrollable-body {
 	height: 80vh;
 }
+
+ .ui-datatable.group-mode .ui-datatable-scrollable-body {
+	 height: auto;
+ }
 
 .ui-datatable-scrollable-container .ui-datatable-scrollable-body,
 .ui-datatable-scrollable-container .ui-datatable-scrollable-header {
@@ -411,13 +420,17 @@ body {
 	height: 35px;
 }
 */
-/*.ui-datatable-scrollable-container .ui-datatable-scrollable-header thead tr th:last-child {*/
-	/*border-right-width: 16px;*/
- /*}*/
+.ui-datatable-scrollable-container .ui-datatable-scrollable-header thead tr th:last-child {
+	border-right-width: 21px;
+ }
 
-/*.ui-datatable-frozen-container .ui-datatable-scrollable-body tbody tr:last-child {*/
-	/*border-bottom-width: 20px;*/
-/*}*/
+.ui-datatable-frozen-container .ui-datatable-scrollable-body tbody {
+	border-right-width: 5px;
+}
+
+.ui-datatable-frozen-container .ui-datatable-scrollable-body tbody tr:last-child {
+	border-bottom-width: 21px;
+}
 
 /* Photo Mode */
 .photo-mode .ui-datagrid-column {
@@ -440,4 +453,8 @@ body {
 .photo-mode .lesson-info label {
 	margin-left: 10px;
 	display: inline;
+}
+
+.photo-mode .ui-datagrid-column {
+	border: 1px solid #a8a8a8;
 }

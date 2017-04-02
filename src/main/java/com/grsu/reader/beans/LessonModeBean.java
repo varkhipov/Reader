@@ -22,12 +22,7 @@ import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -111,7 +106,7 @@ public class LessonModeBean implements Serializable {
 				.filter(l -> LessonType.ATTESTATION.equals(l.getType()))
 				.map(LessonModel::new).collect(Collectors.toList());
 
-		students = studentSet.stream().map(LessonStudentModel::new).sorted((s1, s2) -> s1.name.compareTo(s2.name)).collect(Collectors.toList());
+		students = studentSet.stream().map(LessonStudentModel::new).sorted(Comparator.comparing(s -> s.name)).collect(Collectors.toList());
 		studentsLazyModel = new LazyStudentDataModel(students);
 	}
 
@@ -170,12 +165,6 @@ public class LessonModeBean implements Serializable {
 			id = lessons.get(((DynamicColumn) event.getColumn()).getIndex()).getId();
 		}
 		EntityDAO.update(studentsLazyModel.getRowData().getStudent().getStudentClasses().get(id));
-	}
-
-	public void backToLesson() {
-		clear();
-//		lessonBean.calculateTimer();
-		sessionBean.setActiveView("lesson");
 	}
 
 	public void saveNote() {

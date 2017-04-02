@@ -14,7 +14,7 @@
 			<p:panel id="lastVisitInfo" styleClass="visit-info">
 				<p:panelGrid columns="2">
 					<p:panel styleClass="image">
-						<p:graphicImage value="#{imageBean.getImagePath(lessonBean.processedStudent.cardUid)}" />
+						<p:graphicImage value="#{imageBean.getImagePath(lessonBean.processedStudent.cardUid)}"/>
 					</p:panel>
 					<p:panel rendered="#{lessonBean.processedStudent eq null}">
 						<p:outputLabel value="#{msg['lesson.visit.noData']}"/>
@@ -141,7 +141,7 @@
 						listener="#{lessonBean.onPresentStudentsSelect}"/>
 
 				<p:ajax event="rowSelect" listener="#{lessonBean.onStudentRowSelect}"
-						update=":lessonForm:lastVisitInfo"/>
+						update=":lessonForm:lastVisitInfo :lessonForm:additionalInfo"/>
 
 				<p:column selectionMode="multiple" styleClass="w16px center"/>
 
@@ -209,7 +209,7 @@
 						listener="#{lessonBean.onAbsentStudentsSelect}"/>
 
 				<p:ajax event="rowSelect" listener="#{lessonBean.onStudentRowSelect}"
-						update=":lessonForm:lastVisitInfo"/>
+						update=":lessonForm:lastVisitInfo :lessonForm:additionalInfo"/>
 
 				<p:column selectionMode="multiple" styleClass="w16px center"/>
 
@@ -263,16 +263,25 @@
 					<p:clock pattern="HH:mm:ss"/>
 				</p:panel>
 
-				<p:panel styleClass="ui-widget-header margin-bottom-10px margin-top-10px h30px"></p:panel>
+				<p:panel styleClass="ui-widget-header margin-bottom-10px margin-top-10px h30px">
+
+				</p:panel>
 
 				<p:photoCam id="camera"
 							widgetVar="camera"
 							styleClass="camera"
 							rendered="#{lessonBean.camera}"/>
-				<p:panel rendered="#{not lessonBean.camera}"
+				<p:panel id="additionalInfo"
+						 rendered="#{not lessonBean.camera}"
 						 header="#{msg['label.additional.info']}"
-						styleClass="additional-info h200px">
-
+						 styleClass="additional-info h200px">
+					<h:outputLabel value="#{lessonBean.processedStudent.fullName}" styleClass="bold"/>
+					<ui:repeat id="noteInfo" var="note" value="#{lessonBean.notes}">
+						<h:panelGrid columns="2" columnClasses="w300px, w20px" styleClass="w100pc">
+							<h:outputText value="#{note.description}"/>
+							<h:outputText value="#{note.createDate}" converter="localDateConverter"/>
+						</h:panelGrid>
+					</ui:repeat>
 				</p:panel>
 			</p:panel>
 		</p:panelGrid>

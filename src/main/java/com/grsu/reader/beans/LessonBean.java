@@ -3,11 +3,8 @@ package com.grsu.reader.beans;
 import com.grsu.reader.constants.Constants;
 import com.grsu.reader.dao.EntityDAO;
 import com.grsu.reader.dao.StudentDAO;
+import com.grsu.reader.entities.*;
 import com.grsu.reader.entities.Class;
-import com.grsu.reader.entities.Group;
-import com.grsu.reader.entities.Lesson;
-import com.grsu.reader.entities.Student;
-import com.grsu.reader.entities.StudentClass;
 import com.grsu.reader.models.LazyStudentDataModel;
 import com.grsu.reader.models.LessonStudentModel;
 import com.grsu.reader.models.LessonType;
@@ -78,6 +75,7 @@ public class LessonBean implements Serializable {
 
 	private long timer;
 	private boolean camera = false;
+	private List<Note> notes;
 
 	public void initLesson() {
 		calculateTimer();
@@ -486,6 +484,9 @@ public class LessonBean implements Serializable {
 
 	public void onStudentRowSelect(SelectEvent event) {
 		processedStudent = ((LessonStudentModel) event.getObject()).getStudent();
+		notes = new ArrayList<>();
+		notes.addAll(processedStudent.getNotes());
+		processedStudent.getStudentClasses().values().forEach(sc -> notes.addAll(sc.getNotes()));
 	}
 
 	public void onPresentStudentsSelect(ToggleSelectEvent event) {
@@ -657,5 +658,9 @@ public class LessonBean implements Serializable {
 
 	public void setCamera(boolean camera) {
 		this.camera = camera;
+	}
+
+	public List<Note> getNotes() {
+		return notes;
 	}
 }
