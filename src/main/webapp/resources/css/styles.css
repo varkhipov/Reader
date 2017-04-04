@@ -354,8 +354,20 @@ body {
 	height: 22px;
 }
 
-.lesson-mode-table tbody.ui-datatable-data td.class-info {
+.lesson-mode-table th.student-info {
 	padding: 0;
+}
+
+.lesson-mode-table .ui-datatable-scrollable-theadclone {
+	display: none;
+}
+
+.lesson-mode-table .ui-datatable-data .class-info,
+.lesson-mode-table .ui-datatable-data .class-info .ui-cell-editor,
+.lesson-mode-table .ui-widget-header .class-info,
+.lesson-mode-table .ui-datatable-scrollable-theadclone .class-info{
+	padding: 0;
+	width: 70px;
 }
 
 .lesson-mode-table td.class-info,
@@ -393,14 +405,7 @@ body {
 */
 .lesson-mode-table .lesson-info {
 	display: block;
-	position: relative;
-	height: 54px;
-}
-
-.lesson-mode-table .notes-info {
-	position: absolute;
-	top: 0;
-	right: -10px;
+	height: 50px;
 }
 
 .ui-datatable .ui-datatable-scrollable-body {

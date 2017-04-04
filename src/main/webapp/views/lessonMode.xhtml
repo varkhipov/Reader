@@ -73,14 +73,14 @@
 			<!-- attestations -->
 			<p:columns value="#{lessonModeBean.attestations}"
 					   var="attestation"
-					   styleClass="attestation w90px class-info #{student.student.studentClasses[attestation.id] eq null ? 'no-class' : ''}"
+					   styleClass="attestation class-info #{student.student.studentClasses[attestation.id] eq null ? 'no-class' : ''}"
 					   rendered="#{lessonModeBean.showAttestations}"
 			           id="attestation"
 			>
 				<f:facet name="header">
 					<h:panelGroup id="attestationInfo" styleClass="lesson-info">
 						<p:outputLabel styleClass="block font-size-10pt"
-									   value="#{msg['label.attestation']}"/>
+									   value="A"/>
 						<p:outputLabel styleClass="notes-info"
 									   rendered="#{attestation.lesson.notes.size() gt 0}">
 							<i class="fa fa-info-circle"></i>
@@ -119,7 +119,7 @@
 			<!-- lessons -->
 			<p:columns value="#{lessonModeBean.lessons}"
 					   var="lesson"
-					   styleClass="w90px class-info #{student.student.studentClasses[lesson.id] eq null ? 'no-class' : (student.student.studentClasses[lesson.id].registered eq false ? 'skip' : '')}"
+					   styleClass="class-info #{student.student.studentClasses[lesson.id] eq null ? 'no-class' : (student.student.studentClasses[lesson.id].registered eq false ? 'skip' : '')}"
 			>
 				<f:facet name="header">
 					<h:panelGroup id="lessonInfo" styleClass="lesson-info">
@@ -161,7 +161,7 @@
 
 			</p:columns>
 
-			<p:column style="width: 0px; padding: 0;"></p:column>
+			<p:column style="padding: 0;"></p:column>
 		</p:dataTable>
 
 		<p:contextMenu id="tableContextMenu"
