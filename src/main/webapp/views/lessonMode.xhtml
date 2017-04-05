@@ -52,7 +52,14 @@
 							update=":lessonModeTable"
 							icon="fa fa-fw fa-buysellads"
 							rendered="#{lessonModeBean.attestations.size() gt 0}"
-					        styleClass="#{lessonModeBean.showAttestations ? 'green' : ''}"
+							styleClass="#{lessonModeBean.showAttestations ? 'green' : ''}"
+					/>
+					<p:commandButton
+							title="#{msg[lessonModeBean.showSkips ? 'btn.show.skips' : 'btn.hide.skips']}"
+							actionListener="#{lessonModeBean.setShowSkips(!lessonModeBean.showSkips)}"
+							update=":lessonModeTable"
+							icon="fa fa-fw fa-male"
+							styleClass="#{lessonModeBean.showSkips ? 'green' : ''}"
 					/>
 					<p:commandButton title="#{msg['btn.photoMode']}"
 									 icon="fa fa-fw fa-photo"
@@ -70,12 +77,19 @@
 				</h:panelGroup>
 			</p:column>
 
+			<!-- skips -->
+			<p:column headerText="#{msg['label.skips']}"
+					  rendered="#{lessonModeBean.showSkips}"
+					  styleClass="class-info">
+				<h:outputText value="#{student.totalSkip}"/>
+			</p:column>
+
 			<!-- attestations -->
 			<p:columns value="#{lessonModeBean.attestations}"
 					   var="attestation"
 					   styleClass="attestation class-info #{student.student.studentClasses[attestation.id] eq null ? 'no-class' : ''}"
 					   rendered="#{lessonModeBean.showAttestations}"
-			           id="attestation"
+					   id="attestation"
 			>
 				<f:facet name="header">
 					<h:panelGroup id="attestationInfo" styleClass="lesson-info">

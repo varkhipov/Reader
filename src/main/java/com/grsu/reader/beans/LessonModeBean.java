@@ -2,6 +2,7 @@ package com.grsu.reader.beans;
 
 import com.grsu.reader.constants.Constants;
 import com.grsu.reader.dao.EntityDAO;
+import com.grsu.reader.dao.StudentDAO;
 import com.grsu.reader.entities.Class;
 import com.grsu.reader.entities.Lesson;
 import com.grsu.reader.entities.Note;
@@ -22,7 +23,14 @@ import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -55,6 +63,7 @@ public class LessonModeBean implements Serializable {
 
 	private boolean registered;
 	private boolean showAttestations = false;
+	private boolean showSkips = false;
 
 	public void initLessonMode() {
 		initLessonStudents();
@@ -107,6 +116,14 @@ public class LessonModeBean implements Serializable {
 				.map(LessonModel::new).collect(Collectors.toList());
 
 		students = studentSet.stream().map(LessonStudentModel::new).sorted(Comparator.comparing(s -> s.name)).collect(Collectors.toList());
+
+		Map<Integer, Map<String, Integer>> skipInfo = new StudentDAO().getSkipInfo(stream.getId(), lesson.getId());
+		students.stream().forEach(s -> {
+			if (skipInfo.containsKey(s.getId())) {
+				s.setTotalSkip(skipInfo.get(s.getId()).get(Constants.TOTAL_SKIP));
+			}
+		});
+
 		studentsLazyModel = new LazyStudentDataModel(students);
 	}
 
@@ -365,5 +382,13 @@ public class LessonModeBean implements Serializable {
 
 	public void setShowAttestations(boolean showAttestations) {
 		this.showAttestations = showAttestations;
+	}
+
+	public boolean isShowSkips() {
+		return showSkips;
+	}
+
+	public void setShowSkips(boolean showSkips) {
+		this.showSkips = showSkips;
 	}
 }

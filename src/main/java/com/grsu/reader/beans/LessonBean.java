@@ -86,20 +86,7 @@ public class LessonBean implements Serializable {
 			initAdditionalStudents();
 
 			if (selectedLesson.getStream() != null) {
-				skipInfo = new HashMap<>();
-				List<SkipInfo> skipInfos = new StudentDAO().getSkipInfo(selectedLesson.getStream().getId(), selectedLesson.getId());
-				if (skipInfos != null) {
-					for (SkipInfo si : skipInfos) {
-						if (!skipInfo.containsKey(si.getStudentId())) {
-							Map<String, Integer> studentSkipInfoMap = new HashMap<>();
-							studentSkipInfoMap.put(Constants.TOTAL_SKIP, 0);
-							skipInfo.put(si.getStudentId(), studentSkipInfoMap);
-						}
-						skipInfo.get(si.getStudentId()).put(si.getLessonType().getKey(), si.getCount());
-						int total = skipInfo.get(si.getStudentId()).get(Constants.TOTAL_SKIP);
-						skipInfo.get(si.getStudentId()).put(Constants.TOTAL_SKIP, total + si.getCount());
-					}
-				}
+				skipInfo = new StudentDAO().getSkipInfo(selectedLesson.getStream().getId(), selectedLesson.getId());
 
 				lessonAbsentStudents = new ArrayList<>();
 				lessonPresentStudents = new ArrayList<>();

@@ -352,6 +352,8 @@ body {
 
 .lesson-mode-table td.student-info {
 	height: 22px;
+	padding-top: 1px;
+	padding-bottom: 1px;
 }
 
 .lesson-mode-table th.student-info {
@@ -372,7 +374,7 @@ body {
 
 .lesson-mode-table td.class-info,
 .lesson-mode-table td.class-info .ui-cell-editor-output{
-	height: 30px;
+	height: 24px;
 }
 
 .lesson-mode-table td.class-info {
@@ -392,7 +394,7 @@ body {
 
 .lesson-mode-table td.class-info input {
 	width: 90%;
-	height: 20px;
+	height: 14px;
 }
 /*
 .lesson-mode-table tbody.ui-datatable-data td{
@@ -437,9 +439,17 @@ body {
 	border-bottom-width: 21px;
 }
 
+.lesson-mode-table .notes-info {
+	text-align: right;
+}
+
 /* Photo Mode */
 .photo-mode .ui-datagrid-column {
 	width: 14%;
+}
+
+.photo-mode .ui-widget-content {
+	border: none;
 }
 
 .photo-mode img {
@@ -460,6 +470,6 @@ body {
 	display: inline;
 }
 
-.photo-mode .ui-datagrid-column {
-	border: 1px solid #a8a8a8;
+.photo-mode img{
+	border: 2px solid;
 }
