@@ -328,6 +328,21 @@ body {
 	background-color: rgba(255, 0, 0, 0.3);
 }
 
+.lesson-mode-table .skip {
+	position: relative;
+}
+
+.lesson-mode-table .skip:after {
+	content: "";
+	position: absolute;
+	border-top: 1px solid black;
+	width: 110%;
+	transform: rotate(17deg);
+	transform-origin: 0% 0%;
+	top: 0;
+	left: 0;
+}
+
 .lesson-mode-table .ui-datatable-data .no-class {
 	background-color: rgba(211, 211, 211, 0.7);
 }
@@ -410,6 +425,10 @@ body {
 	height: 50px;
 }
 
+.lesson-mode-table .ui-datatable-odd {
+	background: none;
+}
+
 .ui-datatable .ui-datatable-scrollable-body {
 	height: 80vh;
 }
@@ -443,6 +462,11 @@ body {
 	text-align: right;
 }
 
+.lesson-mode-table .ui-state-highlight{
+	background: rgba(0, 0, 0, 0) linear-gradient(-90deg, rgba(86, 163, 31, 0.5), rgba(106, 255, 0, 0.5)) repeat scroll 0 0;
+	color: inherit;
+	text-shadow: inherit;
+}
 /* Photo Mode */
 .photo-mode .ui-datagrid-column {
 	width: 14%;

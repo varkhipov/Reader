@@ -47,7 +47,7 @@
 						<f:ajax event="click" listener="#{lessonModeBean.clear}"/>
 					</p:commandButton>
 					<p:commandButton
-							title="#{msg[lessonModeBean.showAttestations ? 'btn.show.attestation' : 'btn.hide.attestation']}"
+							title="#{msg[lessonModeBean.showAttestations ? 'btn.hide.attestation' : 'btn.show.attestation']}"
 							actionListener="#{lessonModeBean.setShowAttestations(!lessonModeBean.showAttestations)}"
 							update=":lessonModeTable"
 							icon="fa fa-fw fa-buysellads"
@@ -55,7 +55,7 @@
 							styleClass="#{lessonModeBean.showAttestations ? 'green' : ''}"
 					/>
 					<p:commandButton
-							title="#{msg[lessonModeBean.showSkips ? 'btn.show.skips' : 'btn.hide.skips']}"
+							title="#{msg[lessonModeBean.showSkips ? 'btn.hide.skips' : 'btn.show.skips']}"
 							actionListener="#{lessonModeBean.setShowSkips(!lessonModeBean.showSkips)}"
 							update=":lessonModeTable"
 							icon="fa fa-fw fa-male"

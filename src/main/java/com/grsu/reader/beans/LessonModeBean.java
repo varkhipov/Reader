@@ -161,14 +161,18 @@ public class LessonModeBean implements Serializable {
 
 	private LessonModel calculateSelectedLesson() {
 		if (selectedCell != null) {
+			int column = selectedCell;
+			if (showSkips) {
+				column--;
+			}
 			if (showAttestations) {
-				if (selectedCell < attestations.size()) {
-					return attestations.get(selectedCell);
+				if (column < attestations.size()) {
+					return attestations.get(column);
 				} else {
-					return lessons.get(selectedCell - attestations.size());
+					return lessons.get(column - attestations.size());
 				}
 			} else {
-				return lessons.get(selectedCell);
+				return lessons.get(column);
 			}
 		}
 		return null;
