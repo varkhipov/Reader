@@ -375,6 +375,10 @@ body {
 	padding: 0;
 }
 
+.lesson-mode-table th.skips {
+	font-size: 10pt;
+}
+
 .lesson-mode-table .ui-datatable-scrollable-theadclone {
 	display: none;
 }
