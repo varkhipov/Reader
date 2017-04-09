@@ -25,4 +25,8 @@ public final class Constants {
 	public static final String STUDENT_CLASS = "STUDENT_CLASS";
 	public static final String STUDENT = "STUDENT";
 	public static final String LESSON = "LESSON";
+
+	//LESSON TYPES
+	public static final String OTHER = "OTHER";
+	public static final String ATTESTATION = "ATTESTATION";
 }

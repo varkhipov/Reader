@@ -123,6 +123,7 @@ public class LessonBean implements Serializable {
 		additionalStudents = null;
 		timer = 0;
 		camera = false;
+		notes = null;
 	}
 
 	private void initStudents() {

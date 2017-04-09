@@ -39,7 +39,7 @@ public class NewLessonBean implements Serializable {
 	}
 
 	public void exit() {
-		sessionBean.setActiveView("lessons");
+//		sessionBean.setActiveView("lessons");
 		clear();
 		update("views");
 		closeDialog("lessonDialog");

@@ -22,6 +22,7 @@
 .w90px {width: 90px;}
 .w200px {width: 200px;}
 .w210px {width: 210px;}
+.w250px {width: 250px;}
 .w300px {width: 300px;}
 
 .w100pc {width: 100%;}
@@ -349,10 +350,12 @@ body {
 
 .lesson-mode-table .attestation {
 	background-color: rgba(249, 233, 2, 0.3);
+	text-align: center;
+	font-weight: bold;
 }
 
 .lesson-mode-table .ui-column-filter.ui-inputfield {
-	width: 40%;
+	width: 40px;
 	display: inline;
 }
 
@@ -375,8 +378,20 @@ body {
 	padding: 0;
 }
 
-.lesson-mode-table th.skips {
-	font-size: 10pt;
+.lesson-mode-table .skips {
+	background-color: rgba(0, 246, 255, 0.3);
+	width: 30px;
+	padding: 0;
+	text-align: center;
+	font-weight: bold;
+}
+
+.lesson-mode-table .average-attestation {
+	background-color: rgba(249, 233, 2, 0.3);
+	width: 40px;
+	padding: 0;
+	text-align: center;
+	font-weight: bold;
 }
 
 .lesson-mode-table .ui-datatable-scrollable-theadclone {
@@ -455,7 +470,7 @@ body {
  }
 
 .ui-datatable-frozen-container .ui-datatable-scrollable-body tbody {
-	border-right-width: 5px;
+	border-right-width: 2px;
 }
 
 .ui-datatable-frozen-container .ui-datatable-scrollable-body tbody tr:last-child {
@@ -471,6 +486,20 @@ body {
 	color: inherit;
 	text-shadow: inherit;
 }
+
+.lesson-mode-table .student-info button {
+	width: 30px;
+	height: 30px;
+}
+
+.lesson-mode-table .student-info .ui-button-text {
+	padding: 0;
+}
+
+.lesson-mode-table .student-info .ui-icon {
+	left: 40%;
+}
+
 /* Photo Mode */
 .photo-mode .ui-datagrid-column {
 	width: 14%;

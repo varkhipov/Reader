@@ -8,6 +8,7 @@
 		<h:inputHidden id="selectedCell" value="#{lessonModeBean.selectedCell}"/>
 		<h:inputHidden id="selectedClientId" value="#{lessonModeBean.selectedClientId}"/>
 		<h:inputHidden id="selectedType" value="#{lessonModeBean.selectedType}"/>
+		<h:inputHidden id="selectedLessonType" value="#{lessonModeBean.selectedLessonType}"/>
 
 		<p:dataTable id="lessonModeTable"
 					 var="student"
@@ -24,7 +25,7 @@
 					 paginatorPosition="bottom"
 					 lazy="true"
 
-					 frozenColumns="1"
+					 frozenColumns="#{lessonModeBean.frozenColumns()}"
 					 scrollable="true"
 
 					 selection="#{lessonModeBean.selectedStudent}"
@@ -34,10 +35,11 @@
 		>
 
 			<p:ajax event="cellEdit" listener="#{lessonModeBean.onCellEdit}"/>
+			<p:ajax event="filter" update=":lessonModeTable" />
 
 			<p:column sortBy="#{student.name}"
 					  filterBy="#{student.name}"
-					  styleClass="w300px student-info">
+					  styleClass="w250px student-info student">
 				<f:facet name="header">
 					<p:commandButton title="#{msg['btn.backToLessons']}"
 									 icon="fa fa-fw fa-arrow-left"
@@ -45,6 +47,14 @@
 									 update="@([id$=views])">
 						<f:setPropertyActionListener value="lesson" target="#{sessionBean.activeView}"/>
 						<f:ajax event="click" listener="#{lessonModeBean.clear}"/>
+					</p:commandButton>
+					<p:commandButton title="#{msg['btn.backToLessons']}"
+									 icon="fa fa-fw fa-angle-double-left"
+									 actionListener="#{lessonModeBean.clear}"
+									 update="@([id$=wrapper])">
+						<f:setPropertyActionListener value="#{true}" target="#{menuBean.showMenu}"/>
+						<f:setPropertyActionListener value="lessons" target="#{sessionBean.activeView}"/>
+						<f:ajax event="click" listener="#{lessonBean.clear}"/>
 					</p:commandButton>
 					<p:commandButton
 							title="#{msg[lessonModeBean.showAttestations ? 'btn.hide.attestation' : 'btn.show.attestation']}"
@@ -66,6 +76,15 @@
 									 actionListener="#{menuBean.changeView('photoMode')}"
 									 update="@([id$=views])">
 					</p:commandButton>
+					<p:commandButton title="#{msg['menu.new.lesson']}"
+									 icon="fa fa-fw fa-plus"
+									 update=":lessonInfoForm"
+									 oncomplete="PF('lessonDialog').show()"
+					>
+						<f:setPropertyActionListener value="#{newInstanceOfLesson}"
+													 target="#{newLessonBean.lesson}"/>
+						<p:resetInput target=":lessonInfoForm:lessonDetail"/>
+					</p:commandButton>
 				</f:facet>
 
 				<h:panelGroup id="STUDENT_#{student.student.id}" styleClass="">
@@ -78,9 +97,9 @@
 			</p:column>
 
 			<!-- skips -->
-			<p:column headerText="#{msg['label.skips']}"
+			<p:column headerText="#{msg['label.skips.short']}"
 					  rendered="#{lessonModeBean.showSkips}"
-					  styleClass="class-info skips">
+					  styleClass="skips">
 				<h:outputText value="#{student.totalSkip}"/>
 			</p:column>
 
@@ -94,7 +113,7 @@
 				<f:facet name="header">
 					<h:panelGroup id="attestationInfo" styleClass="lesson-info">
 						<p:outputLabel styleClass="block font-size-10pt"
-									   value="A"/>
+									   value="A#{attestation.number}"/>
 						<p:outputLabel styleClass="notes-info"
 									   rendered="#{attestation.lesson.notes.size() gt 0}">
 							<i class="fa fa-info-circle"></i>
@@ -108,6 +127,13 @@
 									icon="ui-icon-search"
 									oncomplete="PF('notesDialog').show()"
 									actionListener="#{lessonModeBean.initNotes}">
+						</p:menuitem>
+						<p:menuitem value="#{msg['label.delete.attestation']}"
+									update=":lessonModeTable"
+									icon="ui-icon-close"
+									styleClass="red"
+									actionListener="#{lessonModeBean.removeAttestation(attestation)}">
+							<p:confirm header="#{msg['warning']}" message="#{msg['warning.sure.delete']}" icon="ui-icon-alert"/>
 						</p:menuitem>
 					</p:contextMenu>
 
@@ -129,11 +155,17 @@
 
 			</p:columns>
 
+			<p:column
+					headerText="AC"
+					rendered="#{lessonModeBean.showAttestations and lessonModeBean.attestations.size() > 1}"
+					styleClass="average-attestation">
+				<h:outputText value="#{student.averageAttestation}"/>
+			</p:column>
 
 			<!-- lessons -->
 			<p:columns value="#{lessonModeBean.lessons}"
 					   var="lesson"
-					   styleClass="class-info #{student.student.studentClasses[lesson.id] eq null ? 'no-class' : (student.student.studentClasses[lesson.id].registered eq false ? 'skip' : '')}"
+					   styleClass="lesson class-info #{student.student.studentClasses[lesson.id] eq null ? 'no-class' : (student.student.studentClasses[lesson.id].registered eq false ? 'skip' : '')}"
 			>
 				<f:facet name="header">
 					<h:panelGroup id="lessonInfo" styleClass="lesson-info">
@@ -192,7 +224,7 @@
 						icon="ui-icon-arrowrefresh-1-w"
 						oncomplete="PF('registeredDialog').show()"
 						actionListener="#{lessonModeBean.initRegisteredDialog}"/>
-			<p:menuitem value="Create attestation"
+			<p:menuitem value="#{msg['label.create.attestation']}"
 						update=":lessonModeTable"
 						actionListener="#{lessonModeBean.createAttestation}"
 						icon="fa fa-fw fa-plus">
@@ -254,6 +286,11 @@
 							   rendered="#{lessonModeBean.selectedStudent.student.studentClasses[lessonModeBean.selectedLesson.id] eq null or lessonModeBean.selectedLesson.type.key eq 'attestation'}"/>
 			</p:outputPanel>
 		</p:dialog>
+
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton value="#{msg['label.yes']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			<p:commandButton value="#{msg['label.no']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		</p:confirmDialog>
 
 	</h:form>
 

@@ -20,7 +20,6 @@ function applySelectedCell(event) {
 	if (id == '' && cell[0].children.length > 0) {
 		id = cell[0].children[0].id;
 	}
-	var type = '';
 
 	if (cell.closest('th').length > 0) {
 		cell = cell.closest('th');
@@ -30,26 +29,56 @@ function applySelectedCell(event) {
 		}
 	}
 	var row = cell.closest('tr');
-
 	var selectedCell = row.children().index(cell);
-
 	console.log('selectedCell-' + selectedCell);
-	if (cell.closest('#lessonModeTable_scrollableTbody').length > 0) {
-		type = 'STUDENT_CLASS';
-		id = cell[0].children[0].id;
+
+	var type = null;
+	var lessonType = null;
+	if (cell.is('td')) {
+		if (cell.hasClass('student')) {
+			type = 'STUDENT';
+		}
+		if (cell.hasClass('attestation')) {
+			type = 'STUDENT_CLASS';
+			id = cell[0].children[0].id;
+			lessonType = 'ATTESTATION';
+		}
+		if (cell.hasClass('lesson')) {
+			type = 'STUDENT_CLASS';
+			id = cell[0].children[0].id;
+			lessonType = 'OTHER';
+		}
 	}
-	if (cell.closest('#lessonModeTable_frozenTbody').length > 0) {
-		type = 'STUDENT';
+	if (cell.is('th')) {
+		if (cell.hasClass('attestation')) {
+			type = 'LESSON';
+			id = "lessonModeTable";
+			lessonType = 'ATTESTATION';
+		}
+		if (cell.hasClass('lesson')) {
+			type = 'LESSON';
+			id = "lessonModeTable";
+			lessonType = 'OTHER';
+		}
 	}
-	if (cell.closest('#lessonModeTable_scrollableThead').length > 0) {
-		type = 'LESSON';
-		id = "lessonModeTable";
-	}
+
+	// if (cell.closest('#lessonModeTable_scrollableTbody').length > 0) {
+	// 	type = 'STUDENT_CLASS';
+	// 	id = cell[0].children[0].id;
+	// }
+	// if (cell.closest('#lessonModeTable_frozenTbody').length > 0) {
+	// 	type = 'STUDENT';
+	// }
+	// if (cell.closest('#lessonModeTable_scrollableThead').length > 0) {
+	// 	type = 'LESSON';
+	// 	id = "lessonModeTable";
+	// }
 
 	console.log("id - " + id);
 	$('#selectedClientId').val(id);
 	$('#selectedCell').val(selectedCell);
 	$('#selectedType').val(type);
+	$('#selectedLessonType').val(lessonType);
 
 	//selectCell();
 }

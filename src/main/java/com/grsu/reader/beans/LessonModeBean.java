@@ -60,6 +60,7 @@ public class LessonModeBean implements Serializable {
 	private Integer selectedCell;
 	private String selectedClientId;
 	private String selectedType;
+	private String selectedLessonType;
 
 	private boolean registered;
 	private boolean showAttestations = false;
@@ -73,6 +74,7 @@ public class LessonModeBean implements Serializable {
 		stream = null;
 		lesson = null;
 		lessons = null;
+		attestations = null;
 
 		notes = null;
 		newNote = null;
@@ -85,8 +87,12 @@ public class LessonModeBean implements Serializable {
 		selectedType = null;
 		selectedCell = null;
 		selectedClientId = null;
+		selectedLessonType = null;
 
 		selectedLesson = null;
+
+		showAttestations = false;
+		showSkips = false;
 	}
 
 	private void initLessonStudents() {
@@ -114,8 +120,10 @@ public class LessonModeBean implements Serializable {
 		this.attestations = lessons.stream()
 				.filter(l -> LessonType.ATTESTATION.equals(l.getType()))
 				.map(LessonModel::new).collect(Collectors.toList());
+		attestations.forEach(a -> a.setNumber(attestations.indexOf(a) + 1));
 
 		students = studentSet.stream().map(LessonStudentModel::new).sorted(Comparator.comparing(s -> s.name)).collect(Collectors.toList());
+		students.stream().forEach(this::updateAverageAttestation);
 
 		Map<Integer, Map<String, Integer>> skipInfo = new StudentDAO().getSkipInfo(stream.getId(), lesson.getId());
 		students.stream().forEach(s -> {
@@ -125,6 +133,20 @@ public class LessonModeBean implements Serializable {
 		});
 
 		studentsLazyModel = new LazyStudentDataModel(students);
+	}
+
+	private void updateAverageAttestation(LessonStudentModel student) {
+		student.setAverageAttestation(null);
+		List<String> marks = new ArrayList<>();
+		attestations.stream().forEach(lesson -> {
+			StudentClass sc = student.getStudent().getStudentClasses().get(lesson.getId());
+			if (sc != null && sc.getMark() != null) {
+				marks.addAll(Arrays.asList(sc.getMark().split("[^0-9]")));
+			}
+		});
+		if (marks.size() > 0) {
+			student.setAverageAttestation(marks.stream().mapToInt(Integer::parseInt).average().getAsDouble());
+		}
 	}
 
 	public void initRegisteredDialog() {
@@ -162,17 +184,15 @@ public class LessonModeBean implements Serializable {
 	private LessonModel calculateSelectedLesson() {
 		if (selectedCell != null) {
 			int column = selectedCell;
-			if (showSkips) {
-				column--;
+			if (Constants.OTHER.equals(selectedLessonType)) {
+				return lessons.get(selectedCell);
 			}
-			if (showAttestations) {
-				if (column < attestations.size()) {
-					return attestations.get(column);
-				} else {
-					return lessons.get(column - attestations.size());
+			if (Constants.ATTESTATION.equals(selectedLessonType)) {
+				column--;
+				if (showSkips) {
+					column--;
 				}
-			} else {
-				return lessons.get(column);
+				return attestations.get(column);
 			}
 		}
 		return null;
@@ -182,6 +202,7 @@ public class LessonModeBean implements Serializable {
 		Integer id;
 		if (event.getColumn().getColumnKey().contains("attestation")) {
 			id = attestations.get(((DynamicColumn) event.getColumn()).getIndex()).getId();
+			updateAverageAttestation(studentsLazyModel.getRowData());
 		} else {
 			id = lessons.get(((DynamicColumn) event.getColumn()).getIndex()).getId();
 		}
@@ -271,8 +292,26 @@ public class LessonModeBean implements Serializable {
 		lesson.getClazz().setStudentClasses(new HashMap<>());
 		studentClasses.stream().forEach(sc -> lesson.getClazz().getStudentClasses().put(sc.getStudentId(), sc));
 		attestations.add(new LessonModel(lesson));
+		attestations.forEach(a -> a.setNumber(attestations.indexOf(a) + 1));
 	}
 
+	public int frozenColumns() {
+		int frozenColumns = 2;
+		if (showAttestations) {
+			frozenColumns += attestations.size();
+			if (attestations.size() > 1) {
+				frozenColumns ++;
+			}
+		}
+		return frozenColumns;
+	}
+
+	public void removeAttestation(LessonModel lesson) {
+		EntityDAO.delete(lesson.getLesson());
+		attestations.remove(lesson);
+		attestations.forEach(a -> a.setNumber(attestations.indexOf(a) + 1));
+		students.stream().forEach(this::updateAverageAttestation);
+	}
 
 	/*GETTERS AND SETTERS*/
 	public void setSessionBean(SessionBean sessionBean) {
@@ -362,6 +401,14 @@ public class LessonModeBean implements Serializable {
 
 	public void setSelectedType(String selectedType) {
 		this.selectedType = selectedType;
+	}
+
+	public String getSelectedLessonType() {
+		return selectedLessonType;
+	}
+
+	public void setSelectedLessonType(String selectedLessonType) {
+		this.selectedLessonType = selectedLessonType;
 	}
 
 	public LessonModel getSelectedLesson() {

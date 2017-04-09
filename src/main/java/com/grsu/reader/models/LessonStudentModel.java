@@ -16,6 +16,7 @@ public class LessonStudentModel {
 	private Integer labSkip;
 	public LocalTime registrationTime;
 	private Student student;
+	private Double averageAttestation;
 	private boolean additional;
 
 	public LessonStudentModel(Student student) {
@@ -105,6 +106,14 @@ public class LessonStudentModel {
 
 	public void setAdditional(boolean additional) {
 		this.additional = additional;
+	}
+
+	public Double getAverageAttestation() {
+		return averageAttestation;
+	}
+
+	public void setAverageAttestation(Double averageAttestation) {
+		this.averageAttestation = averageAttestation;
 	}
 
 	@Override
