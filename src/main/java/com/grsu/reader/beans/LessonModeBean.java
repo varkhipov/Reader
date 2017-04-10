@@ -64,7 +64,7 @@ public class LessonModeBean implements Serializable {
 
 	private boolean registered;
 	private boolean showAttestations = false;
-	private boolean showSkips = false;
+	private boolean showSkips = true;
 
 	public void initLessonMode() {
 		initLessonStudents();
@@ -92,7 +92,7 @@ public class LessonModeBean implements Serializable {
 		selectedLesson = null;
 
 		showAttestations = false;
-		showSkips = false;
+		showSkips = true;
 	}
 
 	private void initLessonStudents() {

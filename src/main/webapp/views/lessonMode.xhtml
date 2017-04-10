@@ -112,12 +112,14 @@
 			>
 				<f:facet name="header">
 					<h:panelGroup id="attestationInfo" styleClass="lesson-info">
-						<p:outputLabel styleClass="block font-size-10pt"
-									   value="A#{attestation.number}"/>
-						<p:outputLabel styleClass="notes-info"
-									   rendered="#{attestation.lesson.notes.size() gt 0}">
-							<i class="fa fa-info-circle"></i>
-						</p:outputLabel>
+						<h:panelGroup styleClass="padding-top-15px block">
+							<p:outputLabel styleClass=""
+										   value="A#{attestation.number}"/>
+							<p:outputLabel styleClass=""
+										   rendered="#{attestation.lesson.notes.size() gt 0}">
+								<i class="fa fa-info-circle"></i>
+							</p:outputLabel>
+						</h:panelGroup>
 					</h:panelGroup>
 
 					<p:contextMenu id="attestationHeaderContextMenu"

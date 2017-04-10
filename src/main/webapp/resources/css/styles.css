@@ -61,6 +61,9 @@
 .margin-bottom-10px {margin-bottom: 10px;}
 .margin-bottom-20px {margin-bottom: 20px;}
 
+/* Padding */
+.padding-top-15px {padding-top: 15px;}
+
 /* Text Transform */
 .lowercase {text-transform: lowercase;}
 
@@ -191,7 +194,7 @@ body {
 	vertical-align: top;
 }
 
-.lesson-info label {
+#lessonForm .lesson-info label {
 	display: block;
 }
 
@@ -348,10 +351,11 @@ body {
 	background-color: rgba(211, 211, 211, 0.7);
 }
 
-.lesson-mode-table .attestation {
+#lessonModeForm .lesson-mode-table .attestation {
 	background-color: rgba(249, 233, 2, 0.3);
 	text-align: center;
 	font-weight: bold;
+	width: 50px;
 }
 
 .lesson-mode-table .ui-column-filter.ui-inputfield {
@@ -399,7 +403,7 @@ body {
 }
 
 .lesson-mode-table .ui-datatable-data .class-info,
-.lesson-mode-table .ui-datatable-data .class-info .ui-cell-editor,
+/*.lesson-mode-table .ui-datatable-data .class-info .ui-cell-editor,*/
 .lesson-mode-table .ui-widget-header .class-info,
 .lesson-mode-table .ui-datatable-scrollable-theadclone .class-info{
 	padding: 0;
@@ -478,6 +482,7 @@ body {
 }
 
 .lesson-mode-table .notes-info {
+	display: block;
 	text-align: right;
 }
 
