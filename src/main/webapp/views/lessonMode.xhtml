@@ -35,7 +35,7 @@
 		>
 
 			<p:ajax event="cellEdit" listener="#{lessonModeBean.onCellEdit}"/>
-			<p:ajax event="filter" update=":lessonModeTable" />
+			<p:ajax event="filter" update=":lessonModeTable"/>
 
 			<p:column sortBy="#{student.name}"
 					  filterBy="#{student.name}"
@@ -89,10 +89,19 @@
 
 				<h:panelGroup id="STUDENT_#{student.student.id}" styleClass="">
 					<h:outputText styleClass="bold" value="#{student.name}"/>
-					<p:outputLabel styleClass="float-right"
+					<p:outputLabel id="noteStudent" styleClass="float-right"
 								   rendered="#{student.student.notes.size() gt 0}">
 						<i class="fa fa-info-circle"></i>
 					</p:outputLabel>
+					<p:tooltip for="noteStudent" position="bottom"
+							   rendered="#{student.student.notes.size() gt 0}">
+						<ui:repeat var="note" value="#{student.student.notes}">
+							<h:panelGrid columns="2" columnClasses="w300px, w20px" styleClass="w100pc">
+								<h:outputText value="#{note.description}"/>
+								<h:outputText value="#{note.createDate}" converter="localDateConverter"/>
+							</h:panelGrid>
+						</ui:repeat>
+					</p:tooltip>
 				</h:panelGroup>
 			</p:column>
 
@@ -115,10 +124,19 @@
 						<h:panelGroup styleClass="padding-top-15px block">
 							<p:outputLabel styleClass=""
 										   value="A#{attestation.number}"/>
-							<p:outputLabel styleClass=""
+							<p:outputLabel id="noteAttestation" styleClass=""
 										   rendered="#{attestation.lesson.notes.size() gt 0}">
 								<i class="fa fa-info-circle"></i>
 							</p:outputLabel>
+							<p:tooltip for="noteAttestation" position="bottom"
+									   rendered="#{attestation.lesson.notes.size() gt 0}">
+								<ui:repeat var="note" value="#{attestation.lesson.notes}">
+									<h:panelGrid columns="2" columnClasses="w300px, w20px" styleClass="w100pc">
+										<h:outputText value="#{note.description}"/>
+										<h:outputText value="#{note.createDate}" converter="localDateConverter"/>
+									</h:panelGrid>
+								</ui:repeat>
+							</p:tooltip>
 						</h:panelGroup>
 					</h:panelGroup>
 
@@ -144,10 +162,19 @@
 				<p:cellEditor rendered="#{student.student.studentClasses[attestation.id] ne null}">
 					<f:facet name="output">
 						<h:outputText value="#{student.student.studentClasses[attestation.id].mark}"/>
-						<p:outputLabel styleClass="float-right"
+						<p:outputLabel id="noteStudentAttestation" styleClass="float-right"
 									   rendered="#{student.student.studentClasses[attestation.id].notes.size() gt 0}">
 							<i class="fa fa-info-circle"></i>
 						</p:outputLabel>
+						<p:tooltip for="noteStudentAttestation" position="bottom"
+								   rendered="#{student.student.studentClasses[attestation.id].notes.size() gt 0}">
+							<ui:repeat var="note" value="#{student.student.studentClasses[attestation.id].notes}">
+								<h:panelGrid columns="2" columnClasses="w300px, w20px" styleClass="w100pc">
+									<h:outputText value="#{note.description}"/>
+									<h:outputText value="#{note.createDate}" converter="localDateConverter"/>
+								</h:panelGrid>
+							</ui:repeat>
+						</p:tooltip>
 					</f:facet>
 					<f:facet name="input">
 						<p:inputText value="#{student.student.studentClasses[attestation.id].mark}"/>
@@ -171,13 +198,22 @@
 			>
 				<f:facet name="header">
 					<h:panelGroup id="lessonInfo" styleClass="lesson-info">
-						<p:outputLabel value="#{lesson.date}"/>
-						<p:outputLabel styleClass="block font-size-10pt"
+						<p:outputLabel value="#{lesson.date}" styleClass="font-size-12pt"/>
+						<p:outputLabel styleClass="block uppercase font-size-10pt"
 									   value="#{msg['label.'.concat(lesson.type.key)]}"/>
-						<p:outputLabel styleClass="notes-info"
+						<p:outputLabel id="noteLesson" styleClass="notes-info"
 									   rendered="#{lesson.lesson.notes.size() gt 0}">
 							<i class="fa fa-info-circle"></i>
 						</p:outputLabel>
+						<p:tooltip for="noteLesson" position="bottom"
+								   rendered="#{lesson.lesson.notes.size() gt 0}">
+							<ui:repeat var="note" value="#{lesson.lesson.notes}">
+								<h:panelGrid columns="2" columnClasses="w300px, w20px" styleClass="w100pc">
+									<h:outputText value="#{note.description}"/>
+									<h:outputText value="#{note.createDate}" converter="localDateConverter"/>
+								</h:panelGrid>
+							</ui:repeat>
+						</p:tooltip>
 					</h:panelGroup>
 
 					<p:contextMenu id="tableHeaderContextMenu"
@@ -196,10 +232,19 @@
 				<p:cellEditor rendered="#{student.student.studentClasses[lesson.id] ne null}">
 					<f:facet name="output">
 						<h:outputText value="#{student.student.studentClasses[lesson.id].mark}"/>
-						<p:outputLabel styleClass="float-right"
+						<p:outputLabel id="noteStudentClass" styleClass="float-right"
 									   rendered="#{student.student.studentClasses[lesson.id].notes.size() gt 0}">
 							<i class="fa fa-info-circle"></i>
 						</p:outputLabel>
+						<p:tooltip for="noteStudentClass" position="bottom"
+								   rendered="#{student.student.studentClasses[lesson.id].notes.size() gt 0}">
+							<ui:repeat var="note" value="#{student.student.studentClasses[lesson.id].notes}">
+								<h:panelGrid columns="2" columnClasses="w300px, w20px" styleClass="w100pc">
+									<h:outputText value="#{note.description}"/>
+									<h:outputText value="#{note.createDate}" converter="localDateConverter"/>
+								</h:panelGrid>
+							</ui:repeat>
+						</p:tooltip>
 					</f:facet>
 					<f:facet name="input">
 						<p:inputText id="modelInput" value="#{student.student.studentClasses[lesson.id].mark}"/>
@@ -290,8 +335,8 @@
 		</p:dialog>
 
 		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-			<p:commandButton value="#{msg['label.yes']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-			<p:commandButton value="#{msg['label.no']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			<p:commandButton value="#{msg['label.yes']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+			<p:commandButton value="#{msg['label.no']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
 		</p:confirmDialog>
 
 	</h:form>

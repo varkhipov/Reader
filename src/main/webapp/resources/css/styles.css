@@ -50,10 +50,14 @@
 
 /* Font Size */
 #wrapper .font-size-10pt {font-size: 10pt;}
+#wrapper .font-size-12pt {font-size: 12pt;}
 #wrapper .font-size-20pt {font-size: 20pt;}
 
 /* Font Weight */
 .bold {font-weight: bold;}
+
+/* Text Transform */
+.uppercase {text-transform: uppercase;}
 
 /* Margin */
 .margin-top-10px {margin-top: 10px;}
