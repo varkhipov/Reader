@@ -80,4 +80,19 @@ public class StudentDAO {
 		return null;
 	}
 
+	public List<Student> getAdditionalStudents(int lessonId) {
+		Session session = DBSessionFactory.getSession();
+		try {
+			Query query = session.createNamedQuery("AdditionalStudents", Student.class);
+			query.setParameter("lessonId", lessonId);
+			return query.getResultList();
+		} catch (PersistenceException e) {
+			System.err.println(e.getLocalizedMessage());
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return null;
+	}
 }

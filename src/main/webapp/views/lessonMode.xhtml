@@ -88,7 +88,7 @@
 				</f:facet>
 
 				<h:panelGroup id="STUDENT_#{student.student.id}" styleClass="">
-					<h:outputText styleClass="bold" value="#{student.name}"/>
+					<h:outputText styleClass="bold #{student.additional ? 'blue' : ''}" value="#{student.name}"/>
 					<p:outputLabel id="noteStudent" styleClass="float-right"
 								   rendered="#{student.student.notes.size() gt 0}">
 						<i class="fa fa-info-circle"></i>

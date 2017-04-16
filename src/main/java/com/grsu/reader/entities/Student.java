@@ -56,7 +56,26 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 						"where st.id in (:studentId) and (sc.registered is null or sc.registered = 0) and str.id = :streamId " +
 						"and ((date(cl.date) < date('now', 'localtime')) or (date(cl.date) = date('now', 'localtime') and time(sch.begin) <= time('now', 'localtime')) or l.id = :lessonId)\n" +
 						"group by st.id, str.id, l.type_id",
-				resultSetMapping = "SkipInfoMapping")
+				resultSetMapping = "SkipInfoMapping"),
+		@NamedNativeQuery(
+				name = "AdditionalStudents",
+				query = "SELECT st.*\n" +
+						"FROM STUDENT st\n" +
+						"\tJOIN STUDENT_CLASS sc ON st.id = sc.student_id\n" +
+						"\tJOIN CLASS cl ON cl.id = sc.class_id\n" +
+						"\tJOIN LESSON l ON l.id = cl.lesson_id\n" +
+						"WHERE l.id = :lessonId\n" +
+						"\t\t\tAND ((l.group_id NOT NULL AND st.id NOT IN (\n" +
+						"\tSELECT stg.student_id\n" +
+						"\tFROM STUDENT_GROUP stg\n" +
+						"\tWHERE stg.group_id = l.group_id\n" +
+						"))\n" +
+						"\t\t\t\t\t OR st.id NOT IN (\n" +
+						"\tSELECT stg.student_id\n" +
+						"\tFROM STUDENT_GROUP stg\n" +
+						"\t\tJOIN STREAM_GROUP sg ON sg.group_id = stg.group_id\n" +
+						"\tWHERE sg.stream_id = l.stream_id\n" +
+						"));", resultClass = Student.class)
 })
 @Entity
 @ManagedBean(name = "newInstanceOfStudent")

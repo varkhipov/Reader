@@ -24,7 +24,7 @@
 		<p:dataGrid var="student" value="#{lessonModeBean.students}" columns="7" layout="grid">
 			<h:panelGroup styleClass="center bold student">
 				<p:graphicImage value="#{imageBean.getImagePath(student.student.cardUid)}"/>
-				<p:outputLabel value="#{student.name}" styleClass="name  #{student.student.studentClasses[lessonModeBean.lesson.id].registered eq false ? 'skip' : ''}"/>
+				<p:outputLabel value="#{student.name}" styleClass="name #{student.additional ? 'blue' : ''} #{student.student.studentClasses[lessonModeBean.lesson.id].registered eq false ? 'skip' : ''}"/>
 			</h:panelGroup>
 		</p:dataGrid>
 

@@ -122,7 +122,12 @@ public class LessonModeBean implements Serializable {
 				.map(LessonModel::new).collect(Collectors.toList());
 		attestations.forEach(a -> a.setNumber(attestations.indexOf(a) + 1));
 
-		students = studentSet.stream().map(LessonStudentModel::new).sorted(Comparator.comparing(s -> s.name)).collect(Collectors.toList());
+		List<LessonStudentModel> additionalStudents = new StudentDAO().getAdditionalStudents(lesson.getId()).stream().map(LessonStudentModel::new).collect(Collectors.toList());
+		additionalStudents.stream().forEach(s -> s.setAdditional(true));
+
+		students = studentSet.stream().map(LessonStudentModel::new).collect(Collectors.toList());
+		students.addAll(additionalStudents);
+		students = students.stream().sorted(Comparator.comparing(s -> s.name)).collect(Collectors.toList());
 		students.stream().forEach(this::updateAverageAttestation);
 
 		Map<Integer, Map<String, Integer>> skipInfo = new StudentDAO().getSkipInfo(stream.getId(), lesson.getId());
