@@ -88,7 +88,10 @@
 				</f:facet>
 
 				<h:panelGroup id="STUDENT_#{student.student.id}" styleClass="">
-					<h:outputText styleClass="bold #{student.additional ? 'blue' : ''}" value="#{student.name}"/>
+					<p:commandLink styleClass="bold #{student.additional ? 'blue' : ''}" value="#{student.name}" update="@([id$=wrapper])">
+						<f:setPropertyActionListener value="studentMode" target="#{sessionBean.activeView}"/>
+						<f:setPropertyActionListener value="#{student.student}" target="#{studentModeBean.student}"/>
+					</p:commandLink>
 					<p:outputLabel id="noteStudent" styleClass="float-right"
 								   rendered="#{student.student.notes.size() gt 0}">
 						<i class="fa fa-info-circle"></i>
