@@ -337,12 +337,15 @@ body {
 	background-color: rgba(255, 0, 0, 0.3);
 }
 
-.lesson-mode-table .skip {
+.lesson-mode-table .skip,
+.student-mode .skip {
 	position: relative;
 }
 
 .lesson-mode-table .skip:after,
-.lesson-mode-table .skip:before {
+.lesson-mode-table .skip:before,
+.student-mode .skip:after,
+.student-mode .skip:before {
 	content: "";
 	position: absolute;
 	border-top: 1px solid black;
@@ -350,11 +353,13 @@ body {
 	transform-origin: 0% 0%;
 	left: 0;
 }
-.lesson-mode-table .skip:after {
+.lesson-mode-table .skip:after,
+.student-mode .skip:after {
 	transform: rotate(17deg);
 	top: 0;
 }
-.lesson-mode-table .skip:before {
+.lesson-mode-table .skip:before,
+.student-mode .skip:before {
 	transform: rotate(-17deg);
 	top: 21px;
 }
@@ -547,4 +552,9 @@ body {
 
 .photo-mode img{
 	border: 2px solid;
+}
+
+/* Student Mode */
+.student-mode label {
+	display: block;
 }

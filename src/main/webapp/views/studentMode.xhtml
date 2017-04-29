@@ -7,20 +7,65 @@
 	<h:form id="studentModeForm" styleClass="student-mode">
 		<p:commandButton title="#{msg['btn.backToLessons']}"
 						 icon="fa fa-fw fa-arrow-left"
-						 actionListener="#{menuBean.changeView('lessonMode')}"
+						 actionListener="#{studentModeBean.clear}"
 						 update="@([id$=views])">
+			<f:setPropertyActionListener value="lessonMode" target="#{sessionBean.activeView}"/>
 		</p:commandButton>
-		<p:panelGrid columns="2">
-			<p:panel styleClass="image">
-				<p:graphicImage value="#{imageBean.getImagePath(studentModeBean.student.cardUid)}"/>
+
+		<h:panelGrid columns="2">
+			<h:panelGrid columns="2">
+				<p:panel styleClass="image">
+					<p:graphicImage value="#{imageBean.getImagePath(studentModeBean.lessonStudent.student.cardUid)}"/>
+				</p:panel>
+				<h:panelGroup>
+					<p:outputLabel value="#{studentModeBean.lessonStudent.student.lastName}"/>
+					<p:outputLabel value="#{studentModeBean.lessonStudent.student.firstName}"/>
+					<p:outputLabel value="#{studentModeBean.lessonStudent.student.patronymic}"/>
+					<p:outputLabel escape="false"
+								   value="#{studentModeBean.lessonStudent.student.groupNames}"/>
+					<p:outputLabel value="#{studentModeBean.lessonStudent.student.phone}"/>
+					<p:outputLabel value="#{studentModeBean.lessonStudent.student.email}"/>
+					<p:outputLabel value="#{studentModeBean.lessonStudent.student.cardUid}"/>
+				</h:panelGroup>
+			</h:panelGrid>
+
+			<h:panelGroup>
+				<h:panelGroup>
+					<p:outputLabel value="#{studentModeBean.stream.name}"/>
+					<p:outputLabel value="#{studentModeBean.stream.discipline.name}"/>
+					<p:outputLabel value="#{studentModeBean.stream.course}"/>
+					<p:outputLabel value="#{studentModeBean.stream.department.name}"/>
+				</h:panelGroup>
+				<p:outputLabel value="#{msg['label.skips']}: #{studentModeBean.lessonStudent.totalSkip} (#{studentModeBean.lessonStudent.skips})"/>
+			</h:panelGroup>
+		</h:panelGrid>
+
+		<h:panelGrid columns="3">
+			<p:panel>
+				<ui:repeat id="noteInfo" var="note" value="#{studentModeBean.notes}">
+					<h:panelGrid columns="2">
+						<h:outputText value="#{note.createDate}" converter="localDateConverter"/>
+						<h:outputText value="#{note.description}"/>
+					</h:panelGrid>
+				</ui:repeat>
 			</p:panel>
 			<p:panel>
-				<p:outputLabel value="#{studentModeBean.student.lastName}"/>
-				<p:outputLabel value="#{studentModeBean.student.firstName}"/>
-				<p:outputLabel escape="false"
-							   value="#{studentModeBean.student.groupNames}"/>
+				<ui:repeat id="markInfo" var="mark" value="#{studentModeBean.marks}">
+					<h:panelGrid columns="2">
+						<h:outputText value="#{mark.key}"/>
+						<h:outputText value="#{mark.value}"/>
+					</h:panelGrid>
+				</ui:repeat>
 			</p:panel>
-		</p:panelGrid>
+			<p:panel>
+				<p:dataGrid var="studentClass" value="#{studentModeBean.studentClasses}" columns="10" layout="grid">
+					<p:panel styleClass="center #{studentClass.registered eq false ? 'skip' : ''}">
+						<p:outputLabel value="#{studentClass.mark}"/>
+					</p:panel>
+				</p:dataGrid>
+
+			</p:panel>
+		</h:panelGrid>
 
 	</h:form>
 </ui:composition>

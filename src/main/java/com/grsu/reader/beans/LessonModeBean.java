@@ -14,11 +14,11 @@ import com.grsu.reader.models.LessonModel;
 import com.grsu.reader.models.LessonStudentModel;
 import com.grsu.reader.models.LessonType;
 import com.grsu.reader.utils.FacesUtils;
+import lombok.Data;
 import org.primefaces.component.api.DynamicColumn;
 import org.primefaces.event.CellEditEvent;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -38,9 +38,8 @@ import java.util.stream.Collectors;
  */
 @ManagedBean(name = "lessonModeBean")
 @ViewScoped
+@Data
 public class LessonModeBean implements Serializable {
-	@ManagedProperty(value = "#{sessionBean}")
-	private SessionBean sessionBean;
 
 	private Stream stream;
 	private Lesson lesson;
@@ -318,133 +317,4 @@ public class LessonModeBean implements Serializable {
 		students.stream().forEach(this::updateAverageAttestation);
 	}
 
-	/*GETTERS AND SETTERS*/
-	public void setSessionBean(SessionBean sessionBean) {
-		this.sessionBean = sessionBean;
-	}
-
-	public Stream getStream() {
-		return stream;
-	}
-
-	public void setStream(Stream stream) {
-		this.stream = stream;
-	}
-
-	public Lesson getLesson() {
-		return lesson;
-	}
-
-	public void setLesson(Lesson lesson) {
-		this.lesson = lesson;
-	}
-
-	public List<Note> getNotes() {
-		return notes;
-	}
-
-	public void setNotes(List<Note> notes) {
-		this.notes = notes;
-	}
-
-	public String getNewNote() {
-		return newNote;
-	}
-
-	public void setNewNote(String newNote) {
-		this.newNote = newNote;
-	}
-
-
-	public List<LessonModel> getLessons() {
-		return lessons;
-	}
-
-	public LazyStudentDataModel getStudentsLazyModel() {
-		return studentsLazyModel;
-	}
-
-	public void setStudentsLazyModel(LazyStudentDataModel studentsLazyModel) {
-		this.studentsLazyModel = studentsLazyModel;
-	}
-
-	public List<LessonStudentModel> getStudents() {
-		return students;
-	}
-
-	public void setStudents(List<LessonStudentModel> students) {
-		this.students = students;
-	}
-
-	public LessonStudentModel getSelectedStudent() {
-		return selectedStudent;
-	}
-
-	public void setSelectedStudent(LessonStudentModel selectedStudent) {
-		this.selectedStudent = selectedStudent;
-	}
-
-	public Integer getSelectedCell() {
-		return selectedCell;
-	}
-
-	public void setSelectedCell(Integer selectedCell) {
-		this.selectedCell = selectedCell;
-	}
-
-	public String getSelectedClientId() {
-		return selectedClientId;
-	}
-
-	public void setSelectedClientId(String selectedClientId) {
-		this.selectedClientId = selectedClientId;
-	}
-
-	public String getSelectedType() {
-		return selectedType;
-	}
-
-	public void setSelectedType(String selectedType) {
-		this.selectedType = selectedType;
-	}
-
-	public String getSelectedLessonType() {
-		return selectedLessonType;
-	}
-
-	public void setSelectedLessonType(String selectedLessonType) {
-		this.selectedLessonType = selectedLessonType;
-	}
-
-	public LessonModel getSelectedLesson() {
-		return selectedLesson;
-	}
-
-	public boolean isRegistered() {
-		return registered;
-	}
-
-	public void setRegistered(boolean registered) {
-		this.registered = registered;
-	}
-
-	public List<LessonModel> getAttestations() {
-		return attestations;
-	}
-
-	public boolean isShowAttestations() {
-		return showAttestations;
-	}
-
-	public void setShowAttestations(boolean showAttestations) {
-		this.showAttestations = showAttestations;
-	}
-
-	public boolean isShowSkips() {
-		return showSkips;
-	}
-
-	public void setShowSkips(boolean showSkips) {
-		this.showSkips = showSkips;
-	}
 }
