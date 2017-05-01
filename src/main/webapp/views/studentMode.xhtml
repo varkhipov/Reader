@@ -5,24 +5,16 @@
 				xmlns:p="http://primefaces.org/ui"
 >
 	<h:form id="studentModeForm" styleClass="student-mode">
-		<p:commandButton title="#{msg['btn.backToLessons']}"
-						 icon="fa fa-fw fa-arrow-left"
-						 actionListener="#{studentModeBean.clear}"
-						 update="@([id$=views])">
-			<f:setPropertyActionListener value="lessonMode" target="#{sessionBean.activeView}"/>
-		</p:commandButton>
-
-		<h:panelGrid columns="2">
-			<h:panelGrid columns="2">
-				<p:panel styleClass="image">
-					<p:graphicImage value="#{imageBean.getImagePath(studentModeBean.lessonStudent.student.cardUid)}"/>
-				</p:panel>
+		<h:panelGrid columns="2" styleClass="font-size-20pt w100pc" columnClasses=",w550px">
+			<h:panelGrid columns="2" columnClasses="w250px,">
+				<p:graphicImage value="#{imageBean.getImagePath(studentModeBean.lessonStudent.student.cardUid)}"/>
 				<h:panelGroup>
 					<p:outputLabel value="#{studentModeBean.lessonStudent.student.lastName}"/>
 					<p:outputLabel value="#{studentModeBean.lessonStudent.student.firstName}"/>
 					<p:outputLabel value="#{studentModeBean.lessonStudent.student.patronymic}"/>
 					<p:outputLabel escape="false"
-								   value="#{studentModeBean.lessonStudent.student.groupNames}"/>
+								   value="#{studentModeBean.lessonStudent.student.groupNames}"
+								   styleClass="margin-top-20px margin-bottom-20px"/>
 					<p:outputLabel value="#{studentModeBean.lessonStudent.student.phone}"/>
 					<p:outputLabel value="#{studentModeBean.lessonStudent.student.email}"/>
 					<p:outputLabel value="#{studentModeBean.lessonStudent.student.cardUid}"/>
@@ -30,42 +22,211 @@
 			</h:panelGrid>
 
 			<h:panelGroup>
-				<h:panelGroup>
+				<h:panelGroup styleClass="buttons">
+					<p:commandButton title="#{msg['btn.backToLessons']}"
+									 icon="fa fa-fw fa-arrow-left"
+									 actionListener="#{studentModeBean.clear}"
+									 update="@([id$=views])">
+						<f:setPropertyActionListener value="lessonMode" target="#{sessionBean.activeView}"/>
+					</p:commandButton>
+				</h:panelGroup>
+				<h:panelGroup styleClass="block">
 					<p:outputLabel value="#{studentModeBean.stream.name}"/>
 					<p:outputLabel value="#{studentModeBean.stream.discipline.name}"/>
 					<p:outputLabel value="#{studentModeBean.stream.course}"/>
 					<p:outputLabel value="#{studentModeBean.stream.department.name}"/>
 				</h:panelGroup>
-				<p:outputLabel value="#{msg['label.skips']}: #{studentModeBean.lessonStudent.totalSkip} (#{studentModeBean.lessonStudent.skips})"/>
+				<p:outputLabel styleClass="margin-top-20px"
+							   value="#{msg['label.skips']}: #{studentModeBean.lessonStudent.totalSkip} (#{studentModeBean.lessonStudent.skips})"/>
 			</h:panelGroup>
 		</h:panelGrid>
 
-		<h:panelGrid columns="3">
-			<p:panel>
+		<h:panelGrid id="studentAdditionalInfo" columns="3" styleClass="w100pc student-additional-info"
+					 columnClasses="w350px,,w700px">
+			<h:panelGroup>
 				<ui:repeat id="noteInfo" var="note" value="#{studentModeBean.notes}">
 					<h:panelGrid columns="2">
 						<h:outputText value="#{note.createDate}" converter="localDateConverter"/>
 						<h:outputText value="#{note.description}"/>
 					</h:panelGrid>
 				</ui:repeat>
-			</p:panel>
-			<p:panel>
+			</h:panelGroup>
+
+			<h:panelGroup>
 				<ui:repeat id="markInfo" var="mark" value="#{studentModeBean.marks}">
 					<h:panelGrid columns="2">
 						<h:outputText value="#{mark.key}"/>
 						<h:outputText value="#{mark.value}"/>
 					</h:panelGrid>
 				</ui:repeat>
-			</p:panel>
-			<p:panel>
+			</h:panelGroup>
+
+			<h:panelGroup>
 				<p:dataGrid var="studentClass" value="#{studentModeBean.studentClasses}" columns="10" layout="grid">
-					<p:panel styleClass="center #{studentClass.registered eq false ? 'skip' : ''}">
-						<p:outputLabel value="#{studentClass.mark}"/>
-					</p:panel>
+					<h:panelGroup id="lessonInfo"
+								  styleClass="student-lesson #{studentClass.registered eq false ? 'skip' : ''}
+								  #{studentClass.clazz.lesson.type.key}
+								  #{studentModeBean.isAdditionalLesson(studentClass.clazz.lesson) ? 'additional-lesson' : ''}">
+						<h:outputText value="#{studentClass.mark}"/>
+						<p:outputLabel id="noteStudentClass" styleClass="float-right"
+									   rendered="#{studentClass.notes.size() gt 0}">
+							<i class="fa fa-info-circle"></i>
+						</p:outputLabel>
+						<p:tooltip for="noteStudentClass" position="bottom"
+								   rendered="#{studentClass.notes.size() gt 0}">
+							<ui:repeat var="note" value="#{studentClass.notes}">
+								<h:panelGrid columns="2" columnClasses="w300px, w20px" styleClass="w100pc">
+									<h:outputText value="#{note.description}"/>
+									<h:outputText value="#{note.createDate}" converter="localDateConverter"/>
+								</h:panelGrid>
+							</ui:repeat>
+						</p:tooltip>
+					</h:panelGroup>
+					<p:contextMenu for="lessonInfo">
+						<p:menuitem value="#{msg['label.notes']}"
+									icon="ui-icon-search"
+									oncomplete="PF('notesDialog').show()"
+									update=":studentModeForm:notes"
+						>
+							<f:setPropertyActionListener value="#{studentClass}"
+														 target="#{studentModeBean.selectedStudentClass}"/>
+							<f:setPropertyActionListener value="#{null}"
+														 target="#{studentModeBean.newNote}"/>
+						</p:menuitem>
+						<p:menuitem value="#{msg['label.skips']}"
+									icon="ui-icon-arrowrefresh-1-w"
+									oncomplete="PF('registeredDialog').show()"
+									update=":studentModeForm:skips"
+						>
+							<f:setPropertyActionListener value="#{studentClass}"
+														 target="#{studentModeBean.selectedStudentClass}"/>
+							<f:setPropertyActionListener value="#{studentClass.registered}"
+														 target="#{studentModeBean.registered}"/>
+						</p:menuitem>
+					</p:contextMenu>
 				</p:dataGrid>
 
-			</p:panel>
+				<p:panelGrid>
+					<f:facet name="header">
+						<p:row>
+							<p:column
+									colspan="#{studentModeBean.attestations.size() + 1}">#{msg['label.attestation']}</p:column>
+							<p:column colspan="2">#{msg['exam']}</p:column>
+						</p:row>
+						<p:row>
+							<ui:repeat var="attestation" value="#{studentModeBean.attestations}">
+								<p:column>A#{studentModeBean.attestations.indexOf(attestation) + 1}</p:column>
+							</ui:repeat>
+							<p:column>AC</p:column>
+							<p:column>#{msg['label.mark']}</p:column>
+							<p:column>#{msg['label.total']}</p:column>
+						</p:row>
+
+					</f:facet>
+
+					<p:row>
+
+						<ui:repeat var="attestation" value="#{studentModeBean.attestations}">
+							<p:column styleClass="padding-0px">
+								<h:panelGroup id="attestationInfo"
+											  styleClass="student-lesson student-attestation">
+									<h:outputText value="#{attestation.mark}"/>
+									<p:outputLabel id="noteAttestation" styleClass="float-right"
+												   rendered="#{attestation.notes.size() gt 0}">
+										<i class="fa fa-info-circle"></i>
+									</p:outputLabel>
+									<p:tooltip for="noteAttestation" position="bottom"
+											   rendered="#{attestation.notes.size() gt 0}">
+										<ui:repeat var="note" value="#{attestation.notes}">
+											<h:panelGrid columns="2" columnClasses="w300px, w20px" styleClass="w100pc">
+												<h:outputText value="#{note.description}"/>
+												<h:outputText value="#{note.createDate}" converter="localDateConverter"/>
+											</h:panelGrid>
+										</ui:repeat>
+									</p:tooltip>
+								</h:panelGroup>
+								<p:contextMenu for="attestationInfo">
+									<p:menuitem value="#{msg['label.notes']}"
+												icon="ui-icon-search"
+												oncomplete="PF('notesDialog').show()"
+												update=":studentModeForm:notes"
+									>
+										<f:setPropertyActionListener value="#{attestation}"
+																	 target="#{studentModeBean.selectedStudentClass}"/>
+										<f:setPropertyActionListener value="#{null}"
+																	 target="#{studentModeBean.newNote}"/>
+									</p:menuitem>
+								</p:contextMenu>
+							</p:column>
+						</ui:repeat>
+
+						<p:column><h:outputText value="#{studentModeBean.lessonStudent.averageAttestation}"/></p:column>
+						<p:column></p:column>
+						<p:column></p:column>
+
+					</p:row>
+				</p:panelGrid>
+
+
+			</h:panelGroup>
 		</h:panelGrid>
+
+		<p:dialog header="#{msg['label.notes']}"
+				  widgetVar="notesDialog"
+				  modal="true"
+				  showEffect="fade"
+				  hideEffect="fade"
+				  resizable="false">
+			<p:ajax event="close" update=":studentModeForm:studentAdditionalInfo"/>
+			<p:outputPanel id="notes">
+				<p:outputLabel styleClass="block" value="#{studentModeBean.selectedStudentClass.clazz.date}"
+							   converter="localDateConverter"/>
+				<p:outputLabel styleClass="block"
+							   value="#{msg[studentModeBean.selectedStudentClass.clazz.lesson.type.key]}"/>
+				<p:outputLabel styleClass="block" value="#{studentModeBean.lessonStudent.name}"/>
+				<ui:repeat var="note" value="#{studentModeBean.selectedStudentClass.notes}">
+					<h:panelGrid columns="3" columnClasses="w300px, w20px">
+						<h:outputText value="#{note.description}"/>
+						<h:outputText value="#{note.createDate}" converter="localDateConverter"/>
+						<p:commandButton actionListener="#{studentModeBean.removeNote(note)}"
+										 update=":studentModeForm:notes"
+										 icon="fa fa-fw fa-minus" title="#{msg['option.remove']}"
+										 styleClass="red"/>
+					</h:panelGrid>
+				</ui:repeat>
+				<p:inputTextarea id="description" value="#{studentModeBean.newNote}"/>
+
+				<p:commandButton value="#{msg['btn.save.exit']}" icon="fa fa-fw fa-save"
+								 actionListener="#{studentModeBean.saveNote}"
+								 styleClass="block"/>
+			</p:outputPanel>
+		</p:dialog>
+
+		<p:dialog header="#{msg['label.skips']}"
+				  widgetVar="registeredDialog"
+				  modal="true"
+				  showEffect="fade"
+				  hideEffect="fade"
+				  resizable="false">
+			<p:ajax event="close" update=":studentModeForm:studentAdditionalInfo"/>
+			<p:outputPanel id="skips">
+				<h:panelGroup>
+					<p:outputLabel styleClass="block" value="#{studentModeBean.selectedStudentClass.clazz.date}"
+								   converter="localDateConverter"/>
+					<p:outputLabel styleClass="block"
+								   value="#{msg[studentModeBean.selectedStudentClass.clazz.lesson.type.key]}"/>
+					<p:outputLabel styleClass="block" value="#{studentModeBean.lessonStudent.name}"/>
+					<p:selectOneRadio id="registered"
+									  value="#{studentModeBean.registered}">
+						<f:selectItem itemLabel="#{msg['label.attend']}" itemValue="#{true}"/>
+						<f:selectItem itemLabel="#{msg['label.absent']}" itemValue="#{false}"/>
+					</p:selectOneRadio>
+					<p:commandButton value="#{msg['btn.save.exit']}" icon="fa fa-fw fa-save"
+									 actionListener="#{studentModeBean.saveRegisteredInfo}"
+					/>
+				</h:panelGroup>
+			</p:outputPanel>
+		</p:dialog>
 
 	</h:form>
 </ui:composition>

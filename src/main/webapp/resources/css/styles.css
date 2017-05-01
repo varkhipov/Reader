@@ -25,6 +25,9 @@
 .w210px {width: 210px;}
 .w250px {width: 250px;}
 .w300px {width: 300px;}
+.w350px {width: 350px;}
+.w550px {width: 550px;}
+.w700px {width: 700px;}
 
 .w100pc {width: 100%;}
 
@@ -67,6 +70,7 @@
 .margin-bottom-20px {margin-bottom: 20px;}
 
 /* Padding */
+#wrapper .padding-0px {padding: 0;}
 .padding-top-15px {padding-top: 15px;}
 
 /* Text Transform */
@@ -349,7 +353,7 @@ body {
 	content: "";
 	position: absolute;
 	border-top: 1px solid black;
-	width: 110%;
+	width: 105%;
 	transform-origin: 0% 0%;
 	left: 0;
 }
@@ -557,4 +561,48 @@ body {
 /* Student Mode */
 .student-mode label {
 	display: block;
+}
+
+.student-mode img {
+	max-width: 200px;
+	height: auto;
+}
+
+.student-lesson {
+	display: block;
+	text-align: center;
+	width: 70px;
+	height: 24px;
+	border: 1px solid;
+}
+
+.student-lesson.practical {
+	background-color: rgba(0, 0, 200, 0.3);
+}
+.student-lesson.lecture {
+	background-color: rgba(249, 237, 67, 0.3);
+}
+.student-lesson.lab {
+	background-color: rgba(0, 200, 0, 0.3);
+}
+
+.student-additional-info td {
+	vertical-align: top;
+}
+
+.buttons {
+	font-size: 10pt;
+	margin-bottom: 20px;
+	display: block;
+	text-align: right;
+}
+
+.additional-lesson {
+	border: 1px solid blue;
+}
+
+.student-mode .student-attestation {
+	padding-bottom: 6px;
+	padding-top: 6px;
+	border: 0;
 }

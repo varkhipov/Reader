@@ -1,17 +1,20 @@
 package com.grsu.reader.beans;
 
+import com.grsu.reader.constants.Constants;
+import com.grsu.reader.dao.EntityDAO;
 import com.grsu.reader.dao.StudentDAO;
-import com.grsu.reader.entities.Note;
-import com.grsu.reader.entities.Stream;
-import com.grsu.reader.entities.Student;
-import com.grsu.reader.entities.StudentClass;
+import com.grsu.reader.entities.*;
 import com.grsu.reader.models.LessonStudentModel;
+import com.grsu.reader.models.LessonType;
 import com.grsu.reader.models.SkipInfo;
+import com.grsu.reader.utils.FacesUtils;
 import lombok.Data;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -31,6 +34,11 @@ public class StudentModeBean implements Serializable {
 	private List<Note> notes;
 	private Map<String, Integer> marks;
 	private List<StudentClass> studentClasses;
+	private List<StudentClass> attestations;
+
+	private StudentClass selectedStudentClass;
+	private String newNote;
+	private boolean registered;
 
 	public void initStudentMode(Student student, Stream stream) {
 		this.stream = stream;
@@ -65,10 +73,27 @@ public class StudentModeBean implements Serializable {
 		}
 
 		//init student notes and marks
+		initNotesAndMarks();
+
+		//init student classes
+		studentClasses = stream.getLessons().stream()
+				.filter(l -> Arrays.asList(LessonType.LECTURE, LessonType.PRACTICAL, LessonType.LAB).contains(l.getType()) && student.getStudentClasses().containsKey(l.getClazz().getId()))
+				.map(l -> student.getStudentClasses().get(l.getClazz().getId()))
+				.collect(Collectors.toList());
+
+		//init attestations
+		attestations = stream.getLessons().stream()
+				.filter(l -> LessonType.ATTESTATION.equals(l.getType()) && student.getStudentClasses().containsKey(l.getClazz().getId()))
+				.map(l -> student.getStudentClasses().get(l.getClazz().getId()))
+				.collect(Collectors.toList());
+		updateAverageAttestation();
+	}
+
+	public void initNotesAndMarks() {
 		notes = new ArrayList<>();
 		marks = new HashMap<>();
-		notes.addAll(student.getNotes());
-		student.getStudentClasses().values().forEach(sc -> {
+		notes.addAll(lessonStudent.getStudent().getNotes());
+		lessonStudent.getStudent().getStudentClasses().values().forEach(sc -> {
 			if (stream.getLessons().contains(sc.getClazz().getLesson())) {
 				notes.addAll(sc.getNotes());
 				if (sc.getMark() != null) {
@@ -79,12 +104,20 @@ public class StudentModeBean implements Serializable {
 				}
 			}
 		});
+	}
 
-		//init student classes
-		studentClasses = stream.getLessons().stream()
-				.filter(l -> student.getStudentClasses().containsKey(l.getClazz().getId()))
-				.map(l -> student.getStudentClasses().get(l.getClazz().getId()))
-				.collect(Collectors.toList());
+	public boolean isAdditionalLesson(Lesson lesson) {
+		if (lesson.getGroup() == null) {
+			for (Group group : lesson.getStream().getGroups()) {
+				if (lessonStudent.getStudent().getGroups().contains(group)) {
+					return false;
+				}
+			}
+		}
+		if (lessonStudent.getStudent().getGroups().contains(lesson.getGroup())) {
+			return false;
+		}
+		return true;
 	}
 
 	public void clear() {
@@ -93,6 +126,7 @@ public class StudentModeBean implements Serializable {
 		notes = null;
 		marks = null;
 		studentClasses = null;
+		attestations = null;
 	}
 
 	public List<Map.Entry<String, Integer>> getMarks() {
@@ -101,4 +135,57 @@ public class StudentModeBean implements Serializable {
 		}
 		return null;
 	}
+
+	private void updateAverageAttestation() {
+		lessonStudent.setAverageAttestation(null);
+		List<String> marks = new ArrayList<>();
+		attestations.stream().forEach(a -> {
+			if (a.getMark() != null) {
+				marks.addAll(Arrays.asList(a.getMark().split("[^0-9]")));
+			}
+		});
+		if (marks.size() > 0) {
+			lessonStudent.setAverageAttestation(marks.stream().mapToInt(Integer::parseInt).average().getAsDouble());
+		}
+	}
+
+	//NOTES
+	public void saveNote() {
+		if (newNote != null && !newNote.isEmpty()) {
+			Note note = new Note();
+			note.setCreateDate(LocalDateTime.now());
+			note.setDescription(newNote);
+			note.setType(Constants.STUDENT_CLASS);
+			note.setEntityId(lessonStudent.getId());
+			notes.add(note);
+			EntityDAO.save(note);
+			selectedStudentClass.getNotes().add(note);
+		}
+		newNote = null;
+		FacesUtils.closeDialog("notesDialog");
+	}
+
+	public void removeNote(Note note) {
+		EntityDAO.delete(note);
+		notes.remove(note);
+		selectedStudentClass.getNotes().remove(note);
+	}
+
+	//REGISTERED INFO
+	public void saveRegisteredInfo() {
+		boolean oldValue = selectedStudentClass.getRegistered();
+		if (oldValue != registered) {
+			selectedStudentClass.setRegistered(registered);
+			if (!registered) {
+				selectedStudentClass.setRegistrationTime(null);
+				selectedStudentClass.setRegistrationType(null);
+			} else {
+				selectedStudentClass.setRegistrationTime(LocalTime.now());
+				selectedStudentClass.setRegistrationType(Constants.REGISTRATION_TYPE_MANUAL);
+			}
+			EntityDAO.save(selectedStudentClass);
+		}
+		FacesUtils.closeDialog("registeredDialog");
+	}
+
 }

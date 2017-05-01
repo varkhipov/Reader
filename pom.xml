@@ -23,7 +23,7 @@
 		<maven.release.plugin.version>2.5.3</maven.release.plugin.version>
 		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
 
-		<primefaces.version>6.1.RC2</primefaces.version>
+		<primefaces.version>6.1</primefaces.version>
 		<primefaces.extensions.version>6.0.0</primefaces.extensions.version>
 		<atmosphere.runtime.version>2.4.9</atmosphere.runtime.version>
 		<jsf.version>2.2.14</jsf.version>
