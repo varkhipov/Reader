@@ -13,6 +13,7 @@ public final class Constants {
 	
 	//BEANS
 	public final static String GROUPS_DELIMITER = ",<br/>";
+	public static final String MARK_DELIMETER = "/";
 
 	//REGISTRATION TYPE
 	public final static String REGISTRATION_TYPE_MANUAL = "MANUAL";

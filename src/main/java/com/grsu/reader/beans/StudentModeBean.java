@@ -97,10 +97,13 @@ public class StudentModeBean implements Serializable {
 			if (stream.getLessons().contains(sc.getClazz().getLesson())) {
 				notes.addAll(sc.getNotes());
 				if (sc.getMark() != null) {
-					if (!marks.containsKey(sc.getMark())) {
-						marks.put(sc.getMark(), 0);
-					}
-					marks.put(sc.getMark(), marks.get(sc.getMark()) + 1);
+					Arrays.stream(sc.getMark().split(Constants.MARK_DELIMETER)).forEach(m -> {
+								if (!marks.containsKey(m)) {
+									marks.put(m, 0);
+								}
+								marks.put(m, marks.get(m) + 1);
+							}
+					);
 				}
 			}
 		});
