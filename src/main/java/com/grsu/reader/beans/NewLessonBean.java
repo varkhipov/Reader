@@ -26,7 +26,7 @@ public class NewLessonBean implements Serializable {
 
 	private Lesson lesson;
 
-	private List<LessonType> lessonTypes = new ArrayList<>(Arrays.asList(LessonType.LECTURE, LessonType.PRACTICAL, LessonType.LAB));
+	private List<LessonType> lessonTypes = new ArrayList<>(Arrays.asList(LessonType.LECTURE, LessonType.PRACTICAL, LessonType.LAB, LessonType.EXAM));
 
 	private void initLesson() {
 		if (lesson.getClasses() == null) {

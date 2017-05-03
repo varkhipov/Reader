@@ -35,6 +35,7 @@ public class StudentModeBean implements Serializable {
 	private Map<String, Integer> marks;
 	private List<StudentClass> studentClasses;
 	private List<StudentClass> attestations;
+	private StudentClass examClass;
 
 	private StudentClass selectedStudentClass;
 	private String newNote;
@@ -87,6 +88,7 @@ public class StudentModeBean implements Serializable {
 				.map(l -> student.getStudentClasses().get(l.getClazz().getId()))
 				.collect(Collectors.toList());
 		updateAverageAttestation();
+		lessonStudent.updateTotal();
 	}
 
 	public void initNotesAndMarks() {
@@ -95,8 +97,17 @@ public class StudentModeBean implements Serializable {
 		notes.addAll(lessonStudent.getStudent().getNotes());
 		lessonStudent.getStudent().getStudentClasses().values().forEach(sc -> {
 			if (stream.getLessons().contains(sc.getClazz().getLesson())) {
+				if (LessonType.EXAM.equals(sc.getClazz().getLesson().getType())) {
+					examClass = sc;
+					try {
+						lessonStudent.setExamMark(Integer.valueOf(sc.getMark()));
+					} catch (NumberFormatException ex) {
+						lessonStudent.setExamMark(null);
+					}
+				}
+
 				notes.addAll(sc.getNotes());
-				if (sc.getMark() != null) {
+				if (sc.getMark() != null && !(LessonType.ATTESTATION.equals(sc.getClazz().getLesson().getType()) || LessonType.EXAM.equals(sc.getClazz().getLesson().getType()))) {
 					Arrays.stream(sc.getMark().split(Constants.MARK_DELIMETER)).forEach(m -> {
 								if (!marks.containsKey(m)) {
 									marks.put(m, 0);
@@ -130,6 +141,10 @@ public class StudentModeBean implements Serializable {
 		marks = null;
 		studentClasses = null;
 		attestations = null;
+		examClass = null;
+
+		selectedStudentClass = null;
+		newNote = null;
 	}
 
 	public List<Map.Entry<String, Integer>> getMarks() {
@@ -150,6 +165,12 @@ public class StudentModeBean implements Serializable {
 		if (marks.size() > 0) {
 			lessonStudent.setAverageAttestation(marks.stream().mapToInt(Integer::parseInt).average().getAsDouble());
 		}
+	}
+
+	public void changeExamMark() {
+		examClass.setMark(String.valueOf(lessonStudent.getExamMark()));
+		EntityDAO.save(examClass);
+		lessonStudent.updateTotal();
 	}
 
 	//NOTES

@@ -140,7 +140,8 @@
 										<ui:repeat var="note" value="#{attestation.notes}">
 											<h:panelGrid columns="2" columnClasses="w300px, w20px" styleClass="w100pc">
 												<h:outputText value="#{note.description}"/>
-												<h:outputText value="#{note.createDate}" converter="localDateConverter"/>
+												<h:outputText value="#{note.createDate}"
+															  converter="localDateConverter"/>
 											</h:panelGrid>
 										</ui:repeat>
 									</p:tooltip>
@@ -161,8 +162,14 @@
 						</ui:repeat>
 
 						<p:column><h:outputText value="#{studentModeBean.lessonStudent.averageAttestation}"/></p:column>
-						<p:column></p:column>
-						<p:column></p:column>
+						<p:column>
+							<p:inputText value="#{studentModeBean.lessonStudent.examMark}"
+										 valueChangeListener="#{studentModeBean.changeExamMark}"
+										 rendered="#{studentModeBean.examClass ne null}"/>
+						</p:column>
+						<p:column>
+							<p:inputText value="#{studentModeBean.lessonStudent.totalMark}"/>
+						</p:column>
 
 					</p:row>
 				</p:panelGrid>

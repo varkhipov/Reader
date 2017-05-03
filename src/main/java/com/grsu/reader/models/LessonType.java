@@ -7,7 +7,8 @@ public enum LessonType {
 	LECTURE(1, "lecture"),
 	PRACTICAL(2, "practical"),
 	LAB(3, "lab"),
-	ATTESTATION(4, "attestation");
+	ATTESTATION(4, "attestation"),
+	EXAM(5, "exam");
 
 	private final int code;
 	private final String key;
