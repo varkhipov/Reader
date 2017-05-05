@@ -606,3 +606,7 @@ body {
 	padding-top: 6px;
 	border: 0;
 }
+
+.student-mode input {
+	width: 40px;
+}

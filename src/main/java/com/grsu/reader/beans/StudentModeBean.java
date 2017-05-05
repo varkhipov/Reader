@@ -3,15 +3,22 @@ package com.grsu.reader.beans;
 import com.grsu.reader.constants.Constants;
 import com.grsu.reader.dao.EntityDAO;
 import com.grsu.reader.dao.StudentDAO;
-import com.grsu.reader.entities.*;
+import com.grsu.reader.entities.Group;
+import com.grsu.reader.entities.Lesson;
+import com.grsu.reader.entities.Note;
+import com.grsu.reader.entities.Stream;
+import com.grsu.reader.entities.Student;
+import com.grsu.reader.entities.StudentClass;
 import com.grsu.reader.models.LessonStudentModel;
 import com.grsu.reader.models.LessonType;
 import com.grsu.reader.models.SkipInfo;
 import com.grsu.reader.utils.FacesUtils;
 import lombok.Data;
+import org.primefaces.component.inputnumber.InputNumber;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.event.ValueChangeEvent;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -167,10 +174,19 @@ public class StudentModeBean implements Serializable {
 		}
 	}
 
-	public void changeExamMark() {
-		examClass.setMark(String.valueOf(lessonStudent.getExamMark()));
-		EntityDAO.save(examClass);
-		lessonStudent.updateTotal();
+	public void changeExamMark(ValueChangeEvent event) {
+		if ("examMark".equals(((InputNumber) event.getSource()).getId())) {
+			lessonStudent.setExamMark((Integer) event.getNewValue());
+			lessonStudent.updateTotal();
+		}
+		if ("totalMark".equals(((InputNumber) event.getSource()).getId())) {
+			lessonStudent.setTotalMark((Integer) event.getNewValue());
+			lessonStudent.updateExam();
+		}
+		if (examClass != null) {
+			examClass.setMark(String.valueOf(lessonStudent.getExamMark()));
+			EntityDAO.save(examClass);
+		}
 	}
 
 	//NOTES

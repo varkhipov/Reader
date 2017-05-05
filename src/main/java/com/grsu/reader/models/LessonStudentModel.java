@@ -53,4 +53,24 @@ public class LessonStudentModel {
 		}
 	}
 
+	public void updateExam() {
+		if (totalMark == null) {
+			examMark = null;
+		} else {
+			if (averageAttestation == null) {
+				examMark = totalMark;
+			} else {
+				examMark = totalMark * 2 - averageAttestation.intValue();
+				if (examMark < 0) {
+					examMark = 0;
+					updateTotal();
+				}
+				if (examMark > 10) {
+					examMark = 10;
+					updateTotal();
+				}
+			}
+		}
+	}
+
 }

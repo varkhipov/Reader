@@ -161,14 +161,28 @@
 							</p:column>
 						</ui:repeat>
 
-						<p:column><h:outputText value="#{studentModeBean.lessonStudent.averageAttestation}"/></p:column>
 						<p:column>
-							<p:inputText value="#{studentModeBean.lessonStudent.examMark}"
-										 valueChangeListener="#{studentModeBean.changeExamMark}"
-										 rendered="#{studentModeBean.examClass ne null}"/>
+							<h:outputText value="#{studentModeBean.lessonStudent.averageAttestation}"/>
 						</p:column>
 						<p:column>
-							<p:inputText value="#{studentModeBean.lessonStudent.totalMark}"/>
+							<p:inputNumber id="examMark"
+										   value="#{studentModeBean.lessonStudent.examMark}"
+										   valueChangeListener="#{studentModeBean.changeExamMark}"
+										   rendered="#{studentModeBean.examClass ne null}"
+										   minValue="0"
+										   maxValue="10">
+								<p:ajax update="totalMark @this"/>
+							</p:inputNumber>
+						</p:column>
+						<p:column>
+							<p:inputNumber id="totalMark"
+										   value="#{studentModeBean.lessonStudent.totalMark}"
+										   valueChangeListener="#{studentModeBean.changeExamMark}"
+										   rendered="#{studentModeBean.examClass ne null}"
+										   minValue="0"
+										   maxValue="10">
+								<p:ajax update="examMark @this"/>
+							</p:inputNumber>
 						</p:column>
 
 					</p:row>

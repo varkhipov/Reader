@@ -20,7 +20,7 @@ public class LessonDAO {
 		try {
 			System.out.println("Start loading Lessons from database.");
 			Query query = session.createQuery("from Lesson where type in (:types)");
-			query.setParameterList("types", Arrays.asList(LessonType.LECTURE, LessonType.PRACTICAL, LessonType.LAB));
+			query.setParameterList("types", Arrays.asList(LessonType.LECTURE, LessonType.PRACTICAL, LessonType.LAB, LessonType.EXAM));
 			return query.getResultList();
 		} catch (RuntimeException e) {
 			e.printStackTrace();
