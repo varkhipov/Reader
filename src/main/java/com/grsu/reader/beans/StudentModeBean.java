@@ -39,7 +39,9 @@ public class StudentModeBean implements Serializable {
 	private Stream stream;
 	private LessonStudentModel lessonStudent;
 	private List<Note> notes;
-	private Map<String, Integer> marks;
+	private Map<Integer, Integer> numberMarks;
+	private Map<String, Integer> symbolMarks;
+	private Double averageMark;
 	private List<StudentClass> studentClasses;
 	private List<StudentClass> attestations;
 	private StudentClass examClass;
@@ -98,9 +100,10 @@ public class StudentModeBean implements Serializable {
 		lessonStudent.updateTotal();
 	}
 
-	public void initNotesAndMarks() {
+	private void initNotesAndMarks() {
 		notes = new ArrayList<>();
-		marks = new HashMap<>();
+		symbolMarks = new HashMap<>();
+		numberMarks = new HashMap<>();
 		notes.addAll(lessonStudent.getStudent().getNotes());
 		lessonStudent.getStudent().getStudentClasses().values().forEach(sc -> {
 			if (stream.getLessons().contains(sc.getClazz().getLesson())) {
@@ -116,15 +119,31 @@ public class StudentModeBean implements Serializable {
 				notes.addAll(sc.getNotes());
 				if (sc.getMark() != null && !(LessonType.ATTESTATION.equals(sc.getClazz().getLesson().getType()) || LessonType.EXAM.equals(sc.getClazz().getLesson().getType()))) {
 					Arrays.stream(sc.getMark().split(Constants.MARK_DELIMETER)).forEach(m -> {
-								if (!marks.containsKey(m)) {
-									marks.put(m, 0);
+
+								List<String> numbers = Arrays.stream(m.split("[^0-9]"))
+										.filter(s -> !s.isEmpty())
+										.collect(Collectors.toList());
+								if (numbers.size() > 0) {
+									numbers.stream().forEach(n -> {
+										Integer key = Integer.parseInt(n);
+										if (!numberMarks.containsKey(key)) {
+											numberMarks.put(key, 0);
+										}
+										numberMarks.put(key, numberMarks.get(key) + 1);
+									});
+								} else {
+									if (!symbolMarks.containsKey(m)) {
+										symbolMarks.put(m, 0);
+									}
+									symbolMarks.put(m, symbolMarks.get(m) + 1);
 								}
-								marks.put(m, marks.get(m) + 1);
 							}
 					);
 				}
 			}
 		});
+
+		averageMark = numberMarks.entrySet().stream().map(n -> n.getKey() * n.getValue()).mapToInt(Integer::intValue).sum() / (double) numberMarks.values().stream().mapToInt(Integer::intValue).sum();
 	}
 
 	public boolean isAdditionalLesson(Lesson lesson) {
@@ -145,7 +164,9 @@ public class StudentModeBean implements Serializable {
 		stream = null;
 		lessonStudent = null;
 		notes = null;
-		marks = null;
+		numberMarks = null;
+		symbolMarks = null;
+		averageMark = null;
 		studentClasses = null;
 		attestations = null;
 		examClass = null;
@@ -154,9 +175,16 @@ public class StudentModeBean implements Serializable {
 		newNote = null;
 	}
 
-	public List<Map.Entry<String, Integer>> getMarks() {
-		if (marks != null) {
-			return new ArrayList<>(marks.entrySet());
+	public List<Map.Entry<Integer, Integer>> getNumberMarks() {
+		if (numberMarks != null) {
+			return new ArrayList<>(numberMarks.entrySet());
+		}
+		return null;
+	}
+
+	public List<Map.Entry<String, Integer>> getSymbolMarks() {
+		if (symbolMarks != null) {
+			return new ArrayList<>(symbolMarks.entrySet());
 		}
 		return null;
 	}

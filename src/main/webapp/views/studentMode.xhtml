@@ -53,9 +53,18 @@
 			</h:panelGroup>
 
 			<h:panelGroup>
-				<ui:repeat id="markInfo" var="mark" value="#{studentModeBean.marks}">
-					<h:panelGrid columns="2">
+				<ui:repeat id="numberMarks" var="mark" value="#{studentModeBean.numberMarks}">
+					<h:panelGrid columns="3">
 						<h:outputText value="#{mark.key}"/>
+						<h:outputText value=" - " />
+						<h:outputText value="#{mark.value}"/>
+					</h:panelGrid>
+				</ui:repeat>
+				<h:outputText value="#{msg['label.average.mark']} #{studentModeBean.averageMark}"/>
+				<ui:repeat id="symbolMarks" var="mark" value="#{studentModeBean.symbolMarks}">
+					<h:panelGrid columns="3">
+						<h:outputText value="#{mark.key}"/>
+						<h:outputText value=" - " />
 						<h:outputText value="#{mark.value}"/>
 					</h:panelGrid>
 				</ui:repeat>
@@ -104,6 +113,22 @@
 														 target="#{studentModeBean.registered}"/>
 						</p:menuitem>
 					</p:contextMenu>
+					<p:tooltip for="lessonInfo" position="top">
+						<h:panelGrid columns="1">
+							<h:outputText value="#{msg[studentClass.clazz.lesson.type.key]}"/>
+							<h:outputText value="#{studentClass.clazz.date}" converter="localDateConverter"/>
+							<h:outputText value="#{studentClass.clazz.schedule.caption}"/>
+							<h:outputText value="#{studentClass.clazz.lesson.group.name}"/>
+							<h:outputText value="#{studentClass.clazz.lesson.description}"/>
+							<h:outputText value="#{msg['label.notes']}:" rendered="#{studentClass.clazz.lesson.notes.size() gt 0}" />
+						</h:panelGrid>
+						<ui:repeat var="note" value="#{studentClass.clazz.lesson.notes}">
+							<h:panelGrid columns="2" columnClasses="w300px, w20px" styleClass="w100pc">
+								<h:outputText value="#{note.description}"/>
+								<h:outputText value="#{note.createDate}" converter="localDateConverter"/>
+							</h:panelGrid>
+						</ui:repeat>
+					</p:tooltip>
 				</p:dataGrid>
 
 				<p:panelGrid>
