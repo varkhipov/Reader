@@ -419,6 +419,15 @@ body {
 	font-weight: bold;
 }
 
+.lesson-mode-table .exams {
+	background-color: rgba(25, 193, 72, 0.3);
+	width: 40px;
+	padding: 0;
+	text-align: center;
+	font-weight: bold;
+}
+
+
 .lesson-mode-table .ui-datatable-scrollable-theadclone {
 	display: none;
 }
@@ -566,6 +575,7 @@ body {
 .student-mode img {
 	max-width: 200px;
 	height: auto;
+	border: 2px solid;
 }
 
 .student-lesson {
@@ -609,4 +619,8 @@ body {
 
 .student-mode input {
 	width: 40px;
+}
+
+.student-mode .lesson-info input {
+	height: 14px;
 }

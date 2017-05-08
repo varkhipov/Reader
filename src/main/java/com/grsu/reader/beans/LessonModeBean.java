@@ -45,6 +45,7 @@ public class LessonModeBean implements Serializable {
 	private Lesson lesson;
 	private List<LessonModel> lessons;
 	private List<LessonModel> attestations;
+	private List<LessonModel> exams;
 
 	private List<Note> notes;
 	private String newNote;
@@ -74,12 +75,13 @@ public class LessonModeBean implements Serializable {
 		lesson = null;
 		lessons = null;
 		attestations = null;
+		exams = null;
 
 		notes = null;
 		newNote = null;
 		entityId = null;
 
-		students  = null;
+		students = null;
 		selectedStudent = null;
 		studentsLazyModel = null;
 
@@ -107,6 +109,7 @@ public class LessonModeBean implements Serializable {
 			}
 		}
 
+		//int lessons
 		this.lessons = lessons.stream()
 				.filter(l -> Arrays.asList(LessonType.LECTURE, LessonType.PRACTICAL, LessonType.LAB).contains(l.getType()))
 				.sorted((l1, l2) -> {
@@ -116,12 +119,20 @@ public class LessonModeBean implements Serializable {
 				})
 				.map(LessonModel::new).collect(Collectors.toList());
 
+		//init attestations
 		this.attestations = lessons.stream()
 				.filter(l -> LessonType.ATTESTATION.equals(l.getType()))
 				.map(LessonModel::new).collect(Collectors.toList());
 		attestations.forEach(a -> a.setNumber(attestations.indexOf(a) + 1));
 
-		List<LessonStudentModel> additionalStudents = new StudentDAO().getAdditionalStudents(lesson.getId()).stream().map(LessonStudentModel::new).collect(Collectors.toList());
+		//init exams
+		this.exams = lessons.stream()
+				.filter(l -> LessonType.EXAM.equals(l.getType()))
+				.map(LessonModel::new).collect(Collectors.toList());
+
+		//init additional students
+		List<LessonStudentModel> additionalStudents = new StudentDAO().getAdditionalStudents(lesson.getId()).stream()
+				.map(LessonStudentModel::new).collect(Collectors.toList());
 		additionalStudents.stream().forEach(s -> s.setAdditional(true));
 
 		students = studentSet.stream().map(LessonStudentModel::new).collect(Collectors.toList());
@@ -134,6 +145,16 @@ public class LessonModeBean implements Serializable {
 			if (skipInfo.containsKey(s.getId())) {
 				s.setTotalSkip(skipInfo.get(s.getId()).get(Constants.TOTAL_SKIP));
 			}
+			exams.stream().forEach(e -> {
+				StudentClass exam = s.getStudent().getStudentClasses().get(e.getLesson().getClazz().getId());
+				if (exam != null) {
+					try {
+						s.setExamMark(Integer.valueOf(exam.getMark()));
+					} catch (NumberFormatException ex) {
+						s.setExamMark(null);
+					}
+				}
+			});
 		});
 
 		studentsLazyModel = new LazyStudentDataModel(students);
@@ -196,6 +217,9 @@ public class LessonModeBean implements Serializable {
 				if (showSkips) {
 					column--;
 				}
+				if (exams.size() > 0) {
+					column--;
+				}
 				return attestations.get(column);
 			}
 		}
@@ -237,11 +261,11 @@ public class LessonModeBean implements Serializable {
 				studentClass.setRegistrationTime(null);
 				studentClass.setRegistrationType(null);
 
-				FacesUtils.execute("$('#"+ selectedClientId.replaceAll("\\:", "\\\\\\\\:")+ "').closest('td').addClass('skip');");
+				FacesUtils.execute("$('#" + selectedClientId.replaceAll("\\:", "\\\\\\\\:") + "').closest('td').addClass('skip');");
 			} else {
 				studentClass.setRegistrationTime(LocalTime.now());
 				studentClass.setRegistrationType(Constants.REGISTRATION_TYPE_MANUAL);
-				FacesUtils.execute("$('#"+ selectedClientId.replaceAll("\\:", "\\\\\\\\:")+ "').closest('td').removeClass('skip')");
+				FacesUtils.execute("$('#" + selectedClientId.replaceAll("\\:", "\\\\\\\\:") + "').closest('td').removeClass('skip')");
 			}
 			EntityDAO.save(studentClass);
 		}
@@ -304,7 +328,10 @@ public class LessonModeBean implements Serializable {
 		if (showAttestations) {
 			frozenColumns += attestations.size();
 			if (attestations.size() > 1) {
-				frozenColumns ++;
+				frozenColumns++;
+			}
+			if (exams.size() > 0) {
+				frozenColumns++;
 			}
 		}
 		return frozenColumns;

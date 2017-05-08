@@ -1,5 +1,6 @@
 package com.grsu.reader.models;
 
+import com.grsu.reader.constants.Constants;
 import com.grsu.reader.entities.Student;
 import lombok.Data;
 
@@ -49,7 +50,7 @@ public class LessonStudentModel {
 				totalMark = examMark;
 			}
 		} else {
-			totalMark = (int) (averageAttestation + examMark) / 2;
+			totalMark = (int) Math.round(averageAttestation * Constants.MARK_ATTESTATION_WEIGHT + examMark * Constants.MARK_EXAM_WEIGHT);
 		}
 	}
 
@@ -60,7 +61,7 @@ public class LessonStudentModel {
 			if (averageAttestation == null) {
 				examMark = totalMark;
 			} else {
-				examMark = totalMark * 2 - averageAttestation.intValue();
+				examMark = (int) Math.round((totalMark - averageAttestation * Constants.MARK_ATTESTATION_WEIGHT) / Constants.MARK_EXAM_WEIGHT);
 				if (examMark < 0) {
 					examMark = 0;
 					updateTotal();

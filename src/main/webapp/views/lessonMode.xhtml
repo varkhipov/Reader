@@ -115,6 +115,14 @@
 				<h:outputText value="#{student.totalSkip}"/>
 			</p:column>
 
+			<!-- exam -->
+			<p:column
+					headerText="#{msg['label.exam.short']}"
+					rendered="#{lessonModeBean.showAttestations and lessonModeBean.exams.size() > 0}"
+					styleClass="exams">
+				<h:outputText value="#{student.examMark}"/>
+			</p:column>
+
 			<!-- attestations -->
 			<p:columns value="#{lessonModeBean.attestations}"
 					   var="attestation"

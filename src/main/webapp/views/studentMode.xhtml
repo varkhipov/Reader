@@ -4,7 +4,9 @@
 				xmlns:f="http://xmlns.jcp.org/jsf/core"
 				xmlns:p="http://primefaces.org/ui"
 >
-	<h:form id="studentModeForm" styleClass="student-mode">
+	<h:form id="studentModeForm" styleClass="student-mode"
+			onkeypress="if (event.keyCode === 13) {event.target.blur(); return false;}">
+
 		<h:panelGrid columns="2" styleClass="font-size-20pt w100pc" columnClasses=",w550px">
 			<h:panelGrid columns="2" columnClasses="w250px,">
 				<p:graphicImage value="#{imageBean.getImagePath(studentModeBean.lessonStudent.student.cardUid)}"/>
@@ -36,7 +38,7 @@
 					<p:outputLabel value="#{studentModeBean.stream.course}"/>
 					<p:outputLabel value="#{studentModeBean.stream.department.name}"/>
 				</h:panelGroup>
-				<p:outputLabel styleClass="margin-top-20px"
+				<p:outputLabel id="studentSkips" styleClass="margin-top-20px"
 							   value="#{msg['label.skips']}: #{studentModeBean.lessonStudent.totalSkip} (#{studentModeBean.lessonStudent.skips})"/>
 			</h:panelGroup>
 		</h:panelGrid>
@@ -44,52 +46,98 @@
 		<h:panelGrid id="studentAdditionalInfo" columns="3" styleClass="w100pc student-additional-info"
 					 columnClasses="w350px,,w700px">
 			<h:panelGroup>
-				<ui:repeat id="noteInfo" var="note" value="#{studentModeBean.notes}">
+				<h:outputText value="#{msg['label.notes']}:" styleClass="bold"/>
+				<ui:repeat var="note" value="#{studentModeBean.lessonStudent.student.notes}">
 					<h:panelGrid columns="2">
 						<h:outputText value="#{note.createDate}" converter="localDateConverter"/>
 						<h:outputText value="#{note.description}"/>
 					</h:panelGrid>
 				</ui:repeat>
+
+				<h:outputText value="#{msg['label.attestation.notes']}:" styleClass="bold"/>
+				<ui:repeat var="attestation" value="#{studentModeBean.attestations}">
+					<h:panelGrid columns="2" rendered="#{attestation.notes.size() gt 0}">
+						<h:outputText value="#{attestation.clazz.date}" converter="localDateConverter"/>
+						<h:panelGroup>
+							<ui:repeat var="note" value="#{attestation.notes}">
+								<h:outputText value="#{note.description}" styleClass="block"/>
+							</ui:repeat>
+						</h:panelGroup>
+					</h:panelGrid>
+				</ui:repeat>
+
+				<h:outputText value="#{msg['label.lesson.notes']}:" styleClass="bold"/>
+				<ui:repeat var="studentClass" value="#{studentModeBean.studentClasses}">
+					<h:panelGrid columns="2" rendered="#{studentClass.notes.size() gt 0}">
+						<h:outputText value="#{studentClass.clazz.date}" converter="localDateConverter"/>
+						<h:panelGroup>
+							<ui:repeat var="note" value="#{studentClass.notes}">
+								<h:outputText value="#{note.description}" styleClass="block"/>
+							</ui:repeat>
+						</h:panelGroup>
+
+					</h:panelGrid>
+				</ui:repeat>
 			</h:panelGroup>
 
 			<h:panelGroup>
+				<h:outputText value="#{msg['label.marks']}:" styleClass="bold"/>
 				<ui:repeat id="numberMarks" var="mark" value="#{studentModeBean.numberMarks}">
 					<h:panelGrid columns="3">
 						<h:outputText value="#{mark.key}"/>
-						<h:outputText value=" - " />
+						<h:outputText value=" - "/>
 						<h:outputText value="#{mark.value}"/>
 					</h:panelGrid>
 				</ui:repeat>
-				<h:outputText value="#{msg['label.average.mark']} #{studentModeBean.averageMark}"/>
+				<h:outputText value="#{msg['label.average.mark']} #{studentModeBean.averageMark}"
+							  styleClass="bold block"/>
+				<h:outputText value="#{msg['label.symbols']}:" styleClass="bold block"/>
 				<ui:repeat id="symbolMarks" var="mark" value="#{studentModeBean.symbolMarks}">
 					<h:panelGrid columns="3">
 						<h:outputText value="#{mark.key}"/>
-						<h:outputText value=" - " />
+						<h:outputText value=" - "/>
 						<h:outputText value="#{mark.value}"/>
 					</h:panelGrid>
 				</ui:repeat>
 			</h:panelGroup>
 
 			<h:panelGroup>
-				<p:dataGrid var="studentClass" value="#{studentModeBean.studentClasses}" columns="10" layout="grid">
+				<p:dataGrid id="studentClassesInfo" var="studentClass" value="#{studentModeBean.studentClasses}"
+							columns="10" layout="grid" styleClass="lesson-info">
 					<h:panelGroup id="lessonInfo"
 								  styleClass="student-lesson #{studentClass.registered eq false ? 'skip' : ''}
 								  #{studentClass.clazz.lesson.type.key}
 								  #{studentModeBean.isAdditionalLesson(studentClass.clazz.lesson) ? 'additional-lesson' : ''}">
-						<h:outputText value="#{studentClass.mark}"/>
-						<p:outputLabel id="noteStudentClass" styleClass="float-right"
+						<p:ajax event="click" listener="#{studentModeBean.editMark(studentClass)}"
+								update="@this :studentModeForm:focus"
+								disabled="#{studentClass eq studentModeBean.editedStudentClass}"/>
+
+						<h:panelGroup rendered="#{not (studentClass eq studentModeBean.editedStudentClass)}">
+							<h:outputText value="#{studentClass.mark}"/>
+							<p:outputLabel id="noteStudentClass" styleClass="float-right"
+										   rendered="#{studentClass.notes.size() gt 0}">
+								<i class="fa fa-info-circle"></i>
+							</p:outputLabel>
+							<p:tooltip for="noteStudentClass" position="bottom"
 									   rendered="#{studentClass.notes.size() gt 0}">
-							<i class="fa fa-info-circle"></i>
-						</p:outputLabel>
-						<p:tooltip for="noteStudentClass" position="bottom"
-								   rendered="#{studentClass.notes.size() gt 0}">
-							<ui:repeat var="note" value="#{studentClass.notes}">
-								<h:panelGrid columns="2" columnClasses="w300px, w20px" styleClass="w100pc">
-									<h:outputText value="#{note.description}"/>
-									<h:outputText value="#{note.createDate}" converter="localDateConverter"/>
-								</h:panelGrid>
-							</ui:repeat>
-						</p:tooltip>
+								<ui:repeat var="note" value="#{studentClass.notes}">
+									<h:panelGrid columns="2" columnClasses="w300px, w20px" styleClass="w100pc">
+										<h:outputText value="#{note.description}"/>
+										<h:outputText value="#{note.createDate}" converter="localDateConverter"/>
+									</h:panelGrid>
+								</ui:repeat>
+							</p:tooltip>
+						</h:panelGroup>
+						<h:panelGroup rendered="#{studentClass eq studentModeBean.editedStudentClass}">
+							<p:inputText id="editedMark"
+										 value="#{studentClass.mark}"
+										 valueChangeListener="#{studentModeBean.saveMark}"
+							>
+								<p:ajax event="blur" listener="#{studentModeBean.saveMark(null)}"
+										update=":studentModeForm:studentAdditionalInfo"/>
+							</p:inputText>
+
+						</h:panelGroup>
 					</h:panelGroup>
 					<p:contextMenu for="lessonInfo">
 						<p:menuitem value="#{msg['label.notes']}"
@@ -120,7 +168,8 @@
 							<h:outputText value="#{studentClass.clazz.schedule.caption}"/>
 							<h:outputText value="#{studentClass.clazz.lesson.group.name}"/>
 							<h:outputText value="#{studentClass.clazz.lesson.description}"/>
-							<h:outputText value="#{msg['label.notes']}:" rendered="#{studentClass.clazz.lesson.notes.size() gt 0}" />
+							<h:outputText value="#{msg['label.notes']}:"
+										  rendered="#{studentClass.clazz.lesson.notes.size() gt 0}"/>
 						</h:panelGrid>
 						<ui:repeat var="note" value="#{studentClass.clazz.lesson.notes}">
 							<h:panelGrid columns="2" columnClasses="w300px, w20px" styleClass="w100pc">
@@ -131,7 +180,9 @@
 					</p:tooltip>
 				</p:dataGrid>
 
-				<p:panelGrid>
+				<p:focus id="focus" context="studentClassesInfo"/>
+
+				<p:panelGrid styleClass="margin-top-10px">
 					<f:facet name="header">
 						<p:row>
 							<p:column
@@ -254,7 +305,7 @@
 				  showEffect="fade"
 				  hideEffect="fade"
 				  resizable="false">
-			<p:ajax event="close" update=":studentModeForm:studentAdditionalInfo"/>
+			<p:ajax event="close" update=":studentModeForm:studentAdditionalInfo :studentModeForm:studentSkips"/>
 			<p:outputPanel id="skips">
 				<h:panelGroup>
 					<p:outputLabel styleClass="block" value="#{studentModeBean.selectedStudentClass.clazz.date}"

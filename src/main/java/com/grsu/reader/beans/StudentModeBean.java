@@ -18,6 +18,8 @@ import org.primefaces.component.inputnumber.InputNumber;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.html.HtmlPanelGroup;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -38,7 +40,6 @@ import java.util.stream.Collectors;
 public class StudentModeBean implements Serializable {
 	private Stream stream;
 	private LessonStudentModel lessonStudent;
-	private List<Note> notes;
 	private Map<Integer, Integer> numberMarks;
 	private Map<String, Integer> symbolMarks;
 	private Double averageMark;
@@ -49,41 +50,15 @@ public class StudentModeBean implements Serializable {
 	private StudentClass selectedStudentClass;
 	private String newNote;
 	private boolean registered;
+	private StudentClass editedStudentClass;
 
 	public void initStudentMode(Student student, Stream stream) {
 		this.stream = stream;
 		lessonStudent = new LessonStudentModel(student);
-		if (stream != null) {
-			List<SkipInfo> studentSkipInfo = new StudentDAO().getStudentSkipInfo(Arrays.asList(student.getId()), stream.getId(), -1);
-			if (studentSkipInfo != null && studentSkipInfo.size() > 0) {
-				for (SkipInfo si : studentSkipInfo) {
-					switch (si.getLessonType()) {
-						case LECTURE:
-							lessonStudent.setLectureSkip(si.getCount());
-							break;
-						case PRACTICAL:
-							lessonStudent.setPracticalSkip(si.getCount());
-							break;
-						case LAB:
-							lessonStudent.setLabSkip(si.getCount());
-							break;
-					}
-				}
-				if (lessonStudent.getLectureSkip() == null) {
-					lessonStudent.setLectureSkip(0);
-				}
-				if (lessonStudent.getPracticalSkip() == null) {
-					lessonStudent.setPracticalSkip(0);
-				}
-				if (lessonStudent.getLabSkip() == null) {
-					lessonStudent.setLabSkip(0);
-				}
-				lessonStudent.setTotalSkip(lessonStudent.getLectureSkip() + lessonStudent.getPracticalSkip() + lessonStudent.getLabSkip());
-			}
-		}
+		updateStudentSkips();
 
-		//init student notes and marks
-		initNotesAndMarks();
+		//init student marks
+		initMarks();
 
 		//init student classes
 		studentClasses = stream.getLessons().stream()
@@ -100,11 +75,9 @@ public class StudentModeBean implements Serializable {
 		lessonStudent.updateTotal();
 	}
 
-	private void initNotesAndMarks() {
-		notes = new ArrayList<>();
+	private void initMarks() {
 		symbolMarks = new HashMap<>();
 		numberMarks = new HashMap<>();
-		notes.addAll(lessonStudent.getStudent().getNotes());
 		lessonStudent.getStudent().getStudentClasses().values().forEach(sc -> {
 			if (stream.getLessons().contains(sc.getClazz().getLesson())) {
 				if (LessonType.EXAM.equals(sc.getClazz().getLesson().getType())) {
@@ -116,7 +89,6 @@ public class StudentModeBean implements Serializable {
 					}
 				}
 
-				notes.addAll(sc.getNotes());
 				if (sc.getMark() != null && !(LessonType.ATTESTATION.equals(sc.getClazz().getLesson().getType()) || LessonType.EXAM.equals(sc.getClazz().getLesson().getType()))) {
 					Arrays.stream(sc.getMark().split(Constants.MARK_DELIMETER)).forEach(m -> {
 
@@ -163,7 +135,6 @@ public class StudentModeBean implements Serializable {
 	public void clear() {
 		stream = null;
 		lessonStudent = null;
-		notes = null;
 		numberMarks = null;
 		symbolMarks = null;
 		averageMark = null;
@@ -173,6 +144,7 @@ public class StudentModeBean implements Serializable {
 
 		selectedStudentClass = null;
 		newNote = null;
+
 	}
 
 	public List<Map.Entry<Integer, Integer>> getNumberMarks() {
@@ -202,6 +174,37 @@ public class StudentModeBean implements Serializable {
 		}
 	}
 
+	private void updateStudentSkips() {
+		if (stream != null) {
+			List<SkipInfo> studentSkipInfo = new StudentDAO().getStudentSkipInfo(Arrays.asList(lessonStudent.getId()), stream.getId(), -1);
+			if (studentSkipInfo != null && studentSkipInfo.size() > 0) {
+				for (SkipInfo si : studentSkipInfo) {
+					switch (si.getLessonType()) {
+						case LECTURE:
+							lessonStudent.setLectureSkip(si.getCount());
+							break;
+						case PRACTICAL:
+							lessonStudent.setPracticalSkip(si.getCount());
+							break;
+						case LAB:
+							lessonStudent.setLabSkip(si.getCount());
+							break;
+					}
+				}
+				if (lessonStudent.getLectureSkip() == null) {
+					lessonStudent.setLectureSkip(0);
+				}
+				if (lessonStudent.getPracticalSkip() == null) {
+					lessonStudent.setPracticalSkip(0);
+				}
+				if (lessonStudent.getLabSkip() == null) {
+					lessonStudent.setLabSkip(0);
+				}
+				lessonStudent.setTotalSkip(lessonStudent.getLectureSkip() + lessonStudent.getPracticalSkip() + lessonStudent.getLabSkip());
+			}
+		}
+	}
+
 	public void changeExamMark(ValueChangeEvent event) {
 		if ("examMark".equals(((InputNumber) event.getSource()).getId())) {
 			lessonStudent.setExamMark((Integer) event.getNewValue());
@@ -217,6 +220,23 @@ public class StudentModeBean implements Serializable {
 		}
 	}
 
+	public void editMark(StudentClass studentClass) {
+		System.out.println("!!!!!!edit");
+		editedStudentClass = studentClass;
+	}
+
+	public void saveMark(ValueChangeEvent event) {
+		System.out.println("!!!!!save" + event);
+		if (event != null) {
+			String value = String.valueOf(event.getNewValue());
+			value = value != null ? (value.trim().isEmpty() ? null : value.trim()) : null;
+			editedStudentClass.setMark(value);
+			EntityDAO.save(editedStudentClass);
+			initMarks();
+		}
+		editedStudentClass = null;
+	}
+
 	//NOTES
 	public void saveNote() {
 		if (newNote != null && !newNote.isEmpty()) {
@@ -225,7 +245,6 @@ public class StudentModeBean implements Serializable {
 			note.setDescription(newNote);
 			note.setType(Constants.STUDENT_CLASS);
 			note.setEntityId(lessonStudent.getId());
-			notes.add(note);
 			EntityDAO.save(note);
 			selectedStudentClass.getNotes().add(note);
 		}
@@ -235,7 +254,6 @@ public class StudentModeBean implements Serializable {
 
 	public void removeNote(Note note) {
 		EntityDAO.delete(note);
-		notes.remove(note);
 		selectedStudentClass.getNotes().remove(note);
 	}
 
@@ -252,6 +270,7 @@ public class StudentModeBean implements Serializable {
 				selectedStudentClass.setRegistrationType(Constants.REGISTRATION_TYPE_MANUAL);
 			}
 			EntityDAO.save(selectedStudentClass);
+			updateStudentSkips();
 		}
 		FacesUtils.closeDialog("registeredDialog");
 	}
