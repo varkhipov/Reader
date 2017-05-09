@@ -46,7 +46,7 @@
 		<h:panelGrid id="studentAdditionalInfo" columns="3" styleClass="w100pc student-additional-info"
 					 columnClasses="w350px,,w700px">
 			<h:panelGroup>
-				<h:outputText value="#{msg['label.notes']}:" styleClass="bold"/>
+				<h:outputText value="#{msg['label.notes']}:" styleClass="bold block"/>
 				<ui:repeat var="note" value="#{studentModeBean.lessonStudent.student.notes}">
 					<h:panelGrid columns="2">
 						<h:outputText value="#{note.createDate}" converter="localDateConverter"/>
@@ -54,7 +54,7 @@
 					</h:panelGrid>
 				</ui:repeat>
 
-				<h:outputText value="#{msg['label.attestation.notes']}:" styleClass="bold"/>
+				<h:outputText value="#{msg['label.attestation.notes']}:" styleClass="bold block"/>
 				<ui:repeat var="attestation" value="#{studentModeBean.attestations}">
 					<h:panelGrid columns="2" rendered="#{attestation.notes.size() gt 0}">
 						<h:outputText value="#{attestation.clazz.date}" converter="localDateConverter"/>
@@ -66,7 +66,7 @@
 					</h:panelGrid>
 				</ui:repeat>
 
-				<h:outputText value="#{msg['label.lesson.notes']}:" styleClass="bold"/>
+				<h:outputText value="#{msg['label.lesson.notes']}:" styleClass="bold block"/>
 				<ui:repeat var="studentClass" value="#{studentModeBean.studentClasses}">
 					<h:panelGrid columns="2" rendered="#{studentClass.notes.size() gt 0}">
 						<h:outputText value="#{studentClass.clazz.date}" converter="localDateConverter"/>

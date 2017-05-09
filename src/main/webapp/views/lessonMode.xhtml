@@ -61,7 +61,7 @@
 							actionListener="#{lessonModeBean.setShowAttestations(!lessonModeBean.showAttestations)}"
 							update=":lessonModeTable"
 							icon="fa fa-fw fa-buysellads"
-							rendered="#{lessonModeBean.attestations.size() gt 0}"
+							rendered="#{lessonModeBean.attestations.size() gt 0 or lessonModeBean.exams.size() gt 0}"
 							styleClass="#{lessonModeBean.showAttestations ? 'green' : ''}"
 					/>
 					<p:commandButton
