@@ -18,8 +18,6 @@ import org.primefaces.component.inputnumber.InputNumber;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.html.HtmlPanelGroup;
-import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -27,8 +25,10 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -39,7 +39,9 @@ import java.util.stream.Collectors;
 @Data
 public class StudentModeBean implements Serializable {
 	private Stream stream;
+	private Lesson lesson;
 	private LessonStudentModel lessonStudent;
+	private Student student;
 	private Map<Integer, Integer> numberMarks;
 	private Map<String, Integer> symbolMarks;
 	private Double averageMark;
@@ -52,7 +54,23 @@ public class StudentModeBean implements Serializable {
 	private boolean registered;
 	private StudentClass editedStudentClass;
 
-	public void initStudentMode(Student student, Stream stream) {
+	private List<Student> students;
+
+	public void initStudentMode(Student student, Stream stream, Lesson lesson) {
+		this.student = student;
+		this.lesson = lesson;
+
+		Set<Student> studentsSet = new HashSet<>();
+		if (stream != null && lesson != null) {
+			if (lesson.getGroup() != null) {
+				studentsSet.addAll(lesson.getGroup().getStudents());
+			} else {
+				stream.getGroups().stream().forEach(g -> studentsSet.addAll(g.getStudents()));
+			}
+		}
+
+		students = studentsSet.stream().sorted((s1, s2) -> s1.getFullName().compareToIgnoreCase(s2.getFullName())).collect(Collectors.toList());
+
 		this.stream = stream;
 		lessonStudent = new LessonStudentModel(student);
 		updateStudentSkips();

@@ -25,6 +25,12 @@
 
 			<h:panelGroup>
 				<h:panelGroup styleClass="buttons">
+					<p:selectOneMenu filter="true" filterMatchMode="startsWith" converter="entityConverter"
+									 value="#{studentModeBean.student}"
+					>
+						  <f:selectItems value="#{studentModeBean.students}" var="student" itemLabel="#{student.fullName}" itemValue="#{student}" />
+						<p:ajax listener="#{studentModeBean.initStudentMode(studentModeBean.student, studentModeBean.stream, studentModeBean.lesson)}" update=":studentModeForm" />
+					</p:selectOneMenu>
 					<p:commandButton title="#{msg['btn.backToLessons']}"
 									 icon="fa fa-fw fa-arrow-left"
 									 actionListener="#{studentModeBean.clear}"
