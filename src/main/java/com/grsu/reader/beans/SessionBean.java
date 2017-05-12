@@ -19,6 +19,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ManagedBean(name = "sessionBean")
 @SessionScoped
@@ -173,6 +174,7 @@ public class SessionBean implements Serializable {
 	public List<Student> getStudents() {
 		if (students == null) {
 			students = EntityDAO.getAll(Student.class);
+			students = students != null ? students.stream().sorted((s1, s2) -> s1.getFullName().compareToIgnoreCase(s2.getFullName())).collect(Collectors.toList()) : null;
 		}
 		return students;
 	}

@@ -28,8 +28,9 @@
 					<p:selectOneMenu filter="true" filterMatchMode="startsWith" converter="entityConverter"
 									 value="#{studentModeBean.student}"
 					>
-						  <f:selectItems value="#{studentModeBean.students}" var="student" itemLabel="#{student.fullName}" itemValue="#{student}" />
-						<p:ajax listener="#{studentModeBean.initStudentMode(studentModeBean.student, studentModeBean.stream, studentModeBean.lesson)}" update=":studentModeForm" />
+						<f:selectItem itemValue="#{null}" itemLabel="#{msg['select.student']}"/>
+						<f:selectItems value="#{sessionBean.students}" var="student" itemLabel="#{student.fullName}" itemValue="#{student}"/>
+						<p:ajax listener="#{studentModeBean.initStudentMode(studentModeBean.student, null)}" update=":studentModeForm"/>
 					</p:selectOneMenu>
 					<p:commandButton title="#{msg['btn.backToLessons']}"
 									 icon="fa fa-fw fa-arrow-left"
@@ -39,7 +40,16 @@
 					</p:commandButton>
 				</h:panelGroup>
 				<h:panelGroup styleClass="block">
-					<p:outputLabel value="#{studentModeBean.stream.name}"/>
+					<p:outputLabel value="#{studentModeBean.stream.name}" rendered="#{studentModeBean.studentStreams.size() eq 1}"/>
+					<p:selectOneMenu converter="entityConverter"
+									 value="#{studentModeBean.stream}"
+									 styleClass="font-size-12pt"
+									 rendered="#{studentModeBean.studentStreams.size() gt 1}"
+					>
+						<f:selectItem itemValue="#{null}" itemLabel="#{msg['select.stream']}"/>
+						<f:selectItems value="#{studentModeBean.studentStreams}" var="stream" itemLabel="#{stream.name}" itemValue="#{stream}"/>
+						<p:ajax listener="#{studentModeBean.initStudentMode(studentModeBean.student, studentModeBean.stream)}" update=":studentModeForm"/>
+					</p:selectOneMenu>
 					<p:outputLabel value="#{studentModeBean.stream.discipline.name}"/>
 					<p:outputLabel value="#{studentModeBean.stream.course}"/>
 					<p:outputLabel value="#{studentModeBean.stream.department.name}"/>

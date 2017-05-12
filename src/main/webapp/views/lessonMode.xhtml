@@ -89,7 +89,7 @@
 
 				<h:panelGroup id="STUDENT_#{student.student.id}" styleClass="">
 					<p:commandLink styleClass="bold #{student.additional ? 'blue' : ''}" value="#{student.name}" update="@([id$=wrapper])"
-								   actionListener="#{studentModeBean.initStudentMode(student.student, lessonModeBean.stream, lessonModeBean.lesson)}">
+								   actionListener="#{studentModeBean.initStudentMode(student.student, lessonModeBean.stream)}">
 						<f:setPropertyActionListener value="studentMode" target="#{sessionBean.activeView}"/>
 					</p:commandLink>
 					<p:outputLabel id="noteStudent" styleClass="float-right"

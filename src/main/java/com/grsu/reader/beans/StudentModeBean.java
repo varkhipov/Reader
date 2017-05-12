@@ -25,10 +25,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -39,9 +37,9 @@ import java.util.stream.Collectors;
 @Data
 public class StudentModeBean implements Serializable {
 	private Stream stream;
-	private Lesson lesson;
 	private LessonStudentModel lessonStudent;
 	private Student student;
+
 	private Map<Integer, Integer> numberMarks;
 	private Map<String, Integer> symbolMarks;
 	private Double averageMark;
@@ -54,43 +52,42 @@ public class StudentModeBean implements Serializable {
 	private boolean registered;
 	private StudentClass editedStudentClass;
 
-	private List<Student> students;
+	private List<Stream> studentStreams;
 
-	public void initStudentMode(Student student, Stream stream, Lesson lesson) {
+	public void initStudentMode(Student student, Stream stream) {
+		clear();
 		this.student = student;
-		this.lesson = lesson;
-
-		Set<Student> studentsSet = new HashSet<>();
-		if (stream != null && lesson != null) {
-			if (lesson.getGroup() != null) {
-				studentsSet.addAll(lesson.getGroup().getStudents());
-			} else {
-				stream.getGroups().stream().forEach(g -> studentsSet.addAll(g.getStudents()));
-			}
-		}
-
-		students = studentsSet.stream().sorted((s1, s2) -> s1.getFullName().compareToIgnoreCase(s2.getFullName())).collect(Collectors.toList());
-
 		this.stream = stream;
 		lessonStudent = new LessonStudentModel(student);
-		updateStudentSkips();
 
-		//init student marks
-		initMarks();
+		studentStreams = student.getStudentClasses().values().stream()
+				.filter(sc -> sc.getClazz().getLesson() != null)
+				.map(sc -> sc.getClazz().getLesson().getStream())
+				.distinct().collect(Collectors.toList());
+		if (stream == null && studentStreams.size() == 1) {
+			this.stream = studentStreams.get(0);
+		}
 
-		//init student classes
-		studentClasses = stream.getLessons().stream()
-				.filter(l -> Arrays.asList(LessonType.LECTURE, LessonType.PRACTICAL, LessonType.LAB).contains(l.getType()) && student.getStudentClasses().containsKey(l.getClazz().getId()))
-				.map(l -> student.getStudentClasses().get(l.getClazz().getId()))
-				.collect(Collectors.toList());
+		if (this.stream != null) {
+			updateStudentSkips();
 
-		//init attestations
-		attestations = stream.getLessons().stream()
-				.filter(l -> LessonType.ATTESTATION.equals(l.getType()) && student.getStudentClasses().containsKey(l.getClazz().getId()))
-				.map(l -> student.getStudentClasses().get(l.getClazz().getId()))
-				.collect(Collectors.toList());
-		updateAverageAttestation();
-		lessonStudent.updateTotal();
+			//init student marks
+			initMarks();
+
+			//init student classes
+			studentClasses = this.stream.getLessons().stream()
+					.filter(l -> Arrays.asList(LessonType.LECTURE, LessonType.PRACTICAL, LessonType.LAB).contains(l.getType()) && student.getStudentClasses().containsKey(l.getClazz().getId()))
+					.map(l -> student.getStudentClasses().get(l.getClazz().getId()))
+					.collect(Collectors.toList());
+
+			//init attestations
+			attestations = this.stream.getLessons().stream()
+					.filter(l -> LessonType.ATTESTATION.equals(l.getType()) && student.getStudentClasses().containsKey(l.getClazz().getId()))
+					.map(l -> student.getStudentClasses().get(l.getClazz().getId()))
+					.collect(Collectors.toList());
+			updateAverageAttestation();
+			lessonStudent.updateTotal();
+		}
 	}
 
 	private void initMarks() {
@@ -133,7 +130,11 @@ public class StudentModeBean implements Serializable {
 			}
 		});
 
-		averageMark = numberMarks.entrySet().stream().map(n -> n.getKey() * n.getValue()).mapToInt(Integer::intValue).sum() / (double) numberMarks.values().stream().mapToInt(Integer::intValue).sum();
+		averageMark = numberMarks.entrySet().stream().map(n -> n.getKey() * n.getValue()).mapToInt(Integer::intValue).sum()
+				/ (double) numberMarks.values().stream().mapToInt(Integer::intValue).sum();
+		if (averageMark.equals(Double.NaN)) {
+			averageMark = null;
+		}
 	}
 
 	public boolean isAdditionalLesson(Lesson lesson) {
@@ -162,6 +163,8 @@ public class StudentModeBean implements Serializable {
 
 		selectedStudentClass = null;
 		newNote = null;
+
+		studentStreams = null;
 
 	}
 
