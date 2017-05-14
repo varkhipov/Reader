@@ -42,10 +42,8 @@ public class LessonStudentModel {
 
 	public void updateTotal() {
 		if (examMark == null || averageAttestation == null) {
-			if (averageAttestation == null && examMark == null) {
+			if (examMark == null) {
 				totalMark = null;
-			} else if (examMark == null) {
-				totalMark = averageAttestation.intValue();
 			} else {
 				totalMark = examMark;
 			}

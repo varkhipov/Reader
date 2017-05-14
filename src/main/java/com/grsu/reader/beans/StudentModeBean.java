@@ -20,6 +20,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ValueChangeEvent;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -58,35 +60,39 @@ public class StudentModeBean implements Serializable {
 		clear();
 		this.student = student;
 		this.stream = stream;
-		lessonStudent = new LessonStudentModel(student);
 
-		studentStreams = student.getStudentClasses().values().stream()
-				.filter(sc -> sc.getClazz().getLesson() != null)
-				.map(sc -> sc.getClazz().getLesson().getStream())
-				.distinct().collect(Collectors.toList());
-		if (stream == null && studentStreams.size() == 1) {
-			this.stream = studentStreams.get(0);
-		}
-
-		if (this.stream != null) {
-			updateStudentSkips();
-
-			//init student marks
-			initMarks();
-
-			//init student classes
-			studentClasses = this.stream.getLessons().stream()
-					.filter(l -> Arrays.asList(LessonType.LECTURE, LessonType.PRACTICAL, LessonType.LAB).contains(l.getType()) && student.getStudentClasses().containsKey(l.getClazz().getId()))
-					.map(l -> student.getStudentClasses().get(l.getClazz().getId()))
+		if (this.student != null) {
+			lessonStudent = new LessonStudentModel(student);
+			studentStreams = student.getStudentClasses().values().stream()
+					.filter(sc -> sc.getClazz().getLesson() != null)
+					.map(sc -> sc.getClazz().getLesson().getStream())
+					.distinct()
+					.sorted((s1, s2) -> s1.getName().compareToIgnoreCase(s2.getName()))
 					.collect(Collectors.toList());
+			if (stream == null && studentStreams.size() > 0) {
+				this.stream = studentStreams.get(0);
+			}
 
-			//init attestations
-			attestations = this.stream.getLessons().stream()
-					.filter(l -> LessonType.ATTESTATION.equals(l.getType()) && student.getStudentClasses().containsKey(l.getClazz().getId()))
-					.map(l -> student.getStudentClasses().get(l.getClazz().getId()))
-					.collect(Collectors.toList());
-			updateAverageAttestation();
-			lessonStudent.updateTotal();
+			if (this.stream != null) {
+				updateStudentSkips();
+
+				//init student marks
+				initMarks();
+
+				//init student classes
+				studentClasses = this.stream.getLessons().stream()
+						.filter(l -> Arrays.asList(LessonType.LECTURE, LessonType.PRACTICAL, LessonType.LAB).contains(l.getType()) && student.getStudentClasses().containsKey(l.getClazz().getId()))
+						.map(l -> student.getStudentClasses().get(l.getClazz().getId()))
+						.collect(Collectors.toList());
+
+				//init attestations
+				attestations = this.stream.getLessons().stream()
+						.filter(l -> LessonType.ATTESTATION.equals(l.getType()) && student.getStudentClasses().containsKey(l.getClazz().getId()))
+						.map(l -> student.getStudentClasses().get(l.getClazz().getId()))
+						.collect(Collectors.toList());
+				updateAverageAttestation();
+				lessonStudent.updateTotal();
+			}
 		}
 	}
 
@@ -105,7 +111,7 @@ public class StudentModeBean implements Serializable {
 				}
 
 				if (sc.getMark() != null && !(LessonType.ATTESTATION.equals(sc.getClazz().getLesson().getType()) || LessonType.EXAM.equals(sc.getClazz().getLesson().getType()))) {
-					Arrays.stream(sc.getMark().split(Constants.MARK_DELIMETER)).forEach(m -> {
+					Arrays.stream(sc.getMark().split(Constants.MARK_DELIMETER)).filter(m -> !m.trim().isEmpty()).forEach(m -> {
 
 								List<String> numbers = Arrays.stream(m.split("[^0-9]"))
 										.filter(s -> !s.isEmpty())
@@ -134,6 +140,8 @@ public class StudentModeBean implements Serializable {
 				/ (double) numberMarks.values().stream().mapToInt(Integer::intValue).sum();
 		if (averageMark.equals(Double.NaN)) {
 			averageMark = null;
+		} else {
+			averageMark = new BigDecimal(averageMark).setScale(2, RoundingMode.UP).doubleValue();
 		}
 	}
 

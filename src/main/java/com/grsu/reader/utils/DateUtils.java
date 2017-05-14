@@ -43,7 +43,7 @@ public class DateUtils {
 		return time.format(DateTimeFormatter.ofPattern(FORMAT_TIME_SECOND));
 	}
 
-	private static LocalDateTime parseDate(String date, DateTimeFormatter formatter) {
+	public static LocalDateTime parseDate(String date, DateTimeFormatter formatter) {
 		return LocalDate.parse(date, formatter).atStartOfDay();
 	}
 

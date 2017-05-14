@@ -16,18 +16,12 @@ import static com.grsu.reader.utils.FacesUtils.update;
 public class DepartmentBean implements Serializable {
 
 	private Department selectedDepartment;
-	private Department copyOfSelectedDepartment;
 
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
 
 	public void setSelectedDepartment(Department selectedDepartment) {
 		this.selectedDepartment = selectedDepartment;
-		copyOfSelectedDepartment = this.selectedDepartment == null ? null : new Department(selectedDepartment);
-	}
-
-	public boolean isInfoChanged() {
-		return selectedDepartment != null && !selectedDepartment.equals(copyOfSelectedDepartment);
 	}
 
 	public void exit() {
@@ -46,13 +40,6 @@ public class DepartmentBean implements Serializable {
 		exit();
 	}
 
-	public void delete() {
-		EntityDAO.delete(selectedDepartment);
-		sessionBean.updateDepartments();
-		update("views");
-		exit();
-	}
-
 	public void setSessionBean(SessionBean sessionBean) {
 		this.sessionBean = sessionBean;
 	}
@@ -61,8 +48,5 @@ public class DepartmentBean implements Serializable {
 		return selectedDepartment;
 	}
 
-	public Department getCopyOfSelectedDepartment() {
-		return copyOfSelectedDepartment;
-	}
 
 }

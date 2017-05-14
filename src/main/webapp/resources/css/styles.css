@@ -18,6 +18,7 @@
 .w25px {width: 25px;}
 .w30px {width: 30px;}
 .w40px {width: 40px;}
+.w50px {width: 50px;}
 .w55px {width: 55px;}
 .w70px {width: 70px;}
 .w90px {width: 90px;}
@@ -26,6 +27,7 @@
 .w250px {width: 250px;}
 .w300px {width: 300px;}
 .w350px {width: 350px;}
+.w500px {width: 500px;}
 .w550px {width: 550px;}
 .w700px {width: 700px;}
 
@@ -46,11 +48,16 @@
 	text-align: left;
 }
 
+.top {
+	vertical-align: top;
+}
+
 /* Display */
 .inline {
 	display: inline;
 }
 #wrapper .block {display: block;}
+#wrapper .inline-block {display: inline-block;}
 
 /* Font Size */
 #wrapper .font-size-10pt {font-size: 10pt;}
@@ -341,15 +348,12 @@ body {
 	background-color: rgba(255, 0, 0, 0.3);
 }
 
-.lesson-mode-table .skip,
-.student-mode .skip {
+.lesson-mode-table .skip {
 	position: relative;
 }
 
 .lesson-mode-table .skip:after,
-.lesson-mode-table .skip:before,
-.student-mode .skip:after,
-.student-mode .skip:before {
+.lesson-mode-table .skip:before {
 	content: "";
 	position: absolute;
 	border-top: 1px solid black;
@@ -357,13 +361,11 @@ body {
 	transform-origin: 0% 0%;
 	left: 0;
 }
-.lesson-mode-table .skip:after,
-.student-mode .skip:after {
+.lesson-mode-table .skip:after {
 	transform: rotate(17deg);
 	top: 0;
 }
-.lesson-mode-table .skip:before,
-.student-mode .skip:before {
+.lesson-mode-table .skip:before {
 	transform: rotate(-17deg);
 	top: 21px;
 }
@@ -397,6 +399,10 @@ body {
 	height: 22px;
 	padding-top: 1px;
 	padding-bottom: 1px;
+}
+
+.lesson-mode-table td.student-info a {
+	text-decoration: none;
 }
 
 .lesson-mode-table th.student-info {
@@ -581,8 +587,8 @@ body {
 .student-lesson {
 	display: block;
 	text-align: center;
-	width: 70px;
-	height: 24px;
+	width: 50px;
+	height: 70px;
 	border: 1px solid;
 }
 
@@ -615,6 +621,8 @@ body {
 	padding-bottom: 6px;
 	padding-top: 6px;
 	border: 0;
+	display: block;
+	text-align: center;
 }
 
 .student-mode input {
@@ -623,4 +631,49 @@ body {
 
 .student-mode .lesson-info input {
 	height: 14px;
+}
+
+.student-mode .lesson-info {
+	display: inline-block;
+}
+
+.student-mode  .lesson-info .ui-grid {
+	border: none;
+}
+
+.student-additional-info .ui-panel .ui-panel-content {
+	padding: 0;
+}
+
+.student-mode .skip {
+	position: relative;
+}
+
+.student-mode .skip:after,
+.student-mode .skip:before {
+	content: "";
+	position: absolute;
+	border-top: 1px solid black;
+	width: 86px;
+	transform-origin: 0% 0%;
+	left: 0;
+}
+.student-mode .skip:after {
+	transform: rotate(55deg);
+	top: 0;
+}
+.student-mode .skip:before {
+	transform: rotate(-55deg);
+	top: 70px;
+}
+
+.student-mode .lesson-info .ui-datagrid-column {
+	padding: 1px;
+}
+
+.exam-block input {
+	width: 100%;
+	height: 36px;
+	padding: 0;
+	text-align: center;
 }
