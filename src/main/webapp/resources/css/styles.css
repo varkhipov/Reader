@@ -31,6 +31,7 @@
 .w550px {width: 550px;}
 .w700px {width: 700px;}
 
+.w50pc {width: 50%;}
 .w100pc {width: 100%;}
 
 /* Height */
@@ -629,15 +630,15 @@ body {
 	width: 40px;
 }
 
-.student-mode .lesson-info input {
+.student-mode .student-class-info input {
 	height: 14px;
 }
 
-.student-mode .lesson-info {
+.student-mode .student-class-info {
 	display: inline-block;
 }
 
-.student-mode  .lesson-info .ui-grid {
+.student-mode  .student-class-info .ui-grid {
 	border: none;
 }
 

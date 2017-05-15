@@ -15,6 +15,7 @@ import com.grsu.reader.models.SkipInfo;
 import com.grsu.reader.utils.FacesUtils;
 import lombok.Data;
 import org.primefaces.component.inputnumber.InputNumber;
+import org.primefaces.component.inputtext.InputText;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -253,6 +254,21 @@ public class StudentModeBean implements Serializable {
 		}
 	}
 
+	public void changeAttestationMark(ValueChangeEvent event) {
+		System.out.println(event);
+
+		String clientId = ((InputText) event.getSource()).getClientId();
+
+		String attestationId = clientId.substring(0, clientId.lastIndexOf(":"));
+		attestationId = attestationId.substring(attestationId.lastIndexOf(":") + 1);
+		//(String) ((InputText) event.getSource()).getAttributes().get("attestation");
+		StudentClass attestation = attestations.get(Integer.parseInt(attestationId));
+		attestation.setMark(String.valueOf(event.getNewValue()));
+		updateAverageAttestation();
+		lessonStudent.updateTotal();
+		EntityDAO.save(attestation);
+	}
+
 	public void editMark(StudentClass studentClass) {
 		System.out.println("!!!!!!edit");
 		editedStudentClass = studentClass;
@@ -310,7 +326,7 @@ public class StudentModeBean implements Serializable {
 
 
 	public List<Student> completeStudent(String query) {
-		return sessionBean.getStudents().stream().filter(s->s.getFullName().toLowerCase().startsWith(query)).collect(Collectors.toList());
+		return sessionBean.getStudents().stream().filter(s -> s.getFullName().toLowerCase().startsWith(query.toLowerCase())).collect(Collectors.toList());
 	}
 
 }
