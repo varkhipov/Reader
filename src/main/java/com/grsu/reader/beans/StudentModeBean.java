@@ -17,6 +17,7 @@ import lombok.Data;
 import org.primefaces.component.inputnumber.InputNumber;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ValueChangeEvent;
 import java.io.Serializable;
@@ -38,6 +39,9 @@ import java.util.stream.Collectors;
 @ViewScoped
 @Data
 public class StudentModeBean implements Serializable {
+	@ManagedProperty(value = "#{sessionBean}")
+	private SessionBean sessionBean;
+
 	private Stream stream;
 	private LessonStudentModel lessonStudent;
 	private Student student;
@@ -302,6 +306,11 @@ public class StudentModeBean implements Serializable {
 			updateStudentSkips();
 		}
 		FacesUtils.closeDialog("registeredDialog");
+	}
+
+
+	public List<Student> completeStudent(String query) {
+		return sessionBean.getStudents().stream().filter(s->s.getFullName().toLowerCase().startsWith(query)).collect(Collectors.toList());
 	}
 
 }

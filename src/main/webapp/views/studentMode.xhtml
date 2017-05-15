@@ -39,6 +39,15 @@
 								<p:ajax listener="#{studentModeBean.initStudentMode(studentModeBean.student, null)}"
 										update=":studentModeForm"/>
 							</p:selectOneMenu>
+
+							<p:autoComplete dropdown="true" value="#{studentModeBean.student}" completeMethod="#{studentModeBean.completeStudent}"
+											var="student" itemLabel="#{student.fullName}" itemValue="#{student}" converter="entityConverter"
+											forceSelection="true">
+								<p:ajax listener="#{studentModeBean.initStudentMode(studentModeBean.student, null)}"
+										update=":studentModeForm"/>
+							</p:autoComplete>
+
+
 							<p:selectOneMenu converter="entityConverter"
 											 value="#{studentModeBean.stream}"
 											 styleClass="font-size-12pt block"
@@ -65,20 +74,22 @@
 					<p:outputLabel value="#{studentModeBean.stream.discipline.name}"/>
 					<p:outputLabel value="#{studentModeBean.stream.course}"/>
 				</h:panelGroup>
-				<p:outputLabel id="studentSkips" styleClass="margin-top-20px"
-							   rendered="#{studentModeBean.stream ne null}"
-							   value="#{msg['label.skips']}: #{studentModeBean.lessonStudent.totalSkip} (#{studentModeBean.lessonStudent.skips})"/>
+				<h:panelGroup id="studentSkips" rendered="#{studentModeBean.stream ne null}" styleClass="margin-top-20px">
+					<p:outputLabel value="#{msg['label.skips']}: #{studentModeBean.lessonStudent.totalSkip} (#{studentModeBean.lessonStudent.skips})"
+								   rendered="#{(studentModeBean.lessonStudent.totalSkip gt 0)}"/>
+					<p:outputLabel value="#{msg['lesson.visit.noSkip']}" rendered="#{not (studentModeBean.lessonStudent.totalSkip gt 0)}"/>
+				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGrid>
 
 		<h:panelGrid id="studentAdditionalInfo" columns="3" styleClass="w100pc student-additional-info"
 					 rendered="#{studentModeBean.stream ne null}"
-					 columnClasses="w500px,,w500px center">
+					 columnClasses="w200px,w200px,center">
 			<p:panel>
 				<h:outputText value="#{msg['label.notes']}:" styleClass="bold block"/>
 				<ui:repeat var="note" value="#{studentModeBean.lessonStudent.student.notes}">
 					<h:panelGrid columns="2">
-						<h:outputText value="#{note.createDate}" converter="localDateConverter"/>
+						<h:outputText value="#{note.createDate}" converter="localShortDateConverter"/>
 						<h:outputText value="#{note.description}"/>
 					</h:panelGrid>
 				</ui:repeat>
@@ -86,7 +97,7 @@
 				<h:outputText value="#{msg['label.attestation.notes']}:" styleClass="bold block"/>
 				<ui:repeat var="attestation" value="#{studentModeBean.attestations}">
 					<h:panelGrid columns="2" rendered="#{attestation.notes.size() gt 0}">
-						<h:outputText value="#{attestation.clazz.date}" converter="localDateConverter"/>
+						<h:outputText value="#{attestation.clazz.date}" converter="localShortDateConverter"/>
 						<h:panelGroup>
 							<ui:repeat var="note" value="#{attestation.notes}">
 								<h:outputText value="#{note.description}" styleClass="block"/>
@@ -98,7 +109,7 @@
 				<h:outputText value="#{msg['label.lesson.notes']}:" styleClass="bold block"/>
 				<ui:repeat var="studentClass" value="#{studentModeBean.studentClasses}">
 					<h:panelGrid columns="2" rendered="#{studentClass.notes.size() gt 0}">
-						<h:outputText value="#{studentClass.clazz.date}" converter="localDateConverter"/>
+						<h:outputText value="#{studentClass.clazz.date}" converter="localShortDateConverter"/>
 						<h:panelGroup>
 							<ui:repeat var="note" value="#{studentClass.notes}">
 								<h:outputText value="#{note.description}" styleClass="block"/>
@@ -215,7 +226,7 @@
 
 				<p:focus id="focus" context="studentClassesInfo"/>
 
-				<p:panelGrid styleClass="margin-top-10px inline-block exam-block">
+				<p:panelGrid styleClass="exam-block">
 					<f:facet name="header">
 						<p:row>
 							<p:column
