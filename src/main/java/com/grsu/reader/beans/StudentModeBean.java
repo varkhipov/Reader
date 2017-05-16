@@ -261,7 +261,6 @@ public class StudentModeBean implements Serializable {
 
 		String attestationId = clientId.substring(0, clientId.lastIndexOf(":"));
 		attestationId = attestationId.substring(attestationId.lastIndexOf(":") + 1);
-		//(String) ((InputText) event.getSource()).getAttributes().get("attestation");
 		StudentClass attestation = attestations.get(Integer.parseInt(attestationId));
 		attestation.setMark(String.valueOf(event.getNewValue()));
 		updateAverageAttestation();
@@ -322,11 +321,6 @@ public class StudentModeBean implements Serializable {
 			updateStudentSkips();
 		}
 		FacesUtils.closeDialog("registeredDialog");
-	}
-
-
-	public List<Student> completeStudent(String query) {
-		return sessionBean.getStudents().stream().filter(s -> s.getFullName().toLowerCase().startsWith(query.toLowerCase())).collect(Collectors.toList());
 	}
 
 }

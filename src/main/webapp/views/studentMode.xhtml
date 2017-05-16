@@ -8,7 +8,7 @@
 			onkeypress="if (event.keyCode === 13) {event.target.blur(); return false;}">
 
 		<h:panelGrid columns="2" styleClass="font-size-20pt w100pc" columnClasses=",w550px">
-			<h:panelGrid columns="2" columnClasses="w250px,">
+			<h:panelGrid columns="2" columnClasses="w250px h280px,">
 				<p:graphicImage value="#{imageBean.getImagePath(studentModeBean.lessonStudent.student.cardUid)}"/>
 				<h:panelGroup>
 					<p:outputLabel value="#{studentModeBean.lessonStudent.student.lastName}" styleClass="uppercase"/>
@@ -40,16 +40,6 @@
 										update=":studentModeForm"/>
 							</p:selectOneMenu>
 
-							<p:autoComplete dropdown="true" value="#{studentModeBean.student}"
-											completeMethod="#{studentModeBean.completeStudent}"
-											var="student" itemLabel="#{student.fullName}" itemValue="#{student}"
-											converter="entityConverter"
-											forceSelection="true" styleClass="block">
-								<p:ajax listener="#{studentModeBean.initStudentMode(studentModeBean.student, null)}"
-										update=":studentModeForm"/>
-							</p:autoComplete>
-
-
 							<p:selectOneMenu converter="entityConverter"
 											 value="#{studentModeBean.stream}"
 											 styleClass="font-size-12pt block"
@@ -71,13 +61,12 @@
 						</p:commandButton>
 					</h:panelGrid>
 				</h:panelGroup>
-				<h:panelGroup styleClass="block">
+				<h:panelGroup styleClass="block margin-bottom-20px">
 					<p:outputLabel value="#{studentModeBean.stream.name}"/>
 					<p:outputLabel value="#{studentModeBean.stream.discipline.name}"/>
 					<p:outputLabel value="#{studentModeBean.stream.course}"/>
 				</h:panelGroup>
-				<h:panelGroup id="studentSkips" rendered="#{studentModeBean.stream ne null}"
-							  styleClass="margin-top-20px">
+				<h:panelGroup id="studentSkips" rendered="#{studentModeBean.stream ne null}">
 					<p:outputLabel
 							value="#{msg['label.skips']}: #{studentModeBean.lessonStudent.totalSkip} (#{studentModeBean.lessonStudent.skips})"
 							rendered="#{(studentModeBean.lessonStudent.totalSkip gt 0)}"/>
@@ -89,7 +78,7 @@
 
 		<h:panelGrid id="studentAdditionalInfo" columns="3" styleClass="w100pc student-additional-info"
 					 rendered="#{studentModeBean.stream ne null}"
-					 columnClasses="w200px,w200px,center">
+					 columnClasses="w25pc,w25pc,center">
 			<p:panel>
 				<h:outputText value="#{msg['label.notes']}:" styleClass="bold block"/>
 				<ui:repeat var="note" value="#{studentModeBean.lessonStudent.student.notes}">
@@ -252,13 +241,13 @@
 					<p:row>
 
 						<ui:repeat var="attestation" value="#{studentModeBean.attestations}">
-							<p:column styleClass="padding-0px">
+							<p:column styleClass="padding-0px w30pc">
 								<h:panelGroup id="attestationInfo"
 											  styleClass="student-attestation">
-									<h:outputText value="#{attestation.mark}"/>
 									<p:inputText id="attestationMark"
 												 value="#{attestation.mark}"
-												 valueChangeListener="#{studentModeBean.changeAttestationMark}">
+												 valueChangeListener="#{studentModeBean.changeAttestationMark}"
+													styleClass="w90pc">
 										<p:ajax update=":studentModeForm:examMark :studentModeForm:totalMark :studentModeForm:averageAttestation @this"/>
 									</p:inputText>
 									<p:outputLabel id="noteAttestation" styleClass="float-right"
