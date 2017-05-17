@@ -7,7 +7,7 @@
 	<h:form id="studentModeForm" styleClass="student-mode"
 			onkeypress="if (event.keyCode === 13) {event.target.blur(); return false;}">
 
-		<h:panelGrid columns="2" styleClass="font-size-20pt w100pc" columnClasses=",w550px">
+		<h:panelGrid columns="2" styleClass="font-size-20pt w100pc" columnClasses=",w550px top">
 			<h:panelGrid columns="2" columnClasses="w250px h280px,">
 				<p:graphicImage value="#{imageBean.getImagePath(studentModeBean.lessonStudent.student.cardUid)}"/>
 				<h:panelGroup>
@@ -27,41 +27,39 @@
 
 			<h:panelGroup>
 				<h:panelGroup styleClass="buttons">
-					<h:panelGrid columns="2" styleClass="inline" columnClasses=",top">
-						<h:panelGroup>
-							<p:selectOneMenu filter="true" filterMatchMode="startsWith" converter="entityConverter"
-											 value="#{studentModeBean.student}"
-							>
-								<f:selectItem itemValue="#{null}" itemLabel="#{msg['select.student']}"/>
-								<f:selectItems value="#{sessionBean.students}" var="student"
-											   itemLabel="#{student.fullName}"
-											   itemValue="#{student}"/>
-								<p:ajax listener="#{studentModeBean.initStudentMode(studentModeBean.student, null)}"
-										update=":studentModeForm"/>
-							</p:selectOneMenu>
+					<h:panelGrid columns="3" styleClass="inline" columnClasses=",top">
+						<p:selectOneMenu filter="true" filterMatchMode="startsWith" converter="entityConverter"
+										 value="#{studentModeBean.student}"
+						>
+							<f:selectItem itemValue="#{null}" itemLabel="#{msg['select.student']}"/>
+							<f:selectItems value="#{sessionBean.students}" var="student"
+										   itemLabel="#{student.fullName}"
+										   itemValue="#{student}"/>
+							<p:ajax listener="#{studentModeBean.initStudentMode(studentModeBean.student, null)}"
+									update=":studentModeForm"/>
+						</p:selectOneMenu>
 
-							<p:selectOneMenu converter="entityConverter"
-											 value="#{studentModeBean.stream}"
-											 styleClass="font-size-12pt block"
-											 rendered="#{studentModeBean.studentStreams.size() gt 1}"
-							>
-								<f:selectItem itemValue="#{null}" itemLabel="#{msg['select.stream']}"/>
-								<f:selectItems value="#{studentModeBean.studentStreams}" var="stream"
-											   itemLabel="#{stream.name}"
-											   itemValue="#{stream}"/>
-								<p:ajax listener="#{studentModeBean.initStudentMode(studentModeBean.student, studentModeBean.stream)}"
-										update=":studentModeForm"/>
-							</p:selectOneMenu>
-						</h:panelGroup>
+						<p:selectOneMenu converter="entityConverter"
+										 value="#{studentModeBean.stream}"
+										 styleClass="font-size-12pt block"
+										 rendered="#{studentModeBean.studentStreams.size() gt 1}"
+						>
+							<f:selectItem itemValue="#{null}" itemLabel="#{msg['select.stream']}"/>
+							<f:selectItems value="#{studentModeBean.studentStreams}" var="stream"
+										   itemLabel="#{stream.name}"
+										   itemValue="#{stream}"/>
+							<p:ajax listener="#{studentModeBean.initStudentMode(studentModeBean.student, studentModeBean.stream)}"
+									update=":studentModeForm"/>
+						</p:selectOneMenu>
 						<p:commandButton title="#{msg['btn.backToLessons']}"
 										 icon="fa fa-fw fa-arrow-left"
-										 actionListener="#{studentModeBean.clear}"
-										 update="@([id$=views])">
+										 actionListener="#{lessonModeBean.initLessonMode}" update="@([id$=views])">
 							<f:setPropertyActionListener value="lessonMode" target="#{sessionBean.activeView}"/>
+							<f:ajax event="click" listener="#{studentModeBean.clear}"/>
 						</p:commandButton>
 					</h:panelGrid>
 				</h:panelGroup>
-				<h:panelGroup styleClass="block margin-bottom-20px">
+				<h:panelGroup styleClass="block margin-bottom-70px">
 					<p:outputLabel value="#{studentModeBean.stream.name}"/>
 					<p:outputLabel value="#{studentModeBean.stream.discipline.name}"/>
 					<p:outputLabel value="#{studentModeBean.stream.course}"/>
@@ -229,7 +227,43 @@
 						</p:row>
 						<p:row>
 							<ui:repeat var="attestation" value="#{studentModeBean.attestations}">
-								<p:column>A#{studentModeBean.attestations.indexOf(attestation) + 1}</p:column>
+								<p:column styleClass="padding-0px">
+									<h:panelGroup id="attestationInfo"
+												  styleClass="student-attestation">
+										<h:outputText
+												value="A#{studentModeBean.attestations.indexOf(attestation) + 1}"/>
+
+										<p:outputLabel id="noteAttestation" styleClass="float-right"
+													   rendered="#{attestation.notes.size() gt 0}">
+											<i class="fa fa-info-circle"></i>
+										</p:outputLabel>
+										<p:tooltip for="noteAttestation" position="bottom"
+												   rendered="#{attestation.notes.size() gt 0}">
+											<ui:repeat var="note" value="#{attestation.notes}">
+												<h:panelGrid columns="2" columnClasses="w300px, w20px"
+															 styleClass="w100pc">
+													<h:outputText value="#{note.description}"/>
+													<h:outputText value="#{note.createDate}"
+																  converter="localDateConverter"/>
+												</h:panelGrid>
+											</ui:repeat>
+										</p:tooltip>
+									</h:panelGroup>
+
+									<p:contextMenu for="attestationInfo">
+										<p:menuitem value="#{msg['label.notes']}"
+													icon="ui-icon-search"
+													oncomplete="PF('notesDialog').show()"
+													update=":studentModeForm:notes"
+										>
+											<f:setPropertyActionListener value="#{attestation}"
+																		 target="#{studentModeBean.selectedStudentClass}"/>
+											<f:setPropertyActionListener value="#{null}"
+																		 target="#{studentModeBean.newNote}"/>
+										</p:menuitem>
+									</p:contextMenu>
+
+								</p:column>
 							</ui:repeat>
 							<p:column>AC</p:column>
 							<p:column>#{msg['label.examMark']}</p:column>
@@ -242,41 +276,12 @@
 
 						<ui:repeat var="attestation" value="#{studentModeBean.attestations}">
 							<p:column styleClass="padding-0px w30pc">
-								<h:panelGroup id="attestationInfo"
-											  styleClass="student-attestation">
-									<p:inputText id="attestationMark"
-												 value="#{attestation.mark}"
-												 valueChangeListener="#{studentModeBean.changeAttestationMark}"
-													styleClass="w90pc">
-										<p:ajax update=":studentModeForm:examMark :studentModeForm:totalMark :studentModeForm:averageAttestation @this"/>
-									</p:inputText>
-									<p:outputLabel id="noteAttestation" styleClass="float-right"
-												   rendered="#{attestation.notes.size() gt 0}">
-										<i class="fa fa-info-circle"></i>
-									</p:outputLabel>
-									<p:tooltip for="noteAttestation" position="bottom"
-											   rendered="#{attestation.notes.size() gt 0}">
-										<ui:repeat var="note" value="#{attestation.notes}">
-											<h:panelGrid columns="2" columnClasses="w300px, w20px" styleClass="w100pc">
-												<h:outputText value="#{note.description}"/>
-												<h:outputText value="#{note.createDate}"
-															  converter="localDateConverter"/>
-											</h:panelGrid>
-										</ui:repeat>
-									</p:tooltip>
-								</h:panelGroup>
-								<p:contextMenu for="attestationInfo">
-									<p:menuitem value="#{msg['label.notes']}"
-												icon="ui-icon-search"
-												oncomplete="PF('notesDialog').show()"
-												update=":studentModeForm:notes"
-									>
-										<f:setPropertyActionListener value="#{attestation}"
-																	 target="#{studentModeBean.selectedStudentClass}"/>
-										<f:setPropertyActionListener value="#{null}"
-																	 target="#{studentModeBean.newNote}"/>
-									</p:menuitem>
-								</p:contextMenu>
+								<p:inputText id="attestationMark"
+											 value="#{attestation.mark}"
+											 valueChangeListener="#{studentModeBean.changeAttestationMark}"
+											 styleClass="w90pc">
+									<p:ajax update=":studentModeForm:examMark :studentModeForm:totalMark :studentModeForm:averageAttestation @this"/>
+								</p:inputText>
 							</p:column>
 						</ui:repeat>
 
