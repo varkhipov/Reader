@@ -78,7 +78,7 @@
 
 		<h:panelGrid id="studentAdditionalInfo" columns="3" styleClass="w100pc student-additional-info"
 					 rendered="#{studentModeBean.stream ne null}"
-					 columnClasses="w25pc,w25pc,center">
+					 columnClasses="w30pc,w20pc,center">
 			<p:panel>
 				<h:outputText value="#{msg['label.notes']}:" styleClass="bold block"/>
 				<ui:repeat var="note" value="#{studentModeBean.lessonStudent.student.notes}">
@@ -146,9 +146,9 @@
 								update="@this :studentModeForm:focus"
 								disabled="#{studentClass eq studentModeBean.editedStudentClass}"/>
 
-						<h:outputLabel styleClass="font-size-10pt"
+						<h:outputLabel styleClass="font-size-11pt"
 									   value="#{msg['label.'.concat(studentClass.clazz.lesson.type.key)]}"/>
-						<h:outputLabel styleClass="font-size-10pt" value="#{studentClass.clazz.date}"
+						<h:outputLabel styleClass="font-size-11pt" value="#{studentClass.clazz.date}"
 									   converter="localShortDateConverter"/>
 						<h:panelGroup rendered="#{not (studentClass eq studentModeBean.editedStudentClass)}">
 							<h:outputLabel styleClass="bold" value="#{studentClass.mark}"/>
