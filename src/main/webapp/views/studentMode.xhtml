@@ -77,7 +77,7 @@
 		<h:panelGrid id="studentAdditionalInfo" columns="3" styleClass="w100pc student-additional-info"
 					 rendered="#{studentModeBean.stream ne null}"
 					 columnClasses="w30pc,w20pc,center">
-			<p:panel>
+			<p:panel styleClass="min-height-350px">
 				<h:outputText value="#{msg['label.notes']}:" styleClass="bold block"/>
 				<ui:repeat var="note" value="#{studentModeBean.lessonStudent.student.notes}">
 					<h:panelGrid columns="2">
@@ -112,7 +112,7 @@
 				</ui:repeat>
 			</p:panel>
 
-			<p:panel>
+			<p:panel styleClass="min-height-350px">
 				<h:outputText value="#{msg['label.marks']}:" styleClass="bold"/>
 				<ui:repeat id="numberMarks" var="mark" value="#{studentModeBean.numberMarks}">
 					<h:panelGrid columns="3">

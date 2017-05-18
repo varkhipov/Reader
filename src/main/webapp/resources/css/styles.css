@@ -44,6 +44,9 @@
 .h200px {height: 200px;}
 .h280px {height: 280px;}
 
+/* Min Height */
+.min-height-350px {min-height: 350px}
+
 /* Align */
 .center {
 	text-align: center;
