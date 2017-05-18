@@ -292,7 +292,7 @@ public class StudentModeBean implements Serializable {
 			note.setCreateDate(LocalDateTime.now());
 			note.setDescription(newNote);
 			note.setType(Constants.STUDENT_CLASS);
-			note.setEntityId(lessonStudent.getId());
+			note.setEntityId(selectedStudentClass.getId());
 			EntityDAO.save(note);
 			selectedStudentClass.getNotes().add(note);
 		}
