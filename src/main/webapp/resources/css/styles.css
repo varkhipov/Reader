@@ -46,6 +46,8 @@
 
 /* Min Height */
 .min-height-350px {min-height: 350px}
+.min-height-400px {min-height: 400px}
+.min-height-450px {min-height: 450px}
 
 /* Align */
 .center {
@@ -59,7 +61,7 @@
 }
 
 .top {vertical-align: top;}
-.middle {vertical-align: middle;}
+#wrapper .middle {vertical-align: middle;}
 
 /* Display */
 .inline {
@@ -90,6 +92,7 @@
 /* Padding */
 #wrapper .padding-0px {padding: 0;}
 .padding-top-15px {padding-top: 15px;}
+.padding-left-10px {padding-left: 10px;}
 
 /* Text Transform */
 .lowercase {text-transform: lowercase;}
@@ -97,6 +100,10 @@
 /* Float */
 .float-right {float: right;}
 
+/* Border */
+	.border-2px {
+		border: 2px solid #000000;
+	}
 /*
 	Custom styles
  */
@@ -646,6 +653,7 @@ body {
 
 .student-mode .student-class-info {
 	display: inline-block;
+	margin-bottom: 15px;
 }
 
 .student-mode  .student-class-info .ui-grid {
@@ -685,12 +693,11 @@ body {
 .exam-block {
 	width: 100%;
 	display: inline;
-	margin-top: 10px;
 }
 
 .exam-block input {
 	width: 100%;
-	height: 36px;
+	height: 70px;
 	padding: 0;
 	text-align: center;
 }

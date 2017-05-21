@@ -38,7 +38,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 						"join STUDENT_CLASS sc on sc.student_id = st.id\n" +
 						"join CLASS cl on cl.id = sc.class_id \n" +
 						"join SCHEDULE sch on sch.id = cl.schedule_id \n" +
-						"join LESSON l on l.id = cl.lesson_id\n" +
+						"join LESSON l on l.id = cl.lesson_id and l.type_id in (1, 2, 3)\n" +
 						"join STREAM str on str.id = l.stream_id\n" +
 						"where (sc.registered is null or sc.registered = 0) and str.id = :streamId " +
 						"and ((date(cl.date) < date('now', 'localtime')) or (date(cl.date) = date('now', 'localtime') and time(sch.begin) <= time('now', 'localtime')) or l.id = :lessonId)\n" +
@@ -51,7 +51,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 						"join STUDENT_CLASS sc on sc.student_id = st.id\n" +
 						"join CLASS cl on cl.id = sc.class_id " +
 						"join SCHEDULE sch on sch.id = cl.schedule_id " +
-						"join LESSON l on l.id = cl.lesson_id\n" +
+						"join LESSON l on l.id = cl.lesson_id and l.type_id in (1, 2, 3)\n" +
 						"join STREAM str on str.id = l.stream_id\n" +
 						"where st.id in (:studentId) and (sc.registered is null or sc.registered = 0) and str.id = :streamId " +
 						"and ((date(cl.date) < date('now', 'localtime')) or (date(cl.date) = date('now', 'localtime') and time(sch.begin) <= time('now', 'localtime')) or l.id = :lessonId)\n" +
