@@ -4,6 +4,10 @@
 				xmlns:f="http://xmlns.jcp.org/jsf/core"
 				xmlns:p="http://primefaces.org/ui"
 >
+
+	<p:socket channel="/register">
+		<p:ajax event="message" update=":studentModeForm"/>
+	</p:socket>
 	<h:form id="studentModeForm" styleClass="student-mode"
 			onkeypress="if (event.keyCode === 13) {event.target.blur(); return false;}">
 
@@ -11,9 +15,12 @@
 			<h:panelGrid columns="2" columnClasses="w250px h280px,">
 				<p:graphicImage value="#{imageBean.getImagePath(studentModeBean.lessonStudent.student.cardUid)}"/>
 				<h:panelGroup>
-					<p:outputLabel value="#{studentModeBean.lessonStudent.student.lastName}" styleClass="uppercase bold"/>
-					<p:outputLabel value="#{studentModeBean.lessonStudent.student.firstName}" styleClass="uppercase bold"/>
-					<p:outputLabel value="#{studentModeBean.lessonStudent.student.patronymic}" styleClass="uppercase bold"/>
+					<p:outputLabel value="#{studentModeBean.lessonStudent.student.lastName}"
+								   styleClass="uppercase bold"/>
+					<p:outputLabel value="#{studentModeBean.lessonStudent.student.firstName}"
+								   styleClass="uppercase bold"/>
+					<p:outputLabel value="#{studentModeBean.lessonStudent.student.patronymic}"
+								   styleClass="uppercase bold"/>
 					<p:outputLabel styleClass="margin-top-20px"
 								   value="#{studentModeBean.stream.department.abbreviation}"/>
 					<p:outputLabel escape="false"
@@ -26,8 +33,8 @@
 			</h:panelGrid>
 
 			<h:panelGroup>
-				<h:panelGroup styleClass="buttons">
-					<h:panelGrid columns="3" styleClass="inline" columnClasses=",top">
+				<h:panelGroup id="buttons" styleClass="buttons">
+					<h:panelGrid columns="5" styleClass="inline" columnClasses=",top">
 						<p:selectOneMenu filter="true" filterMatchMode="startsWith" converter="entityConverter"
 										 value="#{studentModeBean.student}"
 						>
@@ -51,6 +58,25 @@
 							<p:ajax listener="#{studentModeBean.initStudentMode(studentModeBean.student, studentModeBean.stream)}"
 									update=":studentModeForm"/>
 						</p:selectOneMenu>
+
+						<p:commandButton title="#{msg['btn.startRecord']}" icon="fa fa-fw fa-play"
+										 update=":studentModeForm:buttons"
+										 actionListener="#{serialBean.startRecord}"
+										 rendered="#{not serialBean.recordStarted}"/>
+						<p:commandButton title="#{msg['btn.stopRecord']}" icon="fa fa-fw fa-stop"
+										 update=":studentModeForm:buttons"
+										 actionListener="#{serialBean.stopRecord}"
+										 rendered="#{serialBean.recordStarted}"/>
+
+						<p:commandButton title="#{msg['btn.enableSound']}" icon="fa fa-fw fa-volume-up"
+										 update=":studentModeForm:buttons"
+										 actionListener="#{serialBean.enableSound}"
+										 rendered="#{serialBean.recordStarted and not serialBean.soundEnabled}"/>
+						<p:commandButton title="#{msg['btn.disableSound']}" icon="fa fa-fw fa-volume-off"
+										 update=":studentModeForm:buttons"
+										 actionListener="#{serialBean.disableSound}"
+										 rendered="#{serialBean.recordStarted and serialBean.soundEnabled}"/>
+
 						<p:commandButton title="#{msg['btn.backToLessons']}"
 										 icon="fa fa-fw fa-arrow-left"
 										 actionListener="#{lessonModeBean.initLessonMode}" update="@([id$=views])">

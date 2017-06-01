@@ -1,6 +1,6 @@
 package com.grsu.reader.utils;
 
-import com.grsu.reader.beans.LessonBean;
+import com.grsu.reader.beans.SerialBean;
 import com.grsu.reader.serial.SerialListener;
 import jssc.SerialPort;
 import jssc.SerialPortException;
@@ -47,21 +47,21 @@ public class SerialUtils {
 		return true;
 	}
 
-	public static boolean connect(LessonBean lessonBean) {
+	public static boolean connect(SerialBean serialBean) {
 		boolean connected = false;
 		String lastConnectionPort = PropertyUtils.getProperty("last.connection.port");
 		if (lastConnectionPort != null && !lastConnectionPort.isEmpty()) {
 			System.out.println("Found previously saved port [ " + lastConnectionPort + " ]. Trying to connect...");
-			connected = connect(lastConnectionPort, lessonBean);
+			connected = connect(lastConnectionPort, serialBean);
 		}
-		return connected || connect(findReader(), lessonBean);
+		return connected || connect(findReader(), serialBean);
 	}
 
-	private static boolean connect(String port, LessonBean lessonBean) {
-		return connect(port, lessonBean, true);
+	private static boolean connect(String port, SerialBean serialBean) {
+		return connect(port, serialBean, true);
 	}
 
-	private static boolean connect(String port, LessonBean lessonBean, boolean retryIfPortBusy) {
+	private static boolean connect(String port, SerialBean serialBean, boolean retryIfPortBusy) {
 		if (port == null) return false;
 
 		serialPort = new SerialPort(port);
@@ -82,7 +82,7 @@ public class SerialUtils {
 			//Устанавливаем ивент лисенер и маску
 			Thread.sleep(1000);
 			serialPort.addEventListener(
-					new SerialListener(serialPort, lessonBean),
+					new SerialListener(serialPort, serialBean),
 					SerialPort.MASK_RXCHAR
 			);
 			System.out.println("Serial port listener added. Port: " + port);
@@ -100,7 +100,7 @@ public class SerialUtils {
 				if (retryIfPortBusy) {
 					System.out.println("Port [ " + serialPort.getPortName() + " ] is busy. Trying to reconnect...");
 					disconnect();
-					connect(port, lessonBean, false);
+					connect(port, serialBean, false);
 				} else {
 					System.out.println("Connection failed. Port [ " + serialPort.getPortName() + " ] is busy.");
 				}

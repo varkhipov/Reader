@@ -1,8 +1,6 @@
 package com.grsu.reader.serial;
 
-import com.grsu.reader.beans.LessonBean;
-import com.grsu.reader.entities.Student;
-import com.grsu.reader.utils.EntityUtils;
+import com.grsu.reader.beans.SerialBean;
 import com.grsu.reader.utils.SerialUtils;
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
@@ -13,11 +11,11 @@ import static com.grsu.reader.constants.Constants.*;
 
 public class SerialListener implements SerialPortEventListener {
 	private SerialPort serialPort;
-	private LessonBean lessonBean;
+	private SerialBean serialBean;
 
-	public SerialListener(SerialPort serialPort, LessonBean lessonBean) {
+	public SerialListener(SerialPort serialPort, SerialBean serialBean) {
 		this.serialPort = serialPort;
-		this.lessonBean = lessonBean;
+		this.serialBean = serialBean;
 	}
 
 	public void serialEvent(SerialPortEvent event) {
@@ -31,8 +29,13 @@ public class SerialListener implements SerialPortEventListener {
 				if (data.startsWith(SERIAL_CARD_UID_PREFIX)) {
 					String uid = data.replace(SERIAL_CARD_UID_PREFIX, "").substring(0, 8);
 					System.out.println("Received card with uid: " + uid);
+					SerialUtils.sendResponse(
+							serialPort,
+							serialBean.process(uid),
+							serialBean.isSoundEnabled()
+					);
 
-					Student student = EntityUtils.getPersonByUid(lessonBean.getAbsentStudents(), uid);
+					/*Student student = EntityUtils.getPersonByUid(lessonBean.getAbsentStudents(), uid);
 					if (student == null) {
 						if (EntityUtils.getPersonByUid(lessonBean.getPresentStudents(), uid) != null) {
 							System.out.println("Student not registered. Reason: Uid[ " + uid + " ] already exists.");
@@ -54,7 +57,7 @@ public class SerialListener implements SerialPortEventListener {
 								false,
 								lessonBean.isSoundEnabled()
 						);
-					}
+					}*/
 				}
 			} catch (SerialPortException ex) {
 				System.out.println(ex);

@@ -12,6 +12,7 @@ import com.grsu.reader.entities.StudentClass;
 import com.grsu.reader.models.LessonStudentModel;
 import com.grsu.reader.models.LessonType;
 import com.grsu.reader.models.SkipInfo;
+import com.grsu.reader.utils.EntityUtils;
 import com.grsu.reader.utils.FacesUtils;
 import lombok.Data;
 import org.primefaces.component.inputnumber.InputNumber;
@@ -39,9 +40,12 @@ import java.util.stream.Collectors;
 @ManagedBean(name = "studentModeBean")
 @ViewScoped
 @Data
-public class StudentModeBean implements Serializable {
+public class StudentModeBean implements Serializable, SerialListenerBean {
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
+
+	@ManagedProperty(value = "#{serialBean}")
+	private SerialBean serialBean;
 
 	private Stream stream;
 	private LessonStudentModel lessonStudent;
@@ -62,6 +66,7 @@ public class StudentModeBean implements Serializable {
 	private List<Stream> studentStreams;
 
 	public void initStudentMode(Student student, Stream stream) {
+		serialBean.setCurrentListener(this);
 		clear();
 		this.student = student;
 		this.stream = stream;
@@ -323,4 +328,17 @@ public class StudentModeBean implements Serializable {
 		FacesUtils.closeDialog("registeredDialog");
 	}
 
+	@Override
+	public boolean process(String uid) {
+		Student student = EntityUtils.getPersonByUid(sessionBean.getStudents(), uid);
+		if (student != null) {
+			initStudentMode(student, null);
+
+			FacesUtils.push("/register", student);
+			return true;
+		} else {
+			System.out.println("Student not registered. Reason: Uid[ " + uid + " ] not exist in database.");
+			return false;
+		}
+	}
 }

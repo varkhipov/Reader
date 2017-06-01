@@ -5,7 +5,7 @@
 				xmlns:p="http://primefaces.org/ui"
 >
 	<h:form id="lessonsForm">
-		<p:dataTable var="lesson" value="#{lessonBean.lessons}"
+		<p:dataTable var="lesson" value="#{sessionBean.lessons}"
 					 sortBy="#{lesson.clazz.date}"
 					 sortOrder="descending">
 			<f:facet name="header">
@@ -31,11 +31,10 @@
 				<h:outputText value="#{lesson.group ne null ? lesson.group.name : msg['label.all.groups']}"/>
 			</p:column>
 			<p:column styleClass="groupOptions">
-				<p:commandButton actionListener="#{menuBean.changeView('lesson')}" update="@([id$=wrapper])"
+				<p:commandButton actionListener="#{lessonBean.initLesson(lesson)}" update="@([id$=wrapper])"
 								 icon="fa fa-fw fa-search" title="#{msg['option.view']}">
-					<f:setPropertyActionListener value="#{lesson}" target="#{lessonBean.selectedLesson}"/>
 					<f:setPropertyActionListener value="#{false}" target="#{menuBean.showMenu}"/>
-					<f:actionListener binding="#{lessonBean.startRecord()}"/>
+					<f:setPropertyActionListener value="lesson" target="#{sessionBean.activeView}"/>
 				</p:commandButton>
 				<p:commandButton actionListener="#{lessonBean.removeLesson(lesson)}" update=":lessonsForm"
 								 icon="fa fa-fw fa-minus" title="#{msg['option.remove']}"

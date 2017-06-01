@@ -72,7 +72,7 @@ public class LessonModeBean implements Serializable {
 
 	public void clear() {
 		stream = null;
-		lesson = null;
+//		lesson = null;
 		lessons = null;
 		attestations = null;
 		exams = null;

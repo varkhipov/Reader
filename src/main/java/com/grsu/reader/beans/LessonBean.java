@@ -9,9 +9,10 @@ import com.grsu.reader.models.LazyStudentDataModel;
 import com.grsu.reader.models.LessonStudentModel;
 import com.grsu.reader.models.LessonType;
 import com.grsu.reader.models.SkipInfo;
+import com.grsu.reader.utils.EntityUtils;
 import com.grsu.reader.utils.FacesUtils;
 import com.grsu.reader.utils.LocaleUtils;
-import com.grsu.reader.utils.SerialUtils;
+import lombok.Data;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.ToggleSelectEvent;
 
@@ -36,17 +37,19 @@ import static com.grsu.reader.utils.FacesUtils.update;
 
 @ManagedBean(name = "lessonBean")
 @ViewScoped
-public class LessonBean implements Serializable {
+@Data
+public class LessonBean implements Serializable, SerialListenerBean {
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean sessionBean;
 
 	@ManagedProperty(value = "#{lessonModeBean}")
 	private LessonModeBean lessonModeBean;
 
+	@ManagedProperty(value = "#{serialBean}")
+	private SerialBean serialBean;
+
 	private Lesson selectedLesson;
 	private Student processedStudent;
-	private boolean recordStarted = false;
-	private boolean soundEnabled = true;
 
 	private List<Student> presentStudents;
 	private List<Student> absentStudents;
@@ -77,7 +80,11 @@ public class LessonBean implements Serializable {
 	private boolean camera = false;
 	private List<Note> notes;
 
-	public void initLesson() {
+	public void initLesson(Lesson lesson) {
+		serialBean.setCurrentListener(this);
+		serialBean.startRecord();
+
+		this.selectedLesson = lesson;
 		calculateTimer();
 		if (selectedLesson != null) {
 			initStudents();
@@ -179,7 +186,26 @@ public class LessonBean implements Serializable {
 		}
 	}
 
-	public boolean processStudent(Student student) {
+	@Override
+	public boolean process(String uid) {
+		Student student = EntityUtils.getPersonByUid(absentStudents, uid);
+		if (student == null) {
+			if (EntityUtils.getPersonByUid(presentStudents, uid) != null) {
+				System.out.println("Student not registered. Reason: Uid[ " + uid + " ] already exists.");
+				return false;
+			} else {
+				student = EntityUtils.getPersonByUid(allStudents, uid);
+			}
+		}
+		if (student != null) {
+			return processStudent(student);
+		} else {
+			System.out.println("Student not registered. Reason: Uid[ " + uid + " ] not exist in database.");
+			return false;
+		}
+	}
+
+	private boolean processStudent(Student student) {
 		presentStudents.add(student);
 		if (absentStudents.contains(student)) {
 			absentStudents.remove(student);
@@ -280,35 +306,10 @@ public class LessonBean implements Serializable {
 		FacesUtils.execute("PF('pStudentsTable').clearFilters()");
 	}
 
-	public void startRecord() {
-		if (!recordStarted) {
-			recordStarted = SerialUtils.connect(this);
-		}
-		if (!recordStarted) {
-			LocaleUtils localeUtils = new LocaleUtils();
-			FacesUtils.addWarning(
-					localeUtils.getMessage("warning"),
-					localeUtils.getMessage("warning.device.not.connected.reconnect")
-			);
-			FacesUtils.update("menuForm:messages");
-		}
-	}
-
-	public void stopRecord() {
-		recordStarted = !SerialUtils.disconnect();
-	}
-
-	public void enableSound() {
-		soundEnabled = true;
-	}
-
-	public void disableSound() {
-		soundEnabled = false;
-	}
 
 	public void removeLesson(Lesson lesson) {
 		EntityDAO.delete(lesson);
-		getLessons().remove(lesson);
+		sessionBean.getLessons().remove(lesson);
 	}
 
 	public void addAbsentStudents() {
@@ -461,7 +462,7 @@ public class LessonBean implements Serializable {
 			Integer practical = studentSkipInfoMap.get(LessonType.PRACTICAL.getKey());
 			Integer lab = studentSkipInfoMap.get(LessonType.LAB.getKey());
 
-			String skip  = (lecture == null ? "0" : lecture) + "/" +
+			String skip = (lecture == null ? "0" : lecture) + "/" +
 					(practical == null ? "0" : practical) + "/" +
 					(lab == null ? "0" : lab);
 
@@ -511,144 +512,4 @@ public class LessonBean implements Serializable {
 		closeDialog("addStudentsDialog");
 	}
 
-
-	/* GETTERS & SETTERS */
-
-	public void setLessonModeBean(LessonModeBean lessonModeBean) {
-		this.lessonModeBean = lessonModeBean;
-	}
-
-	public void setSelectedLesson(Lesson selectedLesson) {
-		this.selectedLesson = selectedLesson;
-		initLesson();
-	}
-
-	public Student getProcessedStudent() {
-		return processedStudent;
-	}
-
-	public void setProcessedStudent(Student processedStudent) {
-		this.processedStudent = processedStudent;
-	}
-
-	public List<Lesson> getLessons() {
-		return sessionBean.getLessons();
-	}
-
-	public void setSessionBean(SessionBean sessionBean) {
-		this.sessionBean = sessionBean;
-	}
-
-	public Lesson getSelectedLesson() {
-		return selectedLesson;
-	}
-
-	public boolean isRecordStarted() {
-		return recordStarted;
-	}
-
-	public void setRecordStarted(boolean recordStarted) {
-		this.recordStarted = recordStarted;
-	}
-
-	public boolean isSoundEnabled() {
-		return soundEnabled;
-	}
-
-	public void setSoundEnabled(boolean soundEnabled) {
-		this.soundEnabled = soundEnabled;
-	}
-
-	public List<Student> getPresentStudents() {
-		return presentStudents;
-	}
-
-	public void setPresentStudents(List<Student> presentStudents) {
-		this.presentStudents = presentStudents;
-	}
-
-	public List<Student> getAbsentStudents() {
-		return absentStudents;
-	}
-
-	public void setAbsentStudents(List<Student> absentStudents) {
-		this.absentStudents = absentStudents;
-	}
-
-	public List<Student> getAllStudents() {
-		return allStudents;
-	}
-
-	public void setAllStudents(List<Student> allStudents) {
-		this.allStudents = allStudents;
-	}
-
-	public List<Student> getFilteredAllStudents() {
-		return filteredAllStudents;
-	}
-
-	public void setFilteredAllStudents(List<Student> filteredAllStudents) {
-		this.filteredAllStudents = filteredAllStudents;
-	}
-
-	public Set<Student> getLessonStudents() {
-		return lessonStudents;
-	}
-
-	public void setLessonStudents(Set<Student> lessonStudents) {
-		this.lessonStudents = lessonStudents;
-	}
-
-	public List<Student> getAdditionalStudents() {
-		return additionalStudents;
-	}
-
-	public LazyStudentDataModel getPresentStudentsLazyModel() {
-		return presentStudentsLazyModel;
-	}
-
-	public void setPresentStudentsLazyModel(LazyStudentDataModel presentStudentsLazyModel) {
-		this.presentStudentsLazyModel = presentStudentsLazyModel;
-	}
-
-	public LazyStudentDataModel getAbsentStudentsLazyModel() {
-		return absentStudentsLazyModel;
-	}
-
-	public void setAbsentStudentsLazyModel(LazyStudentDataModel absentStudentsLazyModel) {
-		this.absentStudentsLazyModel = absentStudentsLazyModel;
-	}
-
-
-	public List<LessonStudentModel> getSelectedPresentStudents() {
-		return selectedPresentStudents;
-	}
-
-	public void setSelectedPresentStudents(List<LessonStudentModel> selectedPresentStudents) {
-		this.selectedPresentStudents = selectedPresentStudents;
-	}
-
-	public List<LessonStudentModel> getSelectedAbsentStudents() {
-		return selectedAbsentStudents;
-	}
-
-	public void setSelectedAbsentStudents(List<LessonStudentModel> selectedAbsentStudents) {
-		this.selectedAbsentStudents = selectedAbsentStudents;
-	}
-
-	public long getTimer() {
-		return timer;
-	}
-
-	public boolean isCamera() {
-		return camera;
-	}
-
-	public void setCamera(boolean camera) {
-		this.camera = camera;
-	}
-
-	public List<Note> getNotes() {
-		return notes;
-	}
 }

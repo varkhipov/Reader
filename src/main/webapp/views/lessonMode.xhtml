@@ -43,7 +43,7 @@
 				<f:facet name="header">
 					<p:commandButton title="#{msg['btn.backToLessons']}"
 									 icon="fa fa-fw fa-arrow-left"
-									 actionListener="#{lessonBean.initLesson}"
+									 actionListener="#{lessonBean.initLesson(lessonModeBean.lesson)}"
 									 update="@([id$=views])">
 						<f:setPropertyActionListener value="lesson" target="#{sessionBean.activeView}"/>
 						<f:ajax event="click" listener="#{lessonModeBean.clear}"/>

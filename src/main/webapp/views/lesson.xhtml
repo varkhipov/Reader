@@ -35,21 +35,21 @@
 					<p:panel id="lessonButtons" styleClass="lesson-buttons">
 						<p:commandButton title="#{msg['btn.startRecord']}" icon="fa fa-fw fa-play"
 										 update=":lessonForm:lessonButtons"
-										 actionListener="#{lessonBean.startRecord}"
-										 rendered="#{not lessonBean.recordStarted}"/>
+										 actionListener="#{serialBean.startRecord}"
+										 rendered="#{not serialBean.recordStarted}"/>
 						<p:commandButton title="#{msg['btn.stopRecord']}" icon="fa fa-fw fa-stop"
 										 update=":lessonForm:lessonButtons"
-										 actionListener="#{lessonBean.stopRecord}"
-										 rendered="#{lessonBean.recordStarted}"/>
+										 actionListener="#{serialBean.stopRecord}"
+										 rendered="#{serialBean.recordStarted}"/>
 
 						<p:commandButton title="#{msg['btn.enableSound']}" icon="fa fa-fw fa-volume-up"
 										 update=":lessonForm:lessonButtons"
-										 actionListener="#{lessonBean.enableSound}"
-										 rendered="#{lessonBean.recordStarted and not lessonBean.soundEnabled}"/>
+										 actionListener="#{serialBean.enableSound}"
+										 rendered="#{serialBean.recordStarted and not serialBean.soundEnabled}"/>
 						<p:commandButton title="#{msg['btn.disableSound']}" icon="fa fa-fw fa-volume-off"
 										 update=":lessonForm:lessonButtons"
-										 actionListener="#{lessonBean.disableSound}"
-										 rendered="#{lessonBean.recordStarted and lessonBean.soundEnabled}"/>
+										 actionListener="#{serialBean.disableSound}"
+										 rendered="#{serialBean.recordStarted and serialBean.soundEnabled}"/>
 
 						<p:commandButton title="#{msg[lessonBean.camera ? 'btn.camera.turnOff' : 'btn.camera.turnOn']}"
 										 styleClass="#{lessonBean.camera ? 'red' : ''}"
