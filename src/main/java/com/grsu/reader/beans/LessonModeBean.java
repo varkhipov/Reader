@@ -131,7 +131,7 @@ public class LessonModeBean implements Serializable {
 				.map(LessonModel::new).collect(Collectors.toList());
 
 		//init additional students
-		List<LessonStudentModel> additionalStudents = new StudentDAO().getAdditionalStudents(lesson.getId()).stream()
+		List<LessonStudentModel> additionalStudents = StudentDAO.getAdditionalStudents(lesson.getId()).stream()
 				.map(LessonStudentModel::new).collect(Collectors.toList());
 		additionalStudents.stream().forEach(s -> s.setAdditional(true));
 
@@ -140,7 +140,7 @@ public class LessonModeBean implements Serializable {
 		students = students.stream().sorted(Comparator.comparing(s -> s.name)).collect(Collectors.toList());
 		students.stream().forEach(this::updateAverageAttestation);
 
-		Map<Integer, Map<String, Integer>> skipInfo = new StudentDAO().getSkipInfo(stream.getId(), lesson.getId());
+		Map<Integer, Map<String, Integer>> skipInfo = StudentDAO.getSkipInfo(stream.getId(), lesson.getId());
 		students.stream().forEach(s -> {
 			if (skipInfo.containsKey(s.getId())) {
 				s.setTotalSkip(skipInfo.get(s.getId()).get(Constants.TOTAL_SKIP));

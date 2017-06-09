@@ -93,7 +93,7 @@ public class LessonBean implements Serializable, SerialListenerBean {
 			initAdditionalStudents();
 
 			if (selectedLesson.getStream() != null) {
-				skipInfo = new StudentDAO().getSkipInfo(selectedLesson.getStream().getId(), selectedLesson.getId());
+				skipInfo = StudentDAO.getSkipInfo(selectedLesson.getStream().getId(), selectedLesson.getId());
 
 				lessonAbsentStudents = new ArrayList<>();
 				lessonPresentStudents = new ArrayList<>();
@@ -394,7 +394,7 @@ public class LessonBean implements Serializable, SerialListenerBean {
 	private void updateSkipInfo(List<Student> students) {
 		List<Integer> studentIds = students.stream().map(Student::getId).collect(Collectors.toList());
 
-		List<SkipInfo> studentSkipInfo = new StudentDAO().getStudentSkipInfo(studentIds, selectedLesson.getStream().getId(), selectedLesson.getId());
+		List<SkipInfo> studentSkipInfo = StudentDAO.getStudentSkipInfo(studentIds, selectedLesson.getStream().getId(), selectedLesson.getId());
 
 		for (Integer id : studentIds) {
 			skipInfo.remove(id);

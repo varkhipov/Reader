@@ -70,9 +70,8 @@ public class CSVUtils {
 	}
 
 	private static void processStudents(Group group, List<Student> students) {
-		StudentDAO studentDAO = new StudentDAO();
 		for (Student student : students) {
-			Student studentFromDB = studentDAO.getByCardUid(student.getCardUid());
+			Student studentFromDB = StudentDAO.getByCardUid(student.getCardUid());
 			if (studentFromDB == null) {
 				student.setGroups(new ArrayList<>());
 				student.getGroups().add(group);

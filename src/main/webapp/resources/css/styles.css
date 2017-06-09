@@ -654,6 +654,7 @@ body {
 .student-mode .student-class-info {
 	display: inline-block;
 	margin-bottom: 15px;
+	height: 292px;
 }
 
 .student-mode  .student-class-info .ui-grid {

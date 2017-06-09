@@ -13,8 +13,10 @@ import java.util.List;
 import java.util.Map;
 
 public class StudentDAO {
+	private StudentDAO() {
+	}
 
-	public Student getByCardUid(String cardUid) {
+	public static Student getByCardUid(String cardUid) {
 		Session session = DBSessionFactory.getSession();
 		try {
 			Query query = session.createQuery("from Student where cardUid = :cardUid");
@@ -30,7 +32,7 @@ public class StudentDAO {
 		return null;
 	}
 
-	public Map<Integer, Map<String, Integer>> getSkipInfo(int streamId, int lessonId) {
+	public static Map<Integer, Map<String, Integer>> getSkipInfo(int streamId, int lessonId) {
 		List<SkipInfo> skipInfoList = null;
 		Session session = DBSessionFactory.getSession();
 		try {
@@ -62,7 +64,7 @@ public class StudentDAO {
 		return skipInfo;
 	}
 
-	public List<SkipInfo> getStudentSkipInfo(List<Integer> studentId, int streamId, int lessonId) {
+	public static List<SkipInfo> getStudentSkipInfo(List<Integer> studentId, int streamId, int lessonId) {
 		Session session = DBSessionFactory.getSession();
 		try {
 			Query query = session.createNamedQuery("StudentSkipInfoQuery", SkipInfo.class);
@@ -80,7 +82,7 @@ public class StudentDAO {
 		return null;
 	}
 
-	public List<Student> getAdditionalStudents(int lessonId) {
+	public static List<Student> getAdditionalStudents(int lessonId) {
 		Session session = DBSessionFactory.getSession();
 		try {
 			Query query = session.createNamedQuery("AdditionalStudents", Student.class);

@@ -215,7 +215,7 @@ public class StudentModeBean implements Serializable, SerialListenerBean {
 
 	private void updateStudentSkips() {
 		if (stream != null) {
-			List<SkipInfo> studentSkipInfo = new StudentDAO().getStudentSkipInfo(Arrays.asList(lessonStudent.getId()), stream.getId(), -1);
+			List<SkipInfo> studentSkipInfo = StudentDAO.getStudentSkipInfo(Arrays.asList(lessonStudent.getId()), stream.getId(), -1);
 			if (studentSkipInfo != null && studentSkipInfo.size() > 0) {
 				for (SkipInfo si : studentSkipInfo) {
 					switch (si.getLessonType()) {
