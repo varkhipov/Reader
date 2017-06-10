@@ -14,7 +14,7 @@
 			Place script resources/scripts/set_TOMCAT_DIR.sh to your Tomcat root dir and execute it
 			to add system variable TOMCAT_DIR that contains path to yor Tomcat root dir
 		-->
-		<tomcat.webapps.path>/home/pavel/env/servers/apache-tomcat-8.5.5/webapps</tomcat.webapps.path>
+		<tomcat.webapps.path>${env.TOMCAT_DIR}/webapps</tomcat.webapps.path>
 
 		<war.name>ROOT</war.name>
 
