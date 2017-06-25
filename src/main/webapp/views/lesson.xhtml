@@ -85,6 +85,42 @@
 										 update=":menuForm :lessonForm:lessonButtons"
 										 actionListener="#{menuBean.showMenu}"
 										 rendered="#{not menuBean.showMenu}"/>
+
+						<p:commandButton id="modeBtn" icon="fa fa-fw fa-forward"/>
+						<p:overlayPanel for="modeBtn" showEvent="mouseover"
+						                hideEvent="mousedown"
+						                style="position: fixed;"
+						                dismissable="false" showCloseIcon="true">
+							<p:commandButton title="#{msg['btn.studentMode']}" value="#{msg['btn.studentMode']}"
+							                 update="@([id$=views])"
+							                 styleClass="block w100pc margin-bottom-10px"
+							                 actionListener="#{studentModeBean.initStudentMode(null, lessonModeBean.stream)}">
+								<f:setPropertyActionListener value="studentMode" target="#{sessionBean.activeView}"/>
+								<f:setPropertyActionListener value="#{false}" target="#{menuBean.showMenu}"/>
+								<f:setPropertyActionListener value="#{lessonBean.selectedLesson.stream}" target="#{lessonModeBean.stream}"/>
+								<f:setPropertyActionListener value="#{lessonBean.selectedLesson}" target="#{lessonModeBean.lesson}"/>
+							</p:commandButton>
+							<p:commandButton title="#{msg['btn.photoMode']}" value="#{msg['btn.photoMode']}"
+							                 actionListener="#{lessonBean.openPhotoMode}"
+							                 update="@([id$=views])"
+							                 styleClass="block w100pc margin-bottom-10px">
+								<f:setPropertyActionListener value="#{false}" target="#{menuBean.showMenu}"/>
+							</p:commandButton>
+							<p:commandButton title="#{msg['btn.lessonMode']}"
+							                 value="#{msg['btn.lessonMode']}"
+							                 update="@([id$=wrapper])"
+							                 actionListener="#{lessonBean.openLessonMode}"
+							                 styleClass="block w100pc margin-bottom-10px">
+								<f:setPropertyActionListener value="#{false}" target="#{menuBean.showMenu}"/>
+							</p:commandButton>
+							<p:commandButton title="#{msg['btn.lessons']}"
+							                 value="#{msg['btn.lessons']}"
+							                 update="@([id$=views])"
+							                 styleClass="block w100pc margin-bottom-10px">
+								<f:setPropertyActionListener value="#{true}" target="#{menuBean.showMenu}"/>
+								<f:setPropertyActionListener value="lessons" target="#{sessionBean.activeView}"/>
+							</p:commandButton>
+						</p:overlayPanel>
 					</p:panel>
 					<p:panelGrid columns="2" styleClass="lesson-text left">
 						<p:panelGrid columns="2" id="attendanceInfo" styleClass="bold">

@@ -82,6 +82,7 @@ public class NewLessonBean implements Serializable {
 			EntityDAO.add(new ArrayList<>(studentClasses));
 
 			sessionBean.updateLessons();
+			sessionBean.updateStudents();
 		}
 		exit();
 	}

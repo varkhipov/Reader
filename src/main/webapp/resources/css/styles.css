@@ -37,7 +37,7 @@
 .w35pc {width: 35%;}
 .w50pc {width: 50%;}
 .w90pc {width: 90%;}
-.w100pc {width: 100%;}
+#wrapper .w100pc {width: 100%;}
 
 /* Height */
 .h30px {height: 30px;}

@@ -118,6 +118,13 @@ public class LessonBean implements Serializable, SerialListenerBean {
 		lessonModeBean.initLessonMode();
 	}
 
+	public void openPhotoMode() {
+		lessonModeBean.setStream(selectedLesson.getStream());
+		lessonModeBean.setLesson(selectedLesson);
+		sessionBean.setActiveView("photoMode");
+		lessonModeBean.initLessonMode();
+	}
+
 	public void clear() {
 		selectedLesson = null;
 		processedStudent = null;
